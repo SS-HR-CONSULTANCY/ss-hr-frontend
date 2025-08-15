@@ -5,27 +5,40 @@ import { store } from './store/store';
 import { useAppDispatch } from './hooks/redux';
 import { loadUserFromStorage } from './store/slices/authSlice';
 import { Login, Register } from './pages';
+import Dashboard from './pages/user/Dashboard';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
-
+// App Content Component (inside Provider)
 const AppContent: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // Load user from localStorage on app start
     dispatch(loadUserFromStorage());
   }, [dispatch]);
 
   return (
     <Router>
       <Routes>
-        {/* Auth Routes */}
+        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* Temporary redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* Protected Routes */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Default redirects */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         
         {/* Catch all route */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>
   );
