@@ -1,19 +1,43 @@
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import { useAppDispatch } from './hooks/redux';
+import { loadUserFromStorage } from './store/slices/authSlice';
+import { Login, Register } from './pages';
 
 
+const AppContent: React.FC = () => {
+  const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    dispatch(loadUserFromStorage());
+  }, [dispatch]);
 
-function App() {
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="card">
-          <h1 className="prata-regular text-4xl text-center text-red-900 mb-4">
-            SS HR Consultancy
-          </h1>
-        </div>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        {/* Temporary redirect */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        
+        {/* Catch all route */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
-}
+};
+
+// Main App Component
+const App: React.FC = () => {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
+  );
+};
 
 export default App;
