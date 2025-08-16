@@ -1,46 +1,36 @@
+// src/types/auth.types.ts
 export interface User {
-  id: string;
+  _id: string;
+  fullName: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  role: 'candidate' | 'admin';
+  role: 'user' | 'admin' | 'hr';
   isVerified: boolean;
+  isActive?: boolean;  // Add this optional property
   createdAt: string;
   updatedAt: string;
 }
 
-export interface AuthState {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export interface LoginRequest {
+export interface LoginCredentials {
   email: string;
   password: string;
 }
 
-export interface RegisterRequest {
-  firstName: string;
-  lastName: string;
+export interface RegisterData {
+  fullName: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
 export interface AuthResponse {
-  success: boolean;
+  user: User;
+  token: string;
   message: string;
-  data: {
-    user: User;
-    token: string;
-  };
 }
 
-export interface ApiError {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string>;
+export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
 }
