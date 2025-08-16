@@ -1,55 +1,33 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from './store/store';
-import { useAppDispatch } from './hooks/redux';
-import { loadUserFromStorage } from './store/slices/authSlice';
-import { Login, Register } from './pages';
-import Dashboard from './pages/user/Dashboard';
-import ProtectedRoute from './components/common/ProtectedRoute';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Login, Register } from "./pages";
+import Home from "./pages/user/Home";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+// import ProtectedRoute from "./components/common/ProtectedRoute";
 
-// App Content Component (inside Provider)
-const AppContent: React.FC = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    // Load user from localStorage on app start
-    dispatch(loadUserFromStorage());
-  }, [dispatch]);
-
+const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
-        {/* Protected Routes */}
-        <Route 
-          path="/dashboard" 
+        <Route path="/" element={<Home />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path='/admin/dashboard' element={<AdminDashboard />} />
+        {/* <Route 
+          path="/admin/dashboard" 
           element={
-            <ProtectedRoute>
-              <Dashboard />
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboard />
             </ProtectedRoute>
           } 
-        />
+        /> */}
         
-        {/* Default redirects */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        
-        {/* Catch all route */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        {/* Redirect old admin routes */}
+        <Route path="/admin-login" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/admin-dashboard" element={<Navigate to="/admin/dashboard" replace />} />
       </Routes>
     </Router>
-  );
-};
-
-// Main App Component
-const App: React.FC = () => {
-  return (
-    <Provider store={store}>
-      <AppContent />
-    </Provider>
   );
 };
 
