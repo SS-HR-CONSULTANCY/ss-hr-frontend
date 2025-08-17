@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useAppSelector } from '@/hooks/redux';
-import type { RootState } from '@/store/store';
+import type { AppDispatch, RootState } from '@/store/store';
 import { Menu, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteUrlConfig, mobileLinks } from "@/utils/constants";
@@ -29,7 +29,7 @@ const Header: React.FC = ({
   className = "max-w-7xl mx-auto",
 }: NavbarProps) => {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
   
   const { isAuthenticated } = useAppSelector((state) => state.auth);
