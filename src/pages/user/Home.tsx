@@ -2,6 +2,8 @@ import React from 'react';
 import Hero from '@/components/sections/Hero';
 import AosComponent from '@/utils/AosComponent';
 import About from '@/components/sections/About';
+import Reviews from '@/components/sections/Reviews';
+import Contact from '@/components/sections/Contact';
 import Header from '@/components/navigations/Header';
 import Footer from '@/components/navigations/Footer';
 import Services from '@/components/sections/Services';
@@ -17,6 +19,8 @@ const Home: React.FC = () => {
         <About />
         <Services />
         <Packages />
+        <Reviews />
+        <Contact />
         <Footer />
       </AosComponent>
     </div>
