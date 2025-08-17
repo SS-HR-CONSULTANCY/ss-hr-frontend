@@ -29,14 +29,20 @@ export interface NavbarProps {
 
 export interface SiteUrlConfigProps {
   home: string;
-  plans: string;
+  aboutUs: string;
+  packages: string;
   reviews: string;
   contact: string;
+  services: string;
   signIn: string;
   signUp: string;
 }
 
-export interface MobileLinkProps {
+export interface navLinkProps {
   text: string;
   href: string;
+  isLink?: boolean;
+  content?: React.ReactNode;
+  isForDesk?: boolean;
+  isForMob?: boolean;
 }

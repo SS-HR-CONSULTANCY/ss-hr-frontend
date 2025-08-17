@@ -15,18 +15,13 @@ import {
   navigationMenuTriggerStyle,
 } from "./navigation-menu";
 import { Link } from "react-router-dom";
+import { navLinks, services } from "@/utils/constants";
+import type { navLinkProps } from "@/types/omponentTypes/header";
 import type { ContentCardProps } from "@/types/omponentTypes/services";
-import { services } from "@/utils/constants";
 
-interface MenuItem {
-  title: string;
-  href?: string;
-  isLink?: boolean;
-  content?: React.ReactNode;
-}
 
 interface NavigationProps {
-  menuItems?: MenuItem[];
+  menuItems?: navLinkProps[];
   components?: ContentCardProps[];
   logo?: React.ReactNode;
   logoTitle?: string;
@@ -40,34 +35,7 @@ interface NavigationProps {
 }
 
 export default function Navigation({
-  menuItems = [
-    {
-      title: "Home",
-      content: "default",
-      isLink: true,
-      href: "/"
-    },
-    {
-      title: "Plans",
-      isLink: true,
-      href: "#plans"
-    },
-    {
-      title: "Reviews",
-      isLink: true,
-      href: "#reviews"
-    },
-    {
-      title: "Services",
-      content: "components",
-    },
-    {
-      title: "Contact",
-      isLink: true,
-      href: "#contact"
-    },
-  ],
-
+  menuItems = navLinks,
   components = services,
   logo = <LaunchUI />,
   logoTitle = "Launch UI",
@@ -78,18 +46,20 @@ export default function Navigation({
   return (
     <NavigationMenu className="hidden md:flex">
       <NavigationMenuList>
-        {menuItems.map((item, index) => (
+        {menuItems
+        .filter(item => item.isForDesk)
+        .map((item, index) => (
           <NavigationMenuItem key={index}>
             {item.isLink ? (
               <NavigationMenuLink
                 className={navigationMenuTriggerStyle()}
                 asChild
               >
-                <Link to={item.href || ""}>{item.title}</Link>
+                <Link to={item.href || ""}>{item.text}</Link>
               </NavigationMenuLink>
             ) : (
               <>
-                <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                <NavigationMenuTrigger>{item.text}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   {item.content === "default" ? (
                     <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -128,7 +98,7 @@ export default function Navigation({
                       ))}
                     </ul>
                   ) : (
-                    item.content
+                    item.content 
                   )}
                 </NavigationMenuContent>
               </>

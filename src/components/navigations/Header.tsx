@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import { siteUrlConfig, mobileLinks } from "@/utils/constants";
+import { siteUrlConfig, navLinks } from "@/utils/constants";
 import type { NavbarProps } from '@/types/omponentTypes/header';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -94,8 +94,12 @@ const Header: React.FC = ({
                   >
                     <span>{name}</span>
                   </a>
-                  {mobileLinks
-                    .filter((link) => !isAuthenticated || (link.text !== "SignIn" && link.text !== "SignUp"))
+                  {navLinks
+                    .filter(
+                      (link) =>
+                        link.isForMob &&
+                        (!isAuthenticated || (link.text !== "SignIn" && link.text !== "SignUp"))
+                    )
                     .map((link, index) =>
                     (
                       <a

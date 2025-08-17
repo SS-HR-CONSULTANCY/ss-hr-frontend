@@ -4,25 +4,31 @@ import ticketService from '../assets/servicesImages/ticketService.png';
 import type { ContentCardProps } from '@/types/omponentTypes/services';
 import jobRecruitment from '../assets/servicesImages/jobRecruitment.png';
 import medicalRecruitment from '../assets/servicesImages/medicalRecruitment.jpg';
-import type { MobileLinkProps, SiteUrlConfigProps } from '@/types/omponentTypes/header';
+import type { navLinkProps, SiteUrlConfigProps } from '@/types/omponentTypes/header';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
 
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {
   home: '/',
-  plans: "#plans",
+  aboutUs: "#aboutus",
+  packages: "#packages",
   reviews: "reviews",
   contact: "#contact",
+  services: '#services',
   signIn: "/login",
   signUp: "/register"
 };
 
-export const mobileLinks: MobileLinkProps[] = [
-    { text: "Plans", href: siteUrlConfig.plans },
-    { text: "Reviews", href: siteUrlConfig.reviews },
-    { text: "Contact", href: siteUrlConfig.contact },
-    { text: "SignIn", href: siteUrlConfig.signIn },
-    { text: "SignUp", href: siteUrlConfig.signUp },
+export const navLinks: navLinkProps[] = [
+    { text: "Home", href: siteUrlConfig.home, content: "default", isLink: true, isForDesk: true, isForMob: true },
+    { text: "About Us", href: siteUrlConfig.aboutUs, isLink: true, isForDesk: true, isForMob: true },
+    { text: "Services", href: siteUrlConfig.services, content: "components", isForDesk: true },
+    { text: "Services", href: siteUrlConfig.services, isForMob: true },
+    { text: "Packages", href: siteUrlConfig.packages, isLink: true, isForDesk: true, isForMob: true },
+    { text: "Reviews", href: siteUrlConfig.reviews, isLink: true, isForDesk: true, isForMob: true },
+    { text: "Contact", href: siteUrlConfig.contact, isLink: true, isForDesk: true, isForMob: true },
+    { text: "SignIn", href: siteUrlConfig.signIn, isLink: true, isForMob: true },
+    { text: "SignUp", href: siteUrlConfig.signUp, isLink: true, isForMob: true },
 ];
 
 // Services component constants
