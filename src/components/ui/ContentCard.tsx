@@ -17,7 +17,7 @@ const ContentCard = ({
       >
         <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60"></div>
 
-        <div className="relative z-10 bg-black/60 rounded-lg p-4 overflow-hidden">
+        <div className="relative z-10 dark:bg-black/70 bg-white/70 rounded-lg p-4 overflow-hidden">
           <h1 className="font-bold text-xl md:text-2xl">{title}</h1>
 
           <div

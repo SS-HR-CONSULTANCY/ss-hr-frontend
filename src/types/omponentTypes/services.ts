@@ -1,6 +1,7 @@
 export interface ContentCardProps {
   title: string;
   description: string;
-  hoverDescription: string;
-  imageUrl: string;
+  imageUrl?: string;
+  hoverDescription?: string;
+  href?: string;
 }

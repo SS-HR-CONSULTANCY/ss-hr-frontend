@@ -15,12 +15,8 @@ import {
   navigationMenuTriggerStyle,
 } from "./navigation-menu";
 import { Link } from "react-router-dom";
-
-interface ComponentItem {
-  title: string;
-  href: string;
-  description: string;
-}
+import type { ContentCardProps } from "@/types/omponentTypes/services";
+import { services } from "@/utils/constants";
 
 interface MenuItem {
   title: string;
@@ -31,7 +27,7 @@ interface MenuItem {
 
 interface NavigationProps {
   menuItems?: MenuItem[];
-  components?: ComponentItem[];
+  components?: ContentCardProps[];
   logo?: React.ReactNode;
   logoTitle?: string;
   logoDescription?: string;
@@ -72,33 +68,7 @@ export default function Navigation({
     },
   ],
 
-  components = [
-    {
-      title: "Visa Services",
-      href: "#services",
-      description: "Fast, hassle-free visa processing—our experts handle documentation and communication with authorities for a quick turnaround.",
-    },
-    {
-      title: "Ticket Services",
-      href: "#services",
-      description: "Book flights and transport easily with our service—compare providers, find the best deals, and save time and money while we handle the details.",
-    },
-    {
-      title: "Certificate Attestation",
-      href: "#services",
-      description: "We offer expert certificate attestation worldwide, ensuring smooth and successful processing through embassy and consulate requirements.",
-    },
-    {
-      title: "Medical Recruitment",
-      href: "#services",
-      description: "We connect skilled medical professionals with top healthcare facilities through a rigorous screening process, ensuring the right fit for both employers and employees.",
-    },
-    {
-      title: "Job Recruitment",
-      href: "#services",
-      description: "We connect skilled professionals to rewarding careers in Dubai, with a personalized approach and strong network to secure your ideal role.",
-    },
-  ],
+  components = services,
   logo = <LaunchUI />,
   logoTitle = "Launch UI",
   logoDescription = "Landing page template built with React, Shadcn/ui and Tailwind that you can copy/paste into your project.",
