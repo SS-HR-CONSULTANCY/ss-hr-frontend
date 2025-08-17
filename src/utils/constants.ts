@@ -20,15 +20,15 @@ export const siteUrlConfig: SiteUrlConfigProps = {
 };
 
 export const navLinks: navLinkProps[] = [
-    { text: "Home", href: siteUrlConfig.home, content: "default", isLink: true, isForDesk: true, isForMob: true },
-    { text: "About Us", href: siteUrlConfig.aboutUs, isLink: true, isForDesk: true, isForMob: true },
-    { text: "Services", href: siteUrlConfig.services, content: "components", isForDesk: true },
-    { text: "Services", href: siteUrlConfig.services, isForMob: true },
-    { text: "Packages", href: siteUrlConfig.packages, isLink: true, isForDesk: true, isForMob: true },
-    { text: "Reviews", href: siteUrlConfig.reviews, isLink: true, isForDesk: true, isForMob: true },
-    { text: "Contact", href: siteUrlConfig.contact, isLink: true, isForDesk: true, isForMob: true },
-    { text: "SignIn", href: siteUrlConfig.signIn, isLink: true, isForMob: true },
-    { text: "SignUp", href: siteUrlConfig.signUp, isLink: true, isForMob: true },
+  { text: "Home", href: siteUrlConfig.home, content: "default", isLink: true, isForDesk: true, isForMob: true },
+  { text: "About Us", href: siteUrlConfig.aboutUs, isLink: true, isForDesk: true, isForMob: true },
+  { text: "Services", href: siteUrlConfig.services, content: "components", isForDesk: true },
+  { text: "Services", href: siteUrlConfig.services, isForMob: true },
+  { text: "Packages", href: siteUrlConfig.packages, isLink: true, isForDesk: true, isForMob: true },
+  { text: "Reviews", href: siteUrlConfig.reviews, isLink: true, isForDesk: true, isForMob: true },
+  { text: "Contact", href: siteUrlConfig.contact, isLink: true, isForDesk: true, isForMob: true },
+  { text: "SignIn", href: siteUrlConfig.signIn, isLink: true, isForMob: true },
+  { text: "SignUp", href: siteUrlConfig.signUp, isLink: true, isForMob: true },
 ];
 
 // Services component constants
@@ -70,3 +70,7 @@ export const services: ContentCardProps[] = [
     imageUrl: jobRecruitment,
   },
 ];
+
+
+// About component constants
+export const words: string = "Established in 2021, SS Human Resource Consultancy & Tours & Travels has quickly become a leader in providing comprehensive HR and travel solutions. Our experienced team boasts extensive knowledge of the Dubai job market and travel industry. We pride ourselves on delivering personalized service and exceeding client expectations, making us your trusted partner for both career advancement and memorable travel experiences."
