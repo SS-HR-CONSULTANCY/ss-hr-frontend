@@ -10,12 +10,12 @@ export interface User {
   updatedAt: string;
 }
 
-export interface LoginCredentials {
+export interface LoginRequest {
   email: string;
   password: string;
 }
 
-export interface RegisterData {
+export interface RegisterRequest {
   fullName: string;
   email: string;
   password: string;
@@ -30,6 +30,7 @@ export interface AuthResponse {
 
 export interface AuthState {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;

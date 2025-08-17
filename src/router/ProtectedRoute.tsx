@@ -1,7 +1,7 @@
 
 import React from 'react';
+import { useAppSelector } from '../hooks/redux';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/redux';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -47,7 +47,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
               </svg>
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-            <p className="text-gray-600 mb-4">You don't have permission to access this admin area.</p>
+            <p className="text-gray-600 mb-4">You don't have permission to access this admin routes.</p>
             <div className="space-y-2">
               <button
                 onClick={() => window.history.back()}
