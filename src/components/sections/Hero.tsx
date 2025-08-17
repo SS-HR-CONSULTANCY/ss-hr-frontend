@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from "motion/react";
+import { useNavigate } from 'react-router-dom';
 import bannerOne from '../../assets/bannerOne.png';
 import bannerTwo from '../../assets/bannerTwo.jpg';
 import { ImagesSlider } from "../ui/images-slider";
 import bannerThree from '../../assets/bannerThree.png';
-import { useNavigate } from 'react-router-dom';
 
 const Hero: React.FC = () => {
 
@@ -17,7 +17,7 @@ const Hero: React.FC = () => {
   ];
 
   return (
-     <ImagesSlider className="h-[40rem] mt-2" images={images}>
+     <ImagesSlider className="h-[40rem]" images={images}>
       <motion.div
         initial={{
           opacity: 0,

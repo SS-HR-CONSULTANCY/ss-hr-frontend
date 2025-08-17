@@ -8,12 +8,12 @@ import { cn } from "@/lib/utils";
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useAppSelector } from '@/hooks/redux';
-import type { AppDispatch, RootState } from '@/store/store';
 import { Menu, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { siteUrlConfig, mobileLinks } from "@/utils/constants";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
+import type { AppDispatch, RootState } from '@/store/store';
+import { siteUrlConfig, mobileLinks } from "@/utils/constants";
 import type { NavbarProps } from '@/types/omponentTypes/header';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -35,8 +35,8 @@ const Header: React.FC = ({
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   return (
-    <header className={cn("sticky top-0 z-50 -mb-4 px-4 pb-4", className)}>
-      <div className="fade-bottom bg-background/15 absolute left-0 h-20 w-full backdrop-blur-lg"></div>
+    <header className={cn("sticky top-0 z-50 h-auto", className)}>
+      <div className="fade-bottom bg-background/15 absolute left-0 h-16 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto">
         <NavbarComponent>
           <NavbarLeft>
