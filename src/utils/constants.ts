@@ -1,3 +1,4 @@
+import type { PackageProps } from '@/types/omponentTypes/package';
 import visaService from '../assets/servicesImages/visaService.png';
 import travelService from '../assets/servicesImages/travelService.jpg';
 import ticketService from '../assets/servicesImages/ticketService.png';
@@ -10,9 +11,9 @@ import certificateAttestationService from '../assets/servicesImages/certificateA
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {
   home: '/',
-  aboutUs: "#aboutus",
+  aboutus: "#aboutus",
   packages: "#packages",
-  reviews: "reviews",
+  reviews: "#reviews",
   contact: "#contact",
   services: '#services',
   signIn: "/login",
@@ -21,7 +22,7 @@ export const siteUrlConfig: SiteUrlConfigProps = {
 
 export const navLinks: navLinkProps[] = [
   { text: "Home", href: siteUrlConfig.home, content: "default", isLink: true, isForDesk: true, isForMob: true },
-  { text: "About Us", href: siteUrlConfig.aboutUs, isLink: true, isForDesk: true, isForMob: true },
+  { text: "About Us", href: siteUrlConfig.aboutus, isLink: true, isForDesk: true, isForMob: true },
   { text: "Services", href: siteUrlConfig.services, content: "components", isForDesk: true },
   { text: "Services", href: siteUrlConfig.services, isForMob: true },
   { text: "Packages", href: siteUrlConfig.packages, isLink: true, isForDesk: true, isForMob: true },
@@ -74,3 +75,51 @@ export const services: ContentCardProps[] = [
 
 // About component constants
 export const words: string = "Established in 2021, SS Human Resource Consultancy & Tours & Travels has quickly become a leader in providing comprehensive HR and travel solutions. Our experienced team boasts extensive knowledge of the Dubai job market and travel industry. We pride ourselves on delivering personalized service and exceeding client expectations, making us your trusted partner for both career advancement and memorable travel experiences."
+
+
+// Package compoenent constants
+export const packages: PackageProps[] = [
+  {
+    name: "Male Package",
+    description: "Package for male",
+    features: [
+      "2 Months Visit Visa",
+      "2 Months Accommodation",
+      "2 Months Food (Served Twice a Day)",
+      "Airport Pickup Only Dubai",
+      "Metro & Bus Card",
+      "Free Wi-Fi",
+      "Free Water",
+    ],
+    price: 100000,
+    popular: true,
+  },
+  {
+    name: "Female Package",
+    description: "Package for female",
+    features: [
+      "2 Months Visit Visa",
+      "2 Months Accommodation",
+      "2 Months Food (Served Twice a Day)",
+      "Airport Pickup Only Dubai",
+      "Metro & Bus Card",
+      "Free Wi-Fi",
+      "Free Water",
+    ],
+    price: 100000,
+  },
+  {
+    name: "Female Package",
+    description: "Package for female",
+    features: [
+      "2 Months Visit Visa",
+      "2 Months Accommodation",
+      "2 Months Food (Served Twice a Day)",
+      "Airport Pickup Only Dubai",
+      "Metro & Bus Card",
+      "Free Wi-Fi",
+      "Free Water",
+    ],
+    price: 100000,
+  },
+];

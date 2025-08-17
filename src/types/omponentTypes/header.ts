@@ -29,7 +29,7 @@ export interface NavbarProps {
 
 export interface SiteUrlConfigProps {
   home: string;
-  aboutUs: string;
+  aboutus: string;
   packages: string;
   reviews: string;
   contact: string;

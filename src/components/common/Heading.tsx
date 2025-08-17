@@ -18,7 +18,7 @@ const Heading: React.FC<HeadingProps> = ({
     <div
       className={cn(
         mainDivClassName,
-        "max-w-2xl mb-10 lg:mb-14"
+        "mb-10 lg:mb-14"
       )}
     >
       <h2 className={`text-black dark:text-white scroll-m-20 border-b border-gray-500 dark:border-gray-400 pb-2 text-3xl font-semibold first:mt-0 ${headingClassName}`}>

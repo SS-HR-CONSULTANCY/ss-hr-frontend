@@ -5,6 +5,7 @@ import About from '@/components/sections/About';
 import Header from '@/components/navigations/Header';
 import Footer from '@/components/navigations/Footer';
 import Services from '@/components/sections/Services';
+import Packages from '@/components/sections/Packages';
 
 const Home: React.FC = () => {
 
@@ -15,6 +16,7 @@ const Home: React.FC = () => {
         <Hero />
         <About />
         <Services />
+        <Packages />
         <Footer />
       </AosComponent>
     </div>

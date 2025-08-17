@@ -6,7 +6,7 @@ import { TextGenerateEffect } from '../ui/text-generate-effect';
 
 const About: React.FC = () => {
   return (
-    <section id="services" className="py-16">
+    <section id="aboutus" className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-12 gap-8">
         <div className="col-span-12 md:col-span-8">
           <Heading
