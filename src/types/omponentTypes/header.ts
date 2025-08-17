@@ -26,3 +26,17 @@ export interface NavbarProps {
   customNavigation?: ReactNode;
   className?: string;
 }
+
+export interface SiteUrlConfigProps {
+  home: string;
+  plans: string;
+  reviews: string;
+  contact: string;
+  signIn: string;
+  signUp: string;
+}
+
+export interface MobileLinkProps {
+  text: string;
+  href: string;
+}
