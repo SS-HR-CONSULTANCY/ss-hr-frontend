@@ -1,22 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Login, Register } from "./pages";
 import Home from "./pages/user/Home";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import ProtectedRoute from "./router/ProtectedRoute";
+import { Login, Register } from "./pages";
+import Error404 from "./pages/common/Error404";
 import ThemeWrapper from "./utils/ThemeWrapper";
-// import ProtectedRoute from "./components/common/ProtectedRoute";
+import AdminLogin from "./pages/admin/AdminLogin";
+import ProtectedRoute from "./router/ProtectedRoute";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
     <ThemeWrapper>
       <Router>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          {/* <Route path='/admin/dashboard' element={<AdminDashboard />} /> */}
+          <Route path='*' element={<Error404 />} />
           <Route
             path="/admin/dashboard"
             element={
@@ -25,7 +25,6 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-
         </Routes>
       </Router>
     </ThemeWrapper>

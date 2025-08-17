@@ -10,7 +10,7 @@ const Home: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white dark:bg-black">
       <AosComponent>
         <Header />
         <Hero />

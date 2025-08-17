@@ -1,58 +1,87 @@
-import React from 'react';
+import { Menu } from "lucide-react";
+import { ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
+
+import LaunchUI from "../../logos/launch-ui";
+import { Button, type ButtonProps } from "../../ui/button";
 import {
+  Navbar as NavbarComponent,
   NavbarLeft,
   NavbarRight,
-  Navbar as NavbarComponent,
-} from "@/components/ui/navbar";
-import { cn } from "@/lib/utils";
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { useAppSelector } from '@/hooks/redux';
-import type { RootState } from '@/store/store';
-import { Menu, Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { siteUrlConfig, mobileLinks } from "@/utils/constants";
-import Navigation from "@/components/ui/navigation";
-import { toggleTheme } from '@/store/slices/appSlice';
-import type { NavbarProps } from '@/types/omponentTypes/header';
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+} from "../../ui/navbar";
+import Navigation from "../../ui/navigation";
+import { Sheet, SheetContent, SheetTrigger } from "../../ui/sheet";
 
+interface NavbarLink {
+  text: string;
+  href: string;
+}
 
-const Header: React.FC = ({
-  name = "ShahaalamGroups",
-  homeUrl = siteUrlConfig.home,
+interface NavbarActionProps {
+  text: string;
+  href: string;
+  variant?: ButtonProps["variant"];
+  icon?: ReactNode;
+  iconRight?: ReactNode;
+  isButton?: boolean;
+}
+
+interface NavbarProps {
+  logo?: ReactNode;
+  name?: string;
+  homeUrl?: string;
+  mobileLinks?: NavbarLink[];
+  actions?: NavbarActionProps[];
+  showNavigation?: boolean;
+  customNavigation?: ReactNode;
+  className?: string;
+}
+
+export default function Navbar({
+  logo = <LaunchUI />,
+  name = "Launch UI",
+  homeUrl = "https://www.launchuicomponents.com/",
+  mobileLinks = [
+    { text: "Getting Started", href: "https://www.launchuicomponents.com/" },
+    { text: "Components", href: "https://www.launchuicomponents.com/" },
+    { text: "Documentation", href: "https://www.launchuicomponents.com/" },
+  ],
   actions = [
-    { text: "Sign in", href: siteUrlConfig.signIn, isButton: true },
+    { text: "Sign in", href: "https://www.launchuicomponents.com/", isButton: false },
+    {
+      text: "Get Started",
+      href: "https://www.launchuicomponents.com/",
+      isButton: true,
+      variant: "default",
+    },
   ],
   showNavigation = true,
   customNavigation,
-  className = "max-w-7xl mx-auto",
-}: NavbarProps) => {
-
-  const dispatch = useDispatch();
-  const theme = useSelector((state: RootState) => state.app.theme);
-  
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-
+  className,
+}: NavbarProps) {
   return (
     <header className={cn("sticky top-0 z-50 -mb-4 px-4 pb-4", className)}>
       <div className="fade-bottom bg-background/15 absolute left-0 h-24 w-full backdrop-blur-lg"></div>
       <div className="max-w-container relative mx-auto">
         <NavbarComponent>
           <NavbarLeft>
-            <a href={homeUrl} className="items-center gap-2 text-xl font-bold" >{name}</a>
+            <a
+              href={homeUrl}
+              className="flex items-center gap-2 text-xl font-bold"
+            >
+              {logo}
+              {name}
+            </a>
             {showNavigation && (customNavigation || <Navigation />)}
           </NavbarLeft>
           <NavbarRight>
-            {actions
-            .filter((action) => !isAuthenticated || (action.text !== "Sign in" && action.text !== "Sign up"))
-            .map((action, index) =>
+            {actions.map((action, index) =>
               action.isButton ? (
                 <Button
                   key={index}
                   variant={action.variant || "default"}
                   asChild
-                  className='hidden md:block'
                 >
                   <a href={action.href}>
                     {action.icon}
@@ -70,11 +99,6 @@ const Header: React.FC = ({
                 </a>
               ),
             )}
-
-                <div className="relative flex rounded-full cursor-pointer mx-3" onClick={() => dispatch(toggleTheme())}>
-                  {theme === "dark" ? <Sun /> : <Moon />}
-                </div>
-
             <Sheet>
               <SheetTrigger asChild>
                 <Button
@@ -94,10 +118,7 @@ const Header: React.FC = ({
                   >
                     <span>{name}</span>
                   </a>
-                  {mobileLinks
-                  .filter((link) => !isAuthenticated || (link.text !== "SignIn" && link.text !== "SignUp"))
-                  .map((link, index) =>
-                  (
+                  {mobileLinks.map((link, index) => (
                     <a
                       key={index}
                       href={link.href}
@@ -113,7 +134,5 @@ const Header: React.FC = ({
         </NavbarComponent>
       </div>
     </header>
-  )
+  );
 }
-
-export default Header
