@@ -1,10 +1,3 @@
-"use client";
-
-import * as React from "react";
-
-import { cn } from "@/lib/utils";
-
-import LaunchUI from "../logos/launch-ui";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,11 +7,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "./navigation-menu";
-import { Link } from "react-router-dom";
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import LaunchUI from "../logos/launch-ui";
 import { navLinks, services } from "@/utils/constants";
 import type { navLinkProps } from "@/types/omponentTypes/header";
 import type { ContentCardProps } from "@/types/omponentTypes/services";
-
 
 interface NavigationProps {
   menuItems?: navLinkProps[];
@@ -55,7 +49,7 @@ export default function Navigation({
                 className={navigationMenuTriggerStyle()}
                 asChild
               >
-                <Link to={item.href || ""}>{item.text}</Link>
+                <a href={item.href}>{item.text}</a>
               </NavigationMenuLink>
             ) : (
               <>
