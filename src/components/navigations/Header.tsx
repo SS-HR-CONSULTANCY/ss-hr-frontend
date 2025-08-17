@@ -5,6 +5,7 @@ import {
   Navbar as NavbarComponent,
 } from "@/components/ui/navbar";
 import { cn } from "@/lib/utils";
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useAppSelector } from '@/hooks/redux';
@@ -15,8 +16,8 @@ import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
 import { siteUrlConfig, navLinks } from "@/utils/constants";
 import type { NavbarProps } from '@/types/omponentTypes/header';
+import logoTransparent from '../../assets/logos/logo-tranparent.png';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
 
 const Header: React.FC = ({
   name = "ShahaalamGroups",
@@ -40,6 +41,9 @@ const Header: React.FC = ({
       <div className="relative max-w-7xl mx-auto">
         <NavbarComponent>
           <NavbarLeft>
+            <Link to={homeUrl} >
+            <img src={logoTransparent} alt="SS HR" className="size-10 cursor-pointer" />
+            </Link>
             <a href={homeUrl} className="items-center gap-2 text-xl font-bold" >{name}</a>
             {showNavigation && (customNavigation || <Navigation />)}
           </NavbarLeft>

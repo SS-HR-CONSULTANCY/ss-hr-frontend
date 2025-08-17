@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { loginUser, clearError } from '../../store/slices/authSlice';
 import { loginSchema } from '../../utils/validationSchema';
 import type { LoginFormData } from '../../utils/validationSchema';
-import logoTransparent from '../../assets/logo-tranparent.png';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { loginUser, clearError } from '../../store/slices/authSlice';
+import logoTransparent from '../../assets/logos/logo-tranparent.png';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ const Login: React.FC = () => {
   const { isLoading, error, isAuthenticated } = useAppSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
 
-  const from = (location.state as any)?.from?.pathname || '/';
+  const from = (location.state)?.from?.pathname || '/';
 
   const {
     register,

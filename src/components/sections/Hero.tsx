@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from "motion/react";
 import { useNavigate } from 'react-router-dom';
-import bannerOne from '../../assets/bannerOne.png';
-import bannerTwo from '../../assets/bannerTwo.jpg';
+import bannerOne from '../../assets/heroImages/bannerOne.png';
+import bannerTwo from '../../assets/heroImages/bannerTwo.jpg';
+import bannerThree from '../../assets/heroImages/bannerThree.png';
 import { ImagesSlider } from "../ui/images-slider";
-import bannerThree from '../../assets/bannerThree.png';
 
 const Hero: React.FC = () => {
 
