@@ -1,56 +1,46 @@
-import { useAppSelector } from '@/hooks/redux';
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { motion } from "motion/react";
+import bannerOne from '../../assets/bannerOne.png';
+import bannerTwo from '../../assets/bannerTwo.jpg';
+import { ImagesSlider } from "../ui/images-slider";
+import bannerThree from '../../assets/bannerThree.png';
+import { useNavigate } from 'react-router-dom';
 
 const Hero: React.FC = () => {
 
-      const { isAuthenticated } = useAppSelector((state) => state.auth);
-    
+  const navigate = useNavigate();
+
+  const images = [
+    bannerOne,
+    bannerTwo,
+    bannerThree
+  ];
+
   return (
-    <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6 font-['Prata']">
-              Your Gateway to Career Success
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto font-['Open_Sans']">
-              Connect with top employers and discover opportunities that match your skills. 
-              We're here to bridge the gap between talent and opportunity.
-            </p>
-            {!isAuthenticated ? (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  to="/register" 
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-blue-700 transition-colors"
-                >
-                  Find Jobs
-                </Link>
-                <Link 
-                  to="/register" 
-                  className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg text-lg hover:bg-blue-50 transition-colors"
-                >
-                  Post Jobs
-                </Link>
-              </div>
-            ) : (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link 
-                  to="/jobs" 
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-blue-700 transition-colors"
-                >
-                  Browse Jobs
-                </Link>
-                <Link 
-                  to="/dashboard" 
-                  className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg text-lg hover:bg-blue-50 transition-colors"
-                >
-                  My Dashboard
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+     <ImagesSlider className="h-[40rem] mt-2" images={images}>
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: -80,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 0.6,
+        }}
+        className="z-50 flex flex-col justify-center items-center"
+      >
+        <motion.p className="font-bold text-xl md:text-6xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-300 py-4">
+          We Bridge Talent, Travel, and <br /> Opportunities Worldwide
+        </motion.p>
+        <button className="text-white px-4 py-2 backdrop-blur-sm border bg-[#0077B6]/10 border-[#0077B6] mx-auto text-center rounded-full relative mt-4 cursor-pointer" onClick={() => {navigate('/register')}}>
+          <span>Sign Up →</span>
+          <div className="absolute inset-x-0  h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent via-[#48CAE4] to-transparent" />
+        </button>
+      </motion.div>
+    </ImagesSlider>
   )
 }
 

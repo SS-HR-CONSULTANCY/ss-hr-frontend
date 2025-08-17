@@ -26,18 +26,18 @@ const Header: React.FC = ({
   ],
   showNavigation = true,
   customNavigation,
-  className = "max-w-7xl mx-auto",
+  className,
 }: NavbarProps) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
-  
+
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   return (
     <header className={cn("sticky top-0 z-50 -mb-4 px-4 pb-4", className)}>
-      <div className="fade-bottom bg-background/15 absolute left-0 h-24 w-full backdrop-blur-lg"></div>
-      <div className="max-w-container relative mx-auto">
+      <div className="fade-bottom bg-background/15 absolute left-0 h-20 w-full backdrop-blur-lg"></div>
+      <div className="relative max-w-7xl mx-auto">
         <NavbarComponent>
           <NavbarLeft>
             <a href={homeUrl} className="items-center gap-2 text-xl font-bold" >{name}</a>
@@ -45,35 +45,35 @@ const Header: React.FC = ({
           </NavbarLeft>
           <NavbarRight>
             {actions
-            .filter((action) => !isAuthenticated || (action.text !== "Sign in" && action.text !== "Sign up"))
-            .map((action, index) =>
-              action.isButton ? (
-                <Button
-                  key={index}
-                  variant={action.variant || "default"}
-                  asChild
-                  className='hidden md:block'
-                >
-                  <a href={action.href}>
-                    {action.icon}
+              .filter((action) => !isAuthenticated || (action.text !== "Sign in" && action.text !== "Sign up"))
+              .map((action, index) =>
+                action.isButton ? (
+                  <Button
+                    key={index}
+                    variant={action.variant || "default"}
+                    asChild
+                    className='hidden md:block'
+                  >
+                    <a href={action.href}>
+                      {action.icon}
+                      {action.text}
+                      {action.iconRight}
+                    </a>
+                  </Button>
+                ) : (
+                  <a
+                    key={index}
+                    href={action.href}
+                    className="hidden text-sm md:block"
+                  >
                     {action.text}
-                    {action.iconRight}
                   </a>
-                </Button>
-              ) : (
-                <a
-                  key={index}
-                  href={action.href}
-                  className="hidden text-sm md:block"
-                >
-                  {action.text}
-                </a>
-              ),
-            )}
+                ),
+              )}
 
-                <div className="relative flex rounded-full cursor-pointer mx-3" onClick={() => dispatch(toggleTheme())}>
-                  {theme === "dark" ? <Sun /> : <Moon />}
-                </div>
+            <div className="relative flex rounded-full cursor-pointer mx-3" onClick={() => dispatch(toggleTheme())}>
+              {theme === "dark" ? <Sun /> : <Moon />}
+            </div>
 
             <Sheet>
               <SheetTrigger asChild>
@@ -95,17 +95,17 @@ const Header: React.FC = ({
                     <span>{name}</span>
                   </a>
                   {mobileLinks
-                  .filter((link) => !isAuthenticated || (link.text !== "SignIn" && link.text !== "SignUp"))
-                  .map((link, index) =>
-                  (
-                    <a
-                      key={index}
-                      href={link.href}
-                      className="text-muted-foreground hover:text-foreground"
-                    >
-                      {link.text}
-                    </a>
-                  ))}
+                    .filter((link) => !isAuthenticated || (link.text !== "SignIn" && link.text !== "SignUp"))
+                    .map((link, index) =>
+                    (
+                      <a
+                        key={index}
+                        href={link.href}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        {link.text}
+                      </a>
+                    ))}
                 </nav>
               </SheetContent>
             </Sheet>
