@@ -8,11 +8,13 @@ import medicalRecruitment from '../assets/servicesImages/medicalRecruitment.jpg'
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/omponentTypes/header';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
 
+export const companyName = "ShahaalamGroups";
+
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {
   home: '/',
   aboutus: "#aboutus",
-  packages: "#packages",
+  travelpackages: "#packages",
   reviews: "#reviews",
   contact: "#contact",
   services: '#services',
@@ -25,7 +27,7 @@ export const navLinks: navLinkProps[] = [
   { text: "About Us", href: siteUrlConfig.aboutus, isLink: true, isForDesk: true, isForMob: true },
   { text: "Services", href: siteUrlConfig.services, content: "components", isForDesk: true },
   { text: "Services", href: siteUrlConfig.services, isForMob: true },
-  { text: "Packages", href: siteUrlConfig.packages, isLink: true, isForDesk: true, isForMob: true },
+  { text: "Travel Packages", href: siteUrlConfig.travelpackages, isLink: true, isForDesk: true, isForMob: true },
   { text: "Reviews", href: siteUrlConfig.reviews, isLink: true, isForDesk: true, isForMob: true },
   { text: "Contact", href: siteUrlConfig.contact, isLink: true, isForDesk: true, isForMob: true },
   { text: "SignIn", href: siteUrlConfig.signIn, isLink: true, isForMob: true },
@@ -129,3 +131,38 @@ export const packages: PackageProps[] = [
     price: 100000,
   },
 ];
+
+
+// Footer compoenent constants
+export const footerData = [
+  {
+    title: "Quick Links",
+    links: [
+      { text: "Home", href: "/" },
+      { text: "About Us", href: "#aboutus" },
+      { text: "Services", href: "#services" },
+      { text: "Packages", href: "#packages" },
+      { text: "Reviews", href: "#reviews" },
+      { text: "Contact", href: "#contact" },
+    ]
+  },
+  {
+    title: "Contact",
+    links: [
+      { text: "Instagram", href: "" },
+      { text: "Facebook", href: "" },
+      { text: "X", href: "" },
+      { text: "Phone IN - +91 971543274799", href: "tel:+91 971543274799" },
+      { text: "Phone UAE - +97 0523664492", href: "tel:+970523664492" },
+      { text: "Email - aalamconsultancy0@gmail.com", href: "mailto:aalamconsultancy0@gmail.com" },
+    ],
+  },
+]
+
+export const footerPoliciesData = [
+    { text: "Privacy Policy", href: "" },
+    { text: "Terms of Service", href: "" },
+  ]
+
+  export const footerCopyright = "© 2025 shahaalamGroups.com All rights reserved";
+  export const footerAddress = "Al Qiyadah Metro Station Exit2, Old Labour Office Al Kazim Building Entrance B, Dubai, UAE"

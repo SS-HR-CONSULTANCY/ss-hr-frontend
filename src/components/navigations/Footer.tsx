@@ -1,49 +1,74 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Footer as FooterNew,
+  FooterBottom,
+  FooterColumn,
+  FooterContent,
+} from "@/components/ui/footer";
+import { cn } from "@/lib/utils";
+import { ModeToggle } from "@/components/ui/mode-toggle";
+import type { FooterProps } from "@/types/omponentTypes/footer";
+import logoTransparent from '../../assets/logos/logo-tranparent.png';
+import { companyName, footerAddress, footerCopyright, footerData, footerPoliciesData } from '@/utils/constants';
+import { MapPin } from "lucide-react";
 
-const Footer: React.FC = () => {
+const Footer = ({
+  name = companyName,
+  columns = footerData,
+  copyright = footerCopyright,
+  policies = footerPoliciesData,
+  showModeToggle = true,
+  className,
+  address = footerAddress,
+}: FooterProps) => {
+
+  const currentYear = new Date().getFullYear();
+  const copyrightText = copyright.replace("2025", currentYear.toString());
+
   return (
-    <footer id='footer' className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4 font-['Prata']">SS HR Consultancy</h3>
-              <p className="text-gray-400">
-                Your trusted partner in career development and talent acquisition.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link to="#" className="hover:text-white transition-colors">Find Jobs</Link></li>
-                <li><Link to="#" className="hover:text-white transition-colors">Post Jobs</Link></li>
-                <li><Link to="#" className="hover:text-white transition-colors">Services</Link></li>
-                <li><Link to="#" className="hover:text-white transition-colors">About Us</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link to="#" className="hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link to="#" className="hover:text-white transition-colors">Contact Us</Link></li>
-                <li><Link to="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link to="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
-              <div className="space-y-2 text-gray-400">
-                <p>Email: info@sshrconsultancy.com</p>
-                <p>Phone: +91 9876543210</p>
-                <p>Address: Kochi, Kerala, India</p>
+    <footer className={cn("w-full px-4 border-t", className)}>
+      <FooterNew className="max-w-7xl mx-auto dark:bg-black bg-white">
+          <FooterContent className="flex flex-col md:flex-row md:justify-between">
+            {columns.map((column, index) => (
+              <FooterColumn key={index}>
+                <h3 className="text-md pt-1 font-semibold">{column.title}</h3>
+                {column.links.map((link, linkIndex) => (
+                  <a
+                    key={linkIndex}
+                    href={link.href}
+                    className="text-muted-foreground text-sm hover:text-black dark:hover:text-white"
+                  >
+                    {link.text}
+                  </a>
+                ))}
+              </FooterColumn>
+            ))}
+            <FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1">
+              <div className="flex flex-col w-6/12">
+                <h3 className="text-md pt-1 font-semibold">Address</h3>
+                <h6 className='text-muted-foreground text-sm mt-4 text-justify'>{address}</h6>
+                <a href="https://maps.app.goo.gl/XRxwHvB2YGcXZSok7" className="flex mt-4"><MapPin /> Google Map</a>
               </div>
-            </div>
+            </FooterColumn>
+            <FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1 align-end">
+              <div className="flex items-center flex-col justify-center h-full space-y-4">
+                <img src={logoTransparent} alt="SS HR" className="size-20 cursor-pointer" />
+                <h3 className="text-xl font-bold">{name}</h3>
+              </div>
+            </FooterColumn>
+          </FooterContent>
+        <FooterBottom className="border-t">
+          <div>{copyrightText}</div>
+          <div className="flex items-center gap-4">
+            {policies.map((policy, index) => (
+              <a key={index} href={policy.href}>
+                {policy.text}
+              </a>
+            ))}
+            {showModeToggle && <ModeToggle />}
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 SS HR Consultancy. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+        </FooterBottom>
+      </FooterNew>
+    </footer>
   )
 }
 

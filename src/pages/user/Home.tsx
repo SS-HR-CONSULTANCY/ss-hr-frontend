@@ -5,9 +5,9 @@ import About from '@/components/sections/About';
 import Reviews from '@/components/sections/Reviews';
 import Contact from '@/components/sections/Contact';
 import Header from '@/components/navigations/Header';
-import Footer from '@/components/navigations/Footer';
 import Services from '@/components/sections/Services';
 import Packages from '@/components/sections/Packages';
+import Footer from '@/components/navigations/Footer';
 
 const Home: React.FC = () => {
 
