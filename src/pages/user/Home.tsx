@@ -8,6 +8,7 @@ import Header from '@/components/navigations/Header';
 import Services from '@/components/sections/Services';
 import Packages from '@/components/sections/Packages';
 import Footer from '@/components/navigations/Footer';
+import CallToAction from '@/components/sections/CallToAction';
 
 const Home: React.FC = () => {
 
@@ -16,6 +17,7 @@ const Home: React.FC = () => {
       <AosComponent>
         <Header />
         <Hero />
+        <CallToAction />
         <About />
         <Services />
         <Packages />

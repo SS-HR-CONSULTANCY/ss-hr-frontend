@@ -9,6 +9,7 @@ import jobRecruitment from '../assets/servicesImages/jobRecruitment.png';
 import medicalRecruitment from '../assets/servicesImages/medicalRecruitment.jpg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/omponentTypes/header';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
+import type { CallToActionProps } from '@/types/omponentTypes/callToAction';
 
 export const companyName = "ShahaalamGroups";
 
@@ -119,7 +120,7 @@ export const packages: PackageProps[] = [
     price: 100000,
   },
   {
-    name: "Female Package",
+    name: "High Package",
     description: "Package for female",
     features: [
       "2 Months Visit Visa",
@@ -231,3 +232,14 @@ export const contactData: ContactItem[] = [
   },
 ];
 export const businessHours = "Mon–Sat, 9:30 AM – 6:30 PM";
+
+
+// CallToAction compoenent constats
+export const callToActionData: CallToActionProps = {
+  title : "Ready to get started?",
+  description : "From seamless travel arrangements to visa support, job opportunities, and medical recruitment — we provide everything you need for a successful international experience. Let us handle the details so you can focus on your future.",
+  buttons : [
+    { href: "/register", text: "Get Started", variant: "default" },
+    { href: "/travel-packages", text: "Travel Packages", variant: "outline" },
+  ],
+}
