@@ -1,33 +1,33 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Login, Register } from "./pages";
 import Home from "./pages/user/Home";
+import { Login, Register } from "./pages";
+import Error404 from "./pages/common/Error404";
+import ThemeWrapper from "./utils/ThemeWrapper";
 import AdminLogin from "./pages/admin/AdminLogin";
+import ProtectedRoute from "./router/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-// import ProtectedRoute from "./components/common/ProtectedRoute";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path='/admin/dashboard' element={<AdminDashboard />} />
-        {/* <Route 
-          path="/admin/dashboard" 
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          } 
-        /> */}
-        
-        {/* Redirect old admin routes */}
-        <Route path="/admin-login" element={<Navigate to="/admin/login" replace />} />
-        <Route path="/admin-dashboard" element={<Navigate to="/admin/dashboard" replace />} />
-      </Routes>
-    </Router>
+    <ThemeWrapper>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path='*' element={<Error404 />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </ThemeWrapper>
   );
 };
 

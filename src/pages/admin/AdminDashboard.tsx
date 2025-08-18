@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { logoutUser } from '../../store/slices/authSlice';
-import logoTransparent from '../../assets/logo-tranparent.png';
+import logoTransparent from '../../assets/logos/logo-tranparent.png';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
 const AdminDashboard: React.FC = () => {
   const dispatch = useAppDispatch();
