@@ -71,8 +71,7 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
-        <div className="w-full z-20">
-          <Card className="w-full max-w-md mx-auto border border-slate-700/50 shadow-xl">
+          <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
             <FormHeader title='Sign In' description='Enter your credentials to access your account' />
             <CardContent>
 
@@ -129,7 +128,6 @@ const Login: React.FC = () => {
               <GoogleButton onClick={handleGoogleLogin} />
             </CardFooter>
           </Card>
-        </div>
       </BackgroundBeamsWithCollision>
     </div>
   );

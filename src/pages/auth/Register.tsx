@@ -94,8 +94,7 @@ const Register: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className="w-full">
-        <Card className=" w-full max-w-md mx-auto border border-slate-700/50 shadow-xl">
+        <Card className="w-full max-w-md border border-slate-700/50 shadow-xl mx-4 md:mx-0">
           <FormHeader title='Sign In' description='Enter your credentials to access your account' />
           <CardContent>
 
@@ -174,7 +173,6 @@ const Register: React.FC = () => {
             <GoogleButton onClick={handleGoogleLogin} />
           </CardFooter>
         </Card>
-      </div>
     </div>
   );
 };

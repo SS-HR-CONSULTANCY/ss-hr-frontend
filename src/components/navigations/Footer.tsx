@@ -25,7 +25,7 @@ const Footer = ({
 
   return (
     <footer className={`w-full border-t ${className}`}>
-      <FooterNew className="max-w-7xl mx-auto ">
+      <FooterNew className="max-w-7xl mx-auto px-4 md:px-0">
           <FooterContent className="flex flex-col md:flex-row md:justify-between">
             {columns.map((column, index) => (
               <FooterColumn key={index}>

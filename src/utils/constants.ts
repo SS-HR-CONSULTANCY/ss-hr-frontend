@@ -216,7 +216,7 @@ export const contactData: ContactItem[] = [
   {
     icon: Phone,
     label: "Phone (UAE)",
-    value: "0523664492",
+    value: "+97 0523664492",
     href: "tel:0523664492",
   },
   {

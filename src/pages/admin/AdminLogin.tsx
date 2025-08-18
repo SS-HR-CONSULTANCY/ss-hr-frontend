@@ -71,62 +71,60 @@ const AdminLogin: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
-        <div className="w-full z-20">
-          <Card className="w-full max-w-md mx-auto border border-slate-700/50 shadow-xl">
-            <FormHeader title='Sign In' description='Enter your credentials to access your account' />
-            <CardContent>
+        <Card className="w-full max-w-md mx-auto border border-slate-700/50 shadow-xl z-20">
+          <FormHeader title='Sign In' description='Enter your credentials to access your account' />
+          <CardContent>
 
-              {error && (
-                <Alert variant="destructive" className="mb-4">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <FormField<LoginFormData>
-                  id="email"
-                  label="Email Address"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="Enter your email"
-                  error={errors.email?.message}
-                  register={register}
-                />
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <FormField<LoginFormData>
+                id="email"
+                label="Email Address"
+                type="email"
+                autoComplete="email"
+                placeholder="Enter your email"
+                error={errors.email?.message}
+                register={register}
+              />
 
-                <FormField<LoginFormData>
-                  id="password"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder="Enter your password"
-                  error={errors.password?.message}
-                  register={register}
-                  showTogglePassword
-                />
+              <FormField<LoginFormData>
+                id="password"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="Enter your password"
+                error={errors.password?.message}
+                register={register}
+                showTogglePassword
+              />
 
-                <RememberMeWithFP />
+              <RememberMeWithFP />
 
-                <Button type="submit"
-                  className="w-full"
-                  disabled={isLoading || !watchedValues.email || !watchedValues.password}>
-                  {isLoading ? (
-                    <span className="flex items-center gap-2">
-                      <LoaderCircle className="animate-spin" />
-                      Authenticating...
-                    </span>
-                  ) : (
-                    'Access Admin Portal'
-                  )}
-                </Button>
-              </form>
+              <Button type="submit"
+                className="w-full"
+                disabled={isLoading || !watchedValues.email || !watchedValues.password}>
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <LoaderCircle className="animate-spin" />
+                    Authenticating...
+                  </span>
+                ) : (
+                  'Access Admin Portal'
+                )}
+              </Button>
+            </form>
 
-            </CardContent>
-            <CardFooter className='flex flex-col space-y-4 w-full'>
-              <CustomLink href='/register' text='Create your account' />
-              <GoogleButton onClick={handleGoogleLogin} />
-            </CardFooter>
-          </Card>
-        </div>
+          </CardContent>
+          <CardFooter className='flex flex-col space-y-4 w-full'>
+            <CustomLink href='/register' text='Create your account' />
+            <GoogleButton onClick={handleGoogleLogin} />
+          </CardFooter>
+        </Card>
       </BackgroundBeamsWithCollision>
     </div>
   );
