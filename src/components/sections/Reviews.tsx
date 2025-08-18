@@ -7,7 +7,7 @@ import { InfiniteMovingCards } from '../ui/infinite-moving-cards';
 
 const Reviews: React.FC = () => {
     return (
-        <section id="reviews">
+        <section id="reviews" className="py-16">
             <Heading
                 heading='Reviews'
                 headingDescription='See what our customers are saying about us.'
@@ -35,12 +35,14 @@ const Reviews: React.FC = () => {
                     }}
                     className="relative flex flex-col gap-4 items-center justify-center px-4"
                 >
-                    <div className="flex flex-col justify-center items-center relative z-20">
+                    <div className="relative w-full max-w-screen overflow-hidden">
                         <InfiniteMovingCards
                             items={reviews}
                             direction="right"
                             speed="normal"
                         />
+                    </div>
+                    <div className="relative w-full max-w-screen overflow-hidden mt-4 hidden md:block">
                         <InfiniteMovingCards
                             items={reviews}
                             direction="left"

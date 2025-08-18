@@ -1,3 +1,5 @@
+import { Mail, MapPin, Phone } from 'lucide-react';
+import type { ContactItem } from '@/types/omponentTypes/contact';
 import type { PackageProps } from '@/types/omponentTypes/package';
 import visaService from '../assets/servicesImages/visaService.png';
 import travelService from '../assets/servicesImages/travelService.jpg';
@@ -154,7 +156,7 @@ export const footerData = [
       { text: "X", href: "" },
       { text: "Phone IN - +91 971543274799", href: "tel:+91 971543274799" },
       { text: "Phone UAE - +97 0523664492", href: "tel:+970523664492" },
-      { text: "Email - aalamconsultancy0@gmail.com", href: "mailto:aalamconsultancy0@gmail.com" },
+      { text: "Email - aalamconsultancy0@gmail.com", href: "mailto:alamconsultancy0@gmail.com" },
     ],
   },
 ]
@@ -200,3 +202,32 @@ export const footerPoliciesData = [
         title: "Moby-Dick",
     },
 ];
+
+
+// Contact component constants
+export const contactData: ContactItem[] = [
+  {
+    icon: Phone,
+    label: "Phone (IN)",
+    value: "+91 97154 3274799",
+    href: "tel:+91971543274799",
+  },
+  {
+    icon: Phone,
+    label: "Phone (UAE)",
+    value: "0523664492",
+    href: "tel:0523664492",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "aalamconsultancy0@gmail.com",
+    href: "mailto:aalamconsultancy0@gmail.com",
+  },
+  {
+    icon: MapPin,
+    label: "Office",
+    value: "Dubai & India",
+  },
+];
+export const businessHours = "Mon–Sat, 9:30 AM – 6:30 PM";
