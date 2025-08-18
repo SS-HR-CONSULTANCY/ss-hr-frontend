@@ -6,8 +6,8 @@ import { TextGenerateEffect } from '../ui/text-generate-effect';
 
 const About: React.FC = () => {
   return (
-    <section id="aboutus" className="pt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-12 gap-8">
+    <section id="aboutus" className="py-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8 px-4 md:px-0">
         <div className="col-span-12 md:col-span-8">
           <Heading
             heading="About Us"
@@ -17,11 +17,10 @@ const About: React.FC = () => {
           />
           <TextGenerateEffect duration={2} filter={false} words={words} />
         </div>
-
-        <div className="col-span-12 md:col-span-4 flex justify-center items-center p-4">
+        <div className="col-span-12 md:col-span-4 flex justify-center items-center">
           <img
             src={aboutOne}
-            className="w-[500px] object-center py-24"
+            className="w-[500px] object-center"
             alt="About Us"
           />
         </div>

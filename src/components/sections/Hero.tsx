@@ -32,7 +32,7 @@ const Hero: React.FC = () => {
         }}
         className="z-50 flex flex-col justify-center items-center"
       >
-        <motion.p className="font-bold text-xl md:text-6xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-300 py-4">
+        <motion.p className="font-bold text-4xl md:text-6xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-300 py-4">
           We Bridge Talent, Travel, and <br /> Opportunities Worldwide
         </motion.p>
         <button className="text-white px-4 py-2 backdrop-blur-sm border bg-[#01487e]/10 border-[#01487e] mx-auto text-center rounded-full relative mt-4 cursor-pointer" onClick={() => {navigate('/register')}}>

@@ -11,8 +11,8 @@ const Packages: React.FC = () => {
     const { isAuthenticated } = useAppSelector((state) => state.auth);
 
     return (
-        <section id="packages" className="py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="packages" className="pt-16">
+            <div className="max-w-7xl mx-auto px-4 md:px-0">
                 <Heading heading='Packages' headingDescription='Checkout our packages.' mainDivClassName="text-center mx-auto max-w-2xl" />
                 <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 py-6`} >
                     {packages.map(item => (

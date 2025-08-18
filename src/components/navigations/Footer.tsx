@@ -24,8 +24,8 @@ const Footer = ({
   const copyrightText = copyright.replace("2025", currentYear.toString());
 
   return (
-    <footer className={`w-full px-4 border-t ${className}`}>
-      <FooterNew className="max-w-7xl mx-auto dark:bg-black bg-white">
+    <footer className={`w-full border-t ${className}`}>
+      <FooterNew className="max-w-7xl mx-auto dark:bg-black bg-white px-4 md:px-0">
           <FooterContent className="flex flex-col md:flex-row md:justify-between">
             {columns.map((column, index) => (
               <FooterColumn key={index}>
