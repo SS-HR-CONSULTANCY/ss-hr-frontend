@@ -21,7 +21,7 @@ const CallToAction = () => {
         )}
 
         {callToActionData.buttons.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-4 mt-4">
+          <div className="flex flex-wrap justify-center gap-4 mt-4 overflow-hidden">
             {callToActionData.buttons.map((button, i) => (
               <Button
                 key={i}

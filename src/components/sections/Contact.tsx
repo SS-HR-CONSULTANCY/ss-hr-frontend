@@ -31,7 +31,7 @@ export default function Contact() {
           mainDivClassName='text-center mx-auto max-w-2xl'
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden">
 
           <Card className="h-full" data-aos="fade-right" >
             <CardHeader>

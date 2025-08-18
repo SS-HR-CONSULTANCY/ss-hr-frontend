@@ -14,13 +14,13 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import { siteUrlConfig, navLinks } from "@/utils/constants";
 import type { NavbarProps } from '@/types/omponentTypes/header';
 import logoTransparent from '../../assets/logos/logo-tranparent.png';
+import { siteUrlConfig, navLinks, companyName } from "@/utils/constants";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Header: React.FC = ({
-  name = "ShahaalamGroups",
+  name = companyName,
   homeUrl = siteUrlConfig.home,
   actions = [
     { text: "Sign in", href: siteUrlConfig.signIn, isButton: true },
@@ -37,7 +37,7 @@ const Header: React.FC = ({
 
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>
-      <div className="fade-bottom bg-background/15 absolute left-0 h-16 w-full backdrop-blur-lg"></div>
+      <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto px-4 md:px-0">
         <NavbarComponent>
           <NavbarLeft>

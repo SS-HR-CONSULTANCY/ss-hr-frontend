@@ -25,7 +25,7 @@ const Footer = ({
 
   return (
     <footer className={`w-full border-t ${className}`}>
-      <FooterNew className="max-w-7xl mx-auto dark:bg-black bg-white px-4 md:px-0">
+      <FooterNew className="max-w-7xl mx-auto ">
           <FooterContent className="flex flex-col md:flex-row md:justify-between">
             {columns.map((column, index) => (
               <FooterColumn key={index}>
@@ -50,11 +50,7 @@ const Footer = ({
             </FooterColumn>
             <FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1 align-end">
               <div className="flex items-center flex-col justify-center h-full space-y-4">
-                <img src={logoTransparent} alt="SS HR" className="size-20 cursor-pointer"
-                  data-aos="flip-left"
-                  data-aos-easing="ease-out-cubic"
-                  data-aos-duration="2000"
-                />
+                <img src={logoTransparent} alt="SS HR" className="size-20 cursor-pointer"/>
                 <h3 className="text-xl font-bold">{name}</h3>
               </div>
             </FooterColumn>

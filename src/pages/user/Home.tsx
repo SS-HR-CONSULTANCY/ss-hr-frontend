@@ -6,7 +6,7 @@ import Footer from '@/components/navigations/Footer';
 const Home: React.FC = () => {
 
   return (
-    <div>
+    <div className='p-0 m-0'>
       <Header />
         <Outlet />
       <Footer />
