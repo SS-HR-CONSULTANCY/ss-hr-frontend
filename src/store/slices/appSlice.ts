@@ -4,7 +4,8 @@ import type { appSliceInitialState } from "@/types/appSliceTypes";
 const savedTheme = (localStorage.getItem("theme") as "light" | "dark") || "light";
 
 const initialState: appSliceInitialState = {
-    theme: savedTheme
+    theme: savedTheme,
+    adminSidebar: false,
 }
 
 const appSlice = createSlice({
@@ -19,8 +20,11 @@ const appSlice = createSlice({
             state.theme = action.payload;
             localStorage.setItem("theme", state.theme);
         },
+        toggleAdminSidebar: (state) => {
+            state.adminSidebar = !state.adminSidebar;
+        },
     }
 });
 
-export const { toggleTheme, setTheme } = appSlice.actions;
+export const { toggleTheme, setTheme, toggleAdminSidebar } = appSlice.actions;
 export default appSlice.reducer;

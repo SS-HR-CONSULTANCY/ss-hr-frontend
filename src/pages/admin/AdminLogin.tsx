@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import FormField from '@/components/form/FormFiled';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
-import CustomLink from '@/components/form/CustomLink';
 import GoogleButton from '@/components/form/GoogleButton';
 import { loginSchema } from '../../utils/validationSchema';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -72,7 +71,7 @@ const AdminLogin: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
         <Card className="w-full max-w-md mx-auto border border-slate-700/50 shadow-xl z-20">
-          <FormHeader title='Sign In' description='Enter your credentials to access your account' />
+          <FormHeader title='Admin Sign In' description='Enter your credentials to access your account' />
           <CardContent>
 
             {error && (
@@ -121,7 +120,6 @@ const AdminLogin: React.FC = () => {
 
           </CardContent>
           <CardFooter className='flex flex-col space-y-4 w-full'>
-            <CustomLink href='/register' text='Create your account' />
             <GoogleButton onClick={handleGoogleLogin} />
           </CardFooter>
         </Card>

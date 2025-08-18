@@ -5,6 +5,7 @@ import Register from "@/pages/auth/Register";
 import ProtectedRoute from "./ProtectedRoute";
 import Error404 from "@/pages/common/Error404";
 import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminLayout from "@/pages/admin/dminLayout";
 import { createBrowserRouter } from "react-router-dom";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 
@@ -17,17 +18,24 @@ const appRouter = createBrowserRouter([
             { path: 'register', element: <Register /> },
             { path: '/login', element: <Login /> },
             { path: '/admin/login', element: <AdminLogin /> },
-            {
-                path: '/admin/dashboard',
-                element: (
-                    < ProtectedRoute requiredRole="admin" >
-                        <AdminDashboard />
-                    </ProtectedRoute >
-                )
-            },
             { path: '*', element: <Error404 /> },
         ]
-    }
+    },
+    {
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+            { path: "login", element: <AdminLogin /> },
+            {
+                path: "dashboard",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminDashboard />
+                    // </ProtectedRoute>
+                ),
+            },
+        ],
+    },
 ])
 
 export default appRouter
