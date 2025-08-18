@@ -10,6 +10,7 @@ const Reviews: React.FC = () => {
         <section id="reviews" className="py-16">
             <Heading
                 heading='Reviews'
+                dataaos='fade-down'
                 headingDescription='See what our customers are saying about us.'
                 mainDivClassName='text-center mx-auto max-w-2xl'
             />

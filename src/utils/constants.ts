@@ -157,7 +157,7 @@ export const footerData = [
       { text: "X", href: "" },
       { text: "Phone IN - +91 971543274799", href: "tel:+91 971543274799" },
       { text: "Phone UAE - +97 0523664492", href: "tel:+970523664492" },
-      { text: "Email - aalamconsultancy0@gmail.com", href: "mailto:alamconsultancy0@gmail.com" },
+      { text: "Email - aalamconsultancy0@gmail.com", href: "mailto:aalamconsultancy0@gmail.com" },
     ],
   },
 ]

@@ -13,10 +13,13 @@ const Packages: React.FC = () => {
     return (
         <section id="packages" className="pt-16">
             <div className="max-w-7xl mx-auto px-4 md:px-0">
-                <Heading heading='Packages' headingDescription='Checkout our packages.' mainDivClassName="text-center mx-auto max-w-2xl" />
+                <Heading 
+                    heading='Packages' 
+                    dataaos='fade-down'
+                    headingDescription='Checkout our packages.' mainDivClassName="text-center mx-auto max-w-2xl" />
                 <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 py-6`} >
                     {packages.map(item => (
-                        <Card key={item.name} className={`p-4 rounded-2xl shadow-sm flex flex-col border-2 hover:border-[#01487e] ${item.popular && "border-2 border-[#01487e]"}`}>
+                        <Card key={item.name} className={`p-4 rounded-2xl shadow-sm flex flex-col border-2 hover:border-[#01487e] ${item.popular && "border-2 border-[#01487e]"}`} data-aos="fade-down">
                             <CardHeader>
                                 <CardTitle className="mb-7">{item.name}</CardTitle>
                                 <span className="font-bold text-5xl">{item.price === 0 ? "FREE" : item.price}</span>

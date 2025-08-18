@@ -8,7 +8,7 @@ const ContentCard = ({
   imageUrl,
 }: ContentCardProps) => {
   return (
-    <div className="w-full group/card flex">
+    <div className="w-full group/card flex" data-aos="fade-up">
       <div
         className={cn(
           "border-0 cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl flex flex-col justify-end p-2 bg-cover bg-center w-full"

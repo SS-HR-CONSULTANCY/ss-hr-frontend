@@ -26,13 +26,14 @@ export default function Contact() {
 
         <Heading
           heading='Get in Touch'
+          dataaos="fade-down"
           headingDescription='Questions about visas, tickets, recruitment, or attestation? We’re here to help.'
           mainDivClassName='text-center mx-auto max-w-2xl'
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          <Card className="h-full">
+          <Card className="h-full" data-aos="fade-right" >
             <CardHeader>
               <CardTitle>Contact Information</CardTitle>
               <CardDescription>We’d love to hear from you.</CardDescription>
@@ -55,7 +56,7 @@ export default function Contact() {
           </Card>
 
 
-          <Card className="h-full">
+          <Card className="h-full" data-aos="fade-left" >
             <CardHeader>
               <CardTitle>Send us a message</CardTitle>
               <CardDescription>We typically respond within one business day.</CardDescription>

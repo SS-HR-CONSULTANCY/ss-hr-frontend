@@ -50,7 +50,11 @@ const Footer = ({
             </FooterColumn>
             <FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1 align-end">
               <div className="flex items-center flex-col justify-center h-full space-y-4">
-                <img src={logoTransparent} alt="SS HR" className="size-20 cursor-pointer" />
+                <img src={logoTransparent} alt="SS HR" className="size-20 cursor-pointer"
+                  data-aos="flip-left"
+                  data-aos-easing="ease-out-cubic"
+                  data-aos-duration="2000"
+                />
                 <h3 className="text-xl font-bold">{name}</h3>
               </div>
             </FooterColumn>

@@ -6,13 +6,15 @@ interface HeadingProps {
   headingDescription: string;
   mainDivClassName: string;
   headingClassName?: string;
+  dataaos?: string;
 }
 
 const Heading: React.FC<HeadingProps> = ({
   heading,
   headingDescription,
   mainDivClassName,
-  headingClassName = "w-[100%]"
+  headingClassName = "w-[100%]",
+  dataaos
 }) => {
   return (
     <div
@@ -20,6 +22,7 @@ const Heading: React.FC<HeadingProps> = ({
         mainDivClassName,
         "mb-10 lg:mb-14"
       )}
+      data-aos={`${dataaos}`}
     >
       <h2 className={`text-black dark:text-white scroll-m-20 border-b border-gray-500 dark:border-gray-400 pb-2 text-3xl font-semibold first:mt-0 ${headingClassName}`}>
         {heading}
