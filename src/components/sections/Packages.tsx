@@ -16,7 +16,7 @@ const Packages: React.FC = () => {
                 <Heading heading='Packages' headingDescription='Checkout our packages.' mainDivClassName="text-center mx-auto max-w-2xl" />
                 <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 py-6`} >
                     {packages.map(item => (
-                        <Card key={item.name} className={`p-4 rounded-2xl shadow-sm flex flex-col border-2 hover:border-[#0077B6] ${item.popular && "border-2 border-[#0077B6]"}`}>
+                        <Card key={item.name} className={`p-4 rounded-2xl shadow-sm flex flex-col border-2 hover:border-[#01487e] ${item.popular && "border-2 border-[#01487e]"}`}>
                             <CardHeader>
                                 <CardTitle className="mb-7">{item.name}</CardTitle>
                                 <span className="font-bold text-5xl">{item.price === 0 ? "FREE" : item.price}</span>
@@ -40,7 +40,7 @@ const Packages: React.FC = () => {
                                 </div>
                             ) : (
                                 <CardFooter>
-                                    <Button className="w-full cursor-pointer hover:bg-[#0077B6]" variant={"outline"}>
+                                    <Button className="w-full cursor-pointer hover:bg-[#01487e]" variant={"outline"}>
                                         Sign up
                                     </Button>
                                 </CardFooter>

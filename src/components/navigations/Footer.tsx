@@ -4,12 +4,11 @@ import {
   FooterColumn,
   FooterContent,
 } from "@/components/ui/footer";
-import { cn } from "@/lib/utils";
+import { MapPin } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import type { FooterProps } from "@/types/omponentTypes/footer";
 import logoTransparent from '../../assets/logos/logo-tranparent.png';
 import { companyName, footerAddress, footerCopyright, footerData, footerPoliciesData } from '@/utils/constants';
-import { MapPin } from "lucide-react";
 
 const Footer = ({
   name = companyName,
@@ -25,7 +24,7 @@ const Footer = ({
   const copyrightText = copyright.replace("2025", currentYear.toString());
 
   return (
-    <footer className={cn("w-full px-4 border-t", className)}>
+    <footer className={`w-full px-4 border-t ${className}`}>
       <FooterNew className="max-w-7xl mx-auto dark:bg-black bg-white">
           <FooterContent className="flex flex-col md:flex-row md:justify-between">
             {columns.map((column, index) => (
