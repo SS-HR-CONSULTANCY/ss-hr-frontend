@@ -51,18 +51,18 @@ const BarChartVertical: React.FC<BarChartVerticalProps> = ({
               <ChartLegend content={<ChartLegendContent />} />
               <Bar
                 dataKey={dataKeyOne}
-                fill="var(--mainColor)"
+                fill="#ffd93e"
                 radius={[8, 8, 0, 0]}
                 barSize={20}
-                label={{ position: "top", fill: "var(--textOne)", fontSize: 12 }}
+                label={{ position: "top", fill: "#ffffff", fontSize: 12 }}
                 animationDuration={500}
               />
               <Bar
                 dataKey={dataKeyTwo}
-                fill="var(--mainColorHover)"
+                fill="#01487e"
                 radius={[8, 8, 0, 0]}
                 barSize={20}
-                label={{ position: "top", fill: "var(--textOne)", fontSize: 12 }}
+                label={{ position: "top", fill: "#ffffff", fontSize: 12 }}
                 animationDuration={700}
               />
             </BarChart>
