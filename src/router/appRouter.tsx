@@ -5,17 +5,18 @@ import Register from "@/pages/auth/Register";
 import ProtectedRoute from "./ProtectedRoute";
 import Error404 from "@/pages/common/Error404";
 import AdminJobs from "@/pages/admin/AdminJobs";
+import AdminChat from "@/pages/admin/AdminChat";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminReports from "@/pages/admin/AdminReports";
+import AdminReviews from "@/pages/admin/AdminReviews";
 import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminPackages from "@/pages/admin/AdminPackages";
 import AdminPayments from "@/pages/admin/AdminPayments";
 import AdminCompanies from "@/pages/admin/AdminCompanies";
 import AdminApplications from "@/pages/admin/AdminApplications";
-import AdminChat from "@/pages/admin/AdminChat";
 
 const appRouter = createBrowserRouter([
     {
@@ -107,6 +108,14 @@ const appRouter = createBrowserRouter([
                 element: (
                     // <ProtectedRoute requiredRole="admin">
                         <AdminChat />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "reviews",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminReviews />
                     // </ProtectedRoute>
                 ),
             },

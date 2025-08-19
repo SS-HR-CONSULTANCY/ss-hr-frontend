@@ -3,12 +3,10 @@ import {
   Briefcase,
   LogOut,
   PanelLeft,
-  Gauge,
   HandCoins,
   Star,
   CalendarCheck,
   LayoutGrid,
-  Settings,
   LayoutDashboard,
   Building,
   MessageCircle
@@ -39,9 +37,7 @@ const Sidebar: React.FC = () => {
     'applications': <CalendarCheck />,
     'payments': <HandCoins />,
     'reviews': <Star />,
-    'analytics': <Gauge />,
     'reports': <LayoutGrid />,
-    'settings': <Settings />,
     'logout': <LogOut />,
     'chat': <MessageCircle />,
   }
