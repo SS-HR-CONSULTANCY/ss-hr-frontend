@@ -11,11 +11,14 @@ const CommonTable = <T,>({
   fetchApiFunction,
   queryKey,
   heading,
+  description,
   headingClassName,
   column,
   columnsCount,
   id,
-  pageSize = 10,
+  dummyData,
+  showDummyData,
+  pageSize = 5,
 }: CommonTableComponentProps<T>) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -37,29 +40,53 @@ const CommonTable = <T,>({
     queryKey: [queryKey, pagination.pageIndex, pagination.pageSize, id],
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
+    enabled: !showDummyData,
   });
+
+  const tableData =
+  showDummyData && dummyData && dummyData.length > 0
+    ? dummyData.slice(
+        pagination.pageIndex * pagination.pageSize,
+        (pagination.pageIndex + 1) * pagination.pageSize
+      )
+    : data?.data ?? [];
+
+const totalPages =
+  showDummyData && dummyData
+    ? Math.ceil(dummyData.length / pagination.pageSize)
+    : data?.totalPages ?? 0;
 
   return (
     <div className="p-2">
       {heading && (
         <h2 className={`text-2xl font-bold ${headingClassName}`}>{heading}</h2>
       )}
-      {isLoading ? (
+      {description && (
+        <h2 className={`text-sm font-normatl`}>{description}</h2>
+      )}
+
+      {isLoading && !showDummyData ? (
         <div className="mt-2">
           <TableShimmer columnsCount={columnsCount} />
         </div>
-      ) : data?.data ? (
+      ) : tableData.length > 0 ? (
         <DataTable
-          columns={column} 
-          data={data.data}
-          pageCount={data.totalPages}
+          columns={column}
+          data={tableData}
+          pageCount={totalPages}
           pagination={pagination}
           onPaginationChange={handlePaginationChange}
         />
       ) : isError && error ? (
-        <DataFetchingError message={(error as Error).message} className="min-h-full" />
+        <DataFetchingError
+          message={(error as Error).message}
+          className="min-h-full"
+        />
       ) : (
-        <DataFetchingError message={"No "+queryKey+" found in databse"} className="min-h-full" />
+        <DataFetchingError
+          message={`No ${queryKey} found in database`}
+          className="min-h-full"
+        />
       )}
     </div>
   );

@@ -436,7 +436,29 @@ body {
   }
 }
 
+/* Shimmer effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(50, 50, 50, 0.2) 25%,
+    rgba(90, 90, 90, 0.3) 50%,
+    rgba(50, 50, 50, 0.2) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite, 3s ease-in-out infinite;
+}
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+
+/* No scrollbar */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;

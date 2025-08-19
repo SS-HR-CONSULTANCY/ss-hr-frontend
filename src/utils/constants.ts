@@ -11,6 +11,7 @@ import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/he
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
 import type { Route } from '@/types/commonTypes';
+import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/admin';
 
 export const companyName = "ShahaalamGroups";
 
@@ -259,3 +260,98 @@ export const adminRoutes: Route[] = [
     { path: "reports", name: "Reports" },
     { path: "reviews", name: "Reviews" },
   ];
+
+
+  // Adminusers compoenent dummy data
+  export const usersDummyData: AdminfetchAllUsersResponse[] = [
+  {
+    _id: "1",
+    fullName: "John Doe",
+    email: "john.doe@example.com",
+    createdAt: "1724066432987",
+    isVerified: true,
+    isActive: true,
+    profileImg: "https://randomuser.me/api/portraits/men/1.jpg",
+  },
+  {
+    _id: "2",
+    fullName: "Jane Smith",
+    email: "jane.smith@example.com",
+    createdAt: "1724066432987",
+    isVerified: false,
+    isActive: true,
+    profileImg: "https://randomuser.me/api/portraits/women/2.jpg",
+  },
+  {
+    _id: "3",
+    fullName: "Michael Johnson",
+    email: "michael.johnson@example.com",
+    createdAt: "1724066432987",
+    isVerified: true,
+    isActive: false,
+    profileImg: "https://randomuser.me/api/portraits/men/3.jpg",
+  },
+  {
+    _id: "4",
+    fullName: "Emily Davis",
+    email: "emily.davis@example.com",
+    createdAt: "1724066432987",
+    isVerified: true,
+    isActive: true,
+    profileImg: "https://randomuser.me/api/portraits/women/4.jpg",
+  },
+  {
+    _id: "5",
+    fullName: "David Wilson",
+    email: "david.wilson@example.com",
+    createdAt: "1724066432987",
+    isVerified: false,
+    isActive: false,
+    profileImg: "https://randomuser.me/api/portraits/men/5.jpg",
+  },
+  {
+    _id: "6",
+    fullName: "Sophia Martinez",
+    email: "sophia.martinez@example.com",
+    createdAt: "1724066432987",
+    isVerified: true,
+    isActive: true,
+    profileImg: "https://randomuser.me/api/portraits/women/6.jpg",
+  },
+  {
+    _id: "7",
+    fullName: "James Brown",
+    email: "james.brown@example.com",
+    createdAt: "1724066432987",
+    isVerified: false,
+    isActive: true,
+    profileImg: "https://randomuser.me/api/portraits/men/7.jpg",
+  },
+  {
+    _id: "8",
+    fullName: "Olivia Taylor",
+    email: "olivia.taylor@example.com",
+    createdAt: "1724066432987",
+    isVerified: true,
+    isActive: true,
+    profileImg: "https://randomuser.me/api/portraits/women/8.jpg",
+  },
+  {
+    _id: "9",
+    fullName: "William Anderson",
+    email: "william.anderson@example.com",
+    createdAt: "1724066432987",
+    isVerified: false,
+    isActive: false,
+    profileImg: "https://randomuser.me/api/portraits/men/9.jpg",
+  },
+  {
+    _id: "10",
+    fullName: "Ava Thomas",
+    email: "ava.thomas@example.com",
+    createdAt: "1724066432987",
+    isVerified: true,
+    isActive: true,
+    profileImg: "https://randomuser.me/api/portraits/women/10.jpg",
+  },
+];
