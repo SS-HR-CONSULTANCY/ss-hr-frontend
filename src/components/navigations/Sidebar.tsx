@@ -43,6 +43,15 @@ const Sidebar: React.FC<SidebarProps> = ({ user, sidebarItems }) => {
 
       {/* Navigation */}
       <nav className="flex-1 p-2 space-y-1">
+
+        <button
+          onClick={() => dispatch(toggleAdminSidebar())}
+          className="w-full flex items-center px-3 py-2 rounded-lg transition-colors hover:bg-slate-600 hover:text-white cursor-pointer"
+        >
+          <PanelRight className="h-5 w-5 flex-shrink-0" />
+          {adminSidebar && <span className="ml-3">Close</span>}
+        </button>
+        
         {sidebarItems.map((item) => {
           const Icon = item.icon;
           return (
@@ -89,14 +98,6 @@ const Sidebar: React.FC<SidebarProps> = ({ user, sidebarItems }) => {
               {adminSidebar && <span className="ml-3">Dark</span>}
             </>
           )}
-        </button>
-
-        <button
-          onClick={() => dispatch(toggleAdminSidebar())}
-          className="w-full flex items-center px-3 py-2 rounded-lg transition-colors hover:bg-slate-600 hover:text-white cursor-pointer"
-        >
-          <PanelRight className="h-5 w-5 flex-shrink-0" />
-          {adminSidebar && <span className="ml-3">Close</span>}
         </button>
       </div>
 

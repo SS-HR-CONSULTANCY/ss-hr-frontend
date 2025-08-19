@@ -30,7 +30,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         }
     };
     return (
-        <header className="bg-gray-200 dark:bg-[#0d0d0d] p-3 rounded-lg text-balck dark:text-white">
+        <header className="bg-gray-200 dark:bg-[#0d0d0d] p-3 rounded-lg text-balck dark:text-white border border-slate-400 dark:border-slate-700">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                 </div>
