@@ -1,15 +1,16 @@
 import { Mail, MapPin, Phone } from 'lucide-react';
-import type { ContactItem } from '@/types/omponentTypes/contact';
-import type { PackageProps } from '@/types/omponentTypes/package';
+import type { ContactItem } from '@/types/componentTypes/contact';
+import type { PackageProps } from '@/types/componentTypes/package';
 import visaService from '../assets/servicesImages/visaService.png';
 import travelService from '../assets/servicesImages/travelService.jpg';
 import ticketService from '../assets/servicesImages/ticketService.png';
-import type { ContentCardProps } from '@/types/omponentTypes/services';
+import type { ContentCardProps } from '@/types/componentTypes/services';
 import jobRecruitment from '../assets/servicesImages/jobRecruitment.png';
 import medicalRecruitment from '../assets/servicesImages/medicalRecruitment.jpg';
-import type { navLinkProps, SiteUrlConfigProps } from '@/types/omponentTypes/header';
+import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/header';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
-import type { CallToActionProps } from '@/types/omponentTypes/callToAction';
+import type { CallToActionProps } from '@/types/componentTypes/callToAction';
+import type { Route } from '@/types/commonTypes';
 
 export const companyName = "ShahaalamGroups";
 
@@ -243,3 +244,19 @@ export const callToActionData: CallToActionProps = {
     { href: "/travel-packages", text: "Travel Packages", variant: "outline" },
   ],
 }
+
+
+// Sidebar compoenent constacts
+export    const adminRoutes: Route[] = [
+    { path: "/overview", name: "Overview" },
+    { path: "/users", name: "Users" },
+    { path: "/companies", name: "Companies" },
+    { path: "/jobs", name: "Jobs" },
+    { path: "/packages", name: "Packages" },
+    { path: "/applications", name: "Applications" },
+    { path: "/payments", name: "Payments" },
+    { path: "/reviews", name: "Reviews" },
+    { path: "/analytics", name: "Analytics" },
+    { path: "/reports", name: "Reports" },
+    { path: "/settings", name: "Settings" },
+  ];

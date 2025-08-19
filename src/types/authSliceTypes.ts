@@ -8,6 +8,7 @@ export interface User {
   isActive?: boolean;  // Add this optional property
   createdAt: string;
   updatedAt: string;
+  profileImg: string;
 }
 
 export interface LoginRequest {

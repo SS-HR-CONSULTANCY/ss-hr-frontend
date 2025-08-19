@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { ContentCardProps } from "@/types/omponentTypes/services";
+import type { ContentCardProps } from "@/types/componentTypes/services";
 
 const ContentCard = ({
   title,

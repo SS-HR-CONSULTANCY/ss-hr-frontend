@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import type { NavbarProps } from '@/types/omponentTypes/header';
+import type { NavbarProps } from '@/types/componentTypes/header';
 import logoTransparent from '../../assets/logos/logo-tranparent.png';
 import { siteUrlConfig, navLinks, companyName } from "@/utils/constants";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";

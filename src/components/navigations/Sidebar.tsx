@@ -1,120 +1,102 @@
-import React, { useState } from "react";
-import type { User } from "@/types/authSliceTypes";
-import { Moon, PanelRight, Sun } from "lucide-react";
+import {
+  Users,
+  Briefcase,
+  LogOut,
+  PanelLeft,
+  Gauge,
+  HandCoins,
+  Star,
+  CalendarCheck,
+  LayoutGrid,
+  Settings,
+  LayoutDashboard
+} from 'lucide-react';
+import React from "react";
+import { SingleTab } from "./SingleTab";
+import { Moon, Sun } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
+import { adminRoutes } from '@/utils/constants';
+import { logoutUser } from '@/store/slices/authSlice';
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
-import type { sidebarItems } from "@/pages/admin/AdminDashboard";
-import logoTransparent from "../../assets/logos/logo-tranparent.png";
 import { toggleAdminSidebar, toggleTheme } from "@/store/slices/appSlice";
 
-interface SidebarProps {
-  user: User | null;
-  sidebarItems: sidebarItems[];
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ user, sidebarItems }) => {
-  const [activeTab, setActiveTab] = useState<string>("overview");
+const Sidebar: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { theme, adminSidebar } = useSelector((state: RootState) => state.app);
 
+  const iconMap: Record<string, React.ReactNode> = {
+    'overview': <LayoutDashboard />,
+    'users': <Users />,
+    'companies': <Briefcase />,
+    'jobs': <Briefcase />,
+    'packages': <LayoutGrid />,
+    'applications': <CalendarCheck />,
+    'payments': <HandCoins />,
+    'reviews': <Star />,
+    'analytics': <Gauge />,
+    'reports': <LayoutGrid />,
+    'settings': <Settings />,
+    'logout': <LogOut />,
+  }
+
+  const getIcon = (name: string): React.ReactNode => {
+    const normalizedName = normalizeRouteName(name);
+    return iconMap[normalizedName];
+  }
+
+  const normalizeRouteName = (name: string): string => {
+    return name.toLowerCase().replace(/ /g, "-");
+  }
+
+   const handleLogout = async () => {
+        try {
+            await dispatch(logoutUser()).unwrap();
+            navigate('/admin/login');
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    };
+
   return (
-    <div
-      className={`${
-        adminSidebar ? "w-60" : "w-16"
-      } bg-gray-200 dark:bg-[#0d0d0d] transition-all duration-300 flex flex-col text-black dark:text-white min-h-screen`}
-    >
-      {/* Logo */}
-      <div className="p-4 border-b border-black dark:border-slate-700">
-        <div className="flex items-center space-x-3">
-          <img
-            src={logoTransparent}
-            alt="SS HR"
-            className="w-10 h-10 object-contain"
-          />
-          {adminSidebar && (
-            <div className="hidden sm:block">
-              <h1 className="font-bold text-lg">SS HR Admin</h1>
-              <p className="text-sm">Control Panel</p>
-            </div>
-          )}
-        </div>
+    <div className={` ${adminSidebar ? 'w-[15%]' : 'w-[5%]'} overflow-y-scroll no-scrollbar transition-all duration-300 flex flex-col border-r border-slate-400 dark:border-slate-700`} >
+      <div className="p-4 flex-1">
+        <ul>
+
+          <li className='px-3 pb-4'>
+            <span className='text-black dark:text-white text-3xl font-bold italic hover:bg-gray-300 hover:text-black px-2 rounded-lg cursor-pointer'>{adminSidebar ? "ADMIN" : "A"}</span>
+          </li>
+
+          <SingleTab icon={<PanelLeft />} text="Close" onClick={() => dispatch(toggleAdminSidebar())} sidebarOpen={adminSidebar} />
+
+          {adminRoutes.map((route) => (
+            <SingleTab
+              key={route.path}
+              icon={getIcon(route.name)}
+              text={route.name}
+              sidebarOpen={adminSidebar}
+            />
+          ))}
+        </ul>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-2 space-y-1">
-
-        <button
-          onClick={() => dispatch(toggleAdminSidebar())}
-          className="w-full flex items-center px-3 py-2 rounded-lg transition-colors hover:bg-slate-600 hover:text-white cursor-pointer"
-        >
-          <PanelRight className="h-5 w-5 flex-shrink-0" />
-          {adminSidebar && <span className="ml-3">Close</span>}
-        </button>
-        
-        {sidebarItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center px-3 py-2 rounded-lg transition-colors cursor-pointer
-                ${
-                  activeTab === item.id
-                    ? "bg-slate-600 text-white"
-                    : "hover:bg-slate-600 hover:text-white"
-                }`}
-            >
-              <Icon className="h-5 w-5 flex-shrink-0" />
-              {adminSidebar && (
-                <>
-                  <span className="ml-3 flex-1 text-left">{item.label}</span>
-                  {item.count && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-slate-500 text-white">
-                      {item.count}
-                    </span>
-                  )}
-                </>
-              )}
-            </button>
-          );
-        })}
-      </nav>
-
-      {/* Actions */}
-      <div className="p-2 space-y-2">
-        <button
+      <ul className='p-4'>
+        <SingleTab
+          icon={theme === "dark" ? <Sun /> : <Moon />}
+          text={theme}
           onClick={() => dispatch(toggleTheme())}
-          className="w-full flex items-center px-3 py-2 rounded-lg transition-colors hover:bg-slate-600 hover:text-white cursor-pointer"
-        >
-          {theme === "dark" ? (
-            <>
-              <Sun className="h-5 w-5 flex-shrink-0" />
-              {adminSidebar && <span className="ml-3">Light</span>}
-            </>
-          ) : (
-            <>
-              <Moon className="h-5 w-5 flex-shrink-0" />
-              {adminSidebar && <span className="ml-3">Dark</span>}
-            </>
-          )}
-        </button>
-      </div>
+          sidebarOpen={adminSidebar}
+        />
+        <SingleTab
+          icon={<LogOut />}
+          text="Logout"
+          onClick={handleLogout}
+          sidebarOpen={adminSidebar}
+        />
+      </ul>
 
-      {/* User Profile */}
-      <div className="p-4 border-t border-slate-300 dark:border-slate-700">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-            {user?.fullName?.charAt(0) || "A"}
-          </div>
-          {adminSidebar && (
-            <div className="flex-1 hidden sm:block">
-              <p className="font-medium truncate">{user?.fullName || "Admin"}</p>
-              <p className="text-sm truncate">{user?.email}</p>
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   );
 };
