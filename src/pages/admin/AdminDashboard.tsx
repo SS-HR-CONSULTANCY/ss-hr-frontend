@@ -1,5 +1,5 @@
 import React from 'react';
-import Overview from './Overview';
+import Overview from './AdminOverview';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import type { LucideIcon } from 'lucide-react';

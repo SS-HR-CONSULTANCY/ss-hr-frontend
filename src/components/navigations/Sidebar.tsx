@@ -9,11 +9,14 @@ import {
   CalendarCheck,
   LayoutGrid,
   Settings,
-  LayoutDashboard
+  LayoutDashboard,
+  Building,
+  MessageCircle
 } from 'lucide-react';
 import React from "react";
 import { SingleTab } from "./SingleTab";
 import { Moon, Sun } from "lucide-react";
+import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { adminRoutes } from '@/utils/constants';
 import { logoutUser } from '@/store/slices/authSlice';
@@ -30,7 +33,7 @@ const Sidebar: React.FC = () => {
   const iconMap: Record<string, React.ReactNode> = {
     'overview': <LayoutDashboard />,
     'users': <Users />,
-    'companies': <Briefcase />,
+    'companies': <Building />,
     'jobs': <Briefcase />,
     'packages': <LayoutGrid />,
     'applications': <CalendarCheck />,
@@ -40,6 +43,7 @@ const Sidebar: React.FC = () => {
     'reports': <LayoutGrid />,
     'settings': <Settings />,
     'logout': <LogOut />,
+    'chat': <MessageCircle />,
   }
 
   const getIcon = (name: string): React.ReactNode => {
@@ -51,14 +55,14 @@ const Sidebar: React.FC = () => {
     return name.toLowerCase().replace(/ /g, "-");
   }
 
-   const handleLogout = async () => {
-        try {
-            await dispatch(logoutUser()).unwrap();
-            navigate('/admin/login');
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
-    };
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate('/admin/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   return (
     <div className={` ${adminSidebar ? 'w-[15%]' : 'w-[5%]'} overflow-y-scroll no-scrollbar transition-all duration-300 flex flex-col border-r border-slate-400 dark:border-slate-700`} >
@@ -71,14 +75,21 @@ const Sidebar: React.FC = () => {
 
           <SingleTab icon={<PanelLeft />} text="Close" onClick={() => dispatch(toggleAdminSidebar())} sidebarOpen={adminSidebar} />
 
-          {adminRoutes.map((route) => (
-            <SingleTab
+          {adminRoutes.map((route) => {
+
+            const tab = <SingleTab
               key={route.path}
               icon={getIcon(route.name)}
               text={route.name}
               sidebarOpen={adminSidebar}
             />
-          ))}
+
+            return (
+              <NavLink key={route.path} to={route.path}>
+                {tab}
+              </NavLink>
+            )
+          })}
         </ul>
       </div>
 

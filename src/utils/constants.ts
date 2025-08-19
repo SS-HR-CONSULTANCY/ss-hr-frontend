@@ -247,16 +247,16 @@ export const callToActionData: CallToActionProps = {
 
 
 // Sidebar compoenent constacts
-export    const adminRoutes: Route[] = [
-    { path: "/overview", name: "Overview" },
-    { path: "/users", name: "Users" },
-    { path: "/companies", name: "Companies" },
-    { path: "/jobs", name: "Jobs" },
-    { path: "/packages", name: "Packages" },
-    { path: "/applications", name: "Applications" },
-    { path: "/payments", name: "Payments" },
-    { path: "/reviews", name: "Reviews" },
-    { path: "/analytics", name: "Analytics" },
-    { path: "/reports", name: "Reports" },
-    { path: "/settings", name: "Settings" },
+export const adminRoutes: Route[] = [
+    { path: "overview", name: "Overview" },
+    { path: "users", name: "Users" },
+    { path: "companies", name: "Companies" },
+    { path: "jobs", name: "Jobs" },
+    { path: "packages", name: "Packages" },
+    { path: "applications", name: "Applications" },
+    { path: "chat", name: "Chat" },
+    { path: "payments", name: "Payments" },
+    { path: "reports", name: "Reports" },
+    { path: "reviews", name: "Reviews" },
+    { path: "analytics", name: "Analytics" },
   ];

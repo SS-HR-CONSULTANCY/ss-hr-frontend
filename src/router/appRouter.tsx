@@ -4,10 +4,18 @@ import Landing from "@/pages/user/Landing";
 import Register from "@/pages/auth/Register";
 import ProtectedRoute from "./ProtectedRoute";
 import Error404 from "@/pages/common/Error404";
+import AdminJobs from "@/pages/admin/AdminJobs";
+import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLogin from "@/pages/admin/AdminLogin";
-import AdminLayout from "@/pages/admin/dminLayout";
+import AdminLayout from "@/pages/admin/AdminLayout";
+import AdminReports from "@/pages/admin/AdminReports";
 import { createBrowserRouter } from "react-router-dom";
-import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminOverview from "@/pages/admin/AdminOverview";
+import AdminPackages from "@/pages/admin/AdminPackages";
+import AdminPayments from "@/pages/admin/AdminPayments";
+import AdminCompanies from "@/pages/admin/AdminCompanies";
+import AdminApplications from "@/pages/admin/AdminApplications";
+import AdminChat from "@/pages/admin/AdminChat";
 
 const appRouter = createBrowserRouter([
     {
@@ -16,7 +24,7 @@ const appRouter = createBrowserRouter([
         children: [
             { path: '/', element: <Landing /> },
             { path: 'register', element: <Register /> },
-            { path: '/login', element: <Login /> },
+            { path: 'login', element: <Login /> },
             { path: '/admin/login', element: <AdminLogin /> },
             { path: '*', element: <Error404 /> },
         ]
@@ -25,17 +33,87 @@ const appRouter = createBrowserRouter([
         path: "/admin",
         element: <AdminLayout />,
         children: [
-            { path: "login", element: <AdminLogin /> },
+            { index: true,  element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminOverview />
+                    // </ProtectedRoute>
+                ) },
             {
-                path: "dashboard",
+                path: "overview",
                 element: (
                     // <ProtectedRoute requiredRole="admin">
-                        <AdminDashboard />
+                        <AdminOverview />
                     // </ProtectedRoute>
                 ),
             },
+            {
+                path: "users",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminUsers />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "companies",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminCompanies />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "jobs",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminJobs />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "packages",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminPackages />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "applications",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminApplications />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "payments",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminPayments />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "reports",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminReports />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "chat",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminChat />
+                    // </ProtectedRoute>
+                ),
+            },
+            { path: '*', element: <Error404 /> },
         ],
     },
+    { path: '*', element: <Error404 /> },
 ])
 
 export default appRouter

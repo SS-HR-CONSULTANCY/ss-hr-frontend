@@ -1,7 +1,7 @@
 import React from 'react';
 import { BriefcaseConveyorBelt, Building, Building2, ClipboardPlus, LayoutGrid, ShieldCheck, Ticket, User, Users } from 'lucide-react';
 
-const Overview: React.FC = () => {
+const AdminOverview: React.FC = () => {
 
     const stats = [
         { label: 'Total Users', value: '1,247', change: '+12%', icon: <Users /> },
@@ -107,4 +107,4 @@ const Overview: React.FC = () => {
     )
 }
 
-export default Overview
+export default AdminOverview;
