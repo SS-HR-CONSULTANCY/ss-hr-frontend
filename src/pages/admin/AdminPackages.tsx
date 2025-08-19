@@ -7,11 +7,11 @@ import { AdminPackagesTableColumns } from '@/components/table/tableColumns/Admin
 
 const AdminPackages: React.FC = () => {
   return (
-     <CommonTable<AdminfetchAllPackagesResponse>
+    <CommonTable<AdminfetchAllPackagesResponse>
       fetchApiFunction={adminFetchAllPackages}
       queryKey="packages"
-      heading="Companies"
-      description='List of companies listed in application'
+      heading="Travel Packages"
+      description='List of Travel packages'
       column={AdminPackagesTableColumns}
       columnsCount={5}
       dummyData={packageDummyData}

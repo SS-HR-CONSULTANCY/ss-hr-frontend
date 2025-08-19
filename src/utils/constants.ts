@@ -15,6 +15,9 @@ import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/admin';
 import type { Job } from '@/types/entities/job';
 import type { Package } from '@/types/entities/package';
 import type { Company } from '@/types/entities/company';
+import type { Payment } from '@/types/entities/payment';
+import type { Review } from '@/types/entities/review';
+import type { Application } from '@/types/entities/application';
 
 export const companyName = "ShahaalamGroups";
 
@@ -260,7 +263,6 @@ export const adminRoutes: Route[] = [
     { path: "applications", name: "Applications" },
     { path: "chat", name: "Chat" },
     { path: "payments", name: "Payments" },
-    { path: "reports", name: "Reports" },
     { path: "reviews", name: "Reviews" },
   ];
 
@@ -505,6 +507,7 @@ export const companiesDummyData: Company[] = [
 // Jobs dummy data
 export const jobsDummyData: Job[] = [
   {
+    _id: "j1",
     companyName: "TechNova Solutions",
     jobPost: "Software Engineer",
     availableCount: 5,
@@ -512,6 +515,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-15T12:45:00Z",
   },
   {
+    _id: "j2",
     companyName: "TechNova Solutions",
     jobPost: "UI/UX Designer",
     availableCount: 3,
@@ -519,6 +523,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-10T11:15:00Z",
   },
   {
+    _id: "j3",
     companyName: "TechNova Solutions",
     jobPost: "QA Tester",
     availableCount: 4,
@@ -526,6 +531,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-12T14:00:00Z",
   },
   {
+    _id: "j4",
     companyName: "GreenField Pvt Ltd",
     jobPost: "Backend Developer",
     availableCount: 3,
@@ -533,6 +539,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-11T15:30:00Z",
   },
   {
+    _id: "j5",
     companyName: "GreenField Pvt Ltd",
     jobPost: "Project Manager",
     availableCount: 2,
@@ -540,6 +547,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-14T09:45:00Z",
   },
   {
+    _id: "j6",
     companyName: "GreenField Pvt Ltd",
     jobPost: "HR Executive",
     availableCount: 3,
@@ -547,6 +555,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-13T10:20:00Z",
   },
   {
+    _id: "j7",
     companyName: "Skyline Industries",
     jobPost: "Mechanical Engineer",
     availableCount: 6,
@@ -554,6 +563,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-16T13:15:00Z",
   },
   {
+    _id: "j8",
     companyName: "Skyline Industries",
     jobPost: "Data Analyst",
     availableCount: 4,
@@ -561,6 +571,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-17T14:10:00Z",
   },
   {
+    _id: "j9",
     companyName: "Skyline Industries",
     jobPost: "Business Analyst",
     availableCount: 5,
@@ -568,6 +579,7 @@ export const jobsDummyData: Job[] = [
     updatedAt: "2025-08-18T16:30:00Z",
   },
   {
+    _id: "j10",
     companyName: "BrightWave Tech",
     jobPost: "Mobile App Developer",
     availableCount: 2,
@@ -580,6 +592,7 @@ export const jobsDummyData: Job[] = [
 // Package dummy data
 export const packageDummyData: Package[] = [
   {
+    _id: "p1",
     packageName: "Dubai Essentials",
     description: "Perfect 3-day trip covering the must-see attractions of Dubai.",
     price: "1500 AED",
@@ -594,6 +607,7 @@ export const packageDummyData: Package[] = [
     updatedAt: "2025-08-15T09:30:00Z",
   },
   {
+    _id: "p2",
     packageName: "Luxury Dubai Getaway",
     description: "Experience Dubai in luxury with 5-star accommodation and premium tours.",
     price: "4500 AED",
@@ -610,6 +624,7 @@ export const packageDummyData: Package[] = [
     updatedAt: "2025-08-10T11:45:00Z",
   },
   {
+    _id: "p3",
     packageName: "Adventure in Dubai",
     description: "Thrilling Dubai adventure package for adrenaline seekers.",
     price: "3200 AED",
@@ -625,6 +640,7 @@ export const packageDummyData: Package[] = [
     updatedAt: "2025-08-12T14:00:00Z",
   },
   {
+    _id: "p4",
     packageName: "Family Fun Dubai",
     description: "Special family-friendly package with activities for all ages.",
     price: "2800 AED",
@@ -642,6 +658,7 @@ export const packageDummyData: Package[] = [
     updatedAt: "2025-08-14T10:20:00Z",
   },
   {
+    _id: "p5",
     packageName: "Romantic Dubai Escape",
     description: "A romantic Dubai experience tailored for couples & honeymooners.",
     price: "3700 AED",
@@ -657,4 +674,179 @@ export const packageDummyData: Package[] = [
     createdAt: "2025-07-25T11:10:00Z",
     updatedAt: "2025-08-16T13:45:00Z",
   }
+];
+
+
+// Payment dummy data
+export const paymentsDummyData: Payment[] = [
+  {
+    _id: "pay_001",
+    transactionId: "TXN987654321",
+    userId: "usr_101",
+    username: "john_doe",
+    screenshot: "/uploads/payments/txn1.png",
+    discountAmount: "50 AED",
+    totalAmount: "1450 AED",
+    paymentStatus: "Completed",
+    createdAt: "2025-08-01T10:15:00Z",
+    updatedAt: "2025-08-01T10:20:00Z",
+  },
+  {
+    _id: "pay_002",
+    transactionId: "TXN123456789",
+    userId: "usr_102",
+    username: "sarah_lee",
+    screenshot: "/uploads/payments/txn2.png",
+    discountAmount: "0 AED",
+    totalAmount: "3200 AED",
+    paymentStatus: "Pending",
+    createdAt: "2025-08-05T09:30:00Z",
+    updatedAt: "2025-08-05T09:35:00Z",
+  },
+  {
+    _id: "pay_003",
+    transactionId: "TXN456789123",
+    userId: "usr_103",
+    username: "mike_smith",
+    screenshot: "/uploads/payments/txn3.png",
+    discountAmount: "200 AED",
+    totalAmount: "4300 AED",
+    paymentStatus: "Completed",
+    createdAt: "2025-08-10T14:45:00Z",
+    updatedAt: "2025-08-10T15:00:00Z",
+  },
+  {
+    _id: "pay_004",
+    transactionId: "TXN789123456",
+    userId: "usr_104",
+    username: "anita_kumar",
+    screenshot: "/uploads/payments/txn4.png",
+    discountAmount: "100 AED",
+    totalAmount: "2700 AED",
+    paymentStatus: "Failed",
+    createdAt: "2025-08-12T08:20:00Z",
+    updatedAt: "2025-08-12T08:25:00Z",
+  },
+  {
+    _id: "pay_005",
+    transactionId: "TXN654321987",
+    userId: "usr_105",
+    username: "david_wong",
+    screenshot: "/uploads/payments/txn5.png",
+    discountAmount: "150 AED",
+    totalAmount: "3550 AED",
+    paymentStatus: "Completed",
+    createdAt: "2025-08-15T11:10:00Z",
+    updatedAt: "2025-08-15T11:20:00Z",
+  },
+];
+
+
+// Review dummy data
+export const reviewsDummyData: Review[] = [
+  {
+    _id: "rev_001",
+    userId: "usr_101",
+    username: "john_doe",
+    job: "Software Engineer",
+    text: "Amazing experience! The platform was easy to use and really helped me find opportunities quickly.",
+    createdAt: "2025-08-01T09:15:00Z",
+    updatedAt: "2025-08-01T09:20:00Z",
+  },
+  {
+    _id: "rev_002",
+    userId: "usr_102",
+    username: "sarah_lee",
+    job: "UI/UX Designer",
+    text: "Loved the clean interface. However, I wish there were more filtering options while browsing jobs.",
+    createdAt: "2025-08-03T11:45:00Z",
+    updatedAt: "2025-08-03T11:50:00Z",
+  },
+  {
+    _id: "rev_003",
+    userId: "usr_103",
+    username: "mike_smith",
+    job: "Data Analyst",
+    text: "Support team was quick to respond when I had issues. Overall, a reliable service.",
+    createdAt: "2025-08-06T14:10:00Z",
+    updatedAt: "2025-08-06T14:20:00Z",
+  },
+  {
+    _id: "rev_004",
+    userId: "usr_104",
+    username: "anita_kumar",
+    job: "Project Manager",
+    text: "The job recommendations were very relevant. It saved me a lot of time during my search.",
+    createdAt: "2025-08-10T16:30:00Z",
+    updatedAt: "2025-08-10T16:40:00Z",
+  },
+  {
+    _id: "rev_005",
+    userId: "usr_105",
+    username: "david_wong",
+    job: "Marketing Specialist",
+    text: "Great value for money! The premium features really boosted my visibility.",
+    createdAt: "2025-08-12T18:00:00Z",
+    updatedAt: "2025-08-12T18:05:00Z",
+  },
+];
+
+
+// Application dummy data
+export const applicationsDummyData: Application[] = [
+  {
+    _id: "app_001",
+    userId: "usr_101",
+    jobId: "job_501",
+    cvLink: "https://example.com/cv/john_doe.pdf",
+    createdAt: "2025-08-01T09:30:00Z",
+    updatedAt: "2025-08-01T09:40:00Z",
+    username: "John Doe",
+    company: "TechNova Solutions",
+    designation: "Software Engineer",
+  },
+  {
+    _id: "app_002",
+    userId: "usr_102",
+    jobId: "job_502",
+    cvLink: "https://example.com/cv/sarah_lee.pdf",
+    createdAt: "2025-08-02T10:15:00Z",
+    updatedAt: "2025-08-02T10:25:00Z",
+    username: "Sarah Lee",
+    company: "DesignHive Studios",
+    designation: "UI/UX Designer",
+  },
+  {
+    _id: "app_003",
+    userId: "usr_103",
+    jobId: "job_503",
+    cvLink: "https://example.com/cv/mike_smith.pdf",
+    createdAt: "2025-08-04T13:20:00Z",
+    updatedAt: "2025-08-04T13:30:00Z",
+    username: "Mike Smith",
+    company: "DataVision Analytics",
+    designation: "Data Analyst",
+  },
+  {
+    _id: "app_004",
+    userId: "usr_104",
+    jobId: "job_504",
+    cvLink: "https://example.com/cv/anita_kumar.pdf",
+    createdAt: "2025-08-06T15:45:00Z",
+    updatedAt: "2025-08-06T15:55:00Z",
+    username: "Anita Kumar",
+    company: "AgileWorks Ltd.",
+    designation: "Project Manager",
+  },
+  {
+    _id: "app_005",
+    userId: "usr_105",
+    jobId: "job_505",
+    cvLink: "https://example.com/cv/david_wong.pdf",
+    createdAt: "2025-08-08T17:00:00Z",
+    updatedAt: "2025-08-08T17:10:00Z",
+    username: "David Wong",
+    company: "MarketEdge Global",
+    designation: "Marketing Specialist",
+  },
 ];

@@ -9,7 +9,6 @@ import AdminChat from "@/pages/admin/AdminChat";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminLayout from "@/pages/admin/AdminLayout";
-import AdminReports from "@/pages/admin/AdminReports";
 import AdminReviews from "@/pages/admin/AdminReviews";
 import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "@/pages/admin/AdminOverview";
@@ -92,14 +91,6 @@ const appRouter = createBrowserRouter([
                 element: (
                     // <ProtectedRoute requiredRole="admin">
                         <AdminPayments />
-                    // </ProtectedRoute>
-                ),
-            },
-            {
-                path: "reports",
-                element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminReports />
                     // </ProtectedRoute>
                 ),
             },
