@@ -18,6 +18,7 @@ import type { Company } from '@/types/entities/company';
 import type { Payment } from '@/types/entities/payment';
 import type { Review } from '@/types/entities/review';
 import type { Application } from '@/types/entities/application';
+import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
 
 export const companyName = "ShahaalamGroups";
 
@@ -264,6 +265,7 @@ export const adminRoutes: Route[] = [
     { path: "chat", name: "Chat" },
     { path: "payments", name: "Payments" },
     { path: "reviews", name: "Reviews" },
+    { path: "reports", name: "Reports" },
   ];
 
 
@@ -1174,3 +1176,15 @@ export const chatDummyData = [
   { align: "start", height: "h-32", width: "w-72" },
   { align: "end", height: "h-24", width: "w-56" },
 ];
+
+
+// Chart Date Data
+export const dateSelectList: dataSelectListItemInterface[] = [
+  { value: "7d", content: "Last 7 days" },
+  { value: "14d", content: "Last 14 days" },
+  { value: "30d", content: "Last month" },
+  { value: "60d", content: "Last 2 months" },
+  { value: "90d", content: "Last 3 months" },
+  { value: "180d", content: "Last 6 months" },
+  { value: "365d", content: "Last year" },
+]

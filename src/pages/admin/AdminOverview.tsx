@@ -1,5 +1,7 @@
 import React from 'react';
-import { BriefcaseConveyorBelt, Building, Building2, ClipboardPlus, LayoutGrid, ShieldCheck, Ticket, User, Users } from 'lucide-react';
+import AreaGroupedChart from '@/components/chart/AreaGroupedChart';
+import BarChartVertical from '@/components/chart/BarChartVertical';
+import { BriefcaseConveyorBelt, Building, Building2, LayoutGrid, ShieldCheck, Ticket, User, Users } from 'lucide-react';
 
 const AdminOverview: React.FC = () => {
 
@@ -19,13 +21,72 @@ const AdminOverview: React.FC = () => {
         { action: 'User profile verified', user: 'Mike Johnson', time: '3 hours ago', type: 'verification' }
     ];
 
+    const usersTimeChartConfig = {
+        newUsers: {
+            label: "New Users",
+            color: "#ffd93e",
+        },
+        oldUsers: {
+            label: "Old Users",
+            color: "#01487e",
+        },
+    }
+
+    const usersData = [
+        { date: "01-08-2025", newUsers: 12, oldUsers: 40 },
+        { date: "02-08-2025", newUsers: 15, oldUsers: 42 },
+        { date: "03-08-2025", newUsers: 9, oldUsers: 38 },
+        { date: "04-08-2025", newUsers: 14, oldUsers: 41 },
+        { date: "05-08-2025", newUsers: 18, oldUsers: 44 },
+        { date: "06-08-2025", newUsers: 20, oldUsers: 46 },
+        { date: "07-08-2025", newUsers: 11, oldUsers: 39 },
+        { date: "08-08-2025", newUsers: 17, oldUsers: 45 },
+        { date: "09-08-2025", newUsers: 13, oldUsers: 40 },
+        { date: "10-08-2025", newUsers: 22, oldUsers: 48 },
+        { date: "11-08-2025", newUsers: 10, oldUsers: 37 },
+        { date: "12-08-2025", newUsers: 19, oldUsers: 43 },
+        { date: "13-08-2025", newUsers: 15, oldUsers: 42 },
+        { date: "14-08-2025", newUsers: 21, oldUsers: 47 },
+        { date: "15-08-2025", newUsers: 16, oldUsers: 41 },
+        { date: "16-08-2025", newUsers: 23, oldUsers: 49 },
+        { date: "17-08-2025", newUsers: 12, oldUsers: 39 },
+        { date: "18-08-2025", newUsers: 14, oldUsers: 42 },
+        { date: "19-08-2025", newUsers: 20, oldUsers: 45 },
+    ];
+
+    const paymentChartConfig = {
+  online: {
+    label: "Package",
+    color: "#3b82f6",
+  },
+  offline: {
+    label: "Hiring",
+    color: "#10b981",
+  },
+};
+
+const analyticsData = [
+  { date: "01-08-2025", Package: 12, Hiring: 8 },
+  { date: "02-08-2025", Package: 15, Hiring: 11 },
+  { date: "03-08-2025", Package: 9,  Hiring: 5 },
+  { date: "04-08-2025", Package: 18, Hiring: 14 },
+  { date: "05-08-2025", Package: 22, Hiring: 17 },
+  { date: "06-08-2025", Package: 14, Hiring: 9 },
+  { date: "07-08-2025", Package: 19, Hiring: 13 },
+  { date: "08-08-2025", Package: 25, Hiring: 20 },
+  { date: "09-08-2025", Package: 11, Hiring: 7 },
+  { date: "10-08-2025", Package: 16, Hiring: 12 },
+];
+
+
+
     return (
         <div className="space-y-6 text-black dark:text-white mt-4">
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
-                    <div key={index} className="bg-gray-200 dark:bg-[#0d0d0d] rounded-xl p-6 border border-slate-400 dark:border-slate-700">
+                    <div key={index} className="shadow-md rounded-xl p-6 bg-white dark:bg-[#171717]">
                         <div className="flex items-center justify-between mb-4">
                             <div className={`w-12 h-12 rounded-lg flex items-center justify-center`}>
                                 <span className="text-xl">{stat.icon}</span>
@@ -40,22 +101,28 @@ const AdminOverview: React.FC = () => {
                 ))}
             </div>
 
-            {/* Charts and Activity */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Analytics Chart */}
-                <div className="bg-gray-200 dark:bg-[#0d0d0d] rounded-xl p-6 border border-slate-400 dark:border-slate-700">
-                    <h3 className="text-lg font-semibold mb-4">Analytics Overview</h3>
-                    <div className="h-64 bg-gray-300 dark:bg-slate-700 rounded-lg flex items-center justify-center">
-                        <div className="text-center">
-                            <div className="text-4xl mb-2">📈</div>
-                            <p className="">Chart Placeholder</p>
-                            <p className="text-sm">Integrate with Chart.js or Recharts</p>
-                        </div>
-                    </div>
-                </div>
+
+                <AreaGroupedChart
+                    title="Users data graph"
+                    description="New and old users comparison"
+                    chartData={usersData}
+                    dataKeyOne="newUsers"
+                    dataKeyTwo="oldUsers"
+                    chartConfig={usersTimeChartConfig}
+                />
+
+                   <BarChartVertical
+                        title="Payment Chart"
+                        description="Package and Hiring Payment"
+                        chartData={analyticsData}
+                        dataKeyOne="Package"
+                        dataKeyTwo="Hiring"
+                        chartConfig={paymentChartConfig}
+                    />
 
                 {/* Recent Activity */}
-                <div className="bg-gray-200 dark:bg-[#0d0d0d] rounded-xl p-6 border border-slate-400 dark:border-slate-700">
+                <div className="bg-white dark:bg-[#171717] rounded-xl p-6 border border-slate-400 dark:border-slate-700">
                     <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
                     <div className="space-y-4">
                         {recentActivities.map((activity, index) => (
@@ -84,25 +151,7 @@ const AdminOverview: React.FC = () => {
                 </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="bg-gray-200 dark:bg-[#0d0d0d] rounded-xl p-6 border border-slate-400 dark:border-slate-700">
-                <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    
-                    <button className="p-4 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600 rounded-lg transition-colors group cursor-pointer">
-                        <div className="text-2xl mb-2 group-hover:scale-110 transition-transform"><BriefcaseConveyorBelt /> </div>
-                        <p className="text-sm font-medium">Post Job</p>
-                    </button>
-                    <button className="p-4 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600 rounded-lg transition-colors group cursor-pointer">
-                        <div className="text-2xl mb-2 group-hover:scale-110 transition-transform"><Building2 /></div>
-                        <p className="text-sm font-medium">Add Company</p>
-                    </button>
-                    <button className="p-4 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600 rounded-lg transition-colors group cursor-pointer">
-                        <div className="text-2xl mb-2 group-hover:scale-110 transition-transform"><ClipboardPlus /></div>
-                        <p className="text-sm font-medium">Generate Report</p>
-                    </button>
-                </div>
-            </div>
+           
         </div>
     )
 }

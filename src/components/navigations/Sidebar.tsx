@@ -9,7 +9,8 @@ import {
   LayoutGrid,
   LayoutDashboard,
   Building,
-  MessageCircle
+  MessageCircle,
+  Notebook
 } from 'lucide-react';
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -37,7 +38,7 @@ const Sidebar: React.FC = () => {
     'applications': <CalendarCheck />,
     'payments': <HandCoins />,
     'reviews': <Star />,
-    'reports': <LayoutGrid />,
+    'reports': <Notebook />,
     'logout': <LogOut />,
     'chat': <MessageCircle />,
   }
@@ -61,12 +62,12 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className={` ${adminSidebar ? 'w-[15%]' : 'w-[5%]'} overflow-y-scroll no-scrollbar transition-all duration-300 flex flex-col border-r border-slate-400 dark:border-slate-700`} >
+    <div className={` ${adminSidebar ? 'w-[15%]' : 'w-[5%]'} text-white overflow-y-scroll no-scrollbar transition-all duration-300 flex flex-col border-r bg-gradient-to-r from-slate-900 to-slate-700`} >
       <div className="p-4 flex-1">
-        <ul>
+        <ul className='space-y-3'>
 
           <li className='px-3 pb-4'>
-            <span className='text-black dark:text-white text-3xl font-bold italic hover:bg-gray-300 hover:text-black px-2 rounded-lg cursor-pointer'>{adminSidebar ? "ADMIN" : "A"}</span>
+            <span className='text-3xl font-bold italic hover:bg-gradient-to-r from-slate-300 to-slate-500 hover:text-black px-2 rounded-lg cursor-pointer'>{adminSidebar ? "ADMIN" : "A"}</span>
           </li>
 
           <SingleTab icon={<PanelLeft />} text="Close" onClick={() => dispatch(toggleAdminSidebar())} sidebarOpen={adminSidebar} />

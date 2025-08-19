@@ -16,6 +16,7 @@ import AdminPackages from "@/pages/admin/AdminPackages";
 import AdminPayments from "@/pages/admin/AdminPayments";
 import AdminCompanies from "@/pages/admin/AdminCompanies";
 import AdminApplications from "@/pages/admin/AdminApplications";
+import AdminReports from "@/pages/admin/AdminReports";
 
 const appRouter = createBrowserRouter([
     {
@@ -107,6 +108,14 @@ const appRouter = createBrowserRouter([
                 element: (
                     // <ProtectedRoute requiredRole="admin">
                         <AdminReviews />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "reports",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminReports />
                     // </ProtectedRoute>
                 ),
             },
