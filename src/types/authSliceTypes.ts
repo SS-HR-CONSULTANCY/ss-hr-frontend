@@ -5,10 +5,10 @@ export interface User {
   email: string;
   role: 'user' | 'admin' | 'hr';
   isVerified: boolean;
-  isActive?: boolean;  // Add this optional property
+  isActive?: boolean;
+  profileImg: string;
   createdAt: string;
   updatedAt: string;
-  profileImg: string;
 }
 
 export interface LoginRequest {

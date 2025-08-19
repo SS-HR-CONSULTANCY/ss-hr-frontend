@@ -57,9 +57,9 @@ const totalPages =
     : data?.totalPages ?? 0;
 
   return (
-    <div className="p-2">
+    <div className="p-4">
       {heading && (
-        <h2 className={`text-2xl font-bold ${headingClassName}`}>{heading}</h2>
+        <h2 className={`text-2xl lg:text-3xl font-bold ${headingClassName}`}>{heading}</h2>
       )}
       {description && (
         <h2 className={`text-sm font-normatl`}>{description}</h2>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { usersDummyData } from '@/utils/constants';
 import CommonTable from '@/components/common/CommonTable';
-import { adminFetchAllProviders } from '@/utils/apis/adminApi';
+import { adminFetchAllUsers } from '@/utils/apis/adminApi';
 import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/admin';
 import { AdminUsersTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
 
 const AdminUsers: React.FC = () => {
   return (
     <CommonTable<AdminfetchAllUsersResponse>
-      fetchApiFunction={adminFetchAllProviders}
+      fetchApiFunction={adminFetchAllUsers}
       queryKey="users"
       heading="Users"
       description='List of users using application'

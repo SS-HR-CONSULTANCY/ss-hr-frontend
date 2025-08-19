@@ -12,6 +12,8 @@ import certificateAttestationService from '../assets/servicesImages/certificateA
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
 import type { Route } from '@/types/commonTypes';
 import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/admin';
+import type { company } from '@/types/entities/company';
+import type { Job } from '@/types/entities/job';
 
 export const companyName = "ShahaalamGroups";
 
@@ -353,5 +355,222 @@ export const adminRoutes: Route[] = [
     isVerified: true,
     isActive: true,
     profileImg: "https://randomuser.me/api/portraits/women/10.jpg",
+  },
+];
+
+
+// Company dummy data 
+export const companiesDummyData: company[] = [
+  {
+    _id: "c1",
+    companyName: "TechNova Solutions",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "hr@technova.com",
+    createdAt: "2024-08-01T10:20:30Z",
+    updatedAt: "2024-08-10T14:25:00Z",
+    availableJobCount: 12,
+    availablePostsWithCount: [
+      { post: "Software Engineer", count: 5 },
+      { post: "UI/UX Designer", count: 3 },
+      { post: "QA Tester", count: 4 },
+    ],
+  },
+  {
+    _id: "c2",
+    companyName: "GreenField Pvt Ltd",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "careers@greenfield.com",
+    createdAt: "2024-07-12T09:15:10Z",
+    updatedAt: "2024-08-05T11:45:00Z",
+    availableJobCount: 8,
+    availablePostsWithCount: [
+      { post: "Backend Developer", count: 3 },
+      { post: "Project Manager", count: 2 },
+      { post: "HR Executive", count: 3 },
+    ],
+  },
+  {
+    _id: "c3",
+    companyName: "Skyline Industries",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "jobs@skyline.com",
+    createdAt: "2024-06-20T12:05:00Z",
+    updatedAt: "2024-07-01T08:40:00Z",
+    availableJobCount: 15,
+    availablePostsWithCount: [
+      { post: "Mechanical Engineer", count: 6 },
+      { post: "Data Analyst", count: 4 },
+      { post: "Business Analyst", count: 5 },
+    ],
+  },
+  {
+    _id: "c4",
+    companyName: "BrightWave Tech",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "brightwave.hr@gmail.com",
+    createdAt: "2024-05-15T14:10:00Z",
+    updatedAt: "2024-06-01T17:45:00Z",
+    availableJobCount: 6,
+    availablePostsWithCount: [
+      { post: "Mobile App Developer", count: 2 },
+      { post: "Cloud Engineer", count: 4 },
+    ],
+  },
+  {
+    _id: "c5",
+    companyName: "NextGen Labs",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "recruit@nextgenlabs.io",
+    createdAt: "2024-09-01T08:25:00Z",
+    updatedAt: "2024-09-05T09:10:00Z",
+    availableJobCount: 10,
+    availablePostsWithCount: [
+      { post: "AI Engineer", count: 4 },
+      { post: "Data Scientist", count: 3 },
+      { post: "Research Intern", count: 3 },
+    ],
+  },
+  {
+    _id: "c6",
+    companyName: "BlueOcean Ventures",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "talent@blueocean.com",
+    createdAt: "2024-03-12T07:45:00Z",
+    updatedAt: "2024-04-01T10:30:00Z",
+    availableJobCount: 9,
+    availablePostsWithCount: [
+      { post: "Finance Analyst", count: 3 },
+      { post: "Marketing Specialist", count: 4 },
+      { post: "Operations Manager", count: 2 },
+    ],
+  },
+  {
+    _id: "c7",
+    companyName: "UrbanWorks Pvt Ltd",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "urbanworks.hr@jobs.com",
+    createdAt: "2024-01-25T11:20:00Z",
+    updatedAt: "2024-02-14T13:40:00Z",
+    availableJobCount: 7,
+    availablePostsWithCount: [
+      { post: "Architect", count: 3 },
+      { post: "Civil Engineer", count: 4 },
+    ],
+  },
+  {
+    _id: "c8",
+    companyName: "CyberNet Systems",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "cybernet.jobs@company.com",
+    createdAt: "2024-02-10T10:15:00Z",
+    updatedAt: "2024-03-01T12:10:00Z",
+    availableJobCount: 14,
+    availablePostsWithCount: [
+      { post: "Network Engineer", count: 5 },
+      { post: "Security Analyst", count: 4 },
+      { post: "System Admin", count: 5 },
+    ],
+  },
+  {
+    _id: "c9",
+    companyName: "QuantumSoft",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "quantumsoft@hr.com",
+    createdAt: "2024-04-08T09:40:00Z",
+    updatedAt: "2024-04-20T11:00:00Z",
+    availableJobCount: 11,
+    availablePostsWithCount: [
+      { post: "Frontend Developer", count: 4 },
+      { post: "Fullstack Engineer", count: 3 },
+      { post: "DevOps Engineer", count: 4 },
+    ],
+  },
+  {
+    _id: "c10",
+    companyName: "AeroSpace Dynamics",
+    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    email: "careers@aerospace.com",
+    createdAt: "2024-06-01T13:00:00Z",
+    updatedAt: "2024-06-15T16:20:00Z",
+    availableJobCount: 5,
+    availablePostsWithCount: [
+      { post: "Aerospace Engineer", count: 3 },
+      { post: "CAD Designer", count: 2 },
+    ],
+  },
+];
+
+
+// Jobs dummy data
+export const jobsDummyData: Job[] = [
+  {
+    companyName: "TechNova Solutions",
+    jobPost: "Software Engineer",
+    availableCount: 5,
+    createdAt: "2025-08-01T10:30:00Z",
+    updatedAt: "2025-08-15T12:45:00Z",
+  },
+  {
+    companyName: "TechNova Solutions",
+    jobPost: "UI/UX Designer",
+    availableCount: 3,
+    createdAt: "2025-07-20T09:00:00Z",
+    updatedAt: "2025-08-10T11:15:00Z",
+  },
+  {
+    companyName: "TechNova Solutions",
+    jobPost: "QA Tester",
+    availableCount: 4,
+    createdAt: "2025-07-10T08:20:00Z",
+    updatedAt: "2025-08-12T14:00:00Z",
+  },
+  {
+    companyName: "GreenField Pvt Ltd",
+    jobPost: "Backend Developer",
+    availableCount: 3,
+    createdAt: "2025-06-18T13:00:00Z",
+    updatedAt: "2025-08-11T15:30:00Z",
+  },
+  {
+    companyName: "GreenField Pvt Ltd",
+    jobPost: "Project Manager",
+    availableCount: 2,
+    createdAt: "2025-06-25T10:15:00Z",
+    updatedAt: "2025-08-14T09:45:00Z",
+  },
+  {
+    companyName: "GreenField Pvt Ltd",
+    jobPost: "HR Executive",
+    availableCount: 3,
+    createdAt: "2025-07-05T11:10:00Z",
+    updatedAt: "2025-08-13T10:20:00Z",
+  },
+  {
+    companyName: "Skyline Industries",
+    jobPost: "Mechanical Engineer",
+    availableCount: 6,
+    createdAt: "2025-05-30T09:00:00Z",
+    updatedAt: "2025-08-16T13:15:00Z",
+  },
+  {
+    companyName: "Skyline Industries",
+    jobPost: "Data Analyst",
+    availableCount: 4,
+    createdAt: "2025-07-12T08:40:00Z",
+    updatedAt: "2025-08-17T14:10:00Z",
+  },
+  {
+    companyName: "Skyline Industries",
+    jobPost: "Business Analyst",
+    availableCount: 5,
+    createdAt: "2025-06-08T12:25:00Z",
+    updatedAt: "2025-08-18T16:30:00Z",
+  },
+  {
+    companyName: "BrightWave Tech",
+    jobPost: "Mobile App Developer",
+    availableCount: 2,
+    createdAt: "2025-07-22T10:50:00Z",
+    updatedAt: "2025-08-18T11:05:00Z",
   },
 ];
