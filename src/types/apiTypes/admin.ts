@@ -1,5 +1,5 @@
 import type { Job } from "../entities/job";
-import type { User } from "../authSliceTypes";
+import type { User } from "../entities/user";
 import type { Review } from "../entities/review";
 import type { Company } from "../entities/company";
 import type { Package } from "../entities/package";

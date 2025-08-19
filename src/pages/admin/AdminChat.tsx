@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import ChatContainer from '@/components/chat/ChatContainer';
 
-const AdminChat = () => {
+const AdminChat: React.FC = () => {
   return (
-    <div>AdminChat</div>
+    <ChatContainer />
   )
 }
 

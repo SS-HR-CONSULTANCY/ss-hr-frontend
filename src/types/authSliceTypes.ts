@@ -1,15 +1,4 @@
-// src/types/auth.types.ts
-export interface User {
-  _id: string;
-  fullName: string;
-  email: string;
-  role: 'user' | 'admin' | 'hr';
-  isVerified: boolean;
-  isActive?: boolean;
-  profileImg: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { User } from "./entities/user";
 
 export interface LoginRequest {
   email: string;

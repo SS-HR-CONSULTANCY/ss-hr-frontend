@@ -2,14 +2,10 @@ import React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import type { User } from '@/types/authSliceTypes';
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
 import noProfile from '../../assets/defaultImgaes/noProfile.png';
-
-interface AdminHeaderProps {
-    user: User | null;
-}
+import type { AdminHeaderProps } from '@/types/componentTypes/AdminHeaderTypes';
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({
     user,
