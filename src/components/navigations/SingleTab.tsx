@@ -1,4 +1,4 @@
-import type { SingleTabProps } from "@/types/componentTypes/singleTab";
+import type { SingleTabProps } from "@/types/componentTypes/singleTabTypes";
 
 export const SingleTab: React.FC<SingleTabProps> = ({
     icon,

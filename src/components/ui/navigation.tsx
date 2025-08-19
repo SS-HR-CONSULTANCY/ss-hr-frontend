@@ -11,8 +11,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import LaunchUI from "../logos/launch-ui";
 import { navLinks, services } from "@/utils/constants";
-import type { navLinkProps } from "@/types/componentTypes/header";
-import type { ContentCardProps } from "@/types/componentTypes/services";
+import type { navLinkProps } from "@/types/componentTypes/headerTypes";
+import type { ContentCardProps } from "@/types/componentTypes/servicesTypes";
 
 interface NavigationProps {
   menuItems?: navLinkProps[];

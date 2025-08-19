@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/footer";
 import { MapPin } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import type { FooterProps } from "@/types/componentTypes/footer";
+import type { FooterProps } from "@/types/componentTypes/footerTypes";
 import logoTransparent from '../../assets/logos/logo-tranparent.png';
 import { companyName, footerAddress, footerCopyright, footerData, footerPoliciesData } from '@/utils/constants';
 
