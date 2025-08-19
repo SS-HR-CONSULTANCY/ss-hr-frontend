@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/components/lib/axios";
 import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
 import { type ApiPaginatedResponse, type FetchFunctionParams } from "@/types/commonTypes";
-import type { AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllUsersResponse } from "@/types/apiTypes/admin";
+import type { AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllUsersResponse } from "@/types/apiTypes/admin";
 
 export const adminFetchAllUsers = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminfetchAllUsersResponse>> => {
     const query = buildQueryParams(params);
@@ -19,4 +19,10 @@ export const adminFetchAllJobs = async (params?: FetchFunctionParams): Promise<A
     const query = buildQueryParams(params);
     const response = await axiosInstance.get(`/admin/jobs${query ? `?${query}` : ''}`);
     return parseNewCommonResponse<AdminfetchAllJobsResponse>(response.data);
+};
+
+export const adminFetchAllPackages = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminfetchAllPackagesResponse>> => {
+    const query = buildQueryParams(params);
+    const response = await axiosInstance.get(`/admin/packages${query ? `?${query}` : ''}`);
+    return parseNewCommonResponse<AdminfetchAllPackagesResponse>(response.data);
 };

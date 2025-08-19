@@ -12,8 +12,9 @@ import certificateAttestationService from '../assets/servicesImages/certificateA
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
 import type { Route } from '@/types/commonTypes';
 import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/admin';
-import type { company } from '@/types/entities/company';
 import type { Job } from '@/types/entities/job';
+import type { Package } from '@/types/entities/package';
+import type { Company } from '@/types/entities/company';
 
 export const companyName = "ShahaalamGroups";
 
@@ -360,7 +361,7 @@ export const adminRoutes: Route[] = [
 
 
 // Company dummy data 
-export const companiesDummyData: company[] = [
+export const companiesDummyData: Company[] = [
   {
     _id: "c1",
     companyName: "TechNova Solutions",
@@ -573,4 +574,87 @@ export const jobsDummyData: Job[] = [
     createdAt: "2025-07-22T10:50:00Z",
     updatedAt: "2025-08-18T11:05:00Z",
   },
+];
+
+
+// Package dummy data
+export const packageDummyData: Package[] = [
+  {
+    packageName: "Dubai Essentials",
+    description: "Perfect 3-day trip covering the must-see attractions of Dubai.",
+    price: "1500 AED",
+    features: [
+      "3 Nights Hotel Stay (3-Star)",
+      "Airport Transfers",
+      "Dubai City Tour",
+      "Desert Safari with BBQ Dinner",
+      "Dhow Cruise at Dubai Marina"
+    ],
+    createdAt: "2025-07-01T10:00:00Z",
+    updatedAt: "2025-08-15T09:30:00Z",
+  },
+  {
+    packageName: "Luxury Dubai Getaway",
+    description: "Experience Dubai in luxury with 5-star accommodation and premium tours.",
+    price: "4500 AED",
+    features: [
+      "4 Nights 5-Star Hotel Stay",
+      "Airport Pick & Drop in Luxury Car",
+      "Burj Khalifa 148th Floor VIP Access",
+      "Premium Desert Safari with Quad Biking",
+      "Dubai Marina Yacht Dinner Cruise",
+      "Shopping Tour with Personal Guide",
+      "Day Trip to Abu Dhabi"
+    ],
+    createdAt: "2025-06-20T12:15:00Z",
+    updatedAt: "2025-08-10T11:45:00Z",
+  },
+  {
+    packageName: "Adventure in Dubai",
+    description: "Thrilling Dubai adventure package for adrenaline seekers.",
+    price: "3200 AED",
+    features: [
+      "3 Nights Hotel Stay (4-Star)",
+      "Skydiving over Palm Jumeirah",
+      "Dune Bashing & Sandboarding",
+      "Atlantis Aquaventure Waterpark",
+      "Jet Ski Experience in Jumeirah Beach",
+      "Dubai Frame & Museum of the Future"
+    ],
+    createdAt: "2025-07-10T08:20:00Z",
+    updatedAt: "2025-08-12T14:00:00Z",
+  },
+  {
+    packageName: "Family Fun Dubai",
+    description: "Special family-friendly package with activities for all ages.",
+    price: "2800 AED",
+    features: [
+      "5 Nights Hotel Stay (Family Suite)",
+      "Airport Transfers",
+      "Dubai Aquarium & Underwater Zoo",
+      "Legoland & Motiongate Dubai",
+      "Global Village Visit",
+      "Desert Safari with Kids Activities",
+      "IMG Worlds of Adventure",
+      "Day Trip to Miracle Garden"
+    ],
+    createdAt: "2025-07-18T09:40:00Z",
+    updatedAt: "2025-08-14T10:20:00Z",
+  },
+  {
+    packageName: "Romantic Dubai Escape",
+    description: "A romantic Dubai experience tailored for couples & honeymooners.",
+    price: "3700 AED",
+    features: [
+      "4 Nights Luxury Hotel Stay",
+      "Private Airport Transfers",
+      "Romantic Dinner on Dubai Creek",
+      "Sunset Desert Safari",
+      "Couple Spa Experience",
+      "Burj Khalifa Sky Lounge Visit",
+      "Hot Air Balloon Ride"
+    ],
+    createdAt: "2025-07-25T11:10:00Z",
+    updatedAt: "2025-08-16T13:45:00Z",
+  }
 ];

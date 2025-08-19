@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import noProfile from '../../../assets/defaultImgaes/noProfile.png';
-import type { AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllUsersResponse } from "@/types/apiTypes/admin";
+import type { AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllUsersResponse } from "@/types/apiTypes/admin";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 
@@ -162,10 +162,6 @@ export const AdminCompaniesTableColumns: ColumnDef<AdminfetchAllComapniesRespons
 export const AdminJobsTableColumns: ColumnDef<AdminfetchAllJobsResponse>[] = [
   {
     accessorKey: "companyName",
-    header: ({ column }) => (<DataTableColumnHeader column={column} title="Name" />)
-  },
-  {
-    accessorKey: "companyName",
     header: ({ column }) => (<DataTableColumnHeader column={column} title="Company Name" />)
   },
   {
@@ -175,6 +171,59 @@ export const AdminJobsTableColumns: ColumnDef<AdminfetchAllJobsResponse>[] = [
   {
     accessorKey: "availableCount",
     header: ({ column }) => (<DataTableColumnHeader column={column} title="Availability" />)
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Joined On" />
+    ),
+    cell: ({ row }) => {
+      const date = dayjs(row.original.createdAt).format("DD MMM YYYY");
+      return <span>{date}</span>;
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: "Actions",
+    id: "actions",
+    cell: () => {
+      //   const provider = row.original;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {/* <DropDownItemGetProviderDetailPage providerId={provider._id} />
+            {!provider.isAdminVerified && (
+              <DropDownItemApproveProvider providerId={provider._id} />
+            )} */}
+            {/* <DropDownItemChangeProviderBlockStatus providerId={provider._id} isBlocked={provider.isBlocked} /> */}
+            {/* <DropDownItemChangeProviderTrustTag providerId={provider._id} trustedBySlotflow={provider.trustedBySlotflow} /> */}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    }
+  },
+]
+
+export const AdminPackagesTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
+  {
+    accessorKey: "packageName",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Package" />)
+  },
+  {
+    accessorKey: "description",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="description" />)
+  },
+  {
+    accessorKey: "price",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Price" />)
   },
   {
     accessorKey: "createdAt",
