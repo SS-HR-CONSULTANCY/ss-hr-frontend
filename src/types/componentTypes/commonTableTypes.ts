@@ -13,4 +13,6 @@ export interface CommonTableComponentProps<T> {
   pageSize?: number;
   dummyData?: T[];
   showDummyData?: boolean;
+  showDatePicker?: boolean;
+  saveDataInStore?: boolean;
 }

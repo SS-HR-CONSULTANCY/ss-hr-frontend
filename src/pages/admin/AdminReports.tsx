@@ -1,24 +1,27 @@
-
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
+import Heading from "@/components/common/Heading";
 import { radialChartConfig } from "@/utils/chartConfig";
 import RadialChart from "@/components/chart/RadialChart";
-import DashboardStats from "@/components/dashboard/dashboardStats";
-import { exportToExcel, exportToPDF } from "@/utils/helpers/report";
-import ChartLineMultiple from "@/components/chart/ChartLineMultiple";
-import { dummyAdminApplicationsReportStats, dummyAdminRevenueReportStats, dummyAdminUserReportStats, weeklyApplicationDummyData, weeklyPaymentsDummyData, weeklyUsersDummyData } from "@/utils/dummyData";
-import { adminFetchApplicationsReportStatsData, adminFetchReportApplicationGraphData, adminFetchReportPaymentsGraphData, adminFetchReportUserGraphData, adminFetchRevenueReportStatsData, adminFetchUserReportStatsData } from "@/utils/apis/adminApi";
-import { applicationConfig, applicationDummyData, reportPageTabs, reportUserDummyData, reportUserDummyDataConfig, revenueDummyData, revenueDummyDataConfig, statsMapForAdminUserStats, statsMapForApplications, statsMapForRevenue } from "@/utils/constants";
-import { type AdminFetchApplicationsReportStatsDataResponse, type AdminFetchReportApplicationsGraphsDataResponse, type AdminFetchReportPaymentsGraphsDataResponse, type AdminFetchReportUserswGraphsDataResponse, type AdminFetchRevenueReportStatsDataResponse, type AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
-import DataFetchingError from "@/components/common/DataFetchingError";
+import CommonTable from "@/components/common/CommonTable";
 import GraphShimmer from "@/components/shimmer/GraphShimmer";
-import Heading from "@/components/common/Heading";
-
+import DashboardStats from "@/components/dashboard/dashboardStats";
+import ChartLineMultiple from "@/components/chart/ChartLineMultiple";
+import DataFetchingError from "@/components/common/DataFetchingError";
+import { handleExportExcel, handleExportPDF } from "@/utils/helpers/report";
+import { AdminReportDataTableColumns } from "@/components/table/tableColumns/AdminUsersTable";
+import { dummyAdminApplicationsReportStats, dummyAdminRevenueReportStats, dummyAdminUserReportStats, reportTableDataDummyData, weeklyApplicationDummyData, weeklyPaymentsDummyData, weeklyUsersDummyData } from "@/utils/dummyData";
+import { applicationConfig, applicationDummyData, reportPageTabs, reportUserDummyData, reportUserDummyDataConfig, revenueDummyData, revenueDummyDataConfig, statsMapForAdminUserStats, statsMapForApplications, statsMapForRevenue } from "@/utils/constants";
+import { adminFetchApplicationsReportStatsData, adminFetchReportApplicationGraphData, adminFetchReportPaymentsGraphData, AdminFetchReportTableData, adminFetchReportUserGraphData, adminFetchRevenueReportStatsData, adminFetchUserReportStatsData } from "@/utils/apis/adminApi";
+import { type AdminFetchApplicationsReportStatsDataResponse, type AdminFetchReportApplicationsGraphsDataResponse, type AdminFetchReportPaymentsGraphsDataResponse, type AdminFetchReportTableDataResponse, type AdminFetchReportUserswGraphsDataResponse, type AdminFetchRevenueReportStatsDataResponse, type AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
 
 const AdminReports: React.FC = () => {
 
     const [activeTab, setActiveTab] = useState<string>("users");
+    const { reportData } = useSelector((store: RootState) => store.admin);
 
     const {
         data: reportGraphData,
@@ -31,21 +34,20 @@ const AdminReports: React.FC = () => {
         AdminFetchReportPaymentsGraphsDataResponse
     >({
         queryKey: ['reportGraph', activeTab],
-        queryFn: () => {
-            if (activeTab === "user") return adminFetchReportUserGraphData();
-            if (activeTab === "applications") return adminFetchReportApplicationGraphData();
-            return adminFetchReportPaymentsGraphData();
+        queryFn: async () => {
+            switch (activeTab) {
+                case "users":
+                    return await adminFetchReportUserGraphData();
+                case "applications":
+                    return await adminFetchReportApplicationGraphData();
+                case "payments":
+                    return await adminFetchReportPaymentsGraphData();
+                default:
+                    throw new Error("Invalid activeTab value");
+            }
         },
         refetchOnWindowFocus: false,
     });
-
-    const handleExportExcel = () => {
-        exportToExcel(`${activeTab}-report`, "Report",);
-    };
-
-    const handleExportPDF = () => {
-        exportToPDF(`${activeTab}-report`, `${activeTab.toUpperCase()} REPORT`,);
-    };
 
     return (
         <div className="space-y-8 text-black dark:text-white mt-4">
@@ -245,15 +247,32 @@ const AdminReports: React.FC = () => {
             </div>
             {/* Graph dummy data over */}
 
+
+            {/* Report table and generate report */}
             <Heading heading="Reports table data" headingDescription="Detailed report table data" mainDivClassName="w-6/12" />
             <div className="p-4 border rounded-xl shadow bg-white dark:bg-[#171717]">
-                <h2 className="font-semibold text-lg mb-4">Reports</h2>
+                <CommonTable<AdminFetchReportTableDataResponse>
+                    fetchApiFunction={AdminFetchReportTableData}
+                    queryKey="reportData"
+                    heading="Report Data"
+                    description='List of the report data aggregated from database'
+                    column={AdminReportDataTableColumns}
+                    columnsCount={5}
+                    dummyData={reportTableDataDummyData}
+                    showDummyData={true}
+                    showDatePicker
+                    saveDataInStore
+                />
                 <hr className="my-2" />
-                <h2 className="font-semibold text-lg mb-4">Generate Reports</h2>
-                <div className="space-x-4">
-                    <Button onClick={handleExportExcel}>Generate PDF</Button>
-                    <Button onClick={handleExportPDF}>Generate Excel</Button>
-                </div>
+                {/* {reportData && ( */}
+                    <>
+                        <h2 className="font-semibold text-lg mb-4">Generate Reports</h2>
+                        <div className="space-x-4">
+                            <Button onClick={(e) => handleExportExcel(e, reportData!, activeTab)}>Generate PDF</Button>
+                            <Button onClick={(e) => handleExportPDF(e, reportData!, activeTab)}>Generate Excel</Button>
+                        </div>
+                    </>
+                {/* )} */}
             </div>
         </div>
     );

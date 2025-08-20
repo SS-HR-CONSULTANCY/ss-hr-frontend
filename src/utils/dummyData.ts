@@ -1,4 +1,4 @@
-import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
+import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportTableDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
 import type { WeeklyData } from "@/types/componentTypes/areportTypes";
 
 // Overview page
@@ -101,4 +101,87 @@ export const weeklyPaymentsDummyData: WeeklyData[] = [
   { day: "Friday", count: 3000 },
   { day: "Saturday", count: 3200 },
   { day: "Sunday", count: 2700 },
+];
+
+export const reportTableDataDummyData: AdminFetchReportTableDataResponse[] = [
+  {
+    date: "2025-08-01",
+    jobApplications: 120,
+    packagesTaken: 45,
+    revenueFromJobApplications: 60000,
+    revenueFromPackages: 180000,
+    totalRevenue: 240000,
+  },
+  {
+    date: "2025-08-02",
+    jobApplications: 90,
+    packagesTaken: 30,
+    revenueFromJobApplications: 45000,
+    revenueFromPackages: 120000,
+    totalRevenue: 165000,
+  },
+  {
+    date: "2025-08-03",
+    jobApplications: 140,
+    packagesTaken: 50,
+    revenueFromJobApplications: 70000,
+    revenueFromPackages: 200000,
+    totalRevenue: 270000,
+  },
+  {
+    date: "2025-08-04",
+    jobApplications: 110,
+    packagesTaken: 35,
+    revenueFromJobApplications: 55000,
+    revenueFromPackages: 140000,
+    totalRevenue: 195000,
+  },
+  {
+    date: "2025-08-05",
+    jobApplications: 180,
+    packagesTaken: 60,
+    revenueFromJobApplications: 90000,
+    revenueFromPackages: 240000,
+    totalRevenue: 330000,
+  },
+  {
+    date: "2025-08-06",
+    jobApplications: 95,
+    packagesTaken: 25,
+    revenueFromJobApplications: 47500,
+    revenueFromPackages: 100000,
+    totalRevenue: 147500,
+  },
+  {
+    date: "2025-08-07",
+    jobApplications: 130,
+    packagesTaken: 55,
+    revenueFromJobApplications: 65000,
+    revenueFromPackages: 220000,
+    totalRevenue: 285000,
+  },
+  {
+    date: "2025-08-08",
+    jobApplications: 160,
+    packagesTaken: 70,
+    revenueFromJobApplications: 80000,
+    revenueFromPackages: 280000,
+    totalRevenue: 360000,
+  },
+  {
+    date: "2025-08-09",
+    jobApplications: 100,
+    packagesTaken: 40,
+    revenueFromJobApplications: 50000,
+    revenueFromPackages: 160000,
+    totalRevenue: 210000,
+  },
+  {
+    date: "2025-08-10",
+    jobApplications: 150,
+    packagesTaken: 65,
+    revenueFromJobApplications: 75000,
+    revenueFromPackages: 260000,
+    totalRevenue: 335000,
+  },
 ];

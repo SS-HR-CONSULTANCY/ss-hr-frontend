@@ -30,6 +30,8 @@ export interface FetchFunctionParams<T = string> {
   pagination?: {
     page: number;
     limit: number;
+    fromDate?: string;
+    toDate?: string;
   };
 }
 

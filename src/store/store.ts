@@ -1,6 +1,7 @@
 import appReducer from './slices/appSlice';
 import authReducer from './slices/authSlice';
 import chatReducer from './slices/chatSlice';
+import adminReducer from './slices/adminSlice';
 import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
     auth: authReducer,
     app: appReducer,
     chat: chatReducer,
+    admin: adminReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import noProfile from '../../../assets/defaultImgaes/noProfile.png';
-import type { AdminfetchAllApplicationsResponse, AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllPaymentsResponse, AdminfetchAllReviewsResponse, AdminfetchAllUsersResponse } from "@/types/apiTypes/admin";
+import type { AdminfetchAllApplicationsResponse, AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllPaymentsResponse, AdminfetchAllReviewsResponse, AdminfetchAllUsersResponse, AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 
@@ -433,5 +433,38 @@ export const AdminApplicationsTableColumns: ColumnDef<AdminfetchAllApplicationsR
         </DropdownMenu>
       )
     }
+  },
+]
+
+export const AdminReportDataTableColumns: ColumnDef<AdminFetchReportTableDataResponse>[] = [
+  {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Applient On" />
+    ),
+    cell: ({ row }) => {
+      const date = dayjs(row.original.date).format("DD MMM YYYY");
+      return <span>{date}</span>;
+    },
+  },
+  {
+    accessorKey: "jobApplications",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Applications" />)
+  },
+  {
+    accessorKey: "packagesTaken",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Packages" />)
+  },
+  {
+    accessorKey: "revenueFromJobApplications",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Revenue From Application" />)
+  },
+  {
+    accessorKey: "revenueFromPackages",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Revenue From Package" />)
+  },
+  {
+    accessorKey: "totalRevenue",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Total Revenue" />)
   },
 ]

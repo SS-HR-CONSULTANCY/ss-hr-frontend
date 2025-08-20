@@ -1,4 +1,6 @@
+import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
 import jsPDF from "jspdf";
+import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 
 /**
@@ -31,4 +33,39 @@ export const exportToPDF = (fileName: string, title: string, data: object[]) => 
   });
 
   doc.save(`${fileName}.pdf`);
+};
+
+
+
+export const handleExportExcel = async (e: React.MouseEvent<HTMLButtonElement>, reportData: Array<AdminFetchReportTableDataResponse>, activeTab: string) => {
+    e.preventDefault();
+    console.log("hi")
+    
+    if (!reportData || !Array.isArray(reportData)) {
+        toast.error("No report in the table");
+        return;
+    }
+    try {
+        await exportToExcel(`${activeTab}-report`, "Report", reportData);
+        toast.success("Excel file exported successfully!");
+    } catch (error) {
+        toast.error("Failed to export Excel file. Please try again.");
+        console.error("Export to Excel error:", error);
+    }
+};
+
+export const handleExportPDF = async (e: React.MouseEvent<HTMLButtonElement>, reportData: Array<AdminFetchReportTableDataResponse>, activeTab: string) => {
+    e.preventDefault();
+    
+    if (!reportData || !Array.isArray(reportData)) {
+        toast.error("No report in the table");
+        return;
+    }
+    try {
+        await exportToPDF(`${activeTab}-report`, `${activeTab.toUpperCase()} REPORT`, reportData);
+        toast.success("PDF file exported successfully!");
+    } catch (error) {
+        toast.error("Failed to export PDF file. Please try again.");
+        console.error("Export to PDF error:", error);
+    }
 };

@@ -57,6 +57,7 @@ export interface AdminFetchRevenueReportStatsDataResponse extends Record<string,
 }
 
 
+// ✅ Admin overview page graph data Response Type
 export interface AdminFetchOverviewGraphsDataResponse {
     usersGragphData: Array<{
         date: string;
@@ -70,6 +71,7 @@ export interface AdminFetchOverviewGraphsDataResponse {
     }>
 }
 
+// ✅ Admin report page user graph data Response Type
 export interface AdminFetchReportUserswGraphsDataResponse {
     usersRadialGragphData: Array<{
         day: string;
@@ -85,6 +87,7 @@ export interface AdminFetchReportUserswGraphsDataResponse {
     }>
 }
 
+// ✅ Admin report page applications graph data Response Type
 export interface AdminFetchReportApplicationsGraphsDataResponse {
     applicationRadialGragphData: Array<{
         day: string;
@@ -97,6 +100,7 @@ export interface AdminFetchReportApplicationsGraphsDataResponse {
     }>
 }
 
+// ✅ Admin report page payment and revenue graph data Response Type
 export interface AdminFetchReportPaymentsGraphsDataResponse {
     paymentsRadialGragphData: Array<{
         day: string;
@@ -108,4 +112,14 @@ export interface AdminFetchReportPaymentsGraphsDataResponse {
         packageRevenue: number;
         hiringRevenue: number;
     }>
+}
+
+// ✅ Admin report page report table Response Type
+export interface AdminFetchReportTableDataResponse {
+  date: string;                       
+  jobApplications: number;            
+  packagesTaken: number;             
+  revenueFromJobApplications: number;
+  revenueFromPackages: number;      
+  totalRevenue: number;             
 }
