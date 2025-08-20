@@ -1,5 +1,5 @@
 import { apiService } from './api';
-import type { LoginRequest, RegisterRequest, AuthResponse } from '../types/auth.types';
+import type { AuthResponse, LoginRequest, RegisterRequest } from '@/types/slice/authSliceTypes';
 
 export const authService = {
   // Login user

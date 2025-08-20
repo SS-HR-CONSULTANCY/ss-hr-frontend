@@ -4,7 +4,6 @@ import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import Heading from "@/components/common/Heading";
-import { radialChartConfig } from "@/utils/chartConfig";
 import RadialChart from "@/components/chart/RadialChart";
 import CommonTable from "@/components/common/CommonTable";
 import GraphShimmer from "@/components/shimmer/GraphShimmer";
@@ -13,9 +12,10 @@ import ChartLineMultiple from "@/components/chart/ChartLineMultiple";
 import DataFetchingError from "@/components/common/DataFetchingError";
 import { handleExportExcel, handleExportPDF } from "@/utils/helpers/report";
 import { AdminReportDataTableColumns } from "@/components/table/tableColumns/AdminUsersTable";
-import { dummyAdminApplicationsReportStats, dummyAdminRevenueReportStats, dummyAdminUserReportStats, reportTableDataDummyData, weeklyApplicationDummyData, weeklyPaymentsDummyData, weeklyUsersDummyData } from "@/utils/dummyData";
-import { applicationConfig, applicationDummyData, reportPageTabs, reportUserDummyData, reportUserDummyDataConfig, revenueDummyData, revenueDummyDataConfig, statsMapForAdminUserStats, statsMapForApplications, statsMapForRevenue } from "@/utils/constants";
+import { reportPageTabs, statsMapForAdminUserStats, statsMapForApplications, statsMapForRevenue } from "@/utils/constants";
+import { applicationConfig, radialChartConfig, reportUserDummyDataConfig, revenueDummyDataConfig } from "@/utils/chartConfig";
 import { adminFetchApplicationsReportStatsData, adminFetchReportApplicationGraphData, adminFetchReportPaymentsGraphData, AdminFetchReportTableData, adminFetchReportUserGraphData, adminFetchRevenueReportStatsData, adminFetchUserReportStatsData } from "@/utils/apis/adminApi";
+import { applicationDummyData, dummyAdminApplicationsReportStats, dummyAdminRevenueReportStats, dummyAdminUserReportStats, reportTableDataDummyData, reportUserDummyData, revenueDummyData, weeklyApplicationDummyData, weeklyPaymentsDummyData, weeklyUsersDummyData } from "@/utils/dummyData";
 import { type AdminFetchApplicationsReportStatsDataResponse, type AdminFetchReportApplicationsGraphsDataResponse, type AdminFetchReportPaymentsGraphsDataResponse, type AdminFetchReportTableDataResponse, type AdminFetchReportUserswGraphsDataResponse, type AdminFetchRevenueReportStatsDataResponse, type AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
 
 const AdminReports: React.FC = () => {

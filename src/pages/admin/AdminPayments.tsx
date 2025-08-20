@@ -1,5 +1,5 @@
 import React from 'react';
-import { paymentsDummyData } from '@/utils/constants';
+import { paymentsDummyData } from '@/utils/dummyData';
 import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllPayments } from '@/utils/apis/adminApi';
 import type { AdminfetchAllPaymentsResponse } from '@/types/apiTypes/admin';

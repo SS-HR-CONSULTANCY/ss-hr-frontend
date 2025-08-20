@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { dummyAdminOverviewStats, overviewPaymentsDummyData, overviewUserDummyData } from '@/utils/dummyData';
+import Heading from '@/components/common/Heading';
+import GraphShimmer from '@/components/shimmer/GraphShimmer';
 import { statsMapForAdminOverview } from '@/utils/constants';
 import AreaGroupedChart from '@/components/chart/AreaGroupedChart';
 import BarChartVertical from '@/components/chart/BarChartVertical';
@@ -9,8 +10,7 @@ import DataFetchingError from '@/components/common/DataFetchingError';
 import type { AdminFetchOverviewStatsDataResponse } from "@/types/apiTypes/admin";
 import { overviewPaymentsDataChartConfig, overviewUserDataChartConfig } from '@/utils/chartConfig';
 import { adminFetchOverviewGrraphData, adminFetchOverviewStatsData } from '@/utils/apis/adminApi';
-import GraphShimmer from '@/components/shimmer/GraphShimmer';
-import Heading from '@/components/common/Heading';
+import { dummyAdminOverviewStats, overviewPaymentsDummyData, overviewUserDummyData } from '@/utils/dummyData';
 
 const AdminOverview: React.FC = () => {
 

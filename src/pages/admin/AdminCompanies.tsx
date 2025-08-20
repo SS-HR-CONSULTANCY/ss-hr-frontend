@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import type { AppDispatch } from '@/store/store';
-import { companiesDummyData } from '@/utils/constants';
+import { companiesDummyData } from '@/utils/dummyData';
 import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllCompanies } from '@/utils/apis/adminApi';
 import { toggleAddCompanyForm } from '@/store/slices/adminSlice';

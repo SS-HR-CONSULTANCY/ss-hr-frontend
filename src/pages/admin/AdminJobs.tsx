@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { Button } from '@/components/ui/button';
 import type { AppDispatch } from '@/store/store';
-import { jobsDummyData } from '@/utils/constants';
+import { jobsDummyData } from '@/utils/dummyData';
 import { adminFetchAllJobs } from '@/utils/apis/adminApi';
 import CommonTable from '@/components/common/CommonTable';
+import { toggleAddJobForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/admin';
 import { AdminJobsTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
-import { toggleAddJobForm } from '@/store/slices/adminSlice';
-import { Button } from '@/components/ui/button';
 
 const AdminJobs: React.FC = () => {
 

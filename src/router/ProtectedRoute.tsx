@@ -2,11 +2,7 @@
 import React from 'react';
 import { useAppSelector } from '../hooks/redux';
 import { Navigate, useLocation } from 'react-router-dom';
-
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-  requiredRole?: 'user' | 'admin' | 'hr';
-}
+import type { ProtectedRouteProps } from '@/types/componentTypes/routerTypes';
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
@@ -15,7 +11,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const { isAuthenticated, user, isLoading } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
-  // Show loading spinner while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -24,19 +19,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // Not authenticated - redirect to appropriate login page
   if (!isAuthenticated) {
-    // If trying to access admin routes, redirect to admin login
     if (location.pathname.startsWith('/admin')) {
       return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
-    // Otherwise redirect to regular login
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check role-based access
   if (requiredRole && user?.role !== requiredRole) {
-    // If user is not admin but trying to access admin routes
     if (requiredRole === 'admin') {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -64,11 +54,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       );
     }
     
-    // For other role mismatches, redirect to home
     return <Navigate to="/" replace />;
   }
 
-  // User is authenticated and has the right role
   return <>{children}</>;
 };
 

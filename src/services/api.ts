@@ -1,6 +1,6 @@
 import axios from 'axios';
+import type { ApiError } from '@/types/commonTypes';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import type { ApiError } from '../types/auth.types';
 
 class ApiService {
   private api: AxiosInstance;
@@ -53,11 +53,11 @@ class ApiService {
     return this.api.get(url, config).then((response) => response.data);
   }
 
-  public post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  public post<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     return this.api.post(url, data, config).then((response) => response.data);
   }
 
-  public put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  public put<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     return this.api.put(url, data, config).then((response) => response.data);
   }
 

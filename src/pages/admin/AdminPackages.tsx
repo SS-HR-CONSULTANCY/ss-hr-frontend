@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { Button } from '@/components/ui/button';
 import type { AppDispatch } from '@/store/store';
-import { packageDummyData } from '@/utils/constants';
+import { packageDummyData } from '@/utils/dummyData';
 import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllPackages } from '@/utils/apis/adminApi';
+import { toggleAddPackageForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllPackagesResponse } from '@/types/apiTypes/admin';
 import { AdminPackagesTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
-import { toggleAddPackageForm } from '@/store/slices/adminSlice';
-import { Button } from '@/components/ui/button';
 
 const AdminPackages: React.FC = () => {
 

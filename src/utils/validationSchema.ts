@@ -1,4 +1,3 @@
-// Frontend: src/utils/validationSchema.ts
 import * as yup from 'yup';
 
 // Login Form Schema

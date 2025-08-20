@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import type { AppDispatch } from '@/store/store';
-import { reviewsDummyData } from '@/utils/constants';
+import { reviewsDummyData } from '@/utils/dummyData';
 import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllPReviews } from '@/utils/apis/adminApi';
 import { toggleAddReviewForm } from '@/store/slices/adminSlice';

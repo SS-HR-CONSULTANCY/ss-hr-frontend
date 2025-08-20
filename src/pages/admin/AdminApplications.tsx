@@ -1,6 +1,6 @@
 import React from 'react';
 import CommonTable from '@/components/common/CommonTable';
-import { applicationsDummyData } from '@/utils/constants';
+import { applicationsDummyData } from '@/utils/dummyData';
 import { adminFetchAllPApplications } from '@/utils/apis/adminApi';
 import type { AdminfetchAllApplicationsResponse } from '@/types/apiTypes/admin';
 import { AdminApplicationsTableColumns } from '@/components/table/tableColumns/AdminUsersTable';

@@ -1,5 +1,5 @@
 import { Users } from "lucide-react";
-import { dummyUsers } from "@/utils/constants";
+import { dummyUsers } from "@/utils/dummyData";
 import { useQuery } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
