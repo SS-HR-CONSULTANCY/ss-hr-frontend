@@ -10,7 +10,8 @@ import {
   LayoutDashboard,
   Building,
   MessageCircle,
-  Notebook
+  Notebook,
+  Settings
 } from 'lucide-react';
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -40,6 +41,7 @@ const Sidebar: React.FC = () => {
     'reports': <Notebook />,
     'logout': <LogOut />,
     'chat': <MessageCircle />,
+    'settings': <Settings />,
   }
 
   const getIcon = (name: string): React.ReactNode => {

@@ -14,6 +14,7 @@ interface FormFieldProps<T extends FieldValues> {
   error?: string;
   register: UseFormRegister<T>;
   showTogglePassword?: boolean;
+  children?: React.ReactNode;
 }
 
 const FormField = <T extends FieldValues>({
@@ -25,8 +26,25 @@ const FormField = <T extends FieldValues>({
   error,
   register,
   showTogglePassword = false,
+  children
 }: FormFieldProps<T>) => {
   const [show, setShow] = useState(false);
+
+   if (type === "select") {
+    return (
+      <div className="space-y-2">
+        <Label htmlFor={id}>{label}</Label>
+        <select
+          id={id}
+          {...register(id)}
+          className={`w-full border rounded p-2 ${error ? "border-destructive" : ""}`}
+        >
+          {children}
+        </select>
+        {error && <p className="text-xs text-destructive">{error}</p>}
+      </div>
+    );
+  }
 
   const inputType =
     showTogglePassword && (type === "password" || type === "text")

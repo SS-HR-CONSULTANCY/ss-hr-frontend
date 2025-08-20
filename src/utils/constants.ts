@@ -267,6 +267,7 @@ export const adminRoutes: Route[] = [
   { path: "payments", name: "Payments" },
   { path: "reviews", name: "Reviews" },
   { path: "reports", name: "Reports" },
+  { path: "settings", name: "Settings" },
 ];
 
 

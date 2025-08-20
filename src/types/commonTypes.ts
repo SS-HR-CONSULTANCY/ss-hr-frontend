@@ -1,9 +1,10 @@
 import type { LucideIcon } from "lucide-react";
 
 export interface ApiError {
-  status: number;
-  message: string;
-  errors?: Record<string, string[]>;
+  message: string;           
+  status?: number;           
+  errors?: Record<string, string[]>; 
+  [key: string]: unknown;   
 }
 
 export interface Route {

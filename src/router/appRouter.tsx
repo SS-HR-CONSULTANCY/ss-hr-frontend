@@ -17,6 +17,7 @@ import AdminPackages from "@/pages/admin/AdminPackages";
 import AdminPayments from "@/pages/admin/AdminPayments";
 import AdminCompanies from "@/pages/admin/AdminCompanies";
 import AdminApplications from "@/pages/admin/AdminApplications";
+import AdminSettings from "@/pages/admin/AdminSettings";
 
 const appRouter = createBrowserRouter([
     {
@@ -116,6 +117,14 @@ const appRouter = createBrowserRouter([
                 element: (
                     // <ProtectedRoute requiredRole="admin">
                         <AdminReports />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "settings",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminSettings />
                     // </ProtectedRoute>
                 ),
             },
