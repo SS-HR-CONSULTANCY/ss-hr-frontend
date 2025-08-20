@@ -8,9 +8,9 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import ChartHeader from "./ChartHeader";
+import ChartDataNotAvailable from "./ChartDataNotAvailable";
 import { LabelList, RadialBar, RadialBarChart } from "recharts";
 import type { ChartDataItem, RadialChartInterface } from "@/types/componentTypes/chartTypes";
-import ChartDataNotAvailable from "./ChartDataNotAvailable";
 
 const RadialChart = <T extends ChartDataItem>({
   title,
@@ -32,10 +32,10 @@ const RadialChart = <T extends ChartDataItem>({
   });
 
   return (
-    <Card className="relative overflow-hidden">
+    <Card className="relative overflow-hidden h-full">
       <ChartHeader title={title} description={description} />
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="min-h-[200px]">
+        <ChartContainer config={chartConfig} className="">
           {chartData.length === 0 ? (
             <ChartDataNotAvailable />
           ) : (

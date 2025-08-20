@@ -1,7 +1,9 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface ApiError {
   status: number;
   message: string;
-  errors?: Record<string, string[]>; // optional extra validation errors
+  errors?: Record<string, string[]>;
 }
 
 export interface Route {
@@ -22,6 +24,7 @@ export interface ApiPaginatedResponse<T> extends ApiBaseResponse {
   currentPage?: number;
   totalPages?: number;
 }
+
 export interface FetchFunctionParams<T = string> {
   id?: T;
   pagination?: {
@@ -30,3 +33,10 @@ export interface FetchFunctionParams<T = string> {
   };
 }
 
+export interface statsMapIntrface<T> {
+  title: string;
+  key: keyof T;
+  icon: LucideIcon;
+  price?: boolean;
+  plans?: string[];
+}

@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Briefcase, Building2, ClipboardList, CreditCard, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
 import type { ContactItem } from '@/types/componentTypes/contactTypes';
 import type { PackageProps } from '@/types/componentTypes/packageTypes';
 import visaService from '../assets/servicesImages/visaService.png';
@@ -10,15 +10,16 @@ import medicalRecruitment from '../assets/servicesImages/medicalRecruitment.jpg'
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
-import type { Route } from '@/types/commonTypes';
-import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/admin';
+import type { Route, statsMapIntrface } from '@/types/commonTypes';
+import type { AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/admin';
 import type { Job } from '@/types/entities/job';
-import type { Package } from '@/types/entities/package';
+import type { Package, Package, Package } from '@/types/entities/package';
 import type { Company } from '@/types/entities/company';
 import type { Payment } from '@/types/entities/payment';
 import type { Review } from '@/types/entities/review';
 import type { Application } from '@/types/entities/application';
 import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
+import type { WeeklyData } from '@/types/componentTypes/areportTypes';
 
 export const companyName = "ShahaalamGroups";
 
@@ -172,45 +173,45 @@ export const footerData = [
 ]
 
 export const footerPoliciesData = [
-    { text: "Privacy Policy", href: "" },
-    { text: "Terms of Service", href: "" },
-  ]
+  { text: "Privacy Policy", href: "" },
+  { text: "Terms of Service", href: "" },
+]
 
-  export const footerCopyright = "© 2025 shahaalamGroups.com All rights reserved";
-  export const footerAddress = "Al Qiyadah Metro Station Exit2, Old Labour Office Al Kazim Building Entrance B, Dubai, UAE"
+export const footerCopyright = "© 2025 shahaalamGroups.com All rights reserved";
+export const footerAddress = "Al Qiyadah Metro Station Exit2, Old Labour Office Al Kazim Building Entrance B, Dubai, UAE"
 
 
-  // Reviews compoenent constats
-  export const reviews = [
-    {
-        quote:
-            "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
-        name: "Charles Dickens",
-        title: "A Tale of Two Cities",
-    },
-    {
-        quote:
-            "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
-        name: "William Shakespeare",
-        title: "Hamlet",
-    },
-    {
-        quote: "All that we see or seem is but a dream within a dream.",
-        name: "Edgar Allan Poe",
-        title: "A Dream Within a Dream",
-    },
-    {
-        quote:
-            "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-        name: "Jane Austen",
-        title: "Pride and Prejudice",
-    },
-    {
-        quote:
-            "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
-        name: "Herman Melville",
-        title: "Moby-Dick",
-    },
+// Reviews compoenent constats
+export const reviews = [
+  {
+    quote:
+      "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
+    name: "Charles Dickens",
+    title: "A Tale of Two Cities",
+  },
+  {
+    quote:
+      "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
+    name: "William Shakespeare",
+    title: "Hamlet",
+  },
+  {
+    quote: "All that we see or seem is but a dream within a dream.",
+    name: "Edgar Allan Poe",
+    title: "A Dream Within a Dream",
+  },
+  {
+    quote:
+      "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+    name: "Jane Austen",
+    title: "Pride and Prejudice",
+  },
+  {
+    quote:
+      "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
+    name: "Herman Melville",
+    title: "Moby-Dick",
+  },
 ];
 
 
@@ -245,9 +246,9 @@ export const businessHours = "Mon–Sat, 9:30 AM – 6:30 PM";
 
 // CallToAction compoenent constats
 export const callToActionData: CallToActionProps = {
-  title : "Ready to get started?",
-  description : "From seamless travel arrangements to visa support, job opportunities, and medical recruitment — we provide everything you need for a successful international experience. Let us handle the details so you can focus on your future.",
-  buttons : [
+  title: "Ready to get started?",
+  description: "From seamless travel arrangements to visa support, job opportunities, and medical recruitment — we provide everything you need for a successful international experience. Let us handle the details so you can focus on your future.",
+  buttons: [
     { href: "/register", text: "Get Started", variant: "default" },
     { href: "/travel-packages", text: "Travel Packages", variant: "outline" },
   ],
@@ -256,21 +257,21 @@ export const callToActionData: CallToActionProps = {
 
 // Sidebar compoenent constacts
 export const adminRoutes: Route[] = [
-    { path: "overview", name: "Overview" },
-    { path: "users", name: "Users" },
-    { path: "companies", name: "Companies" },
-    { path: "jobs", name: "Jobs" },
-    { path: "packages", name: "Packages" },
-    { path: "applications", name: "Applications" },
-    { path: "chat", name: "Chat" },
-    { path: "payments", name: "Payments" },
-    { path: "reviews", name: "Reviews" },
-    { path: "reports", name: "Reports" },
-  ];
+  { path: "overview", name: "Overview" },
+  { path: "users", name: "Users" },
+  { path: "companies", name: "Companies" },
+  { path: "jobs", name: "Jobs" },
+  { path: "packages", name: "Packages" },
+  { path: "applications", name: "Applications" },
+  { path: "chat", name: "Chat" },
+  { path: "payments", name: "Payments" },
+  { path: "reviews", name: "Reviews" },
+  { path: "reports", name: "Reports" },
+];
 
 
-  // Adminusers compoenent dummy data
-  export const usersDummyData: AdminfetchAllUsersResponse[] = [
+// Adminusers compoenent dummy data
+export const usersDummyData: AdminfetchAllUsersResponse[] = [
   {
     _id: "1",
     fullName: "John Doe",
@@ -854,8 +855,8 @@ export const applicationsDummyData: Application[] = [
 ];
 
 
-  // Chat component shimmer constants
-  export const shimmerMessages: { align: string, height: string, width: string }[] = [
+// Chat component shimmer constants
+export const shimmerMessages: { align: string, height: string, width: string }[] = [
   { align: "end", height: "h-10", width: "w-64" },
   { align: "start", height: "h-24", width: "w-60" },
   { align: "end", height: "h-36", width: "w-72" },
@@ -882,29 +883,364 @@ export const dateSelectList: dataSelectListItemInterface[] = [
 
 // chat dummy data
 export const dummyUsers = [
-    {
-        _id: "u1",
-        fullName: "John Doe",
-        profileImg: "https://randomuser.me/api/portraits/men/32.jpg",
-    },
-    {
-        _id: "u2",
-        fullName: "Jane Smith",
-        profileImg: "https://randomuser.me/api/portraits/women/44.jpg",
-    },
-    {
-        _id: "u3",
-        fullName: "Alice Johnson",
-        profileImg: "https://randomuser.me/api/portraits/women/68.jpg",
-    },
-    {
-        _id: "u4",
-        fullName: "Michael Brown",
-        profileImg: "https://randomuser.me/api/portraits/men/76.jpg",
-    },
-    {
-        _id: "u5",
-        fullName: "Sophia Davis",
-        profileImg: "https://randomuser.me/api/portraits/women/12.jpg",
-    },
+  {
+    _id: "u1",
+    fullName: "John Doe",
+    profileImg: "https://randomuser.me/api/portraits/men/32.jpg",
+  },
+  {
+    _id: "u2",
+    fullName: "Jane Smith",
+    profileImg: "https://randomuser.me/api/portraits/women/44.jpg",
+  },
+  {
+    _id: "u3",
+    fullName: "Alice Johnson",
+    profileImg: "https://randomuser.me/api/portraits/women/68.jpg",
+  },
+  {
+    _id: "u4",
+    fullName: "Michael Brown",
+    profileImg: "https://randomuser.me/api/portraits/men/76.jpg",
+  },
+  {
+    _id: "u5",
+    fullName: "Sophia Davis",
+    profileImg: "https://randomuser.me/api/portraits/women/12.jpg",
+  },
 ];
+
+
+// Report user dummy data
+export const reportUserDummyData = [
+  {
+    date: "01-08-2025",
+    totalUsers: 597,
+    oldUsers: 266,
+    newUsers: 331,
+    jobApplicants: 239,
+    packageUsedUsers: 141,
+  },
+  {
+    date: "02-08-2025",
+    totalUsers: 738,
+    oldUsers: 446,
+    newUsers: 292,
+    jobApplicants: 112,
+    packageUsedUsers: 126,
+  },
+  {
+    date: "03-08-2025",
+    totalUsers: 591,
+    oldUsers: 445,
+    newUsers: 146,
+    jobApplicants: 299,
+    packageUsedUsers: 52,
+  },
+  {
+    date: "04-08-2025",
+    totalUsers: 586,
+    oldUsers: 436,
+    newUsers: 150,
+    jobApplicants: 269,
+    packageUsedUsers: 105,
+  },
+  {
+    date: "05-08-2025",
+    totalUsers: 622,
+    oldUsers: 452,
+    newUsers: 170,
+    jobApplicants: 152,
+    packageUsedUsers: 25,
+  },
+  {
+    date: "06-08-2025",
+    totalUsers: 781,
+    oldUsers: 512,
+    newUsers: 269,
+    jobApplicants: 199,
+    packageUsedUsers: 175,
+  },
+  {
+    date: "07-08-2025",
+    totalUsers: 829,
+    oldUsers: 488,
+    newUsers: 341,
+    jobApplicants: 173,
+    packageUsedUsers: 87,
+  },
+  {
+    date: "08-08-2025",
+    totalUsers: 754,
+    oldUsers: 389,
+    newUsers: 365,
+    jobApplicants: 221,
+    packageUsedUsers: 142,
+  },
+  {
+    date: "09-08-2025",
+    totalUsers: 623,
+    oldUsers: 355,
+    newUsers: 268,
+    jobApplicants: 283,
+    packageUsedUsers: 67,
+  },
+  {
+    date: "10-08-2025",
+    totalUsers: 695,
+    oldUsers: 400,
+    newUsers: 295,
+    jobApplicants: 142,
+    packageUsedUsers: 132,
+  },
+  {
+    date: "11-08-2025",
+    totalUsers: 842,
+    oldUsers: 576,
+    newUsers: 266,
+    jobApplicants: 214,
+    packageUsedUsers: 151,
+  },
+  {
+    date: "12-08-2025",
+    totalUsers: 715,
+    oldUsers: 419,
+    newUsers: 296,
+    jobApplicants: 187,
+    packageUsedUsers: 124,
+  },
+  {
+    date: "13-08-2025",
+    totalUsers: 605,
+    oldUsers: 310,
+    newUsers: 295,
+    jobApplicants: 198,
+    packageUsedUsers: 91,
+  },
+  {
+    date: "14-08-2025",
+    totalUsers: 774,
+    oldUsers: 432,
+    newUsers: 342,
+    jobApplicants: 168,
+    packageUsedUsers: 139,
+  },
+  {
+    date: "15-08-2025",
+    totalUsers: 692,
+    oldUsers: 401,
+    newUsers: 291,
+    jobApplicants: 207,
+    packageUsedUsers: 112,
+  },
+];
+
+export const reportUserDummyDataConfig = {
+  totalUsers: {
+    label: "Total Users",
+    color: "#4F46E5",
+  },
+  oldUsers: {
+    label: "Old Users",
+    color: "#10B981",
+  },
+  newUsers: {
+    label: "New Users",
+    color: "#F59E0B",
+  },
+  jobApplicants: {
+    label: "Job Applicants",
+    color: "#EF4444",
+  },
+  packageUsedUsers: {
+    label: "Package Used Users",
+    color: "#3B82F6",
+  },
+};
+
+export const applicationDummyData = [
+  { date: "10-08-2025", totalApplicants: 120, successfulPlacements: 30 },
+  { date: "11-08-2025", totalApplicants: 140, successfulPlacements: 40 },
+  { date: "12-08-2025", totalApplicants: 135, successfulPlacements: 38 },
+  { date: "13-08-2025", totalApplicants: 150, successfulPlacements: 45 },
+  { date: "14-08-2025", totalApplicants: 160, successfulPlacements: 50 },
+  { date: "15-08-2025", totalApplicants: 170, successfulPlacements: 55 },
+  { date: "16-08-2025", totalApplicants: 165, successfulPlacements: 52 },
+  { date: "17-08-2025", totalApplicants: 180, successfulPlacements: 60 },
+  { date: "18-08-2025", totalApplicants: 190, successfulPlacements: 62 },
+  { date: "19-08-2025", totalApplicants: 200, successfulPlacements: 70 },
+];
+
+
+export const applicationConfig = {
+  totalApplicants: {
+    label: "Total Applicants",
+    color: "#3b82f6",
+  },
+  successfulPlacements: {
+    label: "Successful Placements",
+    color: "#22c55e",
+  },
+};
+
+export const revenueDummyData = [
+  { date: "01-08-2025", totalRevenue: 12000, packageRevenue: 8000, hiringRevenue: 4000 },
+  { date: "02-08-2025", totalRevenue: 15000, packageRevenue: 9500, hiringRevenue: 5500 },
+  { date: "03-08-2025", totalRevenue: 11000, packageRevenue: 7000, hiringRevenue: 4000 },
+  { date: "04-08-2025", totalRevenue: 17000, packageRevenue: 11000, hiringRevenue: 6000 },
+  { date: "05-08-2025", totalRevenue: 14000, packageRevenue: 9000, hiringRevenue: 5000 },
+  { date: "06-08-2025", totalRevenue: 18000, packageRevenue: 12000, hiringRevenue: 6000 },
+  { date: "07-08-2025", totalRevenue: 16000, packageRevenue: 10000, hiringRevenue: 6000 },
+  { date: "08-08-2025", totalRevenue: 20000, packageRevenue: 13000, hiringRevenue: 7000 },
+  { date: "09-08-2025", totalRevenue: 19000, packageRevenue: 12500, hiringRevenue: 6500 },
+  { date: "10-08-2025", totalRevenue: 22000, packageRevenue: 14000, hiringRevenue: 8000 },
+];
+
+
+export const revenueDummyDataConfig = {
+  totalRevenue: {
+    label: "Total Revenue",
+    color: "#3b82f6",
+  },
+  packageRevenue: {
+    label: "Package Revenue",
+    color: "#10b981",
+  },
+  hiringRevenue: {
+    label: "Hiring Revenue",
+    color: "#f59e0b",
+  },
+};
+
+// report page tabs
+export const reportPageTabs = [
+  {
+    id: "users",
+    label: "User Report",
+    // weekly: weeklyUsersData,
+  },
+  {
+    id: "applications",
+    label: "Application Report",
+    // weekly: weeklyApplicationData,
+  },
+  {
+    id: "revenue",
+    label: "Revenue Report",
+    // weekly: weeklyRevenueData,
+  },
+];
+
+
+
+
+//  stats card data \\
+// ✅ Admin users Stats Map
+export const statsMapForAdminUserStats: Array<statsMapIntrface<AdminFetchUserReportStatsDataResponse>> = [
+  {
+    title: "Total Users",
+    key: "totalUsers",
+    icon: Users,
+  },
+  {
+    title: "New Users",
+    key: "newUsers",
+    icon: Users,
+  },
+  {
+    title: "Old Users",
+    key: "oldUsers",
+    icon: Users,
+  },
+  {
+    title: "Job Applications",
+    key: "jobApplications",
+    icon: Briefcase,
+  },
+  {
+    title: "Package Used Users",
+    key: "packageUsedUsers",
+    icon: Package,
+  },
+]
+
+// ✅ Admin Applications Stats Map
+export const statsMapForApplications: Array<statsMapIntrface<AdminFetchApplicationsReportStatsDataResponse>> = [
+  {
+    title: "Total Applications",
+    key: "totalApplications",
+    icon: Briefcase,
+  },
+  {
+    title: "Successful Placements",
+    key: "successfulPlacements",
+    icon: Briefcase,
+  },
+];
+
+// ✅ Admin Revenue Stats Map
+export const statsMapForRevenue: Array<statsMapIntrface<AdminFetchRevenueReportStatsDataResponse>> = [
+  {
+    title: "Total Revenue",
+    key: "totalRevenue",
+    icon: Landmark,
+    price: true,
+  },
+  {
+    title: "Package Revenue",
+    key: "packageRevenue",
+    icon: Landmark,
+    price: true,
+  },
+  {
+    title: "Hiring Revenue",
+    key: "hiringRevenue",
+    icon: Landmark,
+    price: true,
+  },
+];
+
+export const statsMapForAdminOverview: Array<statsMapIntrface<AdminFetchOverviewStatsDataResponse>> = [
+  {
+    title: "Total Users",
+    key: "totalUsers",
+    icon: Users,
+  },
+  {
+    title: "Total Packages",
+    key: "totalPackages",
+    icon: Package,
+  },
+  {
+    title: "Jobs Available",
+    key: "totalJobsAvailable",
+    icon: Briefcase,
+  },
+  {
+    title: "Companies",
+    key: "totalCompanies",
+    icon: Building2,
+  },
+  {
+    title: "Total Positions",
+    key: "totalPostions",
+    icon: ClipboardList,
+  },
+  {
+    title: "Payments",
+    key: "totalPayments",
+    icon: CreditCard,
+  },
+  {
+    title: "Total Revenue",
+    key: "totalRevenue",
+    icon: Landmark,
+    price: true,
+  },
+  {
+    title: "Applications",
+    key: "totalApplications",
+    icon: FileText,
+  },
+];
+

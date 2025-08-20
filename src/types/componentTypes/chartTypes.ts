@@ -55,6 +55,8 @@ export interface ChatComponentProps<T extends { date: string }> {
   dataKeyOne: string;
   dataKeyTwo: string;
   dataKeyThree?: string;
+  dataKeyFour?: string;
+  dataKeyFive?: string;
   nameKey: string;
   chartConfig: ChartConfig;
   isLocked?: boolean;
@@ -68,3 +70,5 @@ export type BaseChartData = {
 export type AreaGroupChartProps = Pick<ChatComponentProps<BaseChartData>, "title" | "description" | "chartData" | "dataKeyOne" | "dataKeyTwo" | "dataKeyThree" | "chartConfig" | "isLocked">;
 
 export type BarChartVerticalProps = Pick<ChatComponentProps<BaseChartData>, "title" | "description" | "chartData" | "dataKeyOne" | "dataKeyTwo" | "chartConfig" | "isLocked"> ;
+
+export type ChartLineMultipleProps = Pick<ChatComponentProps<BaseChartData>, "title" | "description" | "chartData" | "dataKeyOne" | "dataKeyTwo" | "dataKeyThree" | "dataKeyFour" | "dataKeyFive" | "chartConfig" | "isLocked"> ;
