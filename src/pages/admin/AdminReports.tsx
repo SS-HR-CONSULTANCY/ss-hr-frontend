@@ -58,7 +58,7 @@ const AdminReports: React.FC = () => {
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-2 rounded-t-lg ${activeTab === tab.id
+                        className={`px-4 py-2 rounded-t-lg cursor-pointer ${activeTab === tab.id
                             ? "bg-gradient-to-r from-slate-300 to-slate-500 text-black font-semibold"
                             : "bg-slate-200 dark:bg-slate-700"
                             }`}
@@ -268,8 +268,8 @@ const AdminReports: React.FC = () => {
                     <>
                         <h2 className="font-semibold text-lg mb-4">Generate Reports</h2>
                         <div className="space-x-4">
-                            <Button onClick={(e) => handleExportExcel(e, reportData!, activeTab)}>Generate PDF</Button>
-                            <Button onClick={(e) => handleExportPDF(e, reportData!, activeTab)}>Generate Excel</Button>
+                            <Button variant={"outline"} onClick={(e) => handleExportExcel(e, reportData!, activeTab)}>Generate PDF</Button>
+                            <Button variant={"outline"} onClick={(e) => handleExportPDF(e, reportData!, activeTab)}>Generate Excel</Button>
                         </div>
                     </>
                 {/* )} */}

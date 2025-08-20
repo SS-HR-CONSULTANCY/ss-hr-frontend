@@ -7,8 +7,8 @@ import TableShimmer from "../shimmer/TableShimmer";
 import DataFetchingError from "./DataFetchingError";
 import { saveReportData } from "@/store/slices/adminSlice";
 import { type OnChangeFn, type PaginationState } from "@tanstack/react-table";
+import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
 import type { CommonTableComponentProps } from "@/types/componentTypes/commonTableTypes";
-
 
 const CommonTable = <T,>({
   fetchApiFunction,
@@ -23,7 +23,7 @@ const CommonTable = <T,>({
   showDummyData,
   pageSize = 5,
   showDatePicker,
-  saveDataInStore
+  saveDataInStore,
 }: CommonTableComponentProps<T>) => {
 
   const dispatch = useDispatch<AppDispatch>();
@@ -44,10 +44,12 @@ const CommonTable = <T,>({
       id,
       pagination: {
         page: pagination.pageIndex + 1,
-        limit: pagination.pageSize
+        limit: pagination.pageSize,
+        fromDate,
+        toDate
       }
     }),
-    queryKey: [queryKey, pagination.pageIndex, pagination.pageSize, id],
+    queryKey: [queryKey, pagination.pageIndex, pagination.pageSize, id, fromDate, toDate],
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: !showDummyData,
@@ -66,14 +68,14 @@ const CommonTable = <T,>({
       ? Math.ceil(dummyData.length / pagination.pageSize)
       : data?.totalPages ?? 0;
 
-      useEffect(() => {
-        if(!saveDataInStore) return;
-          dispatch(saveReportData(data));
-      },[data, saveDataInStore])
+  useEffect(() => {
+    if (!saveDataInStore || !data) return;
+    dispatch(saveReportData(data?.data as Array<AdminFetchReportTableDataResponse>));
+  }, [data, saveDataInStore, dispatch]);
 
   return (
     <div className="p-4">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <div>
           {heading && (
             <h2 className={`text-2xl lg:text-3xl font-bold ${headingClassName}`}>{heading}</h2>
@@ -82,24 +84,25 @@ const CommonTable = <T,>({
             <h2 className={`text-sm font-normal`}>{description}</h2>
           )}
         </div>
-        {showDatePicker && (
-          
-          <div className="space-x-4 space-y-2">
-            <h2 className={`text-lg font-normal`}>Pick specific date range</h2>
-            <input
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              className="border rounded p-2"
-            />
-            <input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="border rounded p-2"
-            />
-          </div>
-        )}
+        <div className="flex items-center space-x-4 space-y-2">
+          {showDatePicker && (
+            <div>
+              <h2 className={`text-lg font-normal`}>Pick specific date range</h2>
+              <input
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                className="border rounded p-2"
+              />
+              <input
+                type="date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                className="border rounded p-2"
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {isLoading && !showDummyData ? (

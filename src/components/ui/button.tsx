@@ -43,7 +43,7 @@ export interface ButtonProps
 }
 
 function Button({
-  className,
+  className = "cursor-pointer",
   variant,
   size,
   asChild = false,
