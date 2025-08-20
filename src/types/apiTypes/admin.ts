@@ -19,3 +19,5 @@ export type AdminfetchAllPaymentsResponse = Pick<Payment, "transactionId" | "tot
 export type AdminfetchAllReviewsResponse = Pick<Review, "text" | "username" | "createdAt" | "job" >;
 
 export type AdminfetchAllApplicationsResponse = Pick<Application, "username" | "company" | "designation" | "jobId" | "createdAt" | "cvLink" >;
+
+export type AdminfetchAllUsersForChatSidebarResponse = Array<Pick<User, "_id" | "fullName" | "profileImg" >>;

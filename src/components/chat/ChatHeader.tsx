@@ -31,7 +31,7 @@ const ChatHeader: React.FC = () => {
     useEffect(() => {},[selectedUser]);
  
     return (
-        <div className="p-2 md:p-3 border-b border-base-300 shadow-md">
+        <div className="p-2 md:p-3 border-b border-base-300 shadow-md bg-blue-50 dark:bg-black z-20">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="avatar">

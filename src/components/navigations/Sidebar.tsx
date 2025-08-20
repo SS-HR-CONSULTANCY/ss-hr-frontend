@@ -16,9 +16,8 @@ import React from "react";
 import { SingleTab } from "./SingleTab";
 import { Moon, Sun } from "lucide-react";
 import { NavLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import useAuthHook from '@/hooks/useAuthHook';
 import { adminRoutes } from '@/utils/constants';
-import { logoutUser } from '@/store/slices/authSlice';
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
 import { toggleAdminSidebar, toggleTheme } from "@/store/slices/appSlice";
@@ -26,7 +25,7 @@ import { toggleAdminSidebar, toggleTheme } from "@/store/slices/appSlice";
 const Sidebar: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  const { handleLogout } = useAuthHook();
   const { theme, adminSidebar } = useSelector((state: RootState) => state.app);
 
   const iconMap: Record<string, React.ReactNode> = {
@@ -51,15 +50,6 @@ const Sidebar: React.FC = () => {
   const normalizeRouteName = (name: string): string => {
     return name.toLowerCase().replace(/ /g, "-");
   }
-
-  const handleLogout = async () => {
-    try {
-      await dispatch(logoutUser()).unwrap();
-      navigate('/admin/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
 
   return (
     <div className={` ${adminSidebar ? 'w-[15%]' : 'w-[5%]'} text-white overflow-y-scroll no-scrollbar transition-all duration-300 flex flex-col border-r bg-gradient-to-r from-slate-900 to-slate-700`} >

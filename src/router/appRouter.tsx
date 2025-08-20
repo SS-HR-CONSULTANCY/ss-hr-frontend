@@ -10,13 +10,13 @@ import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminReviews from "@/pages/admin/AdminReviews";
+import AdminReports from "@/pages/admin/AdminReports";
 import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminPackages from "@/pages/admin/AdminPackages";
 import AdminPayments from "@/pages/admin/AdminPayments";
 import AdminCompanies from "@/pages/admin/AdminCompanies";
 import AdminApplications from "@/pages/admin/AdminApplications";
-import AdminReports from "@/pages/admin/AdminReports";
 
 const appRouter = createBrowserRouter([
     {
@@ -24,12 +24,12 @@ const appRouter = createBrowserRouter([
         element: <Home />,
         children: [
             { path: '/', element: <Landing /> },
-            { path: 'register', element: <Register /> },
-            { path: 'login', element: <Login /> },
-            { path: '/admin/login', element: <AdminLogin /> },
             { path: '*', element: <Error404 /> },
         ]
     },
+    { path: 'register', element: <Register /> },
+    { path: 'login', element: <Login /> },
+    { path: '/admin/login', element: <AdminLogin /> },
     {
         path: "/admin",
         element: <AdminLayout />,

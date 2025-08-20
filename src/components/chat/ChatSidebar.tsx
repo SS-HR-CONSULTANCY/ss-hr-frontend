@@ -1,4 +1,5 @@
 import { Users } from "lucide-react";
+import { dummyUsers } from "@/utils/constants";
 import { useQuery } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,6 +40,10 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
 }) => {
 
     const dispatch = useDispatch<AppDispatch>();
+    const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+
+    const [useDummy] = useState(true);
+
     const { selectedUser, lastMessages, onlineUsers, chatSocket } = useSelector((store: RootState) => store.chat);
     const getLastMessage = (userId: string): { message: string; date: string } | null => {
         return lastMessages?.[userId] || null;
@@ -49,15 +54,16 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
         queryKey: ["chatUsers"],
         staleTime: 1 * 60 * 1000,
         refetchOnWindowFocus: false,
+        enabled: !useDummy,
     });
 
-    const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+    const users = useDummy ? dummyUsers : data ?? [];
 
     const filteredUsers = useMemo(() => {
         return showOnlineOnly
-            ? data?.filter((user: UserProps) => onlineUsers?.includes(user._id))
-            : data;
-    }, [showOnlineOnly, data, onlineUsers]);
+            ? users?.filter((user: UserProps) => onlineUsers?.includes(user._id))
+            : users;
+    }, [showOnlineOnly, users, onlineUsers]);
 
     const handleOnlineUsers = useCallback((userIds: string[]) => {
         dispatch(setOnlineUsers(userIds));
@@ -76,20 +82,17 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
         return () => { chatSocket?.off("newMessage", setNewMessage) };
     }, [chatSocket]);
 
-    if (isLoading) return <ChatSidebarShimmer />;
-    if (!data || (isError && error)) return <DataFetchingError message={(error as Error).message} className="min-h-full" />
-
     return (
-        <aside className={`h-full w-full md:w-4/12 flex flex-col transition-all duration-200 sticky border-r border-[var(--boxBorder)] ${selectedUser ? "hidden md:block" : "block"}`}>
+        <aside className={`overflow-y-scroll h-full w-full md:w-4/12 flex flex-col transition-all duration-200 sticky border-r-2 no-scrollbar ${selectedUser ? "hidden md:block" : "block"}`}>
 
-            <div className="w-full p-3 md:p-5 border-b border-[var(--boxBorder)]">
+            <div className="w-full p-3 md:p-5 shadow-md sticky top-0 bg-blue-50 dark:bg-black z-20">
                 <div className="lg:flex items-center gap-3">
                     <Users className="size-6" />
                     <label className="cursor-pointer flex items-center gap-2">
                         <Checkbox
                             checked={showOnlineOnly}
                             onCheckedChange={(checked) => setShowOnlineOnly(checked === true)}
-                            className="size-4 cursor-pointer"
+                            className="size-4 cursor-pointer border-black dark:border-white"
                         />
                         <span className="text-sm">Show online only</span>
                     </label>
@@ -100,55 +103,51 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
             </div>
 
             <div className="overflow-y-auto w-full flex-1">
-                {filteredUsers?.map((user: UserProps) => (
-                    <button
-                        key={user._id}
-                        onClick={() => dispatch(setSelectedUser(user))}
-                        className={`
-                            w-full p-2 flex gap-3 items-center border-b border-[var(--boxBorder)]
-                            hover:bg-[var(--boxBorder)] transition-colors
-                            ${selectedUser?._id === user._id ? "" : ""}
-                            `}>
-                        <div className="relative w-fit">
-                            <img
-                                src={user.profileImg || "/user_avatar.jpg"}
-                                alt={user.fullName}
-                                className="size-10 object-cover rounded-full"
-                            />
-                            {onlineUsers?.includes(user._id) && (
-                                <span
-                                    className="absolute bottom-0 right-0 size-3 bg-green-500 
-                  rounded-full ring-2 ring-zinc-900"
+                {isLoading ? (
+                    <ChatSidebarShimmer />
+                ) : isError ? (
+                    <DataFetchingError message={"Something went wrong " + error.message} />
+                ) : filteredUsers && filteredUsers.length > 0 ? (
+                    filteredUsers.map((user: UserProps) => (
+                        <button
+                            key={user._id}
+                            onClick={() => dispatch(setSelectedUser(user))}
+                            className={`w-full p-3 flex gap-3 items-center border-b transition-colors hover:bg-gray-200 dark:hover:bg-gray-500 ${selectedUser?._id === user._id ? "" : ""}`}>
+                            <div className="relative w-fit">
+                                <img
+                                    src={user.profileImg || "/user_avatar.jpg"}
+                                    alt={user.fullName}
+                                    className="size-10 object-cover rounded-full"
                                 />
-                            )}
-                        </div>
-
-                        <div className="w-10/12">
-                            <div className="flex justify-between">
-                                <p className="font-medium truncate text-sm lg:text-md">{user.fullName}</p>
-                                {getLastMessage(user._id) && (
-                                    <p className="text-xs truncate mt-1 ">
-                                        {getLastMessage(user._id)?.date && formatDate(getLastMessage(user._id)!.date)}
-                                    </p>
+                                {onlineUsers?.includes(user._id) && (
+                                    <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
                                 )}
                             </div>
-                            <div className="flex text-sm lg:text-md text-stone-500">
-                                {getLastMessage(user._id) ? (
-                                    <p className="font-normal truncate">
-                                        {getLastMessage(user._id)?.message}
-                                    </p>
-                                ) : onlineUsers?.includes(user._id) ? (
-                                    "Online"
-                                ) : (
-                                    "Offline"
-                                )}
-                            </div>
-                        </div>
-                    </button>
-                ))}
 
-                {filteredUsers?.length === 0 && (
-                    <div className="text-center text-zinc-500 py-4">No online users</div>
+                            <div className="w-10/12">
+                                <div className="flex justify-between">
+                                    <p className="font-medium truncate text-sm lg:text-md">{user.fullName}</p>
+                                    {getLastMessage(user._id) && (
+                                        <p className="text-xs truncate mt-1">
+                                            {getLastMessage(user._id)?.date &&
+                                                formatDate(getLastMessage(user._id)!.date)}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="flex text-sm lg:text-md text-stone-500 dark:text-stone-300">
+                                    {getLastMessage(user._id) ? (
+                                        <p className="font-normal truncate">{getLastMessage(user._id)?.message}</p>
+                                    ) : onlineUsers?.includes(user._id) ? (
+                                        "Online"
+                                    ) : (
+                                        "Offline"
+                                    )}
+                                </div>
+                            </div>
+                        </button>
+                    ))
+                ) : (
+                    <div className="text-center text-zinc-500 py-4">No users</div>
                 )}
             </div>
         </aside>

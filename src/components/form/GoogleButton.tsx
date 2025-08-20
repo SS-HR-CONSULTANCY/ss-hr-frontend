@@ -1,10 +1,7 @@
 import React from 'react';
+import type { GoogleButtonProps } from '@/types/componentTypes/googleButtonTypes';
 
-interface GoogleButton {
-    onClick: () => void;
-}
-
-const GoogleButton: React.FC<GoogleButton> = ({
+const GoogleButton: React.FC<GoogleButtonProps> = ({
     onClick
 }) => {
     return (
@@ -14,7 +11,7 @@ const GoogleButton: React.FC<GoogleButton> = ({
             className="
                 w-full
                 relative flex items-center justify-center
-                px-10 py-3 pl-12 
+                px-10 py-2 md:py-3 pl-12 
                 bg-white
                 rounded-md border-none
                 shadow-sm 

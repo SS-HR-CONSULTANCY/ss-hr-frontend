@@ -67,7 +67,7 @@ const ChatContainer: React.FC = () => {
     if (!selectedUser) return <NoChatSelectedSShimmer className="w-9/12" />;
 
     return (
-        <div className="w-full md:w-8/12 flex flex-col overflow-auto border-r border-[var(--boxBorder)] mt-5 md:mt-0">
+        <div className="w-full md:w-8/12 flex flex-col overflow-auto mt-5 md:mt-0">
             <ChatHeader />
             {isMessagesLoading ? (
                 <NoChatSelectedSShimmer className="w-full" />
@@ -79,7 +79,7 @@ const ChatContainer: React.FC = () => {
                             ref={messageEndRef}
                         >
                             {message.senderId !== user?._id && (
-                                <ChatBubbleProfileImage profileImage={selectedUser.profileImg || "/user_avatar.jpg"} />
+                                <ChatBubbleProfileImage profileImage={selectedUser?.profileImg || "/user_avatar.jpg"} />
                             )}
 
                             <div className={`flex flex-col rounded-md bg-[var(--menuItemHoverBg)] px-4 py-2 max-w-8/12 ${message.senderId !== user?._id ? "ml-3" : "mr-3"}`}>

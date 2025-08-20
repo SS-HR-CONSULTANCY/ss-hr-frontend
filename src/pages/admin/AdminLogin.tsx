@@ -70,7 +70,7 @@ const AdminLogin: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
-        <Card className="w-full max-w-md mx-auto border border-slate-700/50 shadow-xl z-20">
+        <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-auto">
           <FormHeader title='Admin Sign In' description='Enter your credentials to access your account' />
           <CardContent>
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { appSliceInitialState } from "@/types/appSliceTypes";
+import type { appSliceInitialState } from "@/types/slice/appSliceTypes";
 
 const savedTheme = (localStorage.getItem("theme") as "light" | "dark") || "light";
 
