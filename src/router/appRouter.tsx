@@ -9,9 +9,10 @@ import AdminChat from "@/pages/admin/AdminChat";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import ContactPage from "@/pages/user/ContactPage";
-import AdminLayout from "@/pages/admin/AdminLayout";
+import UserProfile from "@/pages/user/UserProfile";
 import AdminReviews from "@/pages/admin/AdminReviews";
 import AdminReports from "@/pages/admin/AdminReports";
+import { applicationRoutes } from "@/utils/constants";
 import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminPackages from "@/pages/admin/AdminPackages";
@@ -19,7 +20,16 @@ import AdminPayments from "@/pages/admin/AdminPayments";
 import AdminSettings from "@/pages/admin/AdminSettings";
 import AdminCompanies from "@/pages/admin/AdminCompanies";
 import ToursAndTravels from "@/pages/user/ToursAndTravels";
+import DashboardLayout from "@/pages/common/DashboardLayout";
 import AdminApplications from "@/pages/admin/AdminApplications";
+
+const adminRoutes = applicationRoutes.filter((route) => 
+    route.roles.some(role => ["admin", "subadmin", "superAdmin"].includes(role))
+);
+
+const userRoutes = applicationRoutes.filter((route) => 
+    route.roles.includes("user")
+);
 
 const appRouter = createBrowserRouter([
     {
@@ -36,8 +46,19 @@ const appRouter = createBrowserRouter([
     { path: 'login', element: <Login /> },
     { path: '/admin/login', element: <AdminLogin /> },
     {
+        path: '/user',
+        element: <DashboardLayout showMobileScreenWarning={false} routes={userRoutes} />,
+        children: [
+            { index: true, element: (
+                <ProtectedRoute requiredRole="user">
+                    <UserProfile />
+                </ProtectedRoute>
+            ) },
+        ]
+    },
+    {
         path: "/admin",
-        element: <AdminLayout />,
+        element: <DashboardLayout showMobileScreenWarning routes={adminRoutes} />,
         children: [
             { index: true,  element: (
                     // <ProtectedRoute requiredRole="admin">

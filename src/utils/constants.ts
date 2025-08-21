@@ -248,19 +248,20 @@ export const callToActionData: CallToActionProps = {
 }
 
 
-// Sidebar compoenent constacts
-export const adminRoutes: Route[] = [
-  { path: "overview", name: "Overview" },
-  { path: "users", name: "Users" },
-  { path: "companies", name: "Companies" },
-  { path: "jobs", name: "Jobs" },
-  { path: "packages", name: "Packages" },
-  { path: "applications", name: "Applications" },
-  { path: "chat", name: "Chat" },
-  { path: "payments", name: "Payments" },
-  { path: "reviews", name: "Reviews" },
-  { path: "reports", name: "Reports" },
-  { path: "settings", name: "Settings" },
+// Routes
+export const applicationRoutes: Route[] = [
+  { path: "overview", name: "Overview", roles: ["admin", "superAdmin", "subadmin"] },
+  { path: "users", name: "Users", roles: ["admin", "superAdmin", "subadmin"] },
+  { path: "companies", name: "Companies", roles: ["admin", "superAdmin", "subadmin"] },
+  { path: "jobs", name: "Jobs", roles: ["admin", "superAdmin", "subadmin", "admin", "user"] },
+  { path: "packages", name: "Packages", roles: ["admin", "superAdmin", "subadmin", "user"] },
+  { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "subadmin", "user"] },
+  { path: "chat", name: "Chat", roles: ["superAdmin", "subadmin", "user"] },
+  { path: "payments", name: "Payments",roles: ["admin", "superAdmin", "subadmin", "user"] },
+  { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin", "subadmin"] },
+  { path: "reports", name: "Reports", roles: ["admin", "superAdmin", "subadmin"] },
+  { path: "settings", name: "Settings", roles: ["admin", "superAdmin", "subadmin"] },
+  { path: "profile", name: "Profile", roles: ["user"] },
 ];
 
 

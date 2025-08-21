@@ -1,4 +1,4 @@
 export interface appSliceInitialState {
     theme: "light" | "dark";
-    adminSidebar: boolean;
+    sidebarOpen: boolean;
 }

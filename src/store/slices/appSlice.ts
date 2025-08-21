@@ -5,7 +5,7 @@ const savedTheme = (localStorage.getItem("theme") as "light" | "dark") || "light
 
 const initialState: appSliceInitialState = {
     theme: savedTheme,
-    adminSidebar: false,
+    sidebarOpen: false,
 }
 
 const appSlice = createSlice({
@@ -21,7 +21,7 @@ const appSlice = createSlice({
             localStorage.setItem("theme", state.theme);
         },
         toggleAdminSidebar: (state) => {
-            state.adminSidebar = !state.adminSidebar;
+            state.sidebarOpen = !state.sidebarOpen;
         },
     }
 });
