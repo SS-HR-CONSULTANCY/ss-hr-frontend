@@ -8,6 +8,7 @@ import AdminJobs from "@/pages/admin/AdminJobs";
 import AdminChat from "@/pages/admin/AdminChat";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLogin from "@/pages/admin/AdminLogin";
+import ContactPage from "@/pages/user/ContactPage";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminReviews from "@/pages/admin/AdminReviews";
 import AdminReports from "@/pages/admin/AdminReports";
@@ -15,9 +16,10 @@ import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminPackages from "@/pages/admin/AdminPackages";
 import AdminPayments from "@/pages/admin/AdminPayments";
-import AdminCompanies from "@/pages/admin/AdminCompanies";
-import AdminApplications from "@/pages/admin/AdminApplications";
 import AdminSettings from "@/pages/admin/AdminSettings";
+import AdminCompanies from "@/pages/admin/AdminCompanies";
+import ToursAndTravels from "@/pages/user/ToursAndTravels";
+import AdminApplications from "@/pages/admin/AdminApplications";
 
 const appRouter = createBrowserRouter([
     {
@@ -25,6 +27,8 @@ const appRouter = createBrowserRouter([
         element: <Home />,
         children: [
             { path: '/', element: <Landing /> },
+            { path: '/toursandtravels', element: <ToursAndTravels /> },
+            { path: '/contact', element: <ContactPage /> },
             { path: '*', element: <Error404 /> },
         ]
     },

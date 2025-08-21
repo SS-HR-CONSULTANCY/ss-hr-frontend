@@ -6,23 +6,23 @@ import { useAppSelector } from '@/hooks/redux';
 import { CheckIcon } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '../ui/card';
 
-const Packages: React.FC = () => {
+const PackagesPricing: React.FC = () => {
 
     const { isAuthenticated } = useAppSelector((state) => state.auth);
 
     return (
-        <section id="packages" className="pt-16">
+        <section id="packages" className="py-16">
             <div className="max-w-7xl mx-auto px-4 md:px-0">
                 <Heading 
-                    heading='Packages' 
+                    heading='Packages & Pricing' 
                     dataaos='fade-down'
-                    headingDescription='Checkout our packages.' mainDivClassName="text-center mx-auto max-w-2xl" />
+                    headingDescription='Checkout our packages & Pricing.' mainDivClassName="text-center mx-auto max-w-2xl" />
                 <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 py-6`} >
                     {packages.map(item => (
                         <Card key={item.name} className={`p-4 rounded-2xl shadow-sm flex flex-col border-2 hover:border-[#01487e] ${item.popular && "border-2 border-[#01487e]"}`} data-aos="fade-down">
-                            <CardHeader>
-                                <CardTitle className="mb-7">{item.name}</CardTitle>
-                                <span className="font-bold text-5xl">{item.price === 0 ? "FREE" : item.price}</span>
+                            <CardHeader className='text-center'>
+                                <CardTitle className="text-2xl font-semibold mb-6">{item.name}</CardTitle>
+                                <span className="font-bold text-4xl">AED {item.price === 0 ? "FREE" : item.price}</span>
                             </CardHeader>
                             <CardDescription className="text-center">
                                 {item.description}
@@ -56,4 +56,4 @@ const Packages: React.FC = () => {
     )
 }
 
-export default Packages
+export default PackagesPricing

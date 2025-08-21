@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion } from "motion/react";
 import { useNavigate } from 'react-router-dom';
+import { ImagesSlider } from "../ui/images-slider";
 import bannerOne from '../../assets/heroImages/bannerOne.png';
 import bannerTwo from '../../assets/heroImages/bannerTwo.jpg';
-import bannerThree from '../../assets/heroImages/bannerThree.png';
-import { ImagesSlider } from "../ui/images-slider";
 
 const Hero: React.FC = () => {
 
@@ -13,7 +12,6 @@ const Hero: React.FC = () => {
   const images = [
     bannerOne,
     bannerTwo,
-    bannerThree
   ];
 
   return (
@@ -33,7 +31,7 @@ const Hero: React.FC = () => {
         className="z-50 flex flex-col justify-center items-center"
       >
         <motion.p className="font-bold text-4xl md:text-6xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-300 py-4">
-          We Bridge Talent, Travel, and <br /> Opportunities Worldwide
+          Make Your Trips Unforgettable <br /> With Us
         </motion.p>
         <button className="text-white px-4 py-2 backdrop-blur-sm border bg-[#01487e]/10 border-[#01487e] mx-auto text-center rounded-full relative mt-4 cursor-pointer" onClick={() => {navigate('/register')}}>
           <span>Sign Up →</span>

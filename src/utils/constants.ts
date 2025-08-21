@@ -19,11 +19,11 @@ export const companyName = "ShahaalamGroups";
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {
   home: '/',
-  aboutus: "#aboutus",
-  travelpackages: "#packages",
-  reviews: "#reviews",
-  contact: "#contact",
-  services: '#services',
+  aboutus: "/#aboutus",
+  travelpackages: "/toursandtravels",
+  reviews: "/#reviews",
+  contact: "/contact",
+  services: '/#services',
   signIn: "/login",
   signUp: "/register"
 };
@@ -33,7 +33,7 @@ export const navLinks: navLinkProps[] = [
   { text: "About Us", href: siteUrlConfig.aboutus, isLink: true, isForDesk: true, isForMob: true },
   { text: "Services", href: siteUrlConfig.services, content: "components", isForDesk: true },
   { text: "Services", href: siteUrlConfig.services, isForMob: true },
-  { text: "Travel Packages", href: siteUrlConfig.travelpackages, isLink: true, isForDesk: true, isForMob: true },
+  { text: "Tours & Travels", href: siteUrlConfig.travelpackages, isLink: true, isForDesk: true, isForMob: true },
   { text: "Reviews", href: siteUrlConfig.reviews, isLink: true, isForDesk: true, isForMob: true },
   { text: "Contact", href: siteUrlConfig.contact, isLink: true, isForDesk: true, isForMob: true },
   { text: "SignIn", href: siteUrlConfig.signIn, isLink: true, isForMob: true },
@@ -240,7 +240,7 @@ export const businessHours = "Mon–Sat, 9:30 AM – 6:30 PM";
 // CallToAction compoenent constats
 export const callToActionData: CallToActionProps = {
   title: "Ready to get started?",
-  description: "From seamless travel arrangements to visa support, job opportunities, and medical recruitment — we provide everything you need for a successful international experience. Let us handle the details so you can focus on your future.",
+  description: "From seamless travel arrangements to visa support, job opportunities, and medical recruitment we provide everything you need for a successful international experience. Let us handle the details so you can focus on your future.",
   buttons: [
     { href: "/register", text: "Get Started", variant: "default" },
     { href: "/travel-packages", text: "Travel Packages", variant: "outline" },
