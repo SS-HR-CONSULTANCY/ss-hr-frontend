@@ -37,13 +37,13 @@ const PackagesPricing: React.FC = () => {
                                     ))}
                                 </ul>
                             </CardContent>
-                            {!isAuthenticated ? (
+                            {isAuthenticated ? (
                                 <div className="mt-auto">
                                     <Button className="w-full cursor-pointer" onClick={() => { }}>Choose Plan</Button>
                                 </div>
                             ) : (
                                 <CardFooter>
-                                    <Button className="w-full cursor-pointer hover:bg-[#01487e]" variant={"outline"}>
+                                    <Button className="w-full border-0 shadow-md hover:font-bold text-white hover:text-white cursor-pointer bg-gradient-to-r to-[#ffd93e] from-[#01487e]" variant={"outline"}>
                                         Sign up
                                     </Button>
                                 </CardFooter>
