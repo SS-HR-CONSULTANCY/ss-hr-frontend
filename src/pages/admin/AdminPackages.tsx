@@ -9,26 +9,34 @@ import { toggleAddPackageForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllPackagesResponse } from '@/types/apiTypes/admin';
 import { AdminPackagesTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
 
-const AdminPackages: React.FC = () => {
+interface Sample {
+  showButton?: boolean;
+}
 
-    const dispatch = useDispatch<AppDispatch>();
+const AdminPackages: React.FC<Sample> = ({
+  showButton
+}) => {
+
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <>
-    <CommonTable<AdminfetchAllPackagesResponse>
-      fetchApiFunction={adminFetchAllPackages}
-      queryKey="packages"
-      heading="Travel Packages"
-      description='List of Travel packages'
-      column={AdminPackagesTableColumns}
-      columnsCount={5}
-      dummyData={packageDummyData}
-      showDummyData={true}
+      <CommonTable<AdminfetchAllPackagesResponse>
+        fetchApiFunction={adminFetchAllPackages}
+        queryKey="packages"
+        heading="Travel Packages"
+        description='List of Travel packages'
+        column={AdminPackagesTableColumns}
+        columnsCount={5}
+        dummyData={packageDummyData}
+        showDummyData={true}
       />
-      <div className='p-4'>
-        <Button variant={"outline"} onClick={() => dispatch(toggleAddPackageForm())}> Add new company</Button>
-      </div>
-      </>
+      {showButton && (
+        <div className='p-4'>
+          <Button variant={"outline"} onClick={() => dispatch(toggleAddPackageForm())}> Add new company</Button>
+        </div>
+      )}
+    </>
   )
 }
 

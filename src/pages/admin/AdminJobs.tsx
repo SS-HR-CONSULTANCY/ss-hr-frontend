@@ -9,7 +9,13 @@ import { toggleAddJobForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/admin';
 import { AdminJobsTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
 
-const AdminJobs: React.FC = () => {
+interface Sample {
+  showButton?: boolean;
+}
+
+const AdminJobs: React.FC<Sample> = ({
+  showButton
+}) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -25,9 +31,11 @@ const AdminJobs: React.FC = () => {
         dummyData={jobsDummyData}
         showDummyData={true}
       />
-      <div className='p-4'>
+      {showButton && (
+        <div className='p-4'>
         <Button variant={"outline"} onClick={() => dispatch(toggleAddJobForm())}> Add new company</Button>
       </div>
+      )}
     </>
   )
 }

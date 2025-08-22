@@ -54,6 +54,54 @@ const appRouter = createBrowserRouter([
                     <UserProfile />
                 // </ProtectedRoute>
             ) },
+            {
+                path: 'profile',
+                element: (
+                    // <ProtectedRoute requiredRole="user">
+                        <UserProfile />
+                    // </ProtectedRoute>
+                )
+            },
+            {
+                path: "jobs",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminJobs />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "packages",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminPackages />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "applications",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminApplications />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "payments",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminPayments />
+                    // </ProtectedRoute>
+                ),
+            },
+            {
+                path: "chat",
+                element: (
+                    // <ProtectedRoute requiredRole="admin">
+                        <AdminChat />
+                    // </ProtectedRoute>
+                ),
+            },
             { path: "*", element: <Error404 /> }
         ]
     },
@@ -94,7 +142,7 @@ const appRouter = createBrowserRouter([
                 path: "jobs",
                 element: (
                     // <ProtectedRoute requiredRole="admin">
-                        <AdminJobs />
+                        <AdminJobs showButton />
                     // </ProtectedRoute>
                 ),
             },
@@ -102,7 +150,7 @@ const appRouter = createBrowserRouter([
                 path: "packages",
                 element: (
                     // <ProtectedRoute requiredRole="admin">
-                        <AdminPackages />
+                        <AdminPackages showButton />
                     // </ProtectedRoute>
                 ),
             },
