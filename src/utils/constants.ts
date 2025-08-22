@@ -94,47 +94,97 @@ export const words: string = "Established in 2021, SS Human Resource Consultancy
 // Package compoenent constants
 export const packages: PackageProps[] = [
   {
-    name: "Male Package",
-    description: "Package for male",
+    id: 1,
+    name: "Dubai Starter Pack (Men)",
+    description: "A complete all-in-one package tailored for men, offering comfort, convenience, and hassle-free living during your 2-month stay in Dubai.",
     features: [
       "2 Months Visit Visa",
       "2 Months Accommodation",
       "2 Months Food (Served Twice a Day)",
-      "Airport Pickup Only Dubai",
+      "Airport Pickup (Dubai Only)",
       "Metro & Bus Card",
       "Free Wi-Fi",
       "Free Water",
     ],
     price: 100000,
     popular: true,
+    className: "md:col-span-2",
+    thumbnail:
+      "https://images.unsplash.com/photo-1476231682828-37e571bc172f?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3",
+    content: {
+      title: "House in the woods",
+      description: "A serene and tranquil retreat, this house in the woods offers a peaceful escape from the hustle and bustle of city life."
+    }
+    ,
   },
   {
-    name: "Female Package",
-    description: "Package for female",
+    id: 2,
+    name: "Dubai Starter Pack (Women)",
+    description:
+      "Designed exclusively for women, this package ensures a safe, comfortable, and worry-free experience while enjoying your 2-month stay in Dubai.",
     features: [
       "2 Months Visit Visa",
       "2 Months Accommodation",
       "2 Months Food (Served Twice a Day)",
-      "Airport Pickup Only Dubai",
+      "Airport Pickup (Dubai Only)",
       "Metro & Bus Card",
       "Free Wi-Fi",
       "Free Water",
     ],
     price: 100000,
+    className: "col-span-1",
+    thumbnail:
+      "https://images.unsplash.com/photo-1464457312035-3d7d0e0c058e?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
+    content: {
+      title: "House above the clouds",
+      description: "Perched high above the world, this house offers breathtaking views and a unique living experience. It’s a place where the sky meets home, and tranquility is a way of life."
+    }
   },
   {
-    name: "High Package",
-    description: "Package for female",
+    id: 3,
+    name: "Premium Explorer Pack",
+    description:
+      "For those who want a little more luxury, this package combines travel essentials with premium comfort and added benefits for a smooth Dubai experience.",
     features: [
-      "2 Months Visit Visa",
-      "2 Months Accommodation",
-      "2 Months Food (Served Twice a Day)",
-      "Airport Pickup Only Dubai",
-      "Metro & Bus Card",
+      "3 Months Visit Visa",
+      "3 Months Premium Accommodation",
+      "Daily Meals (Breakfast, Lunch, Dinner)",
+      "Airport Pickup & Drop",
+      "Metro & Bus Card + Taxi Credits",
       "Free Wi-Fi",
-      "Free Water",
+      "Laundry Services",
     ],
-    price: 100000,
+    price: 150000,
+    className: "col-span-1",
+    thumbnail:
+      "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
+    content: {
+      title: "Greens all over",
+      description: "A house surrounded by greenery and nature’s beauty. It’s the perfect place to relax, unwind, and enjoy life."
+    }
+  },
+  {
+    id: 4,
+    name: "Luxury Elite Pack",
+    description:
+      "The ultimate all-inclusive package with premium living, unlimited convenience, and exclusive services for a stress-free and luxurious Dubai stay.",
+    features: [
+      "6 Months Visit Visa",
+      "Luxury Hotel Accommodation",
+      "All Meals & Beverages",
+      "Private Airport Pickup & Drop",
+      "Chauffeur Service",
+      "Free Wi-Fi & Premium Support",
+      "Wellness & Fitness Membership",
+    ],
+    price: 300000,
+    className: "md:col-span-2",
+    thumbnail:
+      "https://images.unsplash.com/photo-1475070929565-c985b496cb9f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
+    content: {
+      title: "Rivers are serene",
+      description: "A house by the river is a place of peace and tranquility. It’s the perfect place to relax, unwind, and enjoy life."
+    },
   },
 ];
 
@@ -250,6 +300,7 @@ export const callToActionData: CallToActionProps = {
 
 // Routes
 export const applicationRoutes: Route[] = [
+  { path: "profile", name: "Profile", roles: ["user"] },
   { path: "overview", name: "Overview", roles: ["admin", "superAdmin", "subadmin"] },
   { path: "users", name: "Users", roles: ["admin", "superAdmin", "subadmin"] },
   { path: "companies", name: "Companies", roles: ["admin", "superAdmin", "subadmin"] },
@@ -257,11 +308,10 @@ export const applicationRoutes: Route[] = [
   { path: "packages", name: "Packages", roles: ["admin", "superAdmin", "subadmin", "user"] },
   { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "subadmin", "user"] },
   { path: "chat", name: "Chat", roles: ["superAdmin", "subadmin", "user"] },
-  { path: "payments", name: "Payments",roles: ["admin", "superAdmin", "subadmin", "user"] },
+  { path: "payments", name: "Payments", roles: ["admin", "superAdmin", "subadmin", "user"] },
   { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin", "subadmin"] },
   { path: "reports", name: "Reports", roles: ["admin", "superAdmin", "subadmin"] },
   { path: "settings", name: "Settings", roles: ["admin", "superAdmin", "subadmin"] },
-  { path: "profile", name: "Profile", roles: ["user"] },
 ];
 
 

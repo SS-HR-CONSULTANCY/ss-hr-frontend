@@ -50,10 +50,11 @@ const appRouter = createBrowserRouter([
         element: <DashboardLayout showMobileScreenWarning={false} routes={userRoutes} />,
         children: [
             { index: true, element: (
-                <ProtectedRoute requiredRole="user">
+                // <ProtectedRoute requiredRole="user">
                     <UserProfile />
-                </ProtectedRoute>
+                // </ProtectedRoute>
             ) },
+            { path: "*", element: <Error404 /> }
         ]
     },
     {

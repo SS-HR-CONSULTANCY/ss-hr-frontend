@@ -1,7 +1,15 @@
+
 export interface PackageProps {
-    name: string;
+  id: number;
+  name: string;
+  description: string;
+  features: string[];
+  price: number;
+  popular?: boolean;
+  className: string;
+  thumbnail: string;
+  content: {
+    title: string;
     description: string;
-    features: string[];
-    price: number;
-    popular?: boolean;
+  };
 }
