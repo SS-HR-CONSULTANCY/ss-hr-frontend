@@ -42,15 +42,19 @@ const AdminLogin: React.FC = () => {
     }
   }, [dispatch, error]);
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === 'admin') {
-        navigate('/admin/dashboard', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+useEffect(() => {
+  console.log("isAuthenticated : ",isAuthenticated);
+  console.log("user : ",user);
+  if (isAuthenticated && user) {
+    if (user.role === 'admin') {
+      navigate('/admin', { replace: true });
+    } else if(user.role === "user") {
+      navigate('/user', { replace: true });
+    } else {
+      navigate('/', { replace: true });
     }
-  }, [isAuthenticated, user, navigate]);
+  }
+}, [isAuthenticated, user, navigate]);
 
 
   const onSubmit = async (data: LoginFormData) => {

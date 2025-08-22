@@ -6,6 +6,8 @@ export interface User {
   isVerified: boolean;
   isActive?: boolean;
   profileImg: string;
+  verificationToken: string;
+  otp: string;
   createdAt: string;
   updatedAt: string;
 }

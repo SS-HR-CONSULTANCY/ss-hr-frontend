@@ -37,7 +37,9 @@ const UserProfile: React.FC = () => {
 
 
 
-  const onSubmitProfile: SubmitHandler<UserProfileFormValues> = async (data) => {
+  const onSubmitProfile: SubmitHandler<UserProfileFormValues> = async (
+  ) => {
+    // data
     // const file = data.profileImage?.[0];
     // if (file && !["image/jpeg", "image/png"].includes(file.type)) {
     //   toast.error("Only JPG or PNG images are allowed for profile image!");

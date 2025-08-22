@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { LoaderCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import FormField from '@/components/form/FormFiled';
 import CustomLink from '@/components/form/CustomLink';
@@ -8,7 +9,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
 import GoogleButton from '@/components/form/GoogleButton';
 import { loginSchema } from '../../utils/validationSchema';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import RememberMeWithFP from '@/components/form/RememberMeWithFP';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -22,12 +22,10 @@ type LoginFormData = {
 };
 
 const Login: React.FC = () => {
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { isLoading, error, isAuthenticated } = useAppSelector((state) => state.auth);
-
-  const from = (location.state)?.from?.pathname || '/';
+  const { isLoading, error, isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const {
     register,
@@ -51,10 +49,18 @@ const Login: React.FC = () => {
   }, [dispatch, error]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate(from, { replace: true });
-    }
-  }, [isAuthenticated, navigate, from]);
+      if (isAuthenticated && user) {
+        if (user.role === 'user') {
+          navigate('/user', { replace: true });
+        } else if(user.role === 'admin') {
+          navigate('/admin', { replace: true });
+        } else{
+          navigate('/', { replace: true });
+        }
+      } else {
+        navigate('/login', { replace: true });
+      }
+    }, [isAuthenticated, user, navigate]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
