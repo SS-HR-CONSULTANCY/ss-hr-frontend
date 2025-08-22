@@ -3,23 +3,20 @@ import { useForm } from 'react-hook-form';
 import { LoaderCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import type { Roles } from '@/types/entities/user';
 import FormField from '@/components/form/FormFiled';
 import CustomLink from '@/components/form/CustomLink';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
+import { clearError } from '../../store/slices/authSlice';
 import GoogleButton from '@/components/form/GoogleButton';
 import { loginSchema } from '../../utils/validationSchema';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import RememberMeWithFP from '@/components/form/RememberMeWithFP';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { loginUser, clearError } from '../../store/slices/authSlice';
+import { signin, type SigninRequest } from '@/utils/apis/authApi';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
 
 const Login: React.FC = () => {
 
@@ -32,11 +29,12 @@ const Login: React.FC = () => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<LoginFormData>({
+  } = useForm<SigninRequest>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
+      role: "user" as Roles
     },
   });
 
@@ -62,9 +60,9 @@ const Login: React.FC = () => {
       }
     }, [isAuthenticated, user, navigate]);
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: SigninRequest) => {
     try {
-      await dispatch(loginUser(data)).unwrap();
+      await dispatch(signin(data)).unwrap();
     } catch (error) {
       console.error('Login error:', error);
     }
@@ -89,7 +87,7 @@ const Login: React.FC = () => {
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-                <FormField<LoginFormData>
+                <FormField<SigninRequest>
                   id="email"
                   label="Email Address"
                   type="email"
@@ -99,7 +97,7 @@ const Login: React.FC = () => {
                   register={register}
                 />
 
-                <FormField<LoginFormData>
+                <FormField<SigninRequest>
                   id="password"
                   label="Password"
                   type="password"

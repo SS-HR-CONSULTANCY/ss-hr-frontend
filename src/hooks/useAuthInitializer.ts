@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "@/hooks/redux";
 import { axiosInstance } from "@/components/lib/axios";
+import { setAuthUser } from "@/store/slices/authSlice";
 
 export function useAuthInitializer() {
   const dispatch = useAppDispatch();
@@ -9,9 +10,9 @@ export function useAuthInitializer() {
     const fetchUser = async () => {
       try {
         const { data } = await axiosInstance.get("/auth/currentUser");
-        dispatch(setUser(data.user));
+        dispatch(setAuthUser(data.user));
       } catch {
-        dispatch(setUser(null));
+        dispatch(setAuthUser(null));
       }
     };
 

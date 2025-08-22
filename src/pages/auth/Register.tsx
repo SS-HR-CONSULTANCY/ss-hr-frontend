@@ -15,9 +15,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import PasswordStrength from '@/components/form/PasswordStrength';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { registerUser, clearError } from '../../store/slices/authSlice';
+import { clearError } from '../../store/slices/authSlice';
 import LoginRegisterDarkThemeBg from '../../assets/pagesImages/LoginRegisterDarkThemeBg.jpg';
 import LoginRegisterLightThemeBg from '../../assets/pagesImages/LoginRegisterLightThemeBg.png';
+import { signup } from '@/utils/apis/authApi';
 
 type RegisterRequest = {
   fullName: string;
@@ -57,7 +58,7 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: RegisterRequest) => {
     try {
-      await dispatch(registerUser(data)).unwrap();
+      await dispatch(signup(data)).unwrap();
     } catch (error) {
       console.error('Registration error:', error);
     }

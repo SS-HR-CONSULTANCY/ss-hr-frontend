@@ -6,7 +6,7 @@ import { services } from '@/utils/constants';
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="pt-16">
+    <section id="services" className="py-16">
       <div className="max-w-7xl mx-auto px-4 md:px-0">
         <Heading 
         heading='Our Services' 

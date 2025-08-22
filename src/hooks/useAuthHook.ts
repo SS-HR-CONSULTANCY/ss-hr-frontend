@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { signout } from "@/utils/apis/authApi";
 import type { AppDispatch } from "@/store/store";
-import { logoutUser } from "@/store/slices/authSlice";
 
 const useAuthHook = () => {
      const dispatch = useDispatch<AppDispatch>();
@@ -9,7 +9,7 @@ const useAuthHook = () => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(logoutUser()).unwrap();
+      await dispatch(signout()).unwrap();
       navigate("/admin/login");
     } catch (error) {
       console.error("Logout error:", error);

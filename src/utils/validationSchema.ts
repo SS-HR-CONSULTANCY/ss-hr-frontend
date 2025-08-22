@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import type { Roles } from '@/types/entities/user';
 
 // Login Form Schema
 export const loginSchema = yup.object({
@@ -10,6 +11,7 @@ export const loginSchema = yup.object({
     .string()
     .min(8, 'Password must be at least 8 characters')
     .required('Password is required'),
+  role: yup.mixed<Roles>().oneOf(["user", "admin", "superAdmin"]).required()
 });
 
 // Register Form Schema
