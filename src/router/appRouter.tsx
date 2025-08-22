@@ -2,7 +2,7 @@ import Home from "@/pages/user/Home";
 import Login from "@/pages/auth/Login";
 import Landing from "@/pages/user/Landing";
 import Register from "@/pages/auth/Register";
-import ProtectedRoute from "./ProtectedRoute";
+// import ProtectedRoute from "./ProtectedRoute";
 import Error404 from "@/pages/common/Error404";
 import AdminJobs from "@/pages/admin/AdminJobs";
 import AdminChat from "@/pages/admin/AdminChat";
@@ -50,56 +50,56 @@ const appRouter = createBrowserRouter([
         element: <DashboardLayout showMobileScreenWarning={false} routes={userRoutes} />,
         children: [
             { index: true, element: (
-                <ProtectedRoute requiredRole="user">
+                // <ProtectedRoute requiredRole="user">
                     <UserProfile />
-                 </ProtectedRoute>
+                //  </ProtectedRoute>
             ) },
             {
                 path: 'profile',
                 element: (
-                    <ProtectedRoute requiredRole="user">
+                    // <ProtectedRoute requiredRole="user">
                         <UserProfile />
-                     </ProtectedRoute>
+                    //  </ProtectedRoute>
                 )
             },
             {
                 path: "jobs",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminJobs />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "packages",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminPackages />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "applications",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminApplications />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "payments",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminPayments />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "chat",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminChat />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             { path: "*", element: <Error404 /> }
@@ -110,96 +110,96 @@ const appRouter = createBrowserRouter([
         element: <DashboardLayout showMobileScreenWarning routes={adminRoutes} />,
         children: [
             { index: true,  element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminOverview />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ) },
             {
                 path: "overview",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminOverview />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "users",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminUsers />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "companies",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminCompanies />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "jobs",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminJobs showButton />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "packages",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminPackages showButton />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "applications",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminApplications />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "payments",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminPayments />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "chat",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminChat />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "reviews",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminReviews />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "reports",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminReports />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "settings",
                 element: (
-                    <ProtectedRoute requiredRole="admin">
+                    // <ProtectedRoute requiredRole="admin">
                         <AdminSettings />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             { path: '*', element: <Error404 /> },
