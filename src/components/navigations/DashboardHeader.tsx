@@ -5,7 +5,7 @@ import { toggleTheme } from '@/store/slices/appSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import type { AppDispatch, RootState } from '@/store/store';
 import noProfile from '../../assets/defaultImgaes/noProfile.png';
-import type { DashboardHeaderProps } from '@/types/componentTypes/adminHeaderTypes';
+import type { DashboardHeaderProps } from '@/types/componentTypes/AdminHeaderTypes';
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     user
