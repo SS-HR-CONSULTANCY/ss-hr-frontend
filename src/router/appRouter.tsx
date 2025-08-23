@@ -47,7 +47,7 @@ const appRouter = createBrowserRouter([
     { path: '/admin/login', element: <AdminLogin /> },
     {
         path: '/user',
-        element: <DashboardLayout showMobileScreenWarning={false} routes={userRoutes} />,
+        element: <DashboardLayout showMobileScreenWarning={true} routes={userRoutes} />,
         children: [
             { index: true, element: (
                 // <ProtectedRoute requiredRole="user">
@@ -107,7 +107,7 @@ const appRouter = createBrowserRouter([
     },
     {
         path: "/admin",
-        element: <DashboardLayout showMobileScreenWarning routes={adminRoutes} />,
+        element: <DashboardLayout showMobileScreenWarning={true} routes={adminRoutes} />,
         children: [
             { index: true,  element: (
                     // <ProtectedRoute requiredRole="admin">

@@ -26,7 +26,7 @@ const AdminReviews: React.FC = () => {
       showDummyData={true}
       />
       <div className='p-4'>
-        <Button variant={"outline"} onClick={() => dispatch(toggleAddReviewForm())}> Add new company</Button>
+        <Button variant={"outline"} onClick={() => dispatch(toggleAddReviewForm())}> Add new review</Button>
       </div>
       </>
   )
