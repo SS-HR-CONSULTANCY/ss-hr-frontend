@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { logoutUser } from '../../store/slices/authSlice';
+import { signout } from '@/utils/apis/authApi';
 
 const UserDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +25,7 @@ const UserDropdown: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(logoutUser()).unwrap();
+      await dispatch(signout()).unwrap();
       setIsOpen(false);
       navigate('/', { replace: true });
     } catch (error) {
