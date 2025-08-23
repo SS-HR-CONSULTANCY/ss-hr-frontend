@@ -20,7 +20,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                     <img src={user?.profileImg || noProfile} className='rounded-full size-6' />
-                    <h5>Hi, {user?.fullName || "Admin"}</h5>
+                    <h5>Hi, {user?.fullName || user?.role}</h5>
                 </div>
                 <div className="flex items-center space-x-4">
                     <button className="relative flex rounded-full cursor-pointer" onClick={() => dispatch(toggleTheme())}>
