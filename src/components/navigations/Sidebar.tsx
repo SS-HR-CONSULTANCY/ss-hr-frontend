@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((store: RootState) => store.auth);
   const { handleLogout } = useAuthHook({
-    route: user?.role === "admin" ? "/admin/login" : user?.role === "user" ? "/login" : '/admin/login'
+    route: user?.role === "admin" ? "/admin/login" : user?.role === "user" ? "/login" : '/superAdmin/login'
   });
   const { theme, sidebarOpen } = useSelector((state: RootState) => state.app);
 
