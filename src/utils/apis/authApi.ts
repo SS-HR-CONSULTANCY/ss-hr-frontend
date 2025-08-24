@@ -27,7 +27,7 @@ export interface ResendOtpResponse extends ApiBaseResponse {
     user: User;
 }
 
-export type ResendOtpRequest = Pick<User, "role" | "verificationToken" | "email">;
+export type ResendOtpRequest = Pick<User, "role" | "verificationToken">;
 
 export type UpdatePasswordRequest = Pick<User, "role" | "verificationToken"> & {
     password: string;
@@ -61,7 +61,8 @@ export const verifyOtp = createAsyncThunk<ApiBaseResponse,VerifyOtpRequest>("aut
 export const signin = createAsyncThunk<SigninResponse, SigninRequest>("auth/signin",
     async (userData: SigninRequest, thunkAPI) => {
         try {
-            const response = await axiosInstance.post('/auth/signin', userData);
+            const response = await axiosInstance.post('/auth/login', userData);
+            console.log("response : ",response);
             return response.data;
         } catch (err) {
             const error = err as AxiosError<ApiBaseResponse>;
@@ -73,7 +74,7 @@ export const signin = createAsyncThunk<SigninResponse, SigninRequest>("auth/sign
 export const signout = createAsyncThunk<ApiBaseResponse>("auth/signOut",
     async (_, thunkAPI) => {
         try {
-            const response = await axiosInstance.post('/auth/signout');
+            const response = await axiosInstance.post('/auth/logout');
             return response.data;
         } catch (err) {
             const error = err as AxiosError<ApiBaseResponse>;

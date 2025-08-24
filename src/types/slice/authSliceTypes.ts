@@ -1,4 +1,4 @@
-import type { User } from "../entities/user";
+import type { Role, User } from "../entities/user";
 
 export interface LoginRequest {
   email: string;
@@ -10,6 +10,7 @@ export interface RegisterRequest {
   email: string;
   password: string;
   confirmPassword: string;
+  role: Role;
 }
 
 export interface AuthResponse {

@@ -34,11 +34,11 @@ export const AdminUsersTableColumns: ColumnDef<AdminfetchAllUsersResponse>[] = [
     header: ({ column }) => (<DataTableColumnHeader column={column} title="Email" />)
   },
   {
-    accessorKey: "isActive",
+    accessorKey: "isBlocked",
     header: ({ column }) => (<DataTableColumnHeader column={column} title="Account Status" />),
     cell: ({ row }) => {
-      const isActive = row.original.isActive;
-      return <span>{isActive ? "Active" : "Inactive"}</span>;
+      const isBlocked = row.original.isBlocked;
+      return <span>{isBlocked ? "Blocked" : "Active"}</span>;
     },
   },
   {

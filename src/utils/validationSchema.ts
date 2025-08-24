@@ -1,18 +1,5 @@
 import * as yup from 'yup';
-import type { Roles } from '@/types/entities/user';
-
-// Login Form Schema
-export const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email('Please enter a valid email address')
-    .required('Email is required'),
-  password: yup
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
-  role: yup.mixed<Roles>().oneOf(["user", "admin", "superAdmin"]).required()
-});
+import type { Role } from '@/types/entities/user';
 
 // Register Form Schema
 export const registerSchema = yup.object({
@@ -37,7 +24,31 @@ export const registerSchema = yup.object({
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Please confirm your password'),
+  role: yup.mixed<Role>().oneOf(["user", "admin", "superAdmin"] as const).required(),
 });
+
+// Otp Form Schema
+export const otpSchema = yup.object({
+  otp: yup
+    .string()
+    .required('Otp is required'),
+  verificationToken: yup.string().required("Token required"),
+  role: yup.mixed<Role>().oneOf(["user", "admin", "superAdmin"]).required()
+});
+
+// Login Form Schema
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .email('Please enter a valid email address')
+    .required('Email is required'),
+  password: yup
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required'),
+  role: yup.mixed<Role>().oneOf(["user", "admin", "superAdmin"]).required()
+});
+
 
 // Type definitions
 export type LoginFormData = yup.InferType<typeof loginSchema>;

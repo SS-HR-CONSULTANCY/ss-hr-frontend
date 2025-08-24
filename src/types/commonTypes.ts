@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { Roles } from "./entities/user";
+import type { Role } from "./entities/user";
 
 export interface ApiError {
   message: string;           
@@ -11,7 +11,7 @@ export interface ApiError {
 export interface Route {
   path: string;
   name: string;
-  roles: Roles[];
+  roles: Role[];
 }
 
 

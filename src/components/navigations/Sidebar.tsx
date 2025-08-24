@@ -29,7 +29,10 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
 
   const dispatch = useDispatch<AppDispatch>();
-  const { handleLogout } = useAuthHook();
+  const { user } = useSelector((store: RootState) => store.auth);
+  const { handleLogout } = useAuthHook({
+    route: user?.role === "admin" ? "/admin/login" : user?.role === "user" ? "/login" : '/admin/login'
+  });
   const { theme, sidebarOpen } = useSelector((state: RootState) => state.app);
 
   const iconMap: Record<string, React.ReactNode> = {
