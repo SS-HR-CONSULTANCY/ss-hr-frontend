@@ -13,7 +13,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { formatTime } from '@/utils/helpers/timerFormatterForOtp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { clearError, updateTimer } from '../../store/slices/authSlice';
+import { clearError, startTimer, stopTimer, updateTimer } from '../../store/slices/authSlice';
 import { resendOtp, verifyOtp, type VerifyOtpRequest } from '@/utils/apis/authApi';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
 
@@ -23,7 +23,6 @@ const Otp: React.FC = () => {
     const navigate = useNavigate();
     const { isLoading, error, user, otpTimerIsRunning, otpRemainingTime } = useAppSelector((state) => state.auth);
     const [resentLoading, setResendLoading] = useState<boolean>(false);
-
 
     const {
         register,
@@ -60,6 +59,7 @@ const Otp: React.FC = () => {
     const onSubmit = async (data: VerifyOtpRequest) => {
         try {
             const res = await dispatch(verifyOtp(data)).unwrap();
+            dispatch(stopTimer());
             if (res.success) {
                 toast.success(res.message || "Otp verified");
                 navigate('/login');
@@ -80,8 +80,10 @@ const Otp: React.FC = () => {
                 .then((res) => {
                     if (res.success) {
                         setResendLoading(false);
+                        dispatch(startTimer(300));
                         toast.success(res.message);
                     } else {
+                        dispatch(stopTimer());
                         toast.error(res.message);
                     }
                 })
@@ -122,7 +124,7 @@ const Otp: React.FC = () => {
                                 disabled={
                                     isLoading || !watchedValues.otp || !watchedValues.role || !watchedValues.verificationToken
                                 }>
-                                {isLoading ? (
+                                {isLoading && !resentLoading ? (
                                     <span className="flex items-center gap-2">
                                         <LoaderCircle className="animate-spin" />
                                         Verifying...

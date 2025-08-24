@@ -51,7 +51,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = action.payload.user;
         state.error = null;
-        state.otpRemainingTime = 300;
+        state.otpRemainingTime = 10;
         state.otpTimerIsRunning = true;
       })
       .addCase(signup.rejected, (state: AuthState, action) => {
