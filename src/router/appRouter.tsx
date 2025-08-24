@@ -6,9 +6,8 @@ import Register from "@/pages/auth/Register";
 import Error404 from "@/pages/common/Error404";
 import AdminJobs from "@/pages/admin/AdminJobs";
 import AdminChat from "@/pages/admin/AdminChat";
-// import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import AdminUsers from "@/pages/admin/AdminUsers";
-import AdminLogin from "@/pages/admin/AdminLogin";
 import ContactPage from "@/pages/user/ContactPage";
 import UserProfile from "@/pages/user/UserProfile";
 import AdminReviews from "@/pages/admin/AdminReviews";
@@ -24,11 +23,11 @@ import ToursAndTravels from "@/pages/user/ToursAndTravels";
 import DashboardLayout from "@/pages/common/DashboardLayout";
 import AdminApplications from "@/pages/admin/AdminApplications";
 
-const adminRoutes = applicationRoutes.filter((route) => 
-    route.roles.some(role => ["admin", "subadmin", "superAdmin"].includes(role))
+const adminRoutes = applicationRoutes.filter((route) =>
+    route.roles.some(role => ["admin", "superAdmin"].includes(role))
 );
 
-const userRoutes = applicationRoutes.filter((route) => 
+const userRoutes = applicationRoutes.filter((route) =>
     route.roles.includes("user")
 );
 
@@ -44,164 +43,172 @@ const appRouter = createBrowserRouter([
         ]
     },
     { path: 'register', element: <Register /> },
-    { path: 'login', element: <Login /> },
+    { path: 'login', element: <Login role="user" /> },
     { path: 'verifyOtp', element: <Otp /> },
-    { path: '/admin/login', element: <AdminLogin /> },
+    { path: 'admin/login', element: <Login role="admin" /> },
+    { path: 'superAdmin/login', element: <Login role="superAdmin" /> },
     {
         path: '/user',
         element: <DashboardLayout showMobileScreenWarning={true} routes={userRoutes} />,
         children: [
-            { index: true, element: (
-                // <ProtectedRoute requiredRole="user">
+            {
+                index: true, element: (
+                    <ProtectedRoute requiredRole={["user"]}>
                     <UserProfile />
-                //  </ProtectedRoute>
-            ) },
+                    </ProtectedRoute>
+                )
+            },
             {
                 path: 'profile',
                 element: (
-                    // <ProtectedRoute requiredRole="user">
-                        <UserProfile />
-                    //  </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["user"]}>
+                    <UserProfile />
+                    </ProtectedRoute>
                 )
             },
             {
                 path: "jobs",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminJobs />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["user"]}>
+                    <AdminJobs />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "packages",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminPackages />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["user"]}>
+                    <AdminPackages />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "applications",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminApplications />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["user"]}>
+                    <AdminApplications />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "payments",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminPayments />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["user"]}>
+                    <AdminPayments />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "chat",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminChat />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["user"]}>
+                    <AdminChat />
+                    </ProtectedRoute>
                 ),
             },
             { path: "*", element: <Error404 /> }
         ]
     },
+    { path: 'admin/login', element: <Login role="admin" /> },
+    { path: 'superAdmin/login', element: <Login role="superAdmin" /> },
     {
         path: "/admin",
         element: <DashboardLayout showMobileScreenWarning={true} routes={adminRoutes} />,
         children: [
-            { index: true,  element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminOverview />
-                    // </ProtectedRoute>
-                ) },
+            {
+                index: true, element: (
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminOverview />
+                    </ProtectedRoute>
+                )
+            },
             {
                 path: "overview",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminOverview />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminOverview />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "users",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminUsers />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminUsers />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "companies",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminCompanies />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminCompanies />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "jobs",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminJobs showButton />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminJobs showButton />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "packages",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminPackages showButton />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminPackages showButton />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "applications",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminApplications />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminApplications />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "payments",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminPayments />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminPayments />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "chat",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminChat />
-                    // </ProtectedRoute>
+                    // need to remove superAdmin for making chat with _id
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminChat />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "reviews",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminReviews />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminReviews />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "reports",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminReports />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminReports />
+                    </ProtectedRoute>
                 ),
             },
             {
                 path: "settings",
                 element: (
-                    // <ProtectedRoute requiredRole="admin">
-                        <AdminSettings />
-                    // </ProtectedRoute>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <AdminSettings />
+                    </ProtectedRoute>
                 ),
             },
             { path: '*', element: <Error404 /> },

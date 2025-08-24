@@ -301,17 +301,17 @@ export const callToActionData: CallToActionProps = {
 // Routes
 export const applicationRoutes: Route[] = [
   { path: "profile", name: "Profile", roles: ["user"] },
-  { path: "overview", name: "Overview", roles: ["admin", "superAdmin", "subadmin"] },
-  { path: "users", name: "Users", roles: ["admin", "superAdmin", "subadmin"] },
-  { path: "companies", name: "Companies", roles: ["admin", "superAdmin", "subadmin"] },
-  { path: "jobs", name: "Jobs", roles: ["admin", "superAdmin", "subadmin", "admin", "user"] },
-  { path: "packages", name: "Packages", roles: ["admin", "superAdmin", "subadmin", "user"] },
-  { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "subadmin", "user"] },
-  { path: "chat", name: "Chat", roles: ["superAdmin", "subadmin", "user"] },
-  { path: "payments", name: "Payments", roles: ["admin", "superAdmin", "subadmin", "user"] },
-  { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin", "subadmin"] },
-  { path: "reports", name: "Reports", roles: ["admin", "superAdmin", "subadmin"] },
-  { path: "settings", name: "Settings", roles: ["admin", "superAdmin", "subadmin"] },
+  { path: "overview", name: "Overview", roles: ["admin", "superAdmin"] },
+  { path: "users", name: "Users", roles: ["admin", "superAdmin"] },
+  { path: "companies", name: "Companies", roles: ["admin", "superAdmin"] },
+  { path: "jobs", name: "Jobs", roles: ["admin", "superAdmin", "admin", "user"] },
+  { path: "packages", name: "Packages", roles: ["admin", "superAdmin", "user"] },
+  { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "user"] },
+  { path: "chat", name: "Chat", roles: ["superAdmin", "user"] },
+  { path: "payments", name: "Payments", roles: ["admin", "superAdmin", "user"] },
+  { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin"] },
+  { path: "reports", name: "Reports", roles: ["admin", "superAdmin"] },
+  { path: "settings", name: "Settings", roles: ["admin", "superAdmin"] },
 ];
 
 

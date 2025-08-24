@@ -61,7 +61,6 @@ export const verifyOtp = createAsyncThunk<ApiBaseResponse,VerifyOtpRequest>("aut
 export const signin = createAsyncThunk<SigninResponse, SigninRequest>("auth/signin",
     async (userData: SigninRequest, thunkAPI) => {
         try {
-            console.log("userData : ",userData);
             const response = await axiosInstance.post('/auth/login', userData);
             console.log("response : ",response);
             return response.data;

@@ -55,14 +55,20 @@ const Register: React.FC = () => {
   const onSubmit = async (data: RegisterRequest) => {
     try {
       const res = await dispatch(signup(data)).unwrap();
-      if(res.success) {
-        toast.success(res.message || "Otp has been send to your email");
+      if (res?.success) {
+        toast.success(res?.message || "Otp has been send to your email");
         navigate('/verifyOtp')
       } else {
-        toast.error(res.message || "Otp sending failed, please try again");
+        toast.error(res?.message || "Otp sending failed, please try again");
       }
-    } catch (error) {
-      console.error('Registration error:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Login failed:", error.message);
+        toast.error(error.message || "Login failed.");
+      } else {
+        console.error("Unexpected error:", error);
+        toast.error("Unexpected error occurred.");
+      }
     }
   };
 
@@ -97,86 +103,86 @@ const Register: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
-        <Card className="w-full max-w-md border border-slate-700/50 shadow-xl mx-4 md:mx-0">
-          <FormHeader title='Sign In' description='Enter your credentials to access your account' />
-          <CardContent>
+      <Card className="w-full max-w-md border border-slate-700/50 shadow-xl mx-4 md:mx-0">
+        <FormHeader title='Sign In' description='Enter your credentials to access your account' />
+        <CardContent>
 
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{typeof error === "string" ? error : "Something went wrong"}</AlertDescription>
+            </Alert>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+            <FormField<RegisterRequest>
+              id="fullName"
+              label="Full Name"
+              type="text"
+              autoComplete="name"
+              placeholder="Enter your full name"
+              error={errors.fullName?.message}
+              register={register}
+            />
+
+            <FormField<RegisterRequest>
+              id="email"
+              label="Email Address"
+              type="email"
+              autoComplete="email"
+              placeholder="Enter your email"
+              error={errors.email?.message}
+              register={register}
+            />
+
+            <FormField<RegisterRequest>
+              id="password"
+              label="Password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Enter your password"
+              error={errors.password?.message}
+              register={register}
+              showTogglePassword
+            />
+
+            {password && (
+              <PasswordStrength password={password} passwordStrength={passwordStrength} />
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <FormField<RegisterRequest>
+              id="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Confirm your password"
+              error={errors.confirmPassword?.message}
+              register={register}
+              showTogglePassword
+            />
 
-              <FormField<RegisterRequest>
-                id="fullName"
-                label="Full Name"
-                type="text"
-                autoComplete="name"
-                placeholder="Enter your full name"
-                error={errors.fullName?.message}
-                register={register}
-              />
+            <input type="hidden" value="user" {...register("role")} />
 
-              <FormField<RegisterRequest>
-                id="email"
-                label="Email Address"
-                type="email"
-                autoComplete="email"
-                placeholder="Enter your email"
-                error={errors.email?.message}
-                register={register}
-              />
-
-              <FormField<RegisterRequest>
-                id="password"
-                label="Password"
-                type="password"
-                autoComplete="new-password"
-                placeholder="Enter your password"
-                error={errors.password?.message}
-                register={register}
-                showTogglePassword
-              />
-
-              {password && (
-                <PasswordStrength password={password} passwordStrength={passwordStrength} />
+            <Button type="submit"
+              className="w-full"
+              disabled={isLoading || !watchedValues.fullName || !watchedValues.email || !watchedValues.password || !watchedValues.confirmPassword}>
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <LoaderCircle className="animate-spin" />
+                  Creating account...
+                </span>
+              ) : (
+                "Create Account"
               )}
+            </Button>
+          </form>
+        </CardContent>
 
-              <FormField<RegisterRequest>
-                id="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                autoComplete="new-password"
-                placeholder="Confirm your password"
-                error={errors.confirmPassword?.message}
-                register={register}
-                showTogglePassword
-              />
-
-              <input type="hidden" value="user" {...register("role")} />
-
-              <Button type="submit"
-                className="w-full"
-                disabled={isLoading || !watchedValues.fullName || !watchedValues.email || !watchedValues.password || !watchedValues.confirmPassword}>
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <LoaderCircle className="animate-spin" />
-                    Creating account...
-                  </span>
-                ) : (
-                  "Create Account"
-                )}
-              </Button>
-            </form>
-          </CardContent>
-
-          <CardFooter className='flex flex-col space-y-4 w-full'>
-            <CustomLink href='/login' text='Sign in to existing account' />
-            <GoogleButton onClick={handleGoogleLogin} />
-          </CardFooter>
-        </Card>
+        <CardFooter className='flex flex-col space-y-4 w-full'>
+          <CustomLink href='/login' text='Sign in to existing account' />
+          <GoogleButton onClick={handleGoogleLogin} />
+        </CardFooter>
+      </Card>
     </div>
   );
 };

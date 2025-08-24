@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { LoaderCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import type { Roles } from '@/types/entities/user';
+import type { Role } from '@/types/entities/user';
 import React, { useEffect, useState } from 'react';
 import FormField from '@/components/form/FormFiled';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -34,7 +34,7 @@ const Otp: React.FC = () => {
         defaultValues: {
             otp: "",
             verificationToken: user?.verificationToken,
-            role: user?.role as Roles
+            role: user?.role as Role
         },
     });
 
@@ -66,9 +66,16 @@ const Otp: React.FC = () => {
             } else {
                 toast.error(res.message || "Invalid otp");
             }
-        } catch (error) {
-            console.error('Login error:', error);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Login failed:", error.message);
+                toast.error(error.message || "Login failed.");
+            } else {
+                console.error("Unexpected error:", error);
+                toast.error("Unexpected error occurred.");
+            }
         }
+
     };
 
     const handleResendOtp = (): void => {
@@ -100,7 +107,7 @@ const Otp: React.FC = () => {
 
                         {error && (
                             <Alert variant="destructive" className="mb-4">
-                                <AlertDescription>{error}</AlertDescription>
+                                <AlertDescription>{typeof error === "string" ? error : "Something went wrong"}</AlertDescription>
                             </Alert>
                         )}
 
