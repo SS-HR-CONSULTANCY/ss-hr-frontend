@@ -1,24 +1,23 @@
 import { toast } from 'react-toastify';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { LoaderCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import type { RootState } from '@/store/store';
 import { Button } from '@/components/ui/button';
 import type { Role } from '@/types/entities/user';
+import { useAppDispatch } from '../../hooks/redux';
 import FormField from '@/components/form/FormFiled';
 import CustomLink from '@/components/form/CustomLink';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
 import GoogleButton from '@/components/form/GoogleButton';
 import { loginSchema } from '../../utils/validationSchema';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import RememberMeWithFP from '@/components/form/RememberMeWithFP';
-import { useAppDispatch } from '../../hooks/redux';
 import { signin, type SigninRequest } from '@/utils/apis/authApi';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@/store/store';
 
 interface Login {
   role: string
@@ -29,7 +28,7 @@ const Login: React.FC<Login> = ({
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { isLoading, isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   const {
     register,
@@ -101,12 +100,6 @@ const Login: React.FC<Login> = ({
         <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
           <FormHeader title='Sign In' description='Enter your credentials to access your account' />
           <CardContent>
-
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertDescription>{typeof error === "string" ? error : "Something went wrong"}</AlertDescription>
-              </Alert>
-            )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
