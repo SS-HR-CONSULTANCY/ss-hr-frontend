@@ -4,7 +4,7 @@ export interface User {
   email: string;
   role: Roles
   isVerified: boolean;
-  isActive?: boolean;
+  isBlocked?: boolean;
   profileImg: string;
   verificationToken: string;
   otp: string;

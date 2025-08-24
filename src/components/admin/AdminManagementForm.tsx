@@ -39,12 +39,12 @@ const AdminManagementForm: React.FC = () => {
   };
 
   // Block/Unblock admin
-  const handleBlock = async (id: string, isActive: boolean) => {
+  const handleBlock = async (id: string, isBlocked: boolean) => {
     try {
-      const payload: BlockAdminRequest = { _id: id, isActive: !isActive };
+      const payload: BlockAdminRequest = { _id: id, isBlocked: !isBlocked };
       const updatedAdmin: BlockAdminResponse = await blockAdmin(payload);
       setAdmins(prev => prev.map(a => a._id === id ? updatedAdmin : a));
-      toast.success(`${updatedAdmin.fullName} is now ${updatedAdmin.isActive ? 'active' : 'blocked'}`);
+      toast.success(`${updatedAdmin.fullName} is now ${updatedAdmin.isBlocked ? 'blocked' : 'unblocked'}`);
     } catch {
       toast.error("Failed to update admin status");
     }
@@ -89,10 +89,10 @@ const AdminManagementForm: React.FC = () => {
                   <p><strong>Name:</strong> {a.fullName}</p>
                   <p><strong>Email:</strong> {a.email}</p>
                   <p><strong>Role:</strong> {a.role}</p>
-                  <p><strong>Active:</strong> {a.isActive ? 'Yes' : 'No'}</p>
+                  <p><strong>Blocked :</strong> {a.isBlocked ? 'No' : 'Yes'}</p>
                   <div className="flex gap-2 mt-2">
-                    <Button variant="outline" size="sm" onClick={() => handleBlock(a._id, a.isActive || false)}>
-                      {a.isActive ? 'Block' : 'Unblock'}
+                    <Button variant="outline" size="sm" onClick={() => handleBlock(a._id, a.isBlocked || false)}>
+                      {a.isBlocked ? 'Unblock' : 'Block'}
                     </Button>
                     <Button variant="destructive" size="sm" onClick={() => handleDelete(a._id)}>Delete</Button>
                   </div>

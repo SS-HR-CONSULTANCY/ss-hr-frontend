@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { signin, type SigninRequest } from '@/utils/apis/authApi';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
+import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
 
@@ -62,9 +63,16 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: SigninRequest) => {
     try {
-      await dispatch(signin(data)).unwrap();
+      const res = await dispatch(signin(data)).unwrap();
+      if(res.success) {
+        toast.success(res.message || "Logged In Successfully");
+        navigate('/user');
+      } else {
+        toast.error(res.message || "Login failed");
+      }
     } catch (error) {
       console.error('Login error:', error);
+      toast.error("Login failed internal error.");
     }
   };
 

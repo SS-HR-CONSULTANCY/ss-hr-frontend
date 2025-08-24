@@ -380,7 +380,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "john.doe@example.com",
     createdAt: "1724066432987",
     isVerified: true,
-    isActive: true,
+    isBlocked: true,
     profileImg: "https://randomuser.me/api/portraits/men/1.jpg",
   },
   {
@@ -389,7 +389,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "jane.smith@example.com",
     createdAt: "1724066432987",
     isVerified: false,
-    isActive: true,
+    isBlocked: true,
     profileImg: "https://randomuser.me/api/portraits/women/2.jpg",
   },
   {
@@ -398,7 +398,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "michael.johnson@example.com",
     createdAt: "1724066432987",
     isVerified: true,
-    isActive: false,
+    isBlocked: false,
     profileImg: "https://randomuser.me/api/portraits/men/3.jpg",
   },
   {
@@ -407,7 +407,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "emily.davis@example.com",
     createdAt: "1724066432987",
     isVerified: true,
-    isActive: true,
+    isBlocked: true,
     profileImg: "https://randomuser.me/api/portraits/women/4.jpg",
   },
   {
@@ -416,7 +416,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "david.wilson@example.com",
     createdAt: "1724066432987",
     isVerified: false,
-    isActive: false,
+    isBlocked: false,
     profileImg: "https://randomuser.me/api/portraits/men/5.jpg",
   },
   {
@@ -425,7 +425,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "sophia.martinez@example.com",
     createdAt: "1724066432987",
     isVerified: true,
-    isActive: true,
+    isBlocked: true,
     profileImg: "https://randomuser.me/api/portraits/women/6.jpg",
   },
   {
@@ -434,7 +434,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "james.brown@example.com",
     createdAt: "1724066432987",
     isVerified: false,
-    isActive: true,
+    isBlocked: true,
     profileImg: "https://randomuser.me/api/portraits/men/7.jpg",
   },
   {
@@ -443,7 +443,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "olivia.taylor@example.com",
     createdAt: "1724066432987",
     isVerified: true,
-    isActive: true,
+    isBlocked: true,
     profileImg: "https://randomuser.me/api/portraits/women/8.jpg",
   },
   {
@@ -452,7 +452,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "william.anderson@example.com",
     createdAt: "1724066432987",
     isVerified: false,
-    isActive: false,
+    isBlocked: false,
     profileImg: "https://randomuser.me/api/portraits/men/9.jpg",
   },
   {
@@ -461,7 +461,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     email: "ava.thomas@example.com",
     createdAt: "1724066432987",
     isVerified: true,
-    isActive: true,
+    isBlocked: true,
     profileImg: "https://randomuser.me/api/portraits/women/10.jpg",
   },
 ];
