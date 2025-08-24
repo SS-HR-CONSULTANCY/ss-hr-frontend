@@ -14,7 +14,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     const dispatch = useDispatch<AppDispatch>();
     const theme = useSelector((state: RootState) => state.app.theme);
     const { handleLogout } = useAuthHook({
-            route: user?.role === "admin" ? "/admin/login" : user?.role === "user" ? "/login" : '/admin/login'
+            route: user?.role === "admin" ? "/admin/login" : user?.role === "user" ? "/login" : '/superAdmin/login'
     });
 
   return (

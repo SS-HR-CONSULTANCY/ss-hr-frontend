@@ -1,35 +1,36 @@
 import { toast } from 'react-toastify';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { LoaderCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import type { RootState } from '@/store/store';
 import { Button } from '@/components/ui/button';
 import type { Role } from '@/types/entities/user';
+import { useAppDispatch } from '../../hooks/redux';
 import FormField from '@/components/form/FormFiled';
 import CustomLink from '@/components/form/CustomLink';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
 import GoogleButton from '@/components/form/GoogleButton';
 import { loginSchema } from '../../utils/validationSchema';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import RememberMeWithFP from '@/components/form/RememberMeWithFP';
-import { useAppDispatch } from '../../hooks/redux';
 import { signin, type SigninRequest } from '@/utils/apis/authApi';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@/store/store';
 
 interface Login {
-  role: string
+  role: string;
+  title: string;
 }
 const Login: React.FC<Login> = ({
-  role
+  role,
+  title
 }) => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { isLoading, isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   const {
     register,
@@ -48,48 +49,30 @@ const Login: React.FC<Login> = ({
   const watchedValues = watch();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === 'user') {
-        navigate('/user', { replace: true });
-      } else if (user.role === 'admin' || user.role === "superAdmin") {
-        navigate('/admin', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
-    }
-  }, [isAuthenticated, user, navigate]);
-
-  const onSubmit = async (data: SigninRequest) => {
-    try {
-      const res = await dispatch(signin(data)).unwrap();
-      console.log("role : ", role);
-      console.log("user : ", user);
-      console.log("user?.role : ", user?.role);
-      if (res?.success) {
-        toast.success(res?.message || "Logged In Successfully");
-        if (role === "user" && res.user?.role === "user") {
-          navigate("/user");
-        } else if (
-          (role === "admin" || role === "superAdmin") &&
-          (res.user?.role === "admin" || res.user?.role === "superAdmin")
-        ) {
-          navigate("/admin");
-        } else {
-          toast.error("Something went wrong, please try again");
-        }
-      } else {
-        toast.error(res?.message || "Login failed");
-      }
-    } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Login failed:", error.message);
-      toast.error(error.message || "Login failed.");
+  if (isAuthenticated && user) {
+    if (user.role === 'user') {
+      navigate('/user', { replace: true });
+    } else if (user.role === 'admin' || user.role === "superAdmin") {
+      navigate('/admin', { replace: true });
     } else {
-      console.error("Unexpected error:", error);
-      toast.error("Unexpected error occurred.");
+      navigate('/', { replace: true });
     }
   }
-};
+}, [isAuthenticated, user, navigate]);
+
+  const onSubmit = async (data: SigninRequest) => {
+    await dispatch(signin(data)).unwrap()
+      .then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Logged In Successfully");
+        } else {
+          toast.error(res?.message || "Login failed");
+        }
+      })
+      .catch((error) => {
+        toast.error(error || "An error occurred during signup.");
+      });
+  };
 
   const handleGoogleLogin = () => {
 
@@ -99,14 +82,8 @@ const Login: React.FC<Login> = ({
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
         <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
-          <FormHeader title='Sign In' description='Enter your credentials to access your account' />
+          <FormHeader title={title} description='Enter your credentials to access your account' />
           <CardContent>
-
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertDescription>{typeof error === "string" ? error : "Something went wrong"}</AlertDescription>
-              </Alert>
-            )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 

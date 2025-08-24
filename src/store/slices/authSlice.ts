@@ -38,6 +38,14 @@ const authSlice = createSlice({
     },
     stopTimer: (state: AuthState) => {
       state.otpTimerIsRunning = false;
+    },
+    clearAuthStore: (state: AuthState) => {
+      state.error = null;
+      state.isAuthenticated = false;
+      state.isLoading = false;
+      state.otpRemainingTime = 0;
+      state.otpTimerIsRunning = false;
+      state.user = null;
     }
   },
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
@@ -154,5 +162,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, setAuthUser, startTimer, updateTimer, stopTimer } = authSlice.actions;
+export const { clearError, setAuthUser, startTimer, updateTimer, stopTimer, clearAuthStore } = authSlice.actions;
 export default authSlice.reducer;

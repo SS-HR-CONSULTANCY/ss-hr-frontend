@@ -9,12 +9,11 @@ import FormField from '@/components/form/FormFiled';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
 import { otpSchema } from '../../utils/validationSchema';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { formatTime } from '@/utils/helpers/timerFormatterForOtp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { clearError, startTimer, stopTimer, updateTimer } from '../../store/slices/authSlice';
 import { resendOtp, verifyOtp, type VerifyOtpRequest } from '@/utils/apis/authApi';
+import { clearError, startTimer, stopTimer, updateTimer } from '../../store/slices/authSlice';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
 
 const Otp: React.FC = () => {
@@ -57,25 +56,19 @@ const Otp: React.FC = () => {
     }, [dispatch, error]);
 
     const onSubmit = async (data: VerifyOtpRequest) => {
-        try {
-            const res = await dispatch(verifyOtp(data)).unwrap();
-            dispatch(stopTimer());
-            if (res.success) {
-                toast.success(res.message || "Otp verified");
-                navigate('/login');
-            } else {
-                toast.error(res.message || "Invalid otp");
-            }
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.error("Login failed:", error.message);
-                toast.error(error.message || "Login failed.");
-            } else {
-                console.error("Unexpected error:", error);
-                toast.error("Unexpected error occurred.");
-            }
-        }
-
+        await dispatch(verifyOtp(data)).unwrap()
+            .then((res) => {
+                if (res.success) {
+                    toast.success(res.message || "Otp verified");
+                    navigate('/login');
+                } else {
+                    toast.error(res.message || "Invalid otp");
+                }
+            })
+            .catch((error) => {
+                toast.error(error || "An error occurred during signup.");
+            });
+        dispatch(stopTimer());
     };
 
     const handleResendOtp = (): void => {
@@ -104,12 +97,6 @@ const Otp: React.FC = () => {
                 <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
                     <FormHeader title='Sign In' description='Enter your credentials to access your account' />
                     <CardContent>
-
-                        {error && (
-                            <Alert variant="destructive" className="mb-4">
-                                <AlertDescription>{typeof error === "string" ? error : "Something went wrong"}</AlertDescription>
-                            </Alert>
-                        )}
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 

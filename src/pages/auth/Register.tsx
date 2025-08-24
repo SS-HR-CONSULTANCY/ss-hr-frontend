@@ -14,7 +14,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import GoogleButton from '@/components/form/GoogleButton';
 import { clearError } from '../../store/slices/authSlice';
 import { registerSchema } from '../../utils/validationSchema';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import PasswordStrength from '@/components/form/PasswordStrength';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import type { RegisterRequest } from '@/types/slice/authSliceTypes';
@@ -53,24 +52,19 @@ const Register: React.FC = () => {
   }, [dispatch, error]);
 
   const onSubmit = async (data: RegisterRequest) => {
-    try {
-      const res = await dispatch(signup(data)).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Otp has been send to your email");
-        navigate('/verifyOtp')
-      } else {
-        toast.error(res?.message || "Otp sending failed, please try again");
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Login failed:", error.message);
-        toast.error(error.message || "Login failed.");
-      } else {
-        console.error("Unexpected error:", error);
-        toast.error("Unexpected error occurred.");
-      }
-    }
-  };
+    await dispatch(signup(data)).unwrap()
+      .then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Otp has been send to your email");
+          navigate('/verifyOtp')
+        } else {
+          toast.error(res?.message || "Otp sending failed, please try again");
+        }
+      })
+      .catch((error) => {
+        toast.error(error || "An error occurred during signup.");
+      });
+  }
 
   const getPasswordStrength = (password: string) => {
     if (!password) return { strength: 0, label: '', color: '' };
@@ -106,12 +100,6 @@ const Register: React.FC = () => {
       <Card className="w-full max-w-md border border-slate-700/50 shadow-xl mx-4 md:mx-0">
         <FormHeader title='Sign In' description='Enter your credentials to access your account' />
         <CardContent>
-
-          {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertDescription>{typeof error === "string" ? error : "Something went wrong"}</AlertDescription>
-            </Alert>
-          )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
