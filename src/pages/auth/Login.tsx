@@ -49,31 +49,22 @@ const Login: React.FC<Login> = ({
   const watchedValues = watch();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === 'user') {
-        navigate('/user', { replace: true });
-      } else if (user.role === 'admin' || user.role === "superAdmin") {
-        navigate('/admin', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+  if (isAuthenticated && user) {
+    if (user.role === 'user') {
+      navigate('/user', { replace: true });
+    } else if (user.role === 'admin' || user.role === "superAdmin") {
+      navigate('/admin', { replace: true });
+    } else {
+      navigate('/', { replace: true });
     }
-  }, [isAuthenticated, user, navigate]);
+  }
+}, [isAuthenticated, user, navigate]);
 
   const onSubmit = async (data: SigninRequest) => {
     await dispatch(signin(data)).unwrap()
       .then((res) => {
         if (res?.success) {
           toast.success(res?.message || "Logged In Successfully");
-          if (role === "user" && res.user?.role === "user") {
-            navigate("/user");
-          } else if (role === "admin" && res.user?.role === "admin") {
-            navigate("/admin");
-          } else if (role === "superAdmin" && res.user?.role === "superAdmin") {
-            navigate('/superAdmin/login');
-          } else {
-            toast.error("Something went wrong, please try again");
-          }
         } else {
           toast.error(res?.message || "Login failed");
         }
