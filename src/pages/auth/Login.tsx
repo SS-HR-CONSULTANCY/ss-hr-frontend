@@ -20,10 +20,12 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
 
 interface Login {
-  role: string
+  role: string;
+  title: string;
 }
 const Login: React.FC<Login> = ({
-  role
+  role,
+  title
 }) => {
 
   const dispatch = useAppDispatch();
@@ -59,36 +61,27 @@ const Login: React.FC<Login> = ({
   }, [isAuthenticated, user, navigate]);
 
   const onSubmit = async (data: SigninRequest) => {
-    try {
-      const res = await dispatch(signin(data)).unwrap();
-      console.log("role : ", role);
-      console.log("user : ", user);
-      console.log("user?.role : ", user?.role);
-      if (res?.success) {
-        toast.success(res?.message || "Logged In Successfully");
-        if (role === "user" && res.user?.role === "user") {
-          navigate("/user");
-        } else if (
-          (role === "admin" || role === "superAdmin") &&
-          (res.user?.role === "admin" || res.user?.role === "superAdmin")
-        ) {
-          navigate("/admin");
+    await dispatch(signin(data)).unwrap()
+      .then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Logged In Successfully");
+          if (role === "user" && res.user?.role === "user") {
+            navigate("/user");
+          } else if (role === "admin" && res.user?.role === "admin") {
+            navigate("/admin");
+          } else if (role === "superAdmin" && res.user?.role === "superAdmin") {
+            navigate('/superAdmin/login');
+          } else {
+            toast.error("Something went wrong, please try again");
+          }
         } else {
-          toast.error("Something went wrong, please try again");
+          toast.error(res?.message || "Login failed");
         }
-      } else {
-        toast.error(res?.message || "Login failed");
-      }
-    } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Login failed:", error.message);
-      toast.error(error.message || "Login failed.");
-    } else {
-      console.error("Unexpected error:", error);
-      toast.error("Unexpected error occurred.");
-    }
-  }
-};
+      })
+      .catch((error) => {
+        toast.error(error || "An error occurred during signup.");
+      });
+  };
 
   const handleGoogleLogin = () => {
 
@@ -98,7 +91,7 @@ const Login: React.FC<Login> = ({
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
         <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
-          <FormHeader title='Sign In' description='Enter your credentials to access your account' />
+          <FormHeader title={title} description='Enter your credentials to access your account' />
           <CardContent>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

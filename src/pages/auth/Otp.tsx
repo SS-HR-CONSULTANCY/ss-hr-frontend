@@ -56,25 +56,19 @@ const Otp: React.FC = () => {
     }, [dispatch, error]);
 
     const onSubmit = async (data: VerifyOtpRequest) => {
-        try {
-            const res = await dispatch(verifyOtp(data)).unwrap();
-            dispatch(stopTimer());
-            if (res.success) {
-                toast.success(res.message || "Otp verified");
-                navigate('/login');
-            } else {
-                toast.error(res.message || "Invalid otp");
-            }
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.error("Login failed:", error.message);
-                toast.error(error.message || "Login failed.");
-            } else {
-                console.error("Unexpected error:", error);
-                toast.error("Unexpected error occurred.");
-            }
-        }
-
+        await dispatch(verifyOtp(data)).unwrap()
+            .then((res) => {
+                if (res.success) {
+                    toast.success(res.message || "Otp verified");
+                    navigate('/login');
+                } else {
+                    toast.error(res.message || "Invalid otp");
+                }
+            })
+            .catch((error) => {
+                toast.error(error || "An error occurred during signup.");
+            });
+        dispatch(stopTimer());
     };
 
     const handleResendOtp = (): void => {

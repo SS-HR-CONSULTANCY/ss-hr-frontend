@@ -43,10 +43,10 @@ const appRouter = createBrowserRouter([
         ]
     },
     { path: 'register', element: <Register /> },
-    { path: 'login', element: <Login role="user" /> },
+    { path: 'login', element: <Login role="user" title="User Sign In" /> },
     { path: 'verifyOtp', element: <Otp /> },
-    { path: 'admin/login', element: <Login role="admin" /> },
-    { path: 'superAdmin/login', element: <Login role="superAdmin" /> },
+    { path: 'admin/login', element: <Login role="admin" title="Admin Sign In" /> },
+    { path: 'superAdmin/login', element: <Login role="superAdmin" title="Super Admin Sign In" /> },
     {
         path: '/user',
         element: <DashboardLayout showMobileScreenWarning={true} routes={userRoutes} />,
@@ -109,8 +109,6 @@ const appRouter = createBrowserRouter([
             { path: "*", element: <Error404 /> }
         ]
     },
-    { path: 'admin/login', element: <Login role="admin" /> },
-    { path: 'superAdmin/login', element: <Login role="superAdmin" /> },
     {
         path: "/admin",
         element: <DashboardLayout showMobileScreenWarning={true} routes={adminRoutes} />,

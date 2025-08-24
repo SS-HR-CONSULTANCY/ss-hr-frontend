@@ -52,24 +52,19 @@ const Register: React.FC = () => {
   }, [dispatch, error]);
 
   const onSubmit = async (data: RegisterRequest) => {
-    try {
-      const res = await dispatch(signup(data)).unwrap();
-      if (res?.success) {
-        toast.success(res?.message || "Otp has been send to your email");
-        navigate('/verifyOtp')
-      } else {
-        toast.error(res?.message || "Otp sending failed, please try again");
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Login failed:", error.message);
-        toast.error(error.message || "Login failed.");
-      } else {
-        console.error("Unexpected error:", error);
-        toast.error("Unexpected error occurred.");
-      }
-    }
-  };
+    await dispatch(signup(data)).unwrap()
+      .then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Otp has been send to your email");
+          navigate('/verifyOtp')
+        } else {
+          toast.error(res?.message || "Otp sending failed, please try again");
+        }
+      })
+      .catch((error) => {
+        toast.error(error || "An error occurred during signup.");
+      });
+  }
 
   const getPasswordStrength = (password: string) => {
     if (!password) return { strength: 0, label: '', color: '' };
