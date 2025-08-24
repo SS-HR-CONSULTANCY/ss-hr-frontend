@@ -27,6 +27,15 @@ export const registerSchema = yup.object({
   role: yup.mixed<Roles>().oneOf(["user", "admin", "superAdmin"] as const).required(),
 });
 
+// Otp Form Schema
+export const otpSchema = yup.object({
+  otp: yup
+    .string()
+    .required('Otp is required'),
+  verificationToken: yup.string().required("Token required"),
+  role: yup.mixed<Roles>().oneOf(["user", "admin", "superAdmin"]).required()
+});
+
 // Login Form Schema
 export const loginSchema = yup.object({
   email: yup

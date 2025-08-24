@@ -1,11 +1,12 @@
+import Otp from "@/pages/auth/Otp";
 import Home from "@/pages/user/Home";
 import Login from "@/pages/auth/Login";
 import Landing from "@/pages/user/Landing";
 import Register from "@/pages/auth/Register";
-// import ProtectedRoute from "./ProtectedRoute";
 import Error404 from "@/pages/common/Error404";
 import AdminJobs from "@/pages/admin/AdminJobs";
 import AdminChat from "@/pages/admin/AdminChat";
+// import ProtectedRoute from "./ProtectedRoute";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import ContactPage from "@/pages/user/ContactPage";
@@ -44,6 +45,7 @@ const appRouter = createBrowserRouter([
     },
     { path: 'register', element: <Register /> },
     { path: 'login', element: <Login /> },
+    { path: 'verifyOtp', element: <Otp /> },
     { path: '/admin/login', element: <AdminLogin /> },
     {
         path: '/user',

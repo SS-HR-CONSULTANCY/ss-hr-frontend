@@ -27,7 +27,7 @@ export interface ResendOtpResponse extends ApiBaseResponse {
     user: User;
 }
 
-export type ResendOtpRequest = Pick<User, "role" | "verificationToken" | "email">;
+export type ResendOtpRequest = Pick<User, "role" | "verificationToken">;
 
 export type UpdatePasswordRequest = Pick<User, "role" | "verificationToken"> & {
     password: string;

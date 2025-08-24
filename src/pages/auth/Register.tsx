@@ -57,6 +57,7 @@ const Register: React.FC = () => {
       const res = await dispatch(signup(data)).unwrap();
       if(res.success) {
         toast.success(res.message || "Otp has been send to your email");
+        navigate('/verifyOtp')
       } else {
         toast.error(res.message || "Otp sending failed, please try again");
       }

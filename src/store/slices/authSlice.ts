@@ -67,9 +67,19 @@ const authSlice = createSlice({
       })
       .addCase(verifyOtp.fulfilled, (state: AuthState) => {
         state.isLoading = false;
+        state.otpTimerIsRunning = false;
+        state.otpRemainingTime = 0;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = null;
       })
       .addCase(verifyOtp.rejected, (state: AuthState) => {
         state.isLoading = false;
+        state.otpTimerIsRunning = false;
+        state.otpRemainingTime = 0;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = null;
       });
 
     builder.addCase(signin.pending, (state: AuthState) => {
