@@ -33,7 +33,7 @@ const AdminJobs: React.FC<Sample> = ({
       />
       {showButton && (
         <div className='p-4'>
-        <Button variant={"outline"} onClick={() => dispatch(toggleAddJobForm())}> Add new company</Button>
+        <Button variant={"outline"} onClick={() => dispatch(toggleAddJobForm())}> Add new job</Button>
       </div>
       )}
     </>

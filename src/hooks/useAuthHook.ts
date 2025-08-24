@@ -2,15 +2,26 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signout } from "@/utils/apis/authApi";
 import type { AppDispatch } from "@/store/store";
+import { toast } from "react-toastify";
 
-const useAuthHook = () => {
-     const dispatch = useDispatch<AppDispatch>();
+const useAuthHook = ({
+  route
+}: {
+  route: string
+}) => {
+
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await dispatch(signout()).unwrap();
-      navigate("/admin/login");
+      const res = await dispatch(signout()).unwrap();
+      if (res.success) {
+        toast.success(res.message || "Logout successfully");
+        navigate(route);
+      } else {
+        toast.error(res.message || "Logout failed");
+      }
     } catch (error) {
       console.error("Logout error:", error);
     }

@@ -33,7 +33,7 @@ const AdminPackages: React.FC<Sample> = ({
       />
       {showButton && (
         <div className='p-4'>
-          <Button variant={"outline"} onClick={() => dispatch(toggleAddPackageForm())}> Add new company</Button>
+          <Button variant={"outline"} onClick={() => dispatch(toggleAddPackageForm())}> Add new package</Button>
         </div>
       )}
     </>

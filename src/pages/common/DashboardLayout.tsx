@@ -1,14 +1,14 @@
 import React, { 
-  // useEffect
+  useEffect
  } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import MobileWarning from '../admin/MobileWarning';
-// import { checkUserStatus } from '@/utils/apis/authApi';
+import { checkUserStatus } from '@/utils/apis/authApi';
 import Sidebar from '@/components/navigations/Sidebar';
 import { 
-  // type AppDispatch, 
+  type AppDispatch, 
   type RootState } from '@/store/store';
 import DashboardHeader from '@/components/navigations/DashboardHeader';
 import type { DashboardLayoutProps } from '@/types/componentTypes/dashboardLayoutTypes';
@@ -18,17 +18,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   routes
 }) => {
 
-  // const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const { user
-    // , isAuthenticated
+    , isAuthenticated
    } = useSelector((state: RootState) => state.auth);
   const { sidebarOpen } = useSelector((state: RootState) => state.app);
 
-  // useEffect(() => {
-  //   if (isAuthenticated && user) {
-  //     dispatch(checkUserStatus());
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      dispatch(checkUserStatus());
+    }
+  }, []);
 
   return (
     <>

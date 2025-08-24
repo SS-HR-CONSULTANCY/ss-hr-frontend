@@ -7,7 +7,7 @@ import type { Payment } from "../entities/payment";
 import type { ApiBaseResponse } from "../commonTypes";
 import type { Application } from "../entities/application";
 
-export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isActive" | "isVerified" | "profileImg" | "fullName" | "createdAt">;
+export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked" | "isVerified" | "profileImg" | "fullName" | "createdAt">;
 
 export type AdminfetchAllComapniesResponse = Pick<Company, "_id" | "companyLogo" | "companyName" | "email" | "availableJobCount" | "createdAt">;
 
@@ -211,19 +211,19 @@ export interface CreateAdminRequest extends Pick<User, "fullName" | "email" | "p
     role: 'subadmin' | 'superAdmin';
 }
 // Create new admin api response
-export type CreateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isActive" | "profileImg" | "role">;
+export type CreateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImg" | "role">;
 
 // Fetch all admins (subadmin and superAdmin)
-export type GetAdminsResponse = Array<Pick<User, "_id" | "fullName" | "email" | "isActive" | "profileImg" | "role">>;
+export type GetAdminsResponse = Array<Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImg" | "role">>;
 
 // Update admin info
-export type UpdateAdminRequest = Pick<User, "_id" | "fullName" | "email" | "isActive" | "profileImg" | "role">;
-export type UpdateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isActive" | "profileImg" | "role">;
+export type UpdateAdminRequest = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImg" | "role">;
+export type UpdateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImg" | "role">;
 
 // Block/Unblock admin
-export type BlockAdminRequest = Pick<User, "_id" | "isActive">; 
+export type BlockAdminRequest = Pick<User, "_id" | "isBlocked">; 
 
-export type BlockAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isActive" | "profileImg" | "role">;
+export type BlockAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImg" | "role">;
 
 // Delete admin
 export type DeleteAdminRequest = Pick<User, "_id">;

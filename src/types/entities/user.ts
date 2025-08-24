@@ -2,9 +2,9 @@ export interface User {
   _id: string;
   fullName: string;
   email: string;
-  role: Roles
+  role: Role
   isVerified: boolean;
-  isActive?: boolean;
+  isBlocked?: boolean;
   profileImg: string;
   verificationToken: string;
   otp: string;
@@ -12,4 +12,4 @@ export interface User {
   updatedAt: string;
 }
 
-export type Roles = 'user' | 'admin' | 'subadmin' | "superAdmin";
+export type Role = 'user' | 'admin' | "superAdmin";
