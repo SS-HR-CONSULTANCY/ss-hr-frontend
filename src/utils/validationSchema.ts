@@ -1,19 +1,6 @@
 import * as yup from 'yup';
 import type { Roles } from '@/types/entities/user';
 
-// Login Form Schema
-export const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email('Please enter a valid email address')
-    .required('Email is required'),
-  password: yup
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
-  role: yup.mixed<Roles>().oneOf(["user", "admin", "superAdmin"]).required()
-});
-
 // Register Form Schema
 export const registerSchema = yup.object({
   fullName: yup
@@ -37,7 +24,22 @@ export const registerSchema = yup.object({
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Please confirm your password'),
+  role: yup.mixed<Roles>().oneOf(["user", "admin", "superAdmin"] as const).required(),
 });
+
+// Login Form Schema
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .email('Please enter a valid email address')
+    .required('Email is required'),
+  password: yup
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required'),
+  role: yup.mixed<Roles>().oneOf(["user", "admin", "superAdmin"]).required()
+});
+
 
 // Type definitions
 export type LoginFormData = yup.InferType<typeof loginSchema>;

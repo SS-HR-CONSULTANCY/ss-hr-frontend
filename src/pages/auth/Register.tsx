@@ -1,7 +1,9 @@
+import { toast } from 'react-toastify';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { LoaderCircle } from 'lucide-react';
+import { signup } from '@/utils/apis/authApi';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '@/store/store';
 import { Button } from '@/components/ui/button';
@@ -10,22 +12,16 @@ import CustomLink from '@/components/form/CustomLink';
 import FormHeader from '@/components/form/FormHeader';
 import { yupResolver } from '@hookform/resolvers/yup';
 import GoogleButton from '@/components/form/GoogleButton';
+import { clearError } from '../../store/slices/authSlice';
 import { registerSchema } from '../../utils/validationSchema';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import PasswordStrength from '@/components/form/PasswordStrength';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import type { RegisterRequest } from '@/types/slice/authSliceTypes';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { clearError } from '../../store/slices/authSlice';
 import LoginRegisterDarkThemeBg from '../../assets/pagesImages/LoginRegisterDarkThemeBg.jpg';
 import LoginRegisterLightThemeBg from '../../assets/pagesImages/LoginRegisterLightThemeBg.png';
-import { signup } from '@/utils/apis/authApi';
 
-type RegisterRequest = {
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 
 const Register: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -58,7 +54,12 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: RegisterRequest) => {
     try {
-      await dispatch(signup(data)).unwrap();
+      const res = await dispatch(signup(data)).unwrap();
+      if(res.success) {
+        toast.success(res.message || "Otp has been send to your email");
+      } else {
+        toast.error(res.message || "Otp sending failed, please try again");
+      }
     } catch (error) {
       console.error('Registration error:', error);
     }
@@ -153,6 +154,7 @@ const Register: React.FC = () => {
                 showTogglePassword
               />
 
+              <input type="hidden" value="user" {...register("role")} />
 
               <Button type="submit"
                 className="w-full"
