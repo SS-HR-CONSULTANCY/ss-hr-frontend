@@ -8,6 +8,8 @@ export interface User {
   profileImg: string;
   verificationToken: string;
   otp: string;
+  phoneOne?: string;
+  phoneTwo?: string;
   createdAt: string;
   updatedAt: string;
 }

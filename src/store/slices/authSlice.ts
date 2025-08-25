@@ -10,6 +10,8 @@ const initialState: AuthState = {
   error: null,
   otpRemainingTime: 0,
   otpTimerIsRunning: false,
+  profileImageUpdating: false,
+  otpForUpdatePassword: false,
 };
 
 const authSlice = createSlice({
@@ -46,6 +48,14 @@ const authSlice = createSlice({
       state.otpRemainingTime = 0;
       state.otpTimerIsRunning = false;
       state.user = null;
+    },
+    setProfileImage: (state, action: PayloadAction<string>) => {
+            if(state.user){
+                state.user.profileImg = action.payload;
+            }
+        },
+    setOtpForUpdatePassword: (state, action) => {
+      state.otpForUpdatePassword = action.payload
     }
   },
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
@@ -158,5 +168,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, setAuthUser, startTimer, updateTimer, stopTimer, clearAuthStore } = authSlice.actions;
+export const { clearError, setAuthUser, startTimer, updateTimer, stopTimer, clearAuthStore, setProfileImage, setOtpForUpdatePassword } = authSlice.actions;
 export default authSlice.reducer;

@@ -49,7 +49,7 @@ const appRouter = createBrowserRouter([
     { path: 'superAdmin/login', element: <Login role="superAdmin" title="Super Admin Sign In" /> },
     {
         path: '/user',
-        element: <DashboardLayout showMobileScreenWarning={true} routes={userRoutes} />,
+        element: <DashboardLayout showMobileScreenWarning={false} routes={userRoutes} />,
         children: [
             {
                 index: true, element: (
