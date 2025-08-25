@@ -45,7 +45,7 @@ const UpdateUserInfo: React.FC = () => {
 
 
     return (
-        <section className="max-w-4xl mx-auto bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md mt-6">
+        <section className="w-full md:max-w-6xl lg:max-w-7xl mx-auto bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md mt-6">
             <div className="p-4 md:p-6 rounded mt-6 space-y-4">
                 <h2 className="text-lg md:text-2xl font-bold mb-6">Update profile info</h2>
                 <form onSubmit={handleSubmit(onSubmitUserInfo)} className="space-y-4">

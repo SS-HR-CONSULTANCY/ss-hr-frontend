@@ -36,7 +36,7 @@ const UserProfile: React.FC = () => {
 
   return (
     <div className="space-y-5 md:space-y-10 p-2 md:p-5">
-      <section className="md:mx-auto w-full md:max-w-7xl  p-6 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md">
+      <section className="md:mx-auto w-full md:max-w-6xl lg:max-w-7xl p-6 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md">
         <h2 className="text-lg md:text-2xl font-bold mb-4 text-center">User Profile</h2>
         <div className="flex flex-col items-center justify-center border rounded-md p-4">
 
