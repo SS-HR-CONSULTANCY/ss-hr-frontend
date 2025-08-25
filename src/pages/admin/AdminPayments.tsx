@@ -3,7 +3,7 @@ import { paymentsDummyData } from '@/utils/dummyData';
 import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllPayments } from '@/utils/apis/adminApi';
 import type { AdminfetchAllPaymentsResponse } from '@/types/apiTypes/admin';
-import { AdminPaymentsTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
+import { AdminPaymentsTableColumns } from '@/components/table/tableColumns/AdminTableColums';
 
 const AdminPayments:React.FC = () => {
   return (

@@ -1,8 +1,8 @@
 export interface Job {
   _id: string;
   companyName: string;
-  jobPost: string;
-  availableCount: number;
+  designation: string;
+  vacancy: number;
   createdAt: string;
   updatedAt: string;
 }

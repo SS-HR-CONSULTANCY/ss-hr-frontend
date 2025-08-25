@@ -165,12 +165,12 @@ export const AdminJobsTableColumns: ColumnDef<AdminfetchAllJobsResponse>[] = [
     header: ({ column }) => (<DataTableColumnHeader column={column} title="Company Name" />)
   },
   {
-    accessorKey: "jobPost",
-    header: ({ column }) => (<DataTableColumnHeader column={column} title="Job Post" />)
+    accessorKey: "designation",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Designation" />)
   },
   {
-    accessorKey: "availableCount",
-    header: ({ column }) => (<DataTableColumnHeader column={column} title="Availability" />)
+    accessorKey: "vacancy",
+    header: ({ column }) => (<DataTableColumnHeader column={column} title="Vacancy" />)
   },
   {
     accessorKey: "createdAt",

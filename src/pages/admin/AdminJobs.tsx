@@ -7,7 +7,7 @@ import { adminFetchAllJobs } from '@/utils/apis/adminApi';
 import CommonTable from '@/components/common/CommonTable';
 import { toggleAddJobForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/admin';
-import { AdminJobsTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
+import { AdminJobsTableColumns } from '@/components/table/tableColumns/AdminTableColums';
 
 interface Sample {
   showButton?: boolean;
