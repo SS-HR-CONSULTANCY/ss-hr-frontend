@@ -22,8 +22,6 @@ const UserProfile: React.FC = () => {
 
   const { user } = useSelector((store: RootState) => store.auth);
 
-  console.log("user : ",user);
-
   const {
     register: registerProfile,
     handleSubmit: handleSubmitProfile,

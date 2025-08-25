@@ -108,7 +108,7 @@ export const updatePassword = createAsyncThunk<ApiBaseResponse,UpdatePasswordReq
 
 export const checkUserStatus = createAsyncThunk("auth/checkUserStatus",
     async () => {
-        await axiosInstance.post("/auth/checkUserStatus");
+        await axiosInstance.get("/auth/checkUserStatus", { withCredentials: true });
     }
 );
 
