@@ -22,6 +22,7 @@ import AdminCompanies from "@/pages/admin/AdminCompanies";
 import ToursAndTravels from "@/pages/user/ToursAndTravels";
 import DashboardLayout from "@/pages/common/DashboardLayout";
 import AdminApplications from "@/pages/admin/AdminApplications";
+import UserJobs from "@/pages/user/UserJobs";
 
 const adminRoutes = applicationRoutes.filter((route) =>
     route.roles.some(role => ["admin", "superAdmin"].includes(role))
@@ -49,7 +50,7 @@ const appRouter = createBrowserRouter([
     { path: 'superAdmin/login', element: <Login role="superAdmin" title="Super Admin Sign In" /> },
     {
         path: '/user',
-        element: <DashboardLayout showMobileScreenWarning={true} routes={userRoutes} />,
+        element: <DashboardLayout showMobileScreenWarning={false} routes={userRoutes} />,
         children: [
             {
                 index: true, element: (
@@ -70,7 +71,7 @@ const appRouter = createBrowserRouter([
                 path: "jobs",
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <AdminJobs />
+                    <UserJobs />
                     </ProtectedRoute>
                 ),
             },

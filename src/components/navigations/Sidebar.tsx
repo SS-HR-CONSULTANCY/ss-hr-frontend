@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   }
 
   return (
-    <div className={` ${sidebarOpen ? 'w-[15%]' : 'w-[5%]'} text-white overflow-y-scroll no-scrollbar transition-all duration-300 flex flex-col border-r bg-gradient-to-r from-slate-900 to-slate-700`} >
+    <div className={` ${sidebarOpen ? 'w-[15%]' : 'w-[5%]'} text-white overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col border-r bg-gradient-to-r from-slate-900 to-slate-700`} >
       <div className="p-4 flex-1">
         <ul className='space-y-3'>
 

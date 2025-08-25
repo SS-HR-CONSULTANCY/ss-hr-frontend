@@ -1,195 +1,120 @@
-import React from "react";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { Input } from "@/components/ui/input";
-import type { RootState } from "@/store/store";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import FormField from "@/components/form/FormFiled";
-import { useForm, type SubmitHandler } from "react-hook-form";
-
-interface UserProfileFormValues {
-  fullName: string;
-  email: string;
-  profileImage: File;
-}
-interface UserPasswordFormValues {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
+import { useSelector, useDispatch } from "react-redux";
+import type { AppDispatch, RootState } from "@/store/store";
+import UpdateUserInfo from "@/components/form/UpdateUserInfo";
+import noProfileImage from "../../assets/defaultImgaes/noProfile.png";
+import { updateProfileImage, type updateProfileImageResponse } from "@/utils/apis/authApi";
 
 const UserProfile: React.FC = () => {
 
-  const { user } = useSelector((store: RootState) => store.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { user, profileImageUpdating } = useSelector((state: RootState) => state.auth);
+  const [userInfoForm, setUserInfoForm] = useState<boolean>(false);
 
-  console.log("user : ",user);
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File | undefined = e.target.files?.[0];
+    if (!file) return;
 
-  const {
-    register: registerProfile,
-    handleSubmit: handleSubmitProfile,
-    formState: { errors: profileErrors },
-  } = useForm<UserProfileFormValues>();
+    const imageUrl = URL.createObjectURL(file);
+    setSelectedImage(imageUrl);
 
-  const {
-    register: registerPassword,
-    handleSubmit: handleSubmitPassword,
-    // reset: resetPasswordForm,
-    formState: { errors: passwordErrors },
-  } = useForm<UserPasswordFormValues>();
+    const formData = new FormData();
+    formData.append("profileImage", file);
 
-
-
-  const onSubmitProfile: SubmitHandler<UserProfileFormValues> = async (
-  ) => {
-    // data
-    // const file = data.profileImage?.[0];
-    // if (file && !["image/jpeg", "image/png"].includes(file.type)) {
-    //   toast.error("Only JPG or PNG images are allowed for profile image!");
-    //   return;
-    // }
-
-    try {
-      // const response = await updateUserProfile({
-      //   fullname: data.fullname,
-      //   email: data.email,
-      //   profileImage: file,
-      // });
-      // if (response.success) toast.success(response.message);
-      // const updatedUser = await getUserProfile();
-      // setCurrentUser(updatedUser);
-    } catch {
-      toast.error("Failed to update profile");
-    }
-  };
-
-  const onSubmitPassword: SubmitHandler<UserPasswordFormValues> = async (data) => {
-    if (data.newPassword !== data.confirmPassword) {
-      toast.error("Passwords do not match!");
-      return;
-    }
-
-    try {
-      // const response = await updateUserPassword(data);
-      // if (response.success) {
-      //   toast.success(response.message);
-      //   resetPasswordForm();
-      // }
-    } catch {
-      toast.error("Failed to update password");
-    }
+    await dispatch(updateProfileImage(formData))
+      .unwrap()
+      .then((res: updateProfileImageResponse) => {
+        toast.success(res.message);
+      })
+      .catch(() => {
+        toast.error("Profile image updating error");
+      });
   };
 
   return (
-    <div className="space-y-10 p-5">
-      <section className="p-4 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md">
-        <h2 className="text-2xl font-bold mb-4">User Profile</h2>
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Left: Current Profile Data */}
-          <div className="md:w-1/2 space-y-4 p-4 rounded">
-            <h3 className="text-lg font-semibold">Current Profile</h3>
-            {user ? (
-              <>
-                <p><strong>Fullname:</strong> {user.fullName}</p>
-                {/* <p><strong>Email:</strong> {user.email}</p> */}
-                {user.profileImg && (
-                  <div>
-                    <strong>Profile Image:</strong>
-                    <img
-                      src={user.profileImg}
-                      alt="Profile"
-                      className="size-24 object-contain mt-2 border rounded-full"
-                    />
-                  </div>
-                )}
-              </>
-            ) : (
-              <p>Loading profile...</p>
-            )}
+    <div className="space-y-5 md:space-y-10 p-2 md:p-5">
+      <section className="md:mx-auto w-full md:max-w-6xl lg:max-w-7xl p-6 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md">
+        <h2 className="text-lg md:text-2xl font-bold mb-4 text-center">User Profile</h2>
+        <div className="flex flex-col items-center justify-center border rounded-md p-4">
+
+          <div className="md:w-1/3 flex flex-col items-center">
+            <div className="relative">
+              <img
+                src={
+                  user?.profileImg
+                    ? user?.profileImg
+                    : selectedImage
+                      ? selectedImage
+                      : noProfileImage
+                }
+                alt="Profile"
+                className="size-32 md:size-40 object-cover rounded-full border shadow"
+              />
+              <label
+                htmlFor="profileImageUpload"
+                className="absolute bottom-2 right-2 bg-white dark:bg-slate-700 p-2 rounded-full shadow hover:bg-slate-100 dark:hover:bg-slate-600 transition cursor-pointer"
+              >
+                ✏️
+              </label>
+              <input
+                type="file"
+                id="profileImageUpload"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </div>
+            <p>{profileImageUpdating && "Profile image updating..."}</p>
+            <p className="mt-4 font-semibold text-[16px] md:text-lg">
+              {user?.fullName || "User"}
+            </p>
           </div>
 
-          {/* Right: Profile Update Form */}
-          <form
-            onSubmit={handleSubmitProfile(onSubmitProfile)}
-            className="md:w-1/2 space-y-4 p-4 rounded shadow"
-          >
-            <FormField
-              id="fullName"
-              label="Fullname"
-              placeholder="Enter fullname"
-              register={registerProfile}
-              error={profileErrors.fullName?.message}
-            />
-
-            <FormField
-              id="email"
-              label="Email"
-              placeholder="Enter email"
-              register={registerProfile}
-              error={profileErrors.email?.message}
-            />
-
-            <div className="space-y-2">
-              <label htmlFor="profileImage" className="block font-medium">
-                Profile Image (JPG or PNG)
-              </label>
-              <Input
-                id="profileImage"
-                type="file"
-                accept=".jpg,.png"
-                {...registerProfile("profileImage")}
-              />
-              {profileErrors.profileImage && (
-                <p className="text-xs text-destructive">
-                  {profileErrors.profileImage.message}
-                </p>
-              )}
+          <div className="rounded-lg w-full p-4 md:p-6 space-y-4 md:max-w-[50%]">
+            <div className="flex justify-between items-center">
+              <dt className="text-sm md:text-lg font-medium text-muted-foreground">Full Name</dt>
+              <dd className="text-sm md:text-lg">{user?.fullName || "Not provided"}</dd>
             </div>
 
-            <Button variant="outline" type="submit">
-              Save Profile
+            <div className="flex justify-between items-center">
+              <dt className="text-sm md:text-lg font-medium text-muted-foreground">Email</dt>
+              <dd className="text-sm md:text-lg">{user?.email || "Not provided"}</dd>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <dt className="text-sm md:text-lg font-medium text-muted-foreground">Phone 1</dt>
+              <dd className="text-sm md:text-lg">{user?.phoneOne || "Not provided"}</dd>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <dt className="text-sm md:text-lg font-medium text-muted-foreground">Phone 2</dt>
+              <dd className="text-sm md:text-lg">{user?.phoneTwo || "Not provided"}</dd>
+            </div>
+          </div>
+
+
+          <div className="p-4 md:p-6 flex">
+            <Button
+              variant={"outline"}
+              onClick={() => setUserInfoForm(!userInfoForm)}
+              className="text-xs md:text-sm px-2 py-1 md:px-3 md:py-1 border rounded-md hover:bg-accent hover:text-accent-foreground transition"
+            >
+              Edit info
             </Button>
-          </form>
+          </div>
+
         </div>
       </section>
 
-      <section className="p-4 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md mt-6">
-        {/* Password Update Form */}
-        <div className="p-4 rounded mt-6 space-y-4">
-          <h3 className="text-lg font-semibold">Update Password</h3>
-          <form onSubmit={handleSubmitPassword(onSubmitPassword)} className="space-y-4">
-            <FormField
-              id="currentPassword"
-              label="Current Password"
-              placeholder="Enter current password"
-              type="password"
-              register={registerPassword}
-              error={passwordErrors.currentPassword?.message}
-            />
 
-            <FormField
-              id="newPassword"
-              label="New Password"
-              placeholder="Enter new password"
-              type="password"
-              register={registerPassword}
-              error={passwordErrors.newPassword?.message}
-            />
+      {/* Update user info Form section */}
+      {userInfoForm && (
+        <UpdateUserInfo />
+      )}
 
-            <FormField
-              id="confirmPassword"
-              label="Confirm New Password"
-              placeholder="Confirm new password"
-              type="password"
-              register={registerPassword}
-              error={passwordErrors.confirmPassword?.message}
-            />
-
-            <Button variant="outline" type="submit">
-              Update Password
-            </Button>
-          </form>
-        </div>
-      </section>
     </div>
   );
 };

@@ -1,14 +1,16 @@
+import wevDev from '../assets/servicesImages/webDevService.jpg';
 import type { Route, statsMapIntrface } from '@/types/commonTypes';
 import visaService from '../assets/servicesImages/visaService.png';
+import cvWriting from '../assets/servicesImages/cvWritingService.jpg';
 import type { ContactItem } from '@/types/componentTypes/contactTypes';
 import travelService from '../assets/servicesImages/travelService.jpg';
 import ticketService from '../assets/servicesImages/ticketService.png';
 import type { PackageProps } from '@/types/componentTypes/packageTypes';
-import jobRecruitment from '../assets/servicesImages/jobRecruitment.png';
 import type { ContentCardProps } from '@/types/componentTypes/servicesTypes';
-import medicalRecruitment from '../assets/servicesImages/medicalRecruitment.jpg';
+import jobRecruitment from '../assets/servicesImages/jobRecruitmentService.png';
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
 import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
+import medicalRecruitment from '../assets/servicesImages/medicalRecruitmentService.jpg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
 import { Briefcase, Building2, ClipboardList, CreditCard, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
@@ -43,11 +45,11 @@ export const navLinks: navLinkProps[] = [
 // Services component constants
 export const services: ContentCardProps[] = [
   {
-    title: "Travel Services",
+    title: "Tours & Travels",
     description: "Comprehensive travel planning and support for your international needs.",
     hoverDescription: "Our comprehensive travel services cover everything from flight bookings and hotel arrangements to itinerary planning and travel insurance. We ensure a smooth and stress-free journey by handling all the essential details, so you can focus on enjoying your trip. Benefit: End-to-end travel support for a seamless experience.",
     imageUrl: travelService,
-    href: "#services"
+    href: "#services",
   },
   {
     title: "Visa Service",
@@ -84,6 +86,20 @@ export const services: ContentCardProps[] = [
     imageUrl: jobRecruitment,
     href: "#services"
   },
+  {
+  title: "CV Writing",
+  description: "Crafting impactful CVs that highlight your strengths and career achievements.",
+  hoverDescription: "Our expert CV writing service ensures your resume stands out to recruiters. We tailor each CV to showcase your skills, experience, and accomplishments in a way that maximizes your chances of landing interviews and advancing your career.",
+  imageUrl: cvWriting,
+  href: "#services"
+},
+{
+  title: "Web Development",
+  description: "Building modern, responsive, and scalable websites tailored to your needs.",
+  hoverDescription: "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
+  imageUrl: wevDev,
+  href: "#services"
+}
 ];
 
 

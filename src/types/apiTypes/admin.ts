@@ -11,15 +11,15 @@ export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked
 
 export type AdminfetchAllComapniesResponse = Pick<Company, "_id" | "companyLogo" | "companyName" | "email" | "availableJobCount" | "createdAt">;
 
-export type AdminfetchAllJobsResponse = Pick<Job, "companyName" | "jobPost" | "availableCount" | "createdAt">;
+export type AdminfetchAllJobsResponse = Pick<Job, "_id" | "companyName" | "designation" | "vacancy" | "createdAt">;
 
-export type AdminfetchAllPackagesResponse = Pick<Package, "packageName" | "description" | "price" | "features" | "createdAt">;
+export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "price" | "features" | "createdAt">;
 
-export type AdminfetchAllPaymentsResponse = Pick<Payment, "transactionId" | "totalAmount" | "discountAmount" | "paymentStatus" | "createdAt" | "username">;
+export type AdminfetchAllPaymentsResponse = Pick<Payment, "_id" | "transactionId" | "totalAmount" | "discountAmount" | "paymentStatus" | "createdAt" | "username">;
 
-export type AdminfetchAllReviewsResponse = Pick<Review, "text" | "username" | "createdAt" | "job">;
+export type AdminfetchAllReviewsResponse = Pick<Review, "_id" | "text" | "username" | "createdAt" | "job">;
 
-export type AdminfetchAllApplicationsResponse = Pick<Application, "username" | "company" | "designation" | "jobId" | "createdAt" | "cvLink">;
+export type AdminfetchAllApplicationsResponse = Pick<Application, "_id" | "username" | "company" | "designation" | "jobId" | "createdAt" | "cvLink">;
 
 export type AdminfetchAllUsersForChatSidebarResponse = Array<Pick<User, "_id" | "fullName" | "profileImg">>;
 

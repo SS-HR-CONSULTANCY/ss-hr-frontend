@@ -12,8 +12,8 @@ import { otpSchema } from '../../utils/validationSchema';
 import { formatTime } from '@/utils/helpers/timerFormatterForOtp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { clearError, stopTimer, updateTimer } from '../../store/slices/authSlice';
 import { resendOtp, verifyOtp, type VerifyOtpRequest } from '@/utils/apis/authApi';
-import { clearError, startTimer, stopTimer, updateTimer } from '../../store/slices/authSlice';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
 
 const Otp: React.FC = () => {
@@ -61,17 +61,18 @@ const Otp: React.FC = () => {
                 if (res.success) {
                     toast.success(res.message || "Otp verified");
                     navigate('/login');
+                    dispatch(stopTimer());
                 } else {
                     toast.error(res.message || "Invalid otp");
                 }
             })
             .catch((error) => {
-                toast.error(error || "An error occurred during signup.");
+                toast.error(error.message || "An error occurred during signup.");
             });
-        dispatch(stopTimer());
     };
 
     const handleResendOtp = (): void => {
+        console.log("user : ",user);
         if (user?.verificationToken && user?.role) {
             const { verificationToken, role } = user;
             setResendLoading(true);
@@ -80,7 +81,6 @@ const Otp: React.FC = () => {
                 .then((res) => {
                     if (res.success) {
                         setResendLoading(false);
-                        dispatch(startTimer(300));
                         toast.success(res.message);
                     } else {
                         dispatch(stopTimer());
@@ -95,7 +95,7 @@ const Otp: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center">
             <BackgroundBeamsWithCollision>
                 <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
-                    <FormHeader title='Sign In' description='Enter your credentials to access your account' />
+                    <FormHeader title='Verify OTP' description='We have sent an OTP to your email address' />
                     <CardContent>
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

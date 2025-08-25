@@ -3,7 +3,7 @@ import { usersDummyData } from '@/utils/dummyData';
 import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllUsers } from '@/utils/apis/adminApi';
 import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/admin';
-import { AdminUsersTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
+import { AdminUsersTableColumns } from '@/components/table/tableColumns/AdminTableColums';
 
 const AdminUsers: React.FC = () => {
   return (

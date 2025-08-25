@@ -11,7 +11,7 @@ import DashboardStats from "@/components/dashboard/dashboardStats";
 import ChartLineMultiple from "@/components/chart/ChartLineMultiple";
 import DataFetchingError from "@/components/common/DataFetchingError";
 import { handleExportExcel, handleExportPDF } from "@/utils/helpers/report";
-import { AdminReportDataTableColumns } from "@/components/table/tableColumns/AdminUsersTable";
+import { AdminReportDataTableColumns } from "@/components/table/tableColumns/AdminTableColums";
 import { reportPageTabs, statsMapForAdminUserStats, statsMapForApplications, statsMapForRevenue } from "@/utils/constants";
 import { applicationConfig, radialChartConfig, reportUserDummyDataConfig, revenueDummyDataConfig } from "@/utils/chartConfig";
 import { adminFetchApplicationsReportStatsData, adminFetchReportApplicationGraphData, adminFetchReportPaymentsGraphData, AdminFetchReportTableData, adminFetchReportUserGraphData, adminFetchRevenueReportStatsData, adminFetchUserReportStatsData } from "@/utils/apis/adminApi";

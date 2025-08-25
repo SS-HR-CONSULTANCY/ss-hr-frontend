@@ -7,7 +7,7 @@ import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllPReviews } from '@/utils/apis/adminApi';
 import { toggleAddReviewForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllReviewsResponse } from '@/types/apiTypes/admin';
-import { AdminReviewsTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
+import { AdminReviewsTableColumns } from '@/components/table/tableColumns/AdminTableColums';
 
 const AdminReviews: React.FC = () => {
 

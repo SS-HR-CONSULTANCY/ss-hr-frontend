@@ -21,7 +21,6 @@ export interface NavbarProps {
   name?: string;
   homeUrl?: string;
   mobileLinks?: NavbarLink[];
-  actions?: NavbarActionProps[];
   showNavigation?: boolean;
   customNavigation?: ReactNode;
   className?: string;

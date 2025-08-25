@@ -55,14 +55,14 @@ const FormField = <T extends FieldValues>({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+      <Label className="text-xs md:text-sm" htmlFor={id}>{label}</Label>
       <div className="relative">
         <Input
           id={id}
           type={inputType}
           autoComplete={autoComplete}
           placeholder={placeholder}
-          className={error ? "border-destructive" : ""}
+          className={`${error ? "border-destructive" : ""} text-sm`}
           {...register(id)}
         />
         {showTogglePassword && (
