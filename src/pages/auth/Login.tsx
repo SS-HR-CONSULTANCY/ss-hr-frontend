@@ -2,7 +2,6 @@ import { toast } from 'react-toastify';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { LoaderCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '@/store/store';
 import { Button } from '@/components/ui/button';
@@ -12,18 +11,15 @@ import FormField from '@/components/form/FormFiled';
 import CustomLink from '@/components/form/CustomLink';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
-import GoogleButton from '@/components/form/GoogleButton';
 import { loginSchema } from '../../utils/validationSchema';
+import { HomeIcon, LoaderCircle, UserPlus } from 'lucide-react';
 import RememberMeWithFP from '@/components/form/RememberMeWithFP';
 import { signin, type SigninRequest } from '@/utils/apis/authApi';
+import type { LoginProps } from '@/types/componentTypes/loginTypes';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
 
-interface Login {
-  role: string;
-  title: string;
-}
-const Login: React.FC<Login> = ({
+const Login: React.FC<LoginProps> = ({
   role,
   title
 }) => {
@@ -70,13 +66,10 @@ const Login: React.FC<Login> = ({
         }
       })
       .catch((error) => {
-        toast.error(error || "An error occurred during signup.");
+        toast.error(error.message || "An error occurred during signup.");
       });
   };
 
-  const handleGoogleLogin = () => {
-
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -128,8 +121,8 @@ const Login: React.FC<Login> = ({
           </CardContent>
 
           <CardFooter className='flex flex-col space-y-4 w-full'>
-            <CustomLink href='/register' text='Create your account' />
-            <GoogleButton onClick={handleGoogleLogin} />
+            <CustomLink href='/register' text='Create your account' icon={UserPlus} />
+            <CustomLink href='/' text='Bck to home' icon={HomeIcon} />
           </CardFooter>
         </Card>
       </BackgroundBeamsWithCollision>

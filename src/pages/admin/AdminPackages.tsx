@@ -7,7 +7,7 @@ import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllPackages } from '@/utils/apis/adminApi';
 import { toggleAddPackageForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllPackagesResponse } from '@/types/apiTypes/admin';
-import { AdminPackagesTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
+import { AdminPackagesTableColumns } from '@/components/table/tableColumns/AdminTableColums';
 
 interface Sample {
   showButton?: boolean;

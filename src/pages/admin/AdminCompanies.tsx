@@ -7,7 +7,7 @@ import CommonTable from '@/components/common/CommonTable';
 import { adminFetchAllCompanies } from '@/utils/apis/adminApi';
 import { toggleAddCompanyForm } from '@/store/slices/adminSlice';
 import type { AdminfetchAllComapniesResponse } from '@/types/apiTypes/admin';
-import { AdminCompaniesTableColumns } from '@/components/table/tableColumns/AdminUsersTable';
+import { AdminCompaniesTableColumns } from '@/components/table/tableColumns/AdminTableColums';
 
 const AdminCompanies: React.FC = () => {
 

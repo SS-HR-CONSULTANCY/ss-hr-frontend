@@ -26,4 +26,6 @@ export interface AuthState {
   error: string | null;
   otpRemainingTime: number,
   otpTimerIsRunning: boolean,
+  profileImageUpdating: boolean;
+  otpForUpdatePassword: boolean;
 }

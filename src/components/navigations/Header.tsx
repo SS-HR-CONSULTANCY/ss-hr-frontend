@@ -14,17 +14,14 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import type { NavbarProps } from '@/types/componentTypes/headerTypes';
 import logoTransparent from '../../assets/logos/logo-tranparent.png';
+import type { NavbarProps } from '@/types/componentTypes/headerTypes';
 import { siteUrlConfig, navLinks, companyName } from "@/utils/constants";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Header: React.FC = ({
   name = companyName,
   homeUrl = siteUrlConfig.home,
-  actions = [
-    { text: "Sign in", href: siteUrlConfig.signIn, isButton: true },
-  ],
   showNavigation = true,
   customNavigation,
   className,
@@ -33,7 +30,7 @@ const Header: React.FC = ({
   const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
 
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>
@@ -42,38 +39,32 @@ const Header: React.FC = ({
         <NavbarComponent>
           <NavbarLeft>
             <Link to={homeUrl} >
-            <img src={logoTransparent} alt="SS HR" className="size-10 cursor-pointer" />
+              <img src={logoTransparent} alt="SS HR" className="size-10 cursor-pointer" />
             </Link>
             <a href={homeUrl} className="items-center gap-2 text-xl font-bold" >{name}</a>
             {showNavigation && (customNavigation || <Navigation />)}
           </NavbarLeft>
           <NavbarRight>
-            {actions
-              .filter((action) => !isAuthenticated || (action.text !== "Sign in" && action.text !== "Sign up"))
-              .map((action, index) =>
-                action.isButton ? (
-                  <Button
-                    key={index}
-                    variant={action.variant || "default"}
-                    asChild
-                    className='hidden md:block'
-                  >
-                    <a href={action.href}>
-                      {action.icon}
-                      {action.text}
-                      {action.iconRight}
-                    </a>
-                  </Button>
-                ) : (
-                  <a
-                    key={index}
-                    href={action.href}
-                    className="hidden text-sm md:block"
-                  >
-                    {action.text}
-                  </a>
-                ),
-              )}
+            
+            {(user && isAuthenticated) ? (
+              <div className="hidden md:block">
+                <img
+                  src={user.profileImg || "/default-profile.png"}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                />
+              </div>
+            ) : (
+              <Button
+                variant="default"
+                asChild
+                className="hidden md:block"
+              >
+                <a href="/login">
+                  Sign In
+                </a>
+              </Button>
+            )}
 
             <div className="relative flex rounded-full cursor-pointer" onClick={() => dispatch(toggleTheme())}>
               {theme === "dark" ? <Sun /> : <Moon />}

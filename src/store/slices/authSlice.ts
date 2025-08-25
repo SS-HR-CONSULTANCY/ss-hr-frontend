@@ -10,6 +10,8 @@ const initialState: AuthState = {
   error: null,
   otpRemainingTime: 0,
   otpTimerIsRunning: false,
+  profileImageUpdating: false,
+  otpForUpdatePassword: false,
 };
 
 const authSlice = createSlice({
@@ -46,6 +48,14 @@ const authSlice = createSlice({
       state.otpRemainingTime = 0;
       state.otpTimerIsRunning = false;
       state.user = null;
+    },
+    setProfileImage: (state, action: PayloadAction<string>) => {
+            if(state.user){
+                state.user.profileImg = action.payload;
+            }
+        },
+    setOtpForUpdatePassword: (state, action) => {
+      state.otpForUpdatePassword = action.payload
     }
   },
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
@@ -59,7 +69,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = action.payload.user;
         state.error = null;
-        state.otpRemainingTime = 10;
+        state.otpRemainingTime = 60;
         state.otpTimerIsRunning = true;
       })
       .addCase(signup.rejected, (state: AuthState, action) => {
@@ -77,15 +87,11 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.otpTimerIsRunning = false;
         state.otpRemainingTime = 0;
-        state.user = null;
         state.isAuthenticated = false;
         state.error = null;
       })
       .addCase(verifyOtp.rejected, (state: AuthState) => {
         state.isLoading = false;
-        state.otpTimerIsRunning = false;
-        state.otpRemainingTime = 0;
-        state.user = null;
         state.isAuthenticated = false;
         state.error = null;
       });
@@ -132,12 +138,12 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = action.payload.user;
-        state.error = null;
+        state.error = null;state.otpRemainingTime = 60;
+        state.otpTimerIsRunning = true;
       })
       .addCase(resendOtp.rejected, (state: AuthState, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
-        state.user = null;
         state.error = action.payload as string;
       });
 
@@ -162,5 +168,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, setAuthUser, startTimer, updateTimer, stopTimer, clearAuthStore } = authSlice.actions;
+export const { clearError, setAuthUser, startTimer, updateTimer, stopTimer, clearAuthStore, setProfileImage, setOtpForUpdatePassword } = authSlice.actions;
 export default authSlice.reducer;

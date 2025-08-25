@@ -27,11 +27,21 @@ export interface ResendOtpResponse extends ApiBaseResponse {
     user: User;
 }
 
-export type ResendOtpRequest = Pick<User, "role" | "verificationToken">;
+export type ResendOtpRequest = Pick<User, "role" | "verificationToken"> & {
+    email?: string;
+};
 
 export type UpdatePasswordRequest = Pick<User, "role" | "verificationToken"> & {
     password: string;
+    confirmPassword: string;
 };
+
+export interface updateProfileImageResponse extends ApiBaseResponse {
+  data: User["profileImg"]
+}
+
+export type updateUserInfo = Pick<User, "fullName" | "phoneOne" | "phoneTwo">;
+export interface updateUserInfoResponse extends ApiBaseResponse, updateUserInfo {}
 
 
 export const signup = createAsyncThunk<SignupResponse, RegisterRequest>('auth/signup',
@@ -108,9 +118,23 @@ export const updatePassword = createAsyncThunk<ApiBaseResponse,UpdatePasswordReq
 
 export const checkUserStatus = createAsyncThunk("auth/checkUserStatus",
     async () => {
-        await axiosInstance.post("/auth/checkUserStatus");
+        await axiosInstance.get("/auth/checkUserStatus", { withCredentials: true });
     }
 );
+
+export const updateProfileImage = createAsyncThunk<updateProfileImageResponse, FormData>('/auth/UpdateProfileImage',
+    async (formData: FormData) => {
+        const response = await axiosInstance.post('/auth/updateProfileImage', formData);
+        return response.data;
+    }
+)
+
+export const updateProfileInfo = createAsyncThunk<updateUserInfoResponse, updateUserInfo>('/auth/UpdateProfileImage',
+    async (data: updateUserInfo) => {
+        const response = await axiosInstance.post('/auth/updateuserInfo', data);
+        return response.data;
+    }
+)
 
 // export const handleGoogleLogin = async () : Promise<any> => {
 //     const response = axiosInstance.get()
