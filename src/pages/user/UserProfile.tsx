@@ -22,6 +22,8 @@ const UserProfile: React.FC = () => {
 
   const { user } = useSelector((store: RootState) => store.auth);
 
+  console.log("user : ",user);
+
   const {
     register: registerProfile,
     handleSubmit: handleSubmitProfile,
@@ -87,13 +89,13 @@ const UserProfile: React.FC = () => {
             <h3 className="text-lg font-semibold">Current Profile</h3>
             {user ? (
               <>
-                <p><strong>Fullname:</strong> {user.fullname}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                {user.profileImage && (
+                <p><strong>Fullname:</strong> {user.fullName}</p>
+                {/* <p><strong>Email:</strong> {user.email}</p> */}
+                {user.profileImg && (
                   <div>
                     <strong>Profile Image:</strong>
                     <img
-                      src={user.profileImage}
+                      src={user.profileImg}
                       alt="Profile"
                       className="size-24 object-contain mt-2 border rounded-full"
                     />
@@ -152,7 +154,7 @@ const UserProfile: React.FC = () => {
 
       <section className="p-4 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md shadow-md mt-6">
         {/* Password Update Form */}
-        <div className="p-4 rounded shadow-md mt-6 space-y-4">
+        <div className="p-4 rounded mt-6 space-y-4">
           <h3 className="text-lg font-semibold">Update Password</h3>
           <form onSubmit={handleSubmitPassword(onSubmitPassword)} className="space-y-4">
             <FormField

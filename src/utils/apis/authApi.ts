@@ -62,7 +62,6 @@ export const signin = createAsyncThunk<SigninResponse, SigninRequest>("auth/sign
     async (userData: SigninRequest, thunkAPI) => {
         try {
             const response = await axiosInstance.post('/auth/login', userData);
-            console.log("response : ",response);
             return response.data;
         } catch (err) {
             const error = err as AxiosError<ApiBaseResponse>;
