@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <ul className='space-y-3'>
 
           <li className='px-3 pb-4'>
-            <span className='text-3xl font-bold italic hover:bg-gradient-to-r from-slate-300 to-slate-500 hover:text-black px-2 rounded-lg cursor-pointer'>{sidebarOpen ? "ADMIN" : "A"}</span>
+            <span className='text-3xl font-bold italic rounded-lg cursor-pointer'>{sidebarOpen ? "Dashboard" : <LayoutDashboard />}</span>
           </li>
 
           <SingleTab icon={<PanelLeft />} text="Close" onClick={() => dispatch(toggleAdminSidebar())} sidebarOpen={sidebarOpen} />
