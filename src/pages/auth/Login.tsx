@@ -51,7 +51,7 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
     } else {
       navigate('/', { replace: true });
     }
-  }, [isAuthenticated, user, navigate]);
+  }}, [isAuthenticated, user, navigate]);
 
   const onSubmit = async (data: SigninRequest) => {
     await dispatch(signin(data))
