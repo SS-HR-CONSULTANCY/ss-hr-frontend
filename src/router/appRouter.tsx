@@ -1,29 +1,31 @@
-import Otp from "@/pages/auth/Otp";
-import Home from "@/pages/user/Home";
-import Login from "@/pages/auth/Login";
-import Landing from "@/pages/user/Landing";
-import Register from "@/pages/auth/Register";
-import UserJobs from "@/pages/user/UserJobs";
+import { lazy } from "react";
 import ProtectedRoute from "./ProtectedRoute";
-import Error404 from "@/pages/common/Error404";
-import AdminJobs from "@/pages/admin/AdminJobs";
-import AdminChat from "@/pages/admin/AdminChat";
-import AdminUsers from "@/pages/admin/AdminUsers";
-import ContactPage from "@/pages/user/ContactPage";
-import UserProfile from "@/pages/user/UserProfile";
-import AdminReviews from "@/pages/admin/AdminReviews";
-import AdminReports from "@/pages/admin/AdminReports";
 import { createBrowserRouter } from "react-router-dom";
-import AdminOverview from "@/pages/admin/AdminOverview";
-import AdminPackages from "@/pages/admin/AdminPackages";
-import AdminPayments from "@/pages/admin/AdminPayments";
-import AdminSettings from "@/pages/admin/AdminSettings";
-import AdminCompanies from "@/pages/admin/AdminCompanies";
-import ToursAndTravels from "@/pages/user/ToursAndTravels";
-import DashboardLayout from "@/pages/common/DashboardLayout";
-import AdminApplications from "@/pages/admin/AdminApplications";
 import { applicationRoutes, services } from "@/utils/constants";
-import ServiceDetailedContent from "@/components/sections/ServiceDetailedContent";
+
+const Otp = lazy(() => import("@/pages/auth/Otp"));
+const Home = lazy(() => import("@/pages/user/Home"));
+const Login = lazy(() => import("@/pages/auth/Login"));
+const Landing = lazy(() => import("@/pages/user/Landing"));
+const Register = lazy(() => import("@/pages/auth/Register"));
+const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
+const Error404 = lazy(() => import("@/pages/common/Error404"));
+const AdminJobs = lazy(() => import("@/pages/admin/AdminJobs"));
+const AdminChat = lazy(() => import("@/pages/admin/AdminChat"));
+const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
+const ContactPage = lazy(() => import("@/pages/user/ContactPage"));
+const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
+const AdminReviews = lazy(() => import("@/pages/admin/AdminReviews"));
+const AdminReports = lazy(() => import("@/pages/admin/AdminReports"));
+const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
+const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
+const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
+const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
+const AdminCompanies = lazy(() => import("@/pages/admin/AdminCompanies"));
+const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
+const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
+const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
+const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
 
 const adminRoutes = applicationRoutes.filter((route) =>
     route.roles.some(role => ["admin", "superAdmin"].includes(role))
