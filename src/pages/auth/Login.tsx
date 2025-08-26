@@ -47,7 +47,7 @@ const Login: React.FC<LoginProps> = ({
   useEffect(() => {
   if (isAuthenticated && user) {
     if (user.role === 'user') {
-      navigate('/user', { replace: true });
+      navigate('/', { replace: true });
     } else if (user.role === 'admin' || user.role === "superAdmin") {
       navigate('/admin', { replace: true });
     } else {

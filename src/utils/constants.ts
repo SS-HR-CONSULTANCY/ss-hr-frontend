@@ -30,6 +30,14 @@ export const siteUrlConfig: SiteUrlConfigProps = {
   signUp: "/register"
 };
 
+ export const links: { url: string, text: string }[] = [
+    { url: '/user', text: "Dashboard" },
+    { url: '/user/profile', text: "Profile" },
+    { url: '/user/jobs', text: "Jobs" },
+    { url: '/user/applications', text: 'Applications' },
+    { url: '/user/chat', text: 'Chat' },
+  ]
+
 export const navLinks: navLinkProps[] = [
   { text: "Home", href: siteUrlConfig.home, content: "default", isLink: true, isForDesk: true, isForMob: true },
   { text: "About Us", href: siteUrlConfig.aboutus, isLink: true, isForDesk: true, isForMob: true },
