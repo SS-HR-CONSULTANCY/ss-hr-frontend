@@ -71,8 +71,9 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
 
   const handleGoogleLogin = () => {
     try {
-      const apiUrl =
-        import.meta.env.VITE_APP_API_BASE_URL || "http://localhost:5000/api";
+      const apiUrl =   import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_APP_API_BASE_URL
+    : import.meta.env.VITE_BACKEND_PRODUCTION_URL;
       window.location.href = `${apiUrl}/auth/google`;
     } catch (error) {
       toast.error("Failed to initiate Google login");
