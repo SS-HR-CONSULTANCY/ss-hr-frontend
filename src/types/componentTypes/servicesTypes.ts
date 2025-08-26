@@ -2,7 +2,7 @@ export interface ContentCardProps {
   title: string;
   description: string;
   imageUrl?: string;
-  hoverDescription?: string;
+  hoverDescription: string;
   buttonText: string;
   buttonUrl: string;
 }
@@ -13,7 +13,7 @@ export interface ServiceProps {
   title: string;
   description: string;
   imageUrl?: string;
-  hoverDescription?: string;
+  hoverDescription: string;
   href?: string;
 
   showButton?: boolean;
