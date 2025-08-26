@@ -8,16 +8,19 @@ import { cn } from "@/lib/utils";
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import useAuthHook from '@/hooks/useAuthHook';
 import { useAppSelector } from '@/hooks/redux';
 import { Menu, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import logoTransparent from '../../assets/logos/logo-tranparent.png';
+import noProfileImg from '../../assets/defaultImgaes/noProfile.png';
+import logoTransparent from '../../assets/logos/logo-transparent.png';
 import type { NavbarProps } from '@/types/componentTypes/headerTypes';
-import { siteUrlConfig, navLinks, companyName } from "@/utils/constants";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { siteUrlConfig, navLinks, companyName, links } from "@/utils/constants";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 const Header: React.FC = ({
   name = companyName,
@@ -32,11 +35,14 @@ const Header: React.FC = ({
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
+  const { handleLogout } = useAuthHook({ route: "/" });
+
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>
       <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto px-4 md:px-0">
         <NavbarComponent>
+          
           <NavbarLeft>
             <Link to={homeUrl} >
               <img src={logoTransparent} alt="SS HR" className="size-10 cursor-pointer" />
@@ -45,14 +51,28 @@ const Header: React.FC = ({
             {showNavigation && (customNavigation || <Navigation />)}
           </NavbarLeft>
           <NavbarRight>
-            
+
             {(user && isAuthenticated) ? (
               <div className="hidden md:block">
-                <img
-                  src={user.profileImg || "/default-profile.png"}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
-                />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <img
+                      src={user.profileImg || noProfileImg}
+                      alt="Profile"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
+                    />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-40" align="end" sideOffset={8}>
+                    {links.map(link => (
+                      <DropdownMenuItem asChild>
+                        <Link to={link.url}>{link.text}</Link>
+                      </DropdownMenuItem>
+                    ))}
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             ) : (
               <Button

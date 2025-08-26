@@ -43,14 +43,13 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
   const watchedValues = watch();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === "user") {
-        navigate("/user", { replace: true });
-      } else if (user.role === "admin" || user.role === "superAdmin") {
-        navigate("/admin", { replace: true });
-      } else {
-        navigate("/", { replace: true });
-      }
+  if (isAuthenticated && user) {
+    if (user.role === 'user') {
+      navigate('/', { replace: true });
+    } else if (user.role === 'admin' || user.role === "superAdmin") {
+      navigate('/admin', { replace: true });
+    } else {
+      navigate('/', { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
 

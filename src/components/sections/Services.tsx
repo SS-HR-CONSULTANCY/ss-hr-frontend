@@ -3,7 +3,6 @@ import Heading from '../common/Heading';
 import ContentCard from '../ui/ContentCard';
 import { services } from '@/utils/constants';
 
-
 const Services: React.FC = () => {
   return (
     <section id="services" className="py-16">
@@ -20,6 +19,8 @@ const Services: React.FC = () => {
               description={service.description}
               hoverDescription={service.hoverDescription}
               imageUrl={service.imageUrl}
+              buttonText={service.buttonText}
+              buttonUrl={service.buttonUrl}
             />
           ))}
         </div>

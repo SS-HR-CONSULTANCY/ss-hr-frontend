@@ -6,11 +6,19 @@ import type { ContactItem } from '@/types/componentTypes/contactTypes';
 import travelService from '../assets/servicesImages/travelService.jpg';
 import ticketService from '../assets/servicesImages/ticketService.png';
 import type { PackageProps } from '@/types/componentTypes/packageTypes';
-import type { ContentCardProps } from '@/types/componentTypes/servicesTypes';
+import type { ServiceProps } from '@/types/componentTypes/servicesTypes';
 import jobRecruitment from '../assets/servicesImages/jobRecruitmentService.png';
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
+import labourSupplyService from '../assets/servicesImages/labourSupplyService.jpg';
 import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
 import medicalRecruitment from '../assets/servicesImages/medicalRecruitmentService.jpg';
+import certificateBanner from '../assets/serviceBanners/certificateBanner.jpg';
+import cvWritingBanner from '../assets/serviceBanners/cvWritingBanner.jpg';
+import labourSupplyBanner from '../assets/serviceBanners/labourSupplyBanner.jpg';
+import medicalRecBanner from '../assets/serviceBanners/medicalRecBanner.jpg';
+import ticketServiceBanner from '../assets/serviceBanners/ticketServiceBanner.jpg';
+import visaServiceBanner from '../assets/serviceBanners/visaServiceBanner.jpg';
+import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
 import { Briefcase, Building2, ClipboardList, CreditCard, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
@@ -30,6 +38,14 @@ export const siteUrlConfig: SiteUrlConfigProps = {
   signUp: "/register"
 };
 
+ export const links: { url: string, text: string }[] = [
+    { url: '/user', text: "Dashboard" },
+    { url: '/user/profile', text: "Profile" },
+    { url: '/user/jobs', text: "Jobs" },
+    { url: '/user/applications', text: 'Applications' },
+    { url: '/user/chat', text: 'Chat' },
+  ]
+
 export const navLinks: navLinkProps[] = [
   { text: "Home", href: siteUrlConfig.home, content: "default", isLink: true, isForDesk: true, isForMob: true },
   { text: "About Us", href: siteUrlConfig.aboutus, isLink: true, isForDesk: true, isForMob: true },
@@ -42,64 +58,225 @@ export const navLinks: navLinkProps[] = [
   { text: "SignUp", href: siteUrlConfig.signUp, isLink: true, isForMob: true },
 ];
 
+
 // Services component constants
-export const services: ContentCardProps[] = [
+export const services: ServiceProps[] = [
   {
+    id: "toursandtravels",
     title: "Tours & Travels",
     description: "Comprehensive travel planning and support for your international needs.",
     hoverDescription: "Our comprehensive travel services cover everything from flight bookings and hotel arrangements to itinerary planning and travel insurance. We ensure a smooth and stress-free journey by handling all the essential details, so you can focus on enjoying your trip. Benefit: End-to-end travel support for a seamless experience.",
     imageUrl: travelService,
     href: "#services",
+
+    banner: "",
+    bannerTitle: "Plan Memorable Tours With Us",
+    showButton: true,
+    buttonText: "See More",
+    buttonUrl: "/toursandtravels",
+    points: [
+      "We handle end-to-end travel arrangements, including flights, accommodations, and local transport, ensuring you have a seamless experience.",
+      "Our affordable and flexible packages are tailored to meet the unique needs of families, solo travelers, and business trips.",
+      "We provide round-the-clock customer support to assist you during your journey, no matter where you are.",
+      "Each travel plan is carefully designed to match your preferences, ensuring comfort and convenience at every stage.",
+      "We take care of all the essential details in advance so you can focus solely on enjoying your trip.",
+    ],
+    contactText: "If you would like to make an enquiry for this service, please contact us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
   },
   {
+    id: "visaservice",
     title: "Visa Service",
     description: "Fast, reliable visa processing with complete documentation support.",
     hoverDescription: "Our specialized team efficiently processes various visa types, ensuring minimal hassle and fast turnaround times. We handle all the necessary documentation and communication with immigration authorities. Benefit: Quick and efficient visa processing.",
     imageUrl: visaService,
-    href: "#services"
+    href: "#services",
+
+    banner: visaServiceBanner,
+    bannerTitle: "Quick Visa Processing Support Service",
+    showButton: true,
+    buttonText: "Know More",
+    buttonUrl: "/visaservice",
+    points: [
+      "We manage all visa documentation requirements, ensuring that every detail is accurate and complete.",
+      "Our streamlined process guarantees faster visa approvals with minimal delays and rejections.",
+      "We handle multiple visa categories, including work, student, tourist, and business visas.",
+      "Clients are kept informed at every stage of the process for complete transparency.",
+      "Our dedicated support team reduces the stress of visa applications by simplifying complex procedures.",
+    ],
+    contactText: "If you would like to enquire about this service, please reach out to us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
   },
   {
+    id: "ticketservice",
     title: "Ticket Service",
     description: "Affordable and hassle-free flight ticket booking for your journeys.",
     hoverDescription: "Secure your flights and other transportation with our simple and convenient booking service. We compare prices and options from multiple providers to find the best deals, saving you time and money. Relax and let us handle the details.",
     imageUrl: ticketService,
-    href: "#services"
+    href: "#services",
+
+    banner: ticketServiceBanner,
+    bannerTitle: "Book Affordable Tickets With Ease",
+    showButton: true,
+    buttonText: "Learn More",
+    buttonUrl: "/ticketservice",
+    points: [
+      "We compare multiple airlines and providers to secure the best possible fares for your journey.",
+      "Our service ensures quick booking confirmations and hassle-free payment processes.",
+      "Flexible rescheduling and cancellation options are available to suit your changing plans.",
+      "We provide assistance with both international and domestic flight bookings for individuals and groups.",
+      "Our goal is to save you both time and money while ensuring your travel is stress-free.",
+    ],
+    contactText: "If you would like to make an enquiry for ticket booking, please contact us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
   },
   {
+    id: "certificationservice",
     title: "Certificate Attestation",
     description: "Hassle-free document attestation for smooth international processing.",
     hoverDescription: "We provide expert certificate attestation services for a wide range of documents and destinations worldwide. Our experienced team is familiar with the specific requirements of various embassies and consulates, ensuring a smooth and successful attestation process.",
     imageUrl: certificateAttestationService,
-    href: "#services"
+    href: "#services",
+
+    banner: certificateBanner,
+    bannerTitle: "Reliable Certificate Attestation Services",
+    showButton: true,
+    buttonText: "Know More",
+    buttonUrl: "/certificationservice",
+    points: [
+      "We provide complete guidance and support for certificate attestation across multiple countries.",
+      "Our experienced team ensures compliance with embassy and consulate requirements for smooth processing.",
+      "We handle documents with the utmost security and confidentiality throughout the attestation process.",
+      "Our systematic approach reduces delays and ensures documents are attested on time.",
+      "We manage the attestation process from start to finish, eliminating unnecessary hassle for clients.",
+    ],
+    contactText: "If you would like to enquire about attestation services, please reach out to us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
   },
   {
+    id: "medicalrecruitservice",
     title: "Medical Recruitment",
     description: "Specialized hiring solutions for healthcare professionals across the globe.",
     hoverDescription: "We specialize in placing highly skilled medical professionals in rewarding positions within reputable healthcare facilities. Our rigorous screening process ensures we connect the right candidates with the right roles, benefiting both employers and employees.",
     imageUrl: medicalRecruitment,
-    href: "#services"
+    href: "#services",
+
+    banner: medicalRecBanner,
+    bannerTitle: "Trusted Medical Recruitment Worldwide",
+    showButton: true,
+    buttonText: "Search More",
+    buttonUrl: "/medicalrecruit",
+    points: [
+      "We connect hospitals and clinics with highly skilled medical professionals from around the world.",
+      "Each candidate is screened thoroughly to ensure they meet professional and ethical standards.",
+      "Our global recruitment network allows us to fill roles quickly and efficiently across multiple healthcare sectors.",
+      "We provide both temporary and permanent staffing solutions depending on employer needs.",
+      "Employers benefit from reduced hiring times and access to a pool of qualified professionals.",
+    ],
+    contactText: "If you would like to enquire about medical recruitment, please get in touch.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
   },
   {
+    id: "jobrecruitservice",
     title: "Job Recruitment",
     description: "Helping professionals find rewarding career opportunities across industries.",
     hoverDescription: "We connect highly skilled professionals with rewarding career opportunities in Dubai's thriving job market. Our personalized approach and extensive network guarantee increased chances of securing your ideal role.",
     imageUrl: jobRecruitment,
-    href: "#services"
+    href: "#services",
+
+    banner: "",
+    bannerTitle: "Connecting You To Better Careers",
+    showButton: true,
+    buttonText: "Take A Look",
+    buttonUrl: "/user",
+    points: [
+      "We help job seekers find positions that align with their skills, experience, and career goals.",
+      "Our extensive network of employers provides access to opportunities across diverse industries.",
+      "We streamline the recruitment process, reducing the time between application and placement.",
+      "Employers gain access to pre-screened candidates who are motivated and qualified for the role.",
+      "Our recruitment team provides career guidance and support to ensure candidates make informed choices.",
+    ],
+    contactText: "If you would like to enquire about job recruitment, please contact us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
   },
   {
-  title: "CV Writing",
-  description: "Crafting impactful CVs that highlight your strengths and career achievements.",
-  hoverDescription: "Our expert CV writing service ensures your resume stands out to recruiters. We tailor each CV to showcase your skills, experience, and accomplishments in a way that maximizes your chances of landing interviews and advancing your career.",
-  imageUrl: cvWriting,
-  href: "#services"
-},
-{
-  title: "Web Development",
-  description: "Building modern, responsive, and scalable websites tailored to your needs.",
-  hoverDescription: "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
-  imageUrl: wevDev,
-  href: "#services"
-}
+    id: "cvwritingservice",
+    title: "CV Writing",
+    description: "Crafting impactful CVs that highlight your strengths and career achievements.",
+    hoverDescription: "Our expert CV writing service ensures your resume stands out to recruiters. We tailor each CV to showcase your skills, experience, and accomplishments in a way that maximizes your chances of landing interviews and advancing your career.",
+    imageUrl: cvWriting,
+    href: "#services",
+
+    banner: cvWritingBanner,
+    bannerTitle: "Professional CV Writing Services",
+    showButton: true,
+    buttonText: "Learn More",
+    buttonUrl: "/cvwriting",
+    points: [
+      "We craft CVs that effectively highlight your strengths, skills, and achievements.",
+      "Our writing style ensures that your CV is clear, concise, and impactful for recruiters.",
+      "Every CV is tailored to meet the expectations of your specific industry or career path.",
+      "We optimize CVs to be applicant tracking system (ATS) friendly, improving your chances of selection.",
+      "Our service increases your likelihood of landing interviews and advancing your career.",
+    ],
+    contactText: "If you would like to enquire about CV writing services, please reach out to us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
+  },
+  {
+    id: "webservice",
+    title: "Web Development",
+    description: "Building modern, responsive, and scalable websites tailored to your needs.",
+    hoverDescription: "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
+    imageUrl: wevDev,
+    href: "#services",
+
+    banner: webDevBanner,
+    bannerTitle: "Modern Scalable Web Development Services",
+    showButton: true,
+    buttonText: "Build One",
+    buttonUrl: "/webservice",
+    points: [
+      "We design and develop modern websites that are responsive across all devices and platforms.",
+      "Our development approach ensures scalability so your website grows as your business expands.",
+      "We optimize every website for fast loading speeds and top performance.",
+      "SEO-friendly structures are built in to maximize visibility on search engines.",
+      "Custom features are tailored to your unique business requirements for a personalized solution.",
+    ],
+    contactText: "If you would like to make an enquiry for web development, please get in touch.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
+  },
+  {
+    id: "laboursupplyservice",
+    title: "Labour Supply",
+    description: "Enhance your productivity with our skilled and reliable workforce tailored to meet your project needs.",
+    hoverDescription: "Our labour supply service provides expert workers and dedicated staff to support your business operations. From short-term staffing to long-term workforce solutions, we ensure efficiency, reliability, and quality to help your projects succeed.",
+    imageUrl: labourSupplyService,
+    href: "#services",
+
+    banner: labourSupplyBanner,
+    bannerTitle: "Skilled Workforce Supply Solutions",
+    showButton: true,
+    buttonText: "Hire",
+    buttonUrl: "/labourservices",
+    points: [
+      "We provide skilled and reliable workers who are trained to adapt to diverse industries and projects.",
+      "Our service offers flexible staffing solutions, including short-term and long-term placements.",
+      "Each candidate undergoes a thorough screening process to ensure reliability and professionalism.",
+      "We cater to industries such as construction, hospitality, manufacturing, and logistics.",
+      "Our workforce solutions help businesses increase productivity, reduce downtime, and meet project deadlines.",
+    ],
+    contactText: "If you would like to make an enquiry for labour supply, please contact us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
+  },
 ];
 
 
@@ -309,7 +486,7 @@ export const callToActionData: CallToActionProps = {
   description: "From seamless travel arrangements to visa support, job opportunities, and medical recruitment we provide everything you need for a successful international experience. Let us handle the details so you can focus on your future.",
   buttons: [
     { href: "/register", text: "Get Started", variant: "default" },
-    { href: "/travel-packages", text: "Travel Packages", variant: "outline" },
+    { href: "/toursandtravels", text: "Travel Packages", variant: "outline" },
   ],
 }
 
@@ -488,4 +665,5 @@ export const statsMapForAdminOverview: Array<statsMapIntrface<AdminFetchOverview
     icon: FileText,
   },
 ];
+
 
