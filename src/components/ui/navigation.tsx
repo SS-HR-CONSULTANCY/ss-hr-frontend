@@ -85,7 +85,7 @@ export default function Navigation({
                         <ListItem
                           key={component.title}
                           title={component.title}
-                          href={component.href}
+                          href={component.buttonUrl}
                         >
                           {component.description}
                         </ListItem>

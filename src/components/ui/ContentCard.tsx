@@ -1,12 +1,20 @@
 import { cn } from "@/lib/utils";
 import type { ContentCardProps } from "@/types/componentTypes/servicesTypes";
+import { Button } from "./button";
+import { useNavigate } from "react-router-dom";
 
 const ContentCard = ({
   title,
   description,
   hoverDescription,
   imageUrl,
+  buttonText,
+  buttonUrl
 }: ContentCardProps) => {
+
+  console.log("buttonTrext : ", buttonText);
+  const navigate = useNavigate();
+
   return (
     <div className="w-full group/card flex" data-aos="fade-up">
       <div
@@ -23,7 +31,7 @@ const ContentCard = ({
           <div
             className={cn(
               "relative overflow-hidden transition-all duration-500",
-              "max-h-16 group-hover/card:max-h-40" 
+              "max-h-16 group-hover/card:max-h-40"
             )}
           >
             <p
@@ -36,14 +44,23 @@ const ContentCard = ({
             </p>
 
             {hoverDescription && (
-              <p
-                className={cn(
-                  "font-normal text-sm transition-all duration-500 transform",
-                  "opacity-0 translate-y-2 group-hover/card:opacity-100 group-hover/card:translate-y-0"
-                )}
-              >
-                {hoverDescription}
-              </p>
+              <div className="flex flex-col h-full">
+                <p
+                  className={cn(
+                    "font-normal text-sm transition-all duration-500 transform overflow-hidden line-clamp-5",
+                    "opacity-0 translate-y-2 group-hover/card:opacity-100 group-hover/card:translate-y-0"
+                  )}
+                >
+                  {hoverDescription}
+                </p>
+                <Button
+                  variant="link"
+                  className="justify-center mt-auto cursor-pointer"
+                  onClick={() => navigate(buttonUrl)}
+                >
+                  {buttonText}
+                </Button>
+              </div>
             )}
           </div>
         </div>
