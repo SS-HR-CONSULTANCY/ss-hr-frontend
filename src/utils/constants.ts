@@ -9,6 +9,7 @@ import type { PackageProps } from '@/types/componentTypes/packageTypes';
 import type { ContentCardProps } from '@/types/componentTypes/servicesTypes';
 import jobRecruitment from '../assets/servicesImages/jobRecruitmentService.png';
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
+import labourSupplyService from '../assets/servicesImages/labourSupplyService.jpg';
 import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
 import medicalRecruitment from '../assets/servicesImages/medicalRecruitmentService.jpg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
@@ -106,6 +107,13 @@ export const services: ContentCardProps[] = [
   description: "Building modern, responsive, and scalable websites tailored to your needs.",
   hoverDescription: "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
   imageUrl: wevDev,
+  href: "#services"
+},
+{
+  title: "Labour Supply",
+  description: "Enhance your productivity with our skilled and reliable workforce tailored to meet your project needs.",
+  hoverDescription: "Our labour supply service provides expert workers and dedicated staff to support your business operations. From short-term staffing to long-term workforce solutions, we ensure efficiency, reliability, and quality to help your projects succeed.",
+  imageUrl: labourSupplyService,
   href: "#services"
 }
 ];
@@ -317,7 +325,7 @@ export const callToActionData: CallToActionProps = {
   description: "From seamless travel arrangements to visa support, job opportunities, and medical recruitment we provide everything you need for a successful international experience. Let us handle the details so you can focus on your future.",
   buttons: [
     { href: "/register", text: "Get Started", variant: "default" },
-    { href: "/travel-packages", text: "Travel Packages", variant: "outline" },
+    { href: "/toursandtravels", text: "Travel Packages", variant: "outline" },
   ],
 }
 
