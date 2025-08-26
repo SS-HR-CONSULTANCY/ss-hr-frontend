@@ -46,12 +46,13 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
   if (isAuthenticated && user) {
     if (user.role === 'user') {
       navigate('/', { replace: true });
-    } else if (user.role === 'admin' || user.role === "superAdmin") {
+    } else if (user.role === 'admin' || user.role === 'superAdmin') {
       navigate('/admin', { replace: true });
     } else {
       navigate('/', { replace: true });
     }
-  }, [isAuthenticated, user, navigate]);
+  }
+}, [isAuthenticated, user, navigate]);
 
   const onSubmit = async (data: SigninRequest) => {
     await dispatch(signin(data))
