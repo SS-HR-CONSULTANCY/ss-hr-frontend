@@ -35,13 +35,14 @@ const Header: React.FC = ({
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
-  const { handleLogout } = useAuthHook({route: "/"});
+  const { handleLogout } = useAuthHook({ route: "/" });
 
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>
       <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto px-4 md:px-0">
         <NavbarComponent>
+          
           <NavbarLeft>
             <Link to={homeUrl} >
               <img src={logoTransparent} alt="SS HR" className="size-10 cursor-pointer" />
