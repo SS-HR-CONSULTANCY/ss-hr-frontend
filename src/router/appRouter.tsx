@@ -12,7 +12,7 @@ import ContactPage from "@/pages/user/ContactPage";
 import UserProfile from "@/pages/user/UserProfile";
 import AdminReviews from "@/pages/admin/AdminReviews";
 import AdminReports from "@/pages/admin/AdminReports";
-import { applicationRoutes } from "@/utils/constants";
+import { applicationRoutes, services } from "@/utils/constants";
 import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminPackages from "@/pages/admin/AdminPackages";
@@ -23,6 +23,7 @@ import ToursAndTravels from "@/pages/user/ToursAndTravels";
 import DashboardLayout from "@/pages/common/DashboardLayout";
 import AdminApplications from "@/pages/admin/AdminApplications";
 import UserJobs from "@/pages/user/UserJobs";
+import ServiceDetailedContent from "@/components/sections/ServiceDetailedContent";
 
 const adminRoutes = applicationRoutes.filter((route) =>
     route.roles.some(role => ["admin", "superAdmin"].includes(role))
@@ -40,6 +41,13 @@ const appRouter = createBrowserRouter([
             { path: '/', element: <Landing /> },
             { path: '/toursandtravels', element: <ToursAndTravels /> },
             { path: '/contact', element: <ContactPage /> },
+            { path: "/visaservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "visaservice")!} /> },
+            { path: "/ticketservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "ticketservice")!} /> },
+            { path: "/certificationservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "certificationservice")!} /> },
+            { path: "/medicalrecruit", element: <ServiceDetailedContent {...services.find((s) => s.id === "medicalrecruitservice")!} /> },
+            { path: "/cvwriting", element: <ServiceDetailedContent {...services.find((s) => s.id === "cvwritingservice")!} /> },
+            { path: "/webservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "webservice")!} /> },
+            { path: "/labourservices", element: <ServiceDetailedContent {...services.find((s) => s.id === "laboursupplyservice")!} /> },
             { path: '*', element: <Error404 /> },
         ]
     },
@@ -55,7 +63,7 @@ const appRouter = createBrowserRouter([
             {
                 index: true, element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <UserProfile />
+                        <UserProfile />
                     </ProtectedRoute>
                 )
             },
@@ -63,7 +71,7 @@ const appRouter = createBrowserRouter([
                 path: 'profile',
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <UserProfile />
+                        <UserProfile />
                     </ProtectedRoute>
                 )
             },
@@ -71,7 +79,7 @@ const appRouter = createBrowserRouter([
                 path: "jobs",
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <UserJobs />
+                        <UserJobs />
                     </ProtectedRoute>
                 ),
             },
@@ -79,7 +87,7 @@ const appRouter = createBrowserRouter([
                 path: "packages",
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <AdminPackages />
+                        <AdminPackages />
                     </ProtectedRoute>
                 ),
             },
@@ -87,7 +95,7 @@ const appRouter = createBrowserRouter([
                 path: "applications",
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <AdminApplications />
+                        <AdminApplications />
                     </ProtectedRoute>
                 ),
             },
@@ -95,7 +103,7 @@ const appRouter = createBrowserRouter([
                 path: "payments",
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <AdminPayments />
+                        <AdminPayments />
                     </ProtectedRoute>
                 ),
             },
@@ -103,7 +111,7 @@ const appRouter = createBrowserRouter([
                 path: "chat",
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                    <AdminChat />
+                        <AdminChat />
                     </ProtectedRoute>
                 ),
             },
@@ -116,64 +124,64 @@ const appRouter = createBrowserRouter([
         children: [
             {
                 index: true, element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminOverview />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminOverview />
                     </ProtectedRoute>
                 )
             },
             {
                 path: "overview",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminOverview />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminOverview />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "users",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminUsers />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminUsers />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "companies",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminCompanies />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminCompanies />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "jobs",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminJobs showButton />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminJobs showButton />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "packages",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminPackages showButton />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminPackages showButton />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "applications",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminApplications />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminApplications />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "payments",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminPayments />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminPayments />
                     </ProtectedRoute>
                 ),
             },
@@ -181,32 +189,32 @@ const appRouter = createBrowserRouter([
                 path: "chat",
                 element: (
                     // need to remove superAdmin for making chat with _id
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminChat />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminChat />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "reviews",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminReviews />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminReviews />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "reports",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminReports />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminReports />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "settings",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
-                    <AdminSettings />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                        <AdminSettings />
                     </ProtectedRoute>
                 ),
             },
