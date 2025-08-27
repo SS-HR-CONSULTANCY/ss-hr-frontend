@@ -85,14 +85,14 @@ const appRouter = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
-            {
-                path: "packages",
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <AdminPackages />
-                    </ProtectedRoute>
-                ),
-            },
+            // {
+            //     path: "packages",
+            //     element: (
+            //         <ProtectedRoute requiredRole={["user"]}>
+            //             <Error404 />
+            //         </ProtectedRoute>
+            //     ),
+            // },
             {
                 path: "applications",
                 element: (
@@ -101,14 +101,14 @@ const appRouter = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
-            {
-                path: "payments",
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <AdminPayments />
-                    </ProtectedRoute>
-                ),
-            },
+            // {
+            //     path: "payments",
+            //     element: (
+            //         <ProtectedRoute requiredRole={["user"]}>
+            //             <Error404 />
+            //         </ProtectedRoute>
+            //     ),
+            // },
             {
                 path: "chat",
                 element: (
