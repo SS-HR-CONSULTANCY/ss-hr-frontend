@@ -2,15 +2,15 @@ export interface User {
   _id: string;
   fullName: string;
   email: string;
-  role: Role
+  role: Role;
   isVerified: boolean;
-  isBlocked?: boolean;
+  isBlocked: boolean;
   profileImage: string;
   verificationToken: string;
   otp: string;
-  phoneOne?: string;
-  phoneTwo?: string;
-  googleId?: string;
+  phone: string;
+  phoneTwo: string;
+  googleId: string;
   createdAt: string;
   updatedAt: string;
 }

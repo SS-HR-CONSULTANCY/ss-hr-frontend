@@ -206,15 +206,16 @@ export interface AdminGetAboutCurrentDataResponse {
 
 
 // Create new admin api request
-export interface CreateAdminRequest extends Pick<User, "fullName" | "email" | "profileImage"> {
+export interface CreateAdminRequest extends Pick<User, "fullName" | "email" | "phone"> {
     password: string;
-    role: 'subadmin' | 'superAdmin';
+    profileImage: FileList;
+    role: 'admin' | 'superAdmin';
+    createrRole: 'superAdmin' | 'systemAdmin';
 }
 // Create new admin api response
-export type CreateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImage" | "role">;
-
+export type CreateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "phone" | "profileImage" | "role" | "isBlocked" | "createdAt">;
 // Fetch all admins (subadmin and superAdmin)
-export type GetAdminsResponse = Array<Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImage" | "role">>;
+export type AdminFetchAllAdminsResponse = Array<Pick<User, "_id" | "fullName" | "email" | "phone" | "profileImage" | "role" | "isBlocked" | "createdAt">>;
 
 // Update admin info
 export type UpdateAdminRequest = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImage" | "role">;
