@@ -28,7 +28,7 @@ const AdminManagementForm: React.FC = () => {
   // Create new admin
   const onSubmit: SubmitHandler<AdminFormValues> = async (data) => {
     try {
-      const payload: CreateAdminRequest = { ...data, profileImg: '' }; // empty string for now
+      const payload: CreateAdminRequest = { ...data, profileImage: '' }; // empty string for now
       const newAdmin: CreateAdminResponse = await createAdmin(payload);
       setAdmins(prev => [...prev, newAdmin]);
       toast.success("Admin created successfully!");

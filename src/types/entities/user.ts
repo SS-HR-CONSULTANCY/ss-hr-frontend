@@ -5,11 +5,12 @@ export interface User {
   role: Role
   isVerified: boolean;
   isBlocked?: boolean;
-  profileImg: string;
+  profileImage: string;
   verificationToken: string;
   otp: string;
   phoneOne?: string;
   phoneTwo?: string;
+  googleId?: string;
   createdAt: string;
   updatedAt: string;
 }

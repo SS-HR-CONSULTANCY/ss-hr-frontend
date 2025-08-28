@@ -44,8 +44,8 @@ const UserProfile: React.FC = () => {
             <div className="relative">
               <img
                 src={
-                  user?.profileImg
-                    ? user?.profileImg
+                  user?.profileImage
+                    ? user?.profileImage
                     : selectedImage
                       ? selectedImage
                       : noProfileImage
