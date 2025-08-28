@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
-import { applicationRoutes, services } from "@/utils/constants";
+import { adminApplicationRoutes, services, userApplicationRoutes } from "@/utils/constants";
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
@@ -27,13 +27,6 @@ const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
 
-const adminRoutes = applicationRoutes.filter((route) =>
-    route.roles.some(role => ["admin", "superAdmin"].includes(role))
-);
-
-const userRoutes = applicationRoutes.filter((route) =>
-    route.roles.includes("user")
-);
 
 const appRouter = createBrowserRouter([
     {
@@ -60,7 +53,7 @@ const appRouter = createBrowserRouter([
     { path: 'superAdmin/login', element: <Login role="superAdmin" title="Super Admin Sign In" /> },
     {
         path: '/user',
-        element: <DashboardLayout showMobileScreenWarning={false} routes={userRoutes} />,
+        element: <DashboardLayout showMobileScreenWarning={false} routes={userApplicationRoutes} />,
         children: [
             {
                 index: true, element: (
@@ -85,14 +78,14 @@ const appRouter = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
-            {
-                path: "packages",
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <AdminPackages />
-                    </ProtectedRoute>
-                ),
-            },
+            // {
+            //     path: "packages",
+            //     element: (
+            //         <ProtectedRoute requiredRole={["user"]}>
+            //             <Error404 />
+            //         </ProtectedRoute>
+            //     ),
+            // },
             {
                 path: "applications",
                 element: (
@@ -101,14 +94,14 @@ const appRouter = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
-            {
-                path: "payments",
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <AdminPayments />
-                    </ProtectedRoute>
-                ),
-            },
+            // {
+            //     path: "payments",
+            //     element: (
+            //         <ProtectedRoute requiredRole={["user"]}>
+            //             <Error404 />
+            //         </ProtectedRoute>
+            //     ),
+            // },
             {
                 path: "chat",
                 element: (
@@ -122,7 +115,7 @@ const appRouter = createBrowserRouter([
     },
     {
         path: "/admin",
-        element: <DashboardLayout showMobileScreenWarning={true} routes={adminRoutes} />,
+        element: <DashboardLayout showMobileScreenWarning={true} routes={adminApplicationRoutes} />,
         children: [
             {
                 index: true, element: (

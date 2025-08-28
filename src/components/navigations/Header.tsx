@@ -10,12 +10,12 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import useAuthHook from '@/hooks/useAuthHook';
 import { useAppSelector } from '@/hooks/redux';
-import { Menu, Moon, Sun } from "lucide-react";
+import { Menu, Moon, Sun, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import noProfileImg from '../../assets/defaultImgaes/noProfile.png';
+import noprofileImage from '../../assets/defaultImgaes/noProfile.png';
 import logoTransparent from '../../assets/logos/logo-transparent.png';
 import type { NavbarProps } from '@/types/componentTypes/headerTypes';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -56,11 +56,15 @@ const Header: React.FC = ({
               <div className="hidden md:block">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <img
-                      src={user.profileImg || noProfileImg}
+                    {user.profileImage ? (
+                      <img
+                      src={user.profileImage || noprofileImage}
                       alt="Profile"
-                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
-                    />
+                      className="w-8 h-8 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
+                      />
+                    ) : (
+                      <UserCircle className='cursor-pointer' />
+                    )}
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-40" align="end" sideOffset={8}>
                     {links.map(link => (

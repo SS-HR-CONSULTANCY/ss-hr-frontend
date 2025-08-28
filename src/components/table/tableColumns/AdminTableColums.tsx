@@ -10,12 +10,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSepar
 
 export const AdminUsersTableColumns: ColumnDef<AdminfetchAllUsersResponse>[] = [
   {
-    accessorKey: "profileImg",
+    accessorKey: "profileImage",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Profile" />
     ),
     cell: ({ row }) => {
-      const img = row.original.profileImg || noProfile;
+      const img = row.original.profileImage || noProfile;
       return (
         <img
           src={img}

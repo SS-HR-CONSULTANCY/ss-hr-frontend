@@ -2,16 +2,17 @@ export interface User {
   _id: string;
   fullName: string;
   email: string;
-  role: Role
+  role: Role;
   isVerified: boolean;
-  isBlocked?: boolean;
-  profileImg: string;
+  isBlocked: boolean;
+  profileImage: string;
   verificationToken: string;
   otp: string;
-  phoneOne?: string;
-  phoneTwo?: string;
+  phone: string;
+  phoneTwo: string;
+  googleId: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export type Role = 'user' | 'admin' | "superAdmin";
+export type Role = 'user' | 'admin' | 'superAdmin' | "systemAdmin";
