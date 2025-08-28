@@ -14,4 +14,4 @@ export interface User {
   updatedAt: string;
 }
 
-export type Role = 'user' | 'admin' | "superAdmin";
+export type Role = 'user' | 'admin' | 'superAdmin' | "systemAdmin";
