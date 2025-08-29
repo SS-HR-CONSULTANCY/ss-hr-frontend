@@ -115,7 +115,7 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
                             className={`w-full p-3 flex gap-3 items-center border-b transition-colors hover:bg-gray-200 dark:hover:bg-gray-500 ${selectedUser?._id === user._id ? "" : ""}`}>
                             <div className="relative w-fit">
                                 <img
-                                    src={user.profileImg || "/user_avatar.jpg"}
+                                    src={user.profileImage || "/user_avatar.jpg"}
                                     alt={user.fullName}
                                     className="size-10 object-cover rounded-full"
                                 />

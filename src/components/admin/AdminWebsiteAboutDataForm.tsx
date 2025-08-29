@@ -44,7 +44,7 @@ const AdminWebsiteAboutDataForm: React.FC = () => {
 
     return (
         <section className="shadow-md p-4 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md">
-            <h2 className="text-2xl font-bold mb-4">About Settings</h2>
+            <h2 className="text-2xl font-bold mb-4">About</h2>
 
             <div className="flex flex-col md:flex-row gap-6">
                 {/* Left: Current Data */}

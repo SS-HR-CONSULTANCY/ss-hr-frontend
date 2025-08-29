@@ -492,19 +492,24 @@ export const callToActionData: CallToActionProps = {
 
 
 // Routes
-export const applicationRoutes: Route[] = [
+export const userApplicationRoutes: Route[] = [
   { path: "profile", name: "Profile", roles: ["user"] },
-  { path: "overview", name: "Overview", roles: ["admin", "superAdmin"] },
-  { path: "users", name: "Users", roles: ["admin", "superAdmin"] },
-  { path: "companies", name: "Companies", roles: ["admin", "superAdmin"] },
-  { path: "jobs", name: "Jobs", roles: ["admin", "superAdmin", "admin", "user"] },
-  { path: "packages", name: "Packages", roles: ["admin", "superAdmin", "user"] },
-  { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "user"] },
-  { path: "chat", name: "Chat", roles: ["superAdmin", "user"] },
-  { path: "payments", name: "Payments", roles: ["admin", "superAdmin", "user"] },
-  { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin"] },
-  { path: "reports", name: "Reports", roles: ["admin", "superAdmin"] },
-  { path: "settings", name: "Settings", roles: ["admin", "superAdmin"] },
+  { path: "jobs", name: "Jobs", roles: ["user"] },
+  { path: "applications", name: "Applications", roles: ["user"] },
+  { path: "chat", name: "Chat", roles: ["user"] },
+];
+export const adminApplicationRoutes: Route[] = [
+  { path: "overview", name: "Overview", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "users", name: "Users", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "companies", name: "Companies", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "jobs", name: "Jobs", roles: ["admin", "superAdmin", "admin", "systemAdmin"] },
+  { path: "packages", name: "Packages", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "chat", name: "Chat", roles: ["superAdmin", "admin"] },
+  { path: "payments", name: "Payments", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "reports", name: "Reports", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "settings", name: "Settings", roles: ["admin", "superAdmin", "systemAdmin"] },
 ];
 
 

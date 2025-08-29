@@ -51,9 +51,8 @@ const AdminWebsiteMainDataForm: React.FC = () => {
 
     return (
         <section className="shadow-md p-4 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md">
-            <h2 className="text-2xl font-bold mb-4">Website Settings</h2>
+            <h2 className="text-2xl font-bold mb-4">Website General Info</h2>
             <div className="flex flex-col md:flex-row gap-6">
-                {/* Left: Current Data */}
 
 
                 <form onSubmit={handleSubmitWebsite(onSubmitWebsite)} className="md:w-1/2 space-y-4 p-4 rounded shadow">
@@ -85,7 +84,6 @@ const AdminWebsiteMainDataForm: React.FC = () => {
                     <Button variant="outline" type="submit">Save Website Settings</Button>
                 </form>
 
-                {/* Right: Form */}
                 <div className="md:w-1/2 space-y-4 p-4 rounded shadow">
                     <h3 className="text-lg font-semibold">Current Data</h3>
                     {currentData ? (
@@ -102,6 +100,7 @@ const AdminWebsiteMainDataForm: React.FC = () => {
                         <p>Loading current data...</p>
                     )}
                 </div>
+                
             </div>
         </section>
     );

@@ -1,5 +1,22 @@
 import { axiosInstance } from "@/components/lib/axios";
-import type { AdminGetAboutCurrentDataResponse, AdminGetFooterCurrentDataResponse, AdminGetWebsiteSettingsResponse, AdminUpdateFooterDataRequest, AdminUpdateFooterDataResponse, AdminUpdateWebsiteAboutRequest, AdminUpdateWebsiteAboutResponse, AdminUpdateWebsiteLogoAndNameRequest, AdminUpdateWebsiteLogoAndNameResponse, BlockAdminRequest, BlockAdminResponse, CreateAdminRequest, CreateAdminResponse, DeleteAdminRequest, GetAdminsResponse, UpdateAdminRequest, UpdateAdminResponse } from "@/types/apiTypes/admin";
+import type { 
+  AdminGetAboutCurrentDataResponse, 
+  AdminGetFooterCurrentDataResponse, 
+  AdminGetWebsiteSettingsResponse, 
+  AdminUpdateFooterDataRequest, 
+  AdminUpdateFooterDataResponse, 
+  AdminUpdateWebsiteAboutRequest, 
+  AdminUpdateWebsiteAboutResponse, 
+  AdminUpdateWebsiteLogoAndNameRequest, 
+  AdminUpdateWebsiteLogoAndNameResponse, 
+  BlockAdminRequest, BlockAdminResponse, 
+  // CreateAdminRequest, 
+  CreateAdminResponse, 
+  DeleteAdminRequest, 
+  AdminFetchAllAdminsResponse, 
+  UpdateAdminRequest, 
+  UpdateAdminResponse
+ } from "@/types/apiTypes/admin";
 import type { ApiBaseResponse } from "@/types/commonTypes";
 
 export const adminUpdateWebsiteLogoAndName = async (payload: AdminUpdateWebsiteLogoAndNameRequest): Promise<AdminUpdateWebsiteLogoAndNameResponse> => {
@@ -43,13 +60,14 @@ export const adminGetWebsiteAboutCurrentData = async (): Promise<AdminGetAboutCu
 
 
 // Create Admin
-export const createAdmin = async (payload: CreateAdminRequest): Promise<CreateAdminResponse> => {
+export const createAdmin = async (payload: FormData): Promise<CreateAdminResponse> => {
+  payload.forEach(item =>  console.log(item))
   const response = await axiosInstance.post('/admin/createAdmin', payload);
   return response.data.data;
 };
 
 // Fetch Admins
-export const fetchAdmins = async (): Promise<GetAdminsResponse> => {
+export const fetchAdmins = async (): Promise<AdminFetchAllAdminsResponse> => {
   const response = await axiosInstance.get('/admin/getAdmins');
   return response.data.data;
 };

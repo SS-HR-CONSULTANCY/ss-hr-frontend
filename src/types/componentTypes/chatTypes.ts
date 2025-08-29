@@ -16,7 +16,7 @@ export interface ChatBubbleProfileImageProps {
 export type setLatMessageProps = Pick<Message, "senderId" | "text" | "createdAt">
 
 
-export type UserProps = Pick<User, "_id" | "fullName" | "profileImg">;
+export type UserProps = Pick<User, "_id" | "fullName" | "profileImage">;
 
 
 export interface MessageInputProps {
