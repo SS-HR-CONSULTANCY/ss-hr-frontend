@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import type { AppDispatch, RootState } from '@/store/store';
 import { closeEditJobForm, updateJob } from '@/store/slices/jobSlice';
 import { updateJob as updateJobApi } from '@/utils/apis/jobApi';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface EditJobFormData {
   companyName: string;
@@ -17,6 +18,7 @@ interface EditJobFormData {
 
 const EditJobForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
   const { selectedJobId, jobs } = useSelector((state: RootState) => state.job);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<EditJobFormData>({
@@ -83,6 +85,10 @@ const EditJobForm: React.FC = () => {
       if (response.success) {
         toast.success(response.message || 'Job updated successfully!');
         dispatch(updateJob(response.job));
+        
+        // Invalidate React Query cache to refresh table
+        queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });
+        
         dispatch(closeEditJobForm());
       } else {
         toast.error('Failed to update job');
@@ -98,6 +104,8 @@ const EditJobForm: React.FC = () => {
 
   const handleClose = () => {
     dispatch(closeEditJobForm());
+    // Reset errors when closing
+    setErrors({});
   };
 
   if (!currentJob) {
@@ -105,23 +113,23 @@ const EditJobForm: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-gray-700">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-black">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-600 bg-gradient-to-r from-gray-700 to-gray-800">
+        <div className="px-6 py-4 border-b border-black bg-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-900/50 rounded-full flex items-center justify-center border border-blue-700">
-                <Briefcase className="h-5 w-5 text-blue-400" />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-black">
+                <Briefcase className="h-5 w-5 text-black" />
               </div>
-              <h3 className="text-xl font-bold text-white">Edit Job</h3>
+              <h3 className="text-xl font-bold text-black">Edit Job</h3>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="h-8 w-8 p-0 hover:bg-gray-600/50 transition-colors text-gray-400 hover:text-white">
-            
+              className="h-8 w-8 p-0 hover:bg-white transition-colors text-black hover:text-black"
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -131,8 +139,8 @@ const EditJobForm: React.FC = () => {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Company Name */}
           <div className="space-y-2">
-            <Label htmlFor="companyName" className="flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Building2 className="h-4 w-4 text-blue-400" />
+            <Label htmlFor="companyName" className="flex items-center gap-2 text-sm font-medium text-black">
+              <Building2 className="h-4 w-4 text-black" />
               Company Name
             </Label>
             <Input
@@ -141,21 +149,21 @@ const EditJobForm: React.FC = () => {
               value={formData.companyName}
               onChange={(e) => handleInputChange('companyName', e.target.value)}
               placeholder="Enter company name"
-              className={`transition-all duration-200 bg-gray-700 border-gray-600 text-white placeholder-gray-400 ${
+              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
                 errors.companyName 
-                  ? 'border-red-500 focus:border-red-400 focus:ring-red-900/20' 
-                  : 'focus:border-blue-400 focus:ring-blue-900/20'
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                  : 'focus:border-black focus:ring-black'
               }`}
             />
             {errors.companyName && (
-              <p className="text-red-400 text-xs">{errors.companyName}</p>
+              <p className="text-red-500 text-xs">{errors.companyName}</p>
             )}
           </div>
 
           {/* Designation */}
           <div className="space-y-2">
-            <Label htmlFor="designation" className="flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Briefcase className="h-4 w-4 text-blue-400" />
+            <Label htmlFor="designation" className="flex items-center gap-2 text-sm font-medium text-black">
+              <Briefcase className="h-4 w-4 text-black" />
               Position/Designation
             </Label>
             <Input
@@ -164,21 +172,21 @@ const EditJobForm: React.FC = () => {
               value={formData.designation}
               onChange={(e) => handleInputChange('designation', e.target.value)}
               placeholder="e.g., Senior Software Engineer"
-              className={`transition-all duration-200 bg-gray-700 border-gray-600 text-white placeholder-gray-400 ${
+              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
                 errors.designation 
-                  ? 'border-red-500 focus:border-red-400 focus:ring-red-900/20' 
-                  : 'focus:border-blue-400 focus:ring-blue-900/20'
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                  : 'focus:border-black focus:ring-black'
               }`}
             />
             {errors.designation && (
-              <p className="text-red-400 text-xs">{errors.designation}</p>
+              <p className="text-red-500 text-xs">{errors.designation}</p>
             )}
           </div>
 
           {/* Vacancy */}
           <div className="space-y-2">
-            <Label htmlFor="vacancy" className="flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Users className="h-4 w-4 text-blue-400" />
+            <Label htmlFor="vacancy" className="flex items-center gap-2 text-sm font-medium text-black">
+              <Users className="h-4 w-4 text-black" />
               Number of Openings
             </Label>
             <Input
@@ -188,25 +196,25 @@ const EditJobForm: React.FC = () => {
               value={formData.vacancy}
               onChange={(e) => handleInputChange('vacancy', parseInt(e.target.value) || 1)}
               placeholder="Enter number of positions"
-              className={`transition-all duration-200 bg-gray-700 border-gray-600 text-white placeholder-gray-400 ${
+              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
                 errors.vacancy 
-                  ? 'border-red-500 focus:border-red-400 focus:ring-red-900/20' 
-                  : 'focus:border-blue-400 focus:ring-blue-900/20'
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                  : 'focus:border-black focus:ring-black'
               }`}
             />
             {errors.vacancy && (
-              <p className="text-red-400 text-xs">{errors.vacancy}</p>
+              <p className="text-red-500 text-xs">{errors.vacancy}</p>
             )}
           </div>
         </form>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-gray-700 border-t border-gray-600 flex gap-3">
+        <div className="px-6 py-4 bg-white border-t border-black flex gap-3">
           <Button 
             type="button"
             onClick={handleClose}
             variant="outline"
-            className="flex-1 hover:bg-gray-600 transition-colors border-gray-600 text-gray-300 hover:text-white"
+            className="flex-1 hover:bg-white transition-colors border-black text-black hover:text-black"
             disabled={loading}
           >
             Cancel

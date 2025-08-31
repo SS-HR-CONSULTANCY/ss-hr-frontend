@@ -1,79 +1,61 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { X } from 'lucide-react';
+import { X, Building2, Briefcase, Users, Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
-import type { AppDispatch } from '@/store/store';
-import { toggleAddJobForm, addJob } from '@/store/slices/jobSlice';
-import { createJob, type CreateJobRequest } from '@/utils/apis/jobApi';
+import type { AppDispatch, RootState } from '@/store/store';
+import { closeAddJobForm, addJob } from '@/store/slices/jobSlice';
+import { createJob } from '@/utils/apis/jobApi';
+import { useQueryClient } from '@tanstack/react-query';
 
-interface AddJobFormProps {
-  onClose?: () => void;
+interface AddJobFormData {
+  companyName: string;
+  designation: string;
+  vacancy: number;
 }
 
-const AddJobForm: React.FC<AddJobFormProps> = ({ onClose }) => {
+const AddJobForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  
-  const [formData, setFormData] = useState({
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<AddJobFormData>({
     companyName: '',
     designation: '',
     vacancy: 1
   });
+  const [errors, setErrors] = useState<Partial<Record<keyof AddJobFormData, string>>>({});
 
-  const [formErrors, setFormErrors] = useState({
-    companyName: '',
-    designation: '',
-    vacancy: ''
-  });
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    
-    if (name === 'vacancy') {
-      const numValue = parseInt(value) || 1;
-      setFormData(prev => ({ ...prev, [name]: numValue }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-    
-    // Clear error when user starts typing
-    if (formErrors[name as keyof typeof formErrors]) {
-      setFormErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const validateForm = () => {
-    const errors = {
-      companyName: '',
-      designation: '',
-      vacancy: ''
-    };
+  const validateForm = (): boolean => {
+    const newErrors: Partial<Record<keyof AddJobFormData, string>> = {};
 
     if (!formData.companyName.trim()) {
-      errors.companyName = 'Company name is required';
-    } else if (formData.companyName.length < 2) {
-      errors.companyName = 'Company name must be at least 2 characters';
+      newErrors.companyName = 'Company name is required';
     }
 
     if (!formData.designation.trim()) {
-      errors.designation = 'Designation is required';
-    } else if (formData.designation.length < 2) {
-      errors.designation = 'Designation must be at least 2 characters';
+      newErrors.designation = 'Designation is required';
     }
 
-    if (formData.vacancy < 1) {
-      errors.vacancy = 'Vacancy must be at least 1';
-    } else if (formData.vacancy > 1000) {
-      errors.vacancy = 'Vacancy cannot exceed 1000';
+    if (!formData.vacancy || formData.vacancy < 1) {
+      newErrors.vacancy = 'Vacancy must be at least 1';
     }
 
-    setFormErrors(errors);
-    return !Object.values(errors).some(error => error !== '');
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (field: keyof AddJobFormData, value: string | number) => {
+    setFormData(prev => ({ 
+      ...prev, 
+      [field]: field === 'vacancy' ? Number(value) : value 
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,22 +63,19 @@ const AddJobForm: React.FC<AddJobFormProps> = ({ onClose }) => {
     
     if (!validateForm()) return;
 
-    setIsLoading(true);
+    setLoading(true);
 
     try {
-      const jobData: CreateJobRequest = {
-        companyName: formData.companyName.trim(),
-        designation: formData.designation.trim(),
-        vacancy: formData.vacancy
-      };
-
-      const response = await createJob(jobData);
+      const response = await createJob(formData);
       
       if (response.success) {
         toast.success(response.message || 'Job created successfully!');
-        
-        // Add job to Redux store
         dispatch(addJob(response.job));
+        
+        // Invalidate React Query cache to refresh table
+        queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });
+        
+        dispatch(closeAddJobForm());
         
         // Reset form
         setFormData({
@@ -104,115 +83,154 @@ const AddJobForm: React.FC<AddJobFormProps> = ({ onClose }) => {
           designation: '',
           vacancy: 1
         });
-        
-        // Close modal
-        handleClose();
+        setErrors({});
       } else {
         toast.error('Failed to create job');
       }
-      
     } catch (error: any) {
       console.error('Create job error:', error);
       const errorMessage = error?.response?.data?.message || 'Failed to create job';
       toast.error(errorMessage);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   const handleClose = () => {
-    if (onClose) {
-      onClose();
-    } else {
-      dispatch(toggleAddJobForm());
-    }
+    dispatch(closeAddJobForm());
+    // Reset form when closing
+    setFormData({
+      companyName: '',
+      designation: '',
+      vacancy: 1
+    });
+    setErrors({});
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <Card className="w-full max-w-md mx-4">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Add New Job</CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-black">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-black bg-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-black">
+                <Briefcase className="h-5 w-5 text-black" />
+              </div>
+              <h3 className="text-xl font-bold text-black">Add New Job</h3>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClose}
+              className="h-8 w-8 p-0 hover:bg-white transition-colors text-black hover:text-black"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {/* Company Name */}
+          <div className="space-y-2">
+            <Label htmlFor="companyName" className="flex items-center gap-2 text-sm font-medium text-black">
+              <Building2 className="h-4 w-4 text-black" />
+              Company Name
+            </Label>
+            <Input
+              id="companyName"
+              type="text"
+              value={formData.companyName}
+              onChange={(e) => handleInputChange('companyName', e.target.value)}
+              placeholder="Enter company name"
+              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
+                errors.companyName 
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                  : 'focus:border-black focus:ring-black'
+              }`}
+            />
+            {errors.companyName && (
+              <p className="text-red-500 text-xs">{errors.companyName}</p>
+            )}
+          </div>
+
+          {/* Designation */}
+          <div className="space-y-2">
+            <Label htmlFor="designation" className="flex items-center gap-2 text-sm font-medium text-black">
+              <Briefcase className="h-4 w-4 text-black" />
+              Position/Designation
+            </Label>
+            <Input
+              id="designation"
+              type="text"
+              value={formData.designation}
+              onChange={(e) => handleInputChange('designation', e.target.value)}
+              placeholder="e.g., Senior Software Engineer"
+              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
+                errors.designation 
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                  : 'focus:border-black focus:ring-black'
+              }`}
+            />
+            {errors.designation && (
+              <p className="text-red-500 text-xs">{errors.designation}</p>
+            )}
+          </div>
+
+          {/* Vacancy */}
+          <div className="space-y-2">
+            <Label htmlFor="vacancy" className="flex items-center gap-2 text-sm font-medium text-black">
+              <Users className="h-4 w-4 text-black" />
+              Number of Openings
+            </Label>
+            <Input
+              id="vacancy"
+              type="number"
+              min="1"
+              value={formData.vacancy}
+              onChange={(e) => handleInputChange('vacancy', parseInt(e.target.value) || 1)}
+              placeholder="Enter number of positions"
+              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
+                errors.vacancy 
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                  : 'focus:border-black focus:ring-black'
+              }`}
+            />
+            {errors.vacancy && (
+              <p className="text-red-500 text-xs">{errors.vacancy}</p>
+            )}
+          </div>
+        </form>
+
+        {/* Footer */}
+        <div className="px-6 py-4 bg-white border-t border-black flex gap-3">
+          <Button 
+            type="button"
             onClick={handleClose}
-            className="h-6 w-6 p-0"
+            variant="outline"
+            className="flex-1 hover:bg-white transition-colors border-black text-black hover:text-black"
+            disabled={loading}
           >
-            <X className="h-4 w-4" />
+            Cancel
           </Button>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="companyName">Company Name</Label>
-              <Input
-                id="companyName"
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleInputChange}
-                placeholder="Enter company name"
-                className={formErrors.companyName ? 'border-red-500' : ''}
-              />
-              {formErrors.companyName && (
-                <p className="text-sm text-red-500">{formErrors.companyName}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="designation">Designation</Label>
-              <Input
-                id="designation"
-                name="designation"
-                value={formData.designation}
-                onChange={handleInputChange}
-                placeholder="Enter job designation"
-                className={formErrors.designation ? 'border-red-500' : ''}
-              />
-              {formErrors.designation && (
-                <p className="text-sm text-red-500">{formErrors.designation}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="vacancy">Number of Vacancies</Label>
-              <Input
-                id="vacancy"
-                name="vacancy"
-                type="number"
-                min="1"
-                max="1000"
-                value={formData.vacancy}
-                onChange={handleInputChange}
-                placeholder="Enter number of vacancies"
-                className={formErrors.vacancy ? 'border-red-500' : ''}
-              />
-              {formErrors.vacancy && (
-                <p className="text-sm text-red-500">{formErrors.vacancy}</p>
-              )}
-            </div>
-
-            <div className="flex gap-2 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                className="flex-1"
-                disabled={isLoading}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="flex-1"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Creating...' : 'Create Job'}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          <Button 
+            type="submit"
+            onClick={handleSubmit}
+            disabled={loading}
+            className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+          >
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <Loader className="h-4 w-4 animate-spin" />
+                Creating...
+              </div>
+            ) : (
+              'Create Job'
+            )}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

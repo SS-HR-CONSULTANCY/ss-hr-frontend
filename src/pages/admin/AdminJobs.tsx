@@ -15,6 +15,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import AddJobForm from '@/components/admin/AddJobForm';
 import EditJobForm from '@/components/admin/EditJobForm';
 import JobDetailsModal from '@/components/admin/JobDetails';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface AdminJobsProps {
   showButton?: boolean;
@@ -22,6 +23,7 @@ interface AdminJobsProps {
 
 const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
   const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId, jobs } =
     useSelector((state: RootState) => state.job);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
@@ -45,6 +47,9 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
       if (response.success) {
         toast.success(response.message || 'Job deleted successfully!');
         dispatch(removeJob(jobId));
+        
+        // Invalidate React Query cache to refresh table
+        queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });
       } else {
         toast.error('Failed to delete job');
       }
@@ -57,7 +62,6 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
     }
   };
 
-  // Table columns
   const AdminJobsTableColumns: ColumnDef<AdminfetchAllJobsResponse>[] = [
     {
       accessorKey: "companyName",
@@ -142,7 +146,7 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
         <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-2">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold text-black">
                 Job Management
               </h1>
             </div>
@@ -161,14 +165,13 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
 
         {/* CommonTable */}
         <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700">
-         <CommonTable<AdminfetchAllJobsResponse>
-  fetchApiFunction={adminFetchAllJobs}
-  queryKey="admin-jobs"
-  column={AdminJobsTableColumns}   // ✅ use "column" (matches your CommonTable props)
-  columnsCount={5}
-  pageSize={10}
-/>
-
+          <CommonTable<AdminfetchAllJobsResponse>
+            fetchApiFunction={adminFetchAllJobs}
+            queryKey="admin-jobs"
+            column={AdminJobsTableColumns}
+            columnsCount={5}
+            pageSize={10}
+          />
         </div>
 
         {/* Modals */}

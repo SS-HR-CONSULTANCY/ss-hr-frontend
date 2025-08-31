@@ -22,17 +22,19 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import type { AppDispatch, RootState } from '@/store/store';
 import { openEditJobForm, removeJob } from '@/store/slices/jobSlice';
 import { deleteJob } from '@/utils/apis/jobApi';
+import { useQueryClient } from '@tanstack/react-query';
 
 // Extend dayjs with relative time plugin
 dayjs.extend(relativeTime);
 
-interface JobDetailsModalProps {
+interface JobDetailsProps {
   jobId: string;
   onClose: () => void;
 }
 
-const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => {
+const JobDetails: React.FC<JobDetailsProps> = ({ jobId, onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const queryClient = useQueryClient();
   const { jobs } = useSelector((state: RootState) => state.job);
   const [deleting, setDeleting] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -42,15 +44,15 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => 
 
   if (!job) {
     return (
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 border border-gray-700">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 border border-black">
           <div className="text-center">
-            <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Briefcase className="h-8 w-8 text-gray-400" />
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-black">
+              <Briefcase className="h-8 w-8 text-black" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Job Not Found</h2>
-            <p className="text-gray-400 mb-6">The job you're looking for doesn't exist.</p>
-            <Button onClick={onClose} className="bg-blue-600 hover:bg-blue-700">
+            <h2 className="text-xl font-bold text-black mb-2">Job Not Found</h2>
+            <p className="text-black mb-6">The job you're looking for doesn't exist.</p>
+            <Button onClick={onClose} className="bg-blue-600 hover:bg-blue-700 text-white">
               Close
             </Button>
           </div>
@@ -77,6 +79,10 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => 
       if (response.success) {
         toast.success(response.message || 'Job deleted successfully!');
         dispatch(removeJob(job._id));
+        
+        // Invalidate React Query cache to refresh table
+        queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });
+        
         onClose();
       } else {
         toast.error('Failed to delete job');
@@ -109,22 +115,22 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden border border-gray-700">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden border border-black">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-600 bg-gradient-to-r from-gray-700 to-gray-800">
+        <div className="px-6 py-4 border-b border-black bg-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-900/50 rounded-full flex items-center justify-center border border-blue-700">
-                <Briefcase className="h-5 w-5 text-blue-400" />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-black">
+                <Briefcase className="h-5 w-5 text-black" />
               </div>
-              <h3 className="text-xl font-bold text-white">Job Details</h3>
+              <h3 className="text-xl font-bold text-black">Job Details</h3>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="h-8 w-8 p-0 hover:bg-gray-600/50 transition-colors text-gray-400 hover:text-white"
+              className="h-8 w-8 p-0 hover:bg-white transition-colors text-black hover:text-black"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -132,182 +138,97 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => 
         </div>
 
         {/* Content */}
-        <div className="max-h-[calc(90vh-80px)] overflow-y-auto">
+        <div className="max-h-[calc(90vh-80px)] overflow-y-auto bg-white">
           <div className="p-6 space-y-6">
             {/* Main Job Information */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {/* Company & Position */}
-              <div className="lg:col-span-2 space-y-4">
-                <div className="flex items-center gap-4 p-4 bg-gray-700/30 rounded-xl">
-                  <div className="w-12 h-12 bg-blue-900/30 rounded-xl flex items-center justify-center">
-                    <Building2 className="h-6 w-6 text-blue-400" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">{job.companyName}</h2>
-                    <p className="text-gray-400">Company</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 p-4 bg-gray-700/30 rounded-xl">
-                  <div className="w-12 h-12 bg-purple-900/30 rounded-xl flex items-center justify-center">
-                    <Briefcase className="h-6 w-6 text-purple-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">{job.designation}</h3>
-                    <p className="text-gray-400">Position</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 p-4 bg-gray-700/30 rounded-xl">
-                  <div className="w-12 h-12 bg-green-900/30 rounded-xl flex items-center justify-center">
-                    <Users className="h-6 w-6 text-green-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">{job.vacancy}</h3>
-                    <p className="text-gray-400">Open Positions</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Stats */}
               <div className="space-y-4">
-                <Card className="bg-gray-700/30 border-gray-600 p-4">
-                  <div className="text-center">
-                    <div className="w-10 h-10 bg-blue-900/30 rounded-lg flex items-center justify-center mx-auto mb-2">
-                      <Calendar className="h-5 w-5 text-blue-400" />
-                    </div>
-                    <p className="text-2xl font-bold text-white">
-                      {dayjs().diff(dayjs(job.createdAt), 'day')}
-                    </p>
-                    <p className="text-sm text-gray-400">Days Active</p>
+                <div className="flex items-center gap-4 p-6 bg-white border border-black rounded-xl">
+                  <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center border border-black">
+                    <Building2 className="h-8 w-8 text-black" />
                   </div>
-                </Card>
-
-                <Card className="bg-gray-700/30 border-gray-600 p-4">
-                  <div className="text-center">
-                    <div className="w-10 h-10 bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-2">
-                      <User className="h-5 w-5 text-green-400" />
-                    </div>
-                    <p className="text-2xl font-bold text-white">0</p>
-                    <p className="text-sm text-gray-400">Applications</p>
-                  </div>
-                </Card>
-              </div>
-            </div>
-
-            {/* Timeline */}
-            <Card className="bg-gray-700/30 border-gray-600 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Clock className="h-5 w-5 text-blue-400" />
-                Job Timeline
-              </h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-medium text-white">Job Created</h4>
-                      <span className="text-sm text-gray-400">
-                        {dayjs(job.createdAt).format('MMM DD, YYYY • HH:mm')}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-400 mt-1">
-                      {dayjs(job.createdAt).fromNow()}
-                    </p>
+                  <div>
+                    <h2 className="text-3xl font-bold text-black">{job.companyName}</h2>
+                    <p className="text-black text-lg">Company</p>
                   </div>
                 </div>
 
-                {job.updatedAt !== job.createdAt && (
-                  <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full mt-2"></div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium text-white">Last Updated</h4>
-                        <span className="text-sm text-gray-400">
-                          {dayjs(job.updatedAt).format('MMM DD, YYYY • HH:mm')}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-400 mt-1">
-                        {dayjs(job.updatedAt).fromNow()}
-                      </p>
+                <div className="flex items-center gap-4 p-6 bg-white border border-black rounded-xl">
+                  <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center border border-black">
+                    <Briefcase className="h-8 w-8 text-black" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-semibold text-black">{job.designation}</h3>
+                    <p className="text-black text-lg">Position</p>
+                  </div>
+                </div>
+
+                {job.vacancy && (
+                  <div className="flex items-center gap-4 p-6 bg-white border border-black rounded-xl">
+                    <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center border border-black">
+                      <Users className="h-8 w-8 text-black" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-semibold text-black">{job.vacancy}</h3>
+                      <p className="text-black text-lg">Open Positions</p>
                     </div>
                   </div>
                 )}
               </div>
-            </Card>
+            </div>
 
-            {/* Job Information */}
-            <Card className="bg-gray-700/30 border-gray-600 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <ExternalLink className="h-5 w-5 text-blue-400" />
-                Job Information
+            {/* Job Information Summary */}
+            <Card className="bg-white border-black p-6">
+              <h3 className="text-lg font-semibold text-black mb-4 flex items-center gap-2">
+                <ExternalLink className="h-5 w-5 text-black" />
+                Job Summary
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center justify-between p-3 bg-gray-600/30 rounded-lg">
-                  <span className="text-gray-400">Job ID</span>
+                <div className="flex items-center justify-between p-4 bg-white border border-black rounded-lg">
+                  <span className="text-black font-medium">Company</span>
+                  <span className="text-black">{job.companyName}</span>
+                </div>
+                
+                <div className="flex items-center justify-between p-4 bg-white border border-black rounded-lg">
+                  <span className="text-black font-medium">Position</span>
+                  <span className="text-black">{job.designation}</span>
+                </div>
+
+                {job.vacancy && (
+                  <div className="flex items-center justify-between p-4 bg-white border border-black rounded-lg">
+                    <span className="text-black font-medium">Vacancies</span>
+                    <span className="text-black font-medium">{job.vacancy} positions</span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between p-4 bg-white border border-black rounded-lg">
+                  <span className="text-black font-medium">Job ID</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-white font-mono text-sm">{job._id.slice(-8)}</span>
+                    <span className="text-black font-mono text-sm">{job._id.slice(-8)}</span>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={handleCopyJobId}
-                      className="h-6 w-6 p-0 hover:bg-gray-500/30"
+                      className="h-6 w-6 p-0 hover:bg-white"
                       title="Copy full Job ID"
                     >
                       {copied ? (
-                        <CheckCircle className="h-3 w-3 text-green-400" />
+                        <CheckCircle className="h-3 w-3 text-green-500" />
                       ) : (
-                        <Copy className="h-3 w-3 text-gray-400" />
+                        <Copy className="h-3 w-3 text-black" />
                       )}
                     </Button>
                   </div>
                 </div>
-                
-                <div className="flex items-center justify-between p-3 bg-gray-600/30 rounded-lg">
-                  <span className="text-gray-400">Status</span>
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900/50 text-green-300 border border-green-700">
-                    Active
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-gray-600/30 rounded-lg">
-                  <span className="text-gray-400">Posted</span>
-                  <span className="text-white text-sm">
-                    {dayjs(job.createdAt).format('MMM DD, YYYY')}
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between p-3 bg-gray-600/30 rounded-lg">
-                  <span className="text-gray-400">Category</span>
-                  <span className="text-white text-sm">General</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Application Analytics Placeholder */}
-            <Card className="bg-gray-700/30 border-gray-600 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <User className="h-5 w-5 text-blue-400" />
-                Application Analytics
-              </h3>
-              
-              <div className="text-center py-6">
-                <div className="w-12 h-12 bg-gray-600/50 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <User className="h-6 w-6 text-gray-400" />
-                </div>
-                <p className="text-gray-400 text-sm mb-2">Application tracking coming soon</p>
-                <p className="text-xs text-gray-500">
-                  View and manage applications when the feature is implemented
-                </p>
               </div>
             </Card>
           </div>
         </div>
 
         {/* Footer with Actions */}
-        <div className="px-6 py-4 bg-gray-700 border-t border-gray-600 flex flex-col sm:flex-row gap-3">
+        <div className="px-6 py-4 bg-white border-t border-black flex flex-col sm:flex-row gap-3">
           <Button
             onClick={handleEdit}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
@@ -320,7 +241,7 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => 
           <Button
             onClick={handleContactCompany}
             variant="outline"
-            className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white"
+            className="flex-1 border-black text-black hover:bg-white hover:text-black"
             disabled={deleting}
           >
             <ExternalLink className="h-4 w-4 mr-2" />
@@ -330,12 +251,12 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => 
           <Button
             onClick={handleDelete}
             variant="outline"
-            className="flex-1 border-red-600 text-red-400 hover:bg-red-900/20 hover:text-red-300"
+            className="flex-1 border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
             disabled={deleting}
           >
             {deleting ? (
               <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent mr-2" />
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-500 border-t-transparent mr-2" />
                 Deleting...
               </>
             ) : (
@@ -351,4 +272,4 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobId, onClose }) => 
   );
 };
 
-export default JobDetailsModal;
+export default JobDetails;
