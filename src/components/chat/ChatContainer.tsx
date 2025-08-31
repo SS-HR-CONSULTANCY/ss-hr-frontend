@@ -79,7 +79,7 @@ const ChatContainer: React.FC = () => {
                             ref={messageEndRef}
                         >
                             {message.senderId !== user?._id && (
-                                <ChatBubbleProfileImage profileImage={selectedUser?.profileImg || "/user_avatar.jpg"} />
+                                <ChatBubbleProfileImage profileImage={selectedUser?.profileImage || "/user_avatar.jpg"} />
                             )}
 
                             <div className={`flex flex-col rounded-md bg-[var(--menuItemHoverBg)] px-4 py-2 max-w-8/12 ${message.senderId !== user?._id ? "ml-3" : "mr-3"}`}>
@@ -99,7 +99,7 @@ const ChatContainer: React.FC = () => {
                             </div>
 
                             {message.senderId === user?._id && (
-                                <ChatBubbleProfileImage profileImage={user?.profileImg || "/user_avatar.jpg"} />
+                                <ChatBubbleProfileImage profileImage={user?.profileImage || "/user_avatar.jpg"} />
                             )}
 
                         </div>

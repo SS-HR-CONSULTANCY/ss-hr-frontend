@@ -15,6 +15,8 @@ interface FormFieldProps<T extends FieldValues> {
   register: UseFormRegister<T>;
   showTogglePassword?: boolean;
   children?: React.ReactNode;
+  onFileSelect?: (url: string) => void;
+
 }
 
 const FormField = <T extends FieldValues>({
@@ -26,11 +28,36 @@ const FormField = <T extends FieldValues>({
   error,
   register,
   showTogglePassword = false,
-  children
+  children,
+  onFileSelect
 }: FormFieldProps<T>) => {
   const [show, setShow] = useState(false);
 
-   if (type === "select") {
+  if (type === "file") {
+    return (
+      <div className="flex flex-col space-y-2">
+        <Label className="text-xs md:text-sm" htmlFor={label}>{label}</Label>
+        <Input
+          id={id}
+          type="file"
+          accept="image/*"
+          {...register(id, {
+            onChange: (e) => {
+              const file: File | undefined = e.target.files?.[0];
+              if (file && onFileSelect) {
+                const imageUrl = URL.createObjectURL(file);
+                onFileSelect(imageUrl);
+              }
+            },
+          })}
+          className={`${error ? "border-destructive" : ""} text-sm`}
+        />
+        {error && <p className="text-xs text-destructive">{error}</p>}
+      </div>
+    );
+  }
+
+  if (type === "select") {
     return (
       <div className="space-y-2">
         <Label htmlFor={id}>{label}</Label>

@@ -2,6 +2,7 @@ import appReducer from './slices/appSlice';
 import authReducer from './slices/authSlice';
 import chatReducer from './slices/chatSlice';
 import adminReducer from './slices/adminSlice';
+import jobReducer from "./slices/jobSlice";
 import localStorage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
@@ -16,6 +17,7 @@ const rootReducers = {
   app: appReducer,
   admin: adminReducer,
   chat: chatReducer,
+  job : jobReducer,
 };
 
 const persistedReducer = persistReducer(persistConfig, combineReducers(rootReducers));

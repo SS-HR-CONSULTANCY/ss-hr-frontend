@@ -44,8 +44,8 @@ const UserProfile: React.FC = () => {
             <div className="relative">
               <img
                 src={
-                  user?.profileImg
-                    ? user?.profileImg
+                  user?.profileImage
+                    ? user?.profileImage
                     : selectedImage
                       ? selectedImage
                       : noProfileImage
@@ -86,7 +86,7 @@ const UserProfile: React.FC = () => {
 
             <div className="flex justify-between items-center">
               <dt className="text-sm md:text-lg font-medium text-muted-foreground">Phone 1</dt>
-              <dd className="text-sm md:text-lg">{user?.phoneOne || "Not provided"}</dd>
+              <dd className="text-sm md:text-lg">{user?.phone || "Not provided"}</dd>
             </div>
 
             <div className="flex justify-between items-center">

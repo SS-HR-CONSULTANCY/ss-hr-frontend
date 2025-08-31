@@ -51,7 +51,7 @@ const authSlice = createSlice({
     },
     setProfileImage: (state, action: PayloadAction<string>) => {
             if(state.user){
-                state.user.profileImg = action.payload;
+                state.user.profileImage = action.payload;
             }
         },
     setOtpForUpdatePassword: (state, action) => {

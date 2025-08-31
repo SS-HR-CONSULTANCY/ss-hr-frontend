@@ -348,27 +348,27 @@ export const dummyUsers = [
   {
     _id: "u1",
     fullName: "John Doe",
-    profileImg: "https://randomuser.me/api/portraits/men/32.jpg",
+    profileImage: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
     _id: "u2",
     fullName: "Jane Smith",
-    profileImg: "https://randomuser.me/api/portraits/women/44.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
     _id: "u3",
     fullName: "Alice Johnson",
-    profileImg: "https://randomuser.me/api/portraits/women/68.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/68.jpg",
   },
   {
     _id: "u4",
     fullName: "Michael Brown",
-    profileImg: "https://randomuser.me/api/portraits/men/76.jpg",
+    profileImage: "https://randomuser.me/api/portraits/men/76.jpg",
   },
   {
     _id: "u5",
     fullName: "Sophia Davis",
-    profileImg: "https://randomuser.me/api/portraits/women/12.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/12.jpg",
   },
 ];
 
@@ -381,7 +381,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: true,
     isBlocked: true,
-    profileImg: "https://randomuser.me/api/portraits/men/1.jpg",
+    profileImage: "https://randomuser.me/api/portraits/men/1.jpg",
   },
   {
     _id: "2",
@@ -390,7 +390,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: false,
     isBlocked: true,
-    profileImg: "https://randomuser.me/api/portraits/women/2.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/2.jpg",
   },
   {
     _id: "3",
@@ -399,7 +399,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: true,
     isBlocked: false,
-    profileImg: "https://randomuser.me/api/portraits/men/3.jpg",
+    profileImage: "https://randomuser.me/api/portraits/men/3.jpg",
   },
   {
     _id: "4",
@@ -408,7 +408,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: true,
     isBlocked: true,
-    profileImg: "https://randomuser.me/api/portraits/women/4.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/4.jpg",
   },
   {
     _id: "5",
@@ -417,7 +417,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: false,
     isBlocked: false,
-    profileImg: "https://randomuser.me/api/portraits/men/5.jpg",
+    profileImage: "https://randomuser.me/api/portraits/men/5.jpg",
   },
   {
     _id: "6",
@@ -426,7 +426,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: true,
     isBlocked: true,
-    profileImg: "https://randomuser.me/api/portraits/women/6.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/6.jpg",
   },
   {
     _id: "7",
@@ -435,7 +435,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: false,
     isBlocked: true,
-    profileImg: "https://randomuser.me/api/portraits/men/7.jpg",
+    profileImage: "https://randomuser.me/api/portraits/men/7.jpg",
   },
   {
     _id: "8",
@@ -444,7 +444,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: true,
     isBlocked: true,
-    profileImg: "https://randomuser.me/api/portraits/women/8.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/8.jpg",
   },
   {
     _id: "9",
@@ -453,7 +453,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: false,
     isBlocked: false,
-    profileImg: "https://randomuser.me/api/portraits/men/9.jpg",
+    profileImage: "https://randomuser.me/api/portraits/men/9.jpg",
   },
   {
     _id: "10",
@@ -462,7 +462,7 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
     createdAt: "1724066432987",
     isVerified: true,
     isBlocked: true,
-    profileImg: "https://randomuser.me/api/portraits/women/10.jpg",
+    profileImage: "https://randomuser.me/api/portraits/women/10.jpg",
   },
 ];
 

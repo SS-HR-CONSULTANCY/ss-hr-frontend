@@ -11,7 +11,7 @@ type LastMessages = Record<
     }
 >;
 
-type SelectedUser = Pick<User, "_id" | "fullName" | "profileImg"> 
+type SelectedUser = Pick<User, "_id" | "fullName" | "profileImage"> 
 
 
 interface chatSliceInitalState {
