@@ -4,7 +4,6 @@ import type { Review } from "../entities/review";
 import type { Company } from "../entities/company";
 import type { Package } from "../entities/package";
 import type { Payment } from "../entities/payment";
-import type { ApiBaseResponse } from "../commonTypes";
 import type { Application } from "../entities/application";
 
 export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked" | "isVerified" | "profileImage" | "fullName" | "createdAt">;
@@ -21,7 +20,6 @@ export type AdminfetchAllReviewsResponse = Pick<Review, "_id" | "text" | "userna
 
 export type AdminfetchAllApplicationsResponse = Pick<Application, "_id" | "username" | "company" | "designation" | "jobId" | "createdAt" | "cvLink">;
 
-export type AdminfetchAllUsersForChatSidebarResponse = Array<Pick<User, "_id" | "fullName" | "profileImage">>;
 
 // ✅ Admin users Response Type
 export interface AdminFetchOverviewStatsDataResponse extends Record<string, number> {
@@ -127,82 +125,12 @@ export interface AdminFetchReportTableDataResponse {
 
 
 
-// Admin settings website company andme logo updating api request payload interface
-export interface AdminUpdateWebsiteLogoAndNameRequest {
-    companyName?: string;
-    logo?: File;
-};
-
-// Admin settings website company andme logo updating api response interface
-export interface AdminUpdateWebsiteLogoAndNameResponse extends ApiBaseResponse {
-    companyName?: string;
-    logo?: string;
-};
-
-// Admin settings website company andme logo current data fetching api response
-export interface AdminGetWebsiteSettingsResponse {
-    companyName: string;
-    logo: string;
-}
-
-
-
-// Admin settings website footer data updating api request
-export interface AdminUpdateFooterDataRequest {
-    address?: string;
-    location?: string;
-    phoneIndia?: string;
-    phoneUAE?: string;
-    facebookUrl?: string;
-    xUrl?: string;
-    instagramUrl?: string;
-    email?: string;
-    timingInida?: string;
-    timingUae?: string;
-};
-
-// Admin settings website footer data fetching api response
-export interface AdminUpdateFooterDataResponse extends ApiBaseResponse {
-    address?: string;
-    location?: string;
-    phoneIndia?: string;
-    phoneUAE?: string;
-    facebookUrl?: string;
-    xUrl?: string;
-    instagramUrl?: string;
-    email?: string;
-    timingInida?: string;
-    timingUae?: string;
-};
-
-// Admin settings website footer current data fetching api response
-export interface AdminGetFooterCurrentDataResponse {
-  address: string;
-  location: string;
-  phoneIndia: string;
-  phoneUAE: string;
-  facebookUrl: string;
-  xUrl: string;
-  instagramUrl: string;
-  companyEmail: string;
-  timingInida: string;
-  timingUae: string;
-}
 
 
 
 
-export interface AdminUpdateWebsiteAboutRequest {
-     aboutText: string;
-};
 
-export interface AdminUpdateWebsiteAboutResponse extends ApiBaseResponse {
-     aboutText: string;
-};
 
-export interface AdminGetAboutCurrentDataResponse {
-  aboutText: string;
-}
 
 
 // Create new admin api request
@@ -220,11 +148,6 @@ export type AdminFetchAllAdminsResponse = Array<Pick<User, "_id" | "fullName" | 
 // Update admin info
 export type UpdateAdminRequest = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImage" | "role">;
 export type UpdateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImage" | "role">;
-
-// Block/Unblock admin
-export type BlockAdminRequest = Pick<User, "_id" | "isBlocked">; 
-
-export type BlockAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImage" | "role">;
 
 // Delete admin
 export type DeleteAdminRequest = Pick<User, "_id">;

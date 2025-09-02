@@ -1,5 +1,7 @@
-// src/utils/apis/jobApi.ts
-import { axiosInstance } from "@/components/lib/axios";
+import { axiosInstance } from "@/lib/axios";
+import type { AdminfetchAllJobsResponse } from "@/types/apiTypes/admin";
+import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
+import type { ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";
 
 export interface Job {
   _id: string;
@@ -44,6 +46,12 @@ export interface DeleteJobResponse {
   success: boolean;
   message: string;
 }
+
+export const adminFetchAllJobs = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminfetchAllJobsResponse>> => {
+    const query = buildQueryParams(params);
+    const response = await axiosInstance.get(`/admin/jobs${query ? `?${query}` : ''}`);
+    return parseNewCommonResponse<AdminfetchAllJobsResponse>(response.data);
+};
 
 export const createJob = async (jobData: CreateJobRequest): Promise<CreateJobResponse> => {
   const response = await axiosInstance.post('/admin/jobs', jobData);
