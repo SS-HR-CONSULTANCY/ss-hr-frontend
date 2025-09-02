@@ -28,8 +28,6 @@ export interface AdminFetchOverviewStatsDataResponse extends Record<string, numb
     totalJobsAvailable: number;
     totalCompanies: number;
     totalPostions: number;
-    totalPayments: number;
-    totalRevenue: number;
     totalApplications: number;
 }
 
@@ -63,10 +61,10 @@ export interface AdminFetchOverviewGraphsDataResponse {
         newUsers: number;
         oldUsers: number
     }>,
-    paymentsGraphData: Array<{
+    applicationsGraphData: Array<{
         date: string;
-        newUsers: number;
-        oldUsers: number
+        users: number;
+        applications: number
     }>
 }
 

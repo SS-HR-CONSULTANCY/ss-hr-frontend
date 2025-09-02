@@ -1,9 +1,9 @@
+import dayjs from "dayjs";
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Plus, Eye, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import dayjs from "dayjs";
 import type { AppDispatch, RootState } from '@/store/store';
 import { adminFetchAllJobs, deleteJob } from '@/utils/apis/jobApi';
 import CommonTable from '@/components/common/CommonTable';
@@ -24,7 +24,7 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
   const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId } =
-    useSelector((state: RootState) => state.job);
+  useSelector((state: RootState) => state.job);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
 
   const handleViewDetails = (jobId: string) => {

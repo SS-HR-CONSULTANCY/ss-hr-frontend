@@ -1,10 +1,10 @@
 export const overviewPaymentsDataChartConfig = {
-    package: {
-        label: "Package",
+    users: {
+        label: "Users",
         color: "#ffd93e",
     },
-    hiring: {
-        label: "Hiring",
+    applications: {
+        label: "Applications",
         color: "#01487e",
     },
 };

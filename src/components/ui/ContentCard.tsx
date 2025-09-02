@@ -16,16 +16,16 @@ const ContentCard = ({
   const navigate = useNavigate();
 
   return (
-    <div className="w-full group/card flex" data-aos="fade-up">
+    <div className="w-full group/card flex text-white" data-aos="fade-up">
       <div
         className={cn(
-          "border-0 cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl flex flex-col justify-end p-2 bg-cover bg-center w-full"
+          "border-0 cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl flex flex-col justify-end p-2 bg-contain bg-no-repeat bg-center w-full"
         )}
         style={{ backgroundImage: `url(${imageUrl})` }}
       >
         <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60"></div>
 
-        <div className="relative z-10 dark:bg-black/70 bg-white/70 rounded-lg p-4 overflow-hidden">
+        <div className="relative z-10 bg-black/50 rounded-lg p-4 overflow-hidden">
           <h1 className="font-bold text-xl md:text-2xl">{title}</h1>
 
           <div
