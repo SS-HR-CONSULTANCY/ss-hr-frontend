@@ -1,5 +1,4 @@
-// src/utils/apis/jobApi.ts
-import { axiosInstance } from "@/components/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 
 export interface Job {
   _id: string;

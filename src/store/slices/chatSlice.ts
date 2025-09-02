@@ -1,5 +1,5 @@
-import { Socket } from 'socket.io-client';
 import type { User } from '@/types/entities/user';
+import { sendMessage } from '@/utils/apis/chatApi';
 import type { Message } from '@/types/entities/message';
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -18,7 +18,8 @@ interface chatSliceInitalState {
     onlineUsers: string[] | null;
     lastMessages: LastMessages,
     selectedUser: SelectedUser | null,
-    chatSocket: Socket | null;
+    socketId: string | null;
+    isConnected: boolean;
     messages: Message[] | null;
     isMessagesLoading: boolean;
 }
@@ -27,7 +28,8 @@ const intitalState: chatSliceInitalState = {
     onlineUsers: null,
     lastMessages: {},
     selectedUser: null,
-    chatSocket: null,
+    socketId: null,
+    isConnected: false,
     messages: null,
     isMessagesLoading: false,
 }
@@ -53,10 +55,30 @@ const chatSlice = createSlice({
         addNewMessage: (state, action: PayloadAction<Message>) => {
             state.messages?.push(action.payload);
         },
-        sendNewMessage: (state, action: PayloadAction<Message>) => {
-            state.messages?.push(action.payload);
-        }
+        setSocketConnected: (state,action: PayloadAction<{ socketId: string }>
+        ) => {
+            state.socketId = action.payload.socketId;
+            state.isConnected = true;
+        },
+        setSocketDisconnected: (state) => {
+            state.socketId = null;
+            state.isConnected = false;
+        },
+        clearChatSlice: (state) => {
+            state.onlineUsers = null;
+            state.lastMessages = {};
+            state.selectedUser = null;
+            state.socketId = null;
+            state.isConnected = false;
+            state.messages = null;
+            state.isMessagesLoading = false;
+        },
     },
+    extraReducers: (builder) => {
+        builder.addCase(sendMessage.fulfilled,(state, action) => {
+            state.messages?.push(action.payload);
+        })
+    }
 });
 
 export const { 
@@ -65,6 +87,8 @@ export const {
     setSelectedUser, 
     setMessages ,
     addNewMessage,
-    sendNewMessage
+    clearChatSlice,
+    setSocketConnected,
+    setSocketDisconnected
 } = chatSlice.actions;
 export default chatSlice.reducer;

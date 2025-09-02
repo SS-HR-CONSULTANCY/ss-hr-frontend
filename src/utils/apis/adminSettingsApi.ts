@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/components/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import type { 
   AdminGetAboutCurrentDataResponse, 
   AdminGetFooterCurrentDataResponse, 

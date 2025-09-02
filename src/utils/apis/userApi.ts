@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/components/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import type { UserfetchAllJobsResponse } from "@/types/apiTypes/user";
 import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
 import type { ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";

@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/components/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
 import { type ApiPaginatedResponse, type FetchFunctionParams } from "@/types/commonTypes";
 import type { AdminfetchAllApplicationsResponse, AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllPaymentsResponse, AdminfetchAllReviewsResponse, AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewGraphsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportApplicationsGraphsDataResponse, AdminFetchReportPaymentsGraphsDataResponse, AdminFetchReportTableDataResponse, AdminFetchReportUserswGraphsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";

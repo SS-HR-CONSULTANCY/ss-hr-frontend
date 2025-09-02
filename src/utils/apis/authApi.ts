@@ -1,8 +1,8 @@
 import type { AxiosError } from "axios";
 import type { User } from "@/types/entities/user";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { axiosInstance } from "@/components/lib/axios";
 import type { RegisterRequest } from "@/types/slice/authSliceTypes";
+import { axiosInstance } from "@/lib/axios";
 
 export interface ApiBaseResponse {
   success?: boolean;
