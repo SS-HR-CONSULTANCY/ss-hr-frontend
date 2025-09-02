@@ -9,9 +9,9 @@ const Login = lazy(() => import("@/pages/auth/Login"));
 const Landing = lazy(() => import("@/pages/user/Landing"));
 const Register = lazy(() => import("@/pages/auth/Register"));
 const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
+const ChatPage = lazy(() => import("@/pages/common/ChatPage"));
 const Error404 = lazy(() => import("@/pages/common/Error404"));
 const AdminJobs = lazy(() => import("@/pages/admin/AdminJobs"));
-const AdminChat = lazy(() => import("@/pages/admin/AdminChat"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
 const ContactPage = lazy(() => import("@/pages/user/ContactPage"));
 const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
@@ -78,14 +78,6 @@ const appRouter = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
-            // {
-            //     path: "packages",
-            //     element: (
-            //         <ProtectedRoute requiredRole={["user"]}>
-            //             <Error404 />
-            //         </ProtectedRoute>
-            //     ),
-            // },
             {
                 path: "applications",
                 element: (
@@ -94,19 +86,11 @@ const appRouter = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
-            // {
-            //     path: "payments",
-            //     element: (
-            //         <ProtectedRoute requiredRole={["user"]}>
-            //             <Error404 />
-            //         </ProtectedRoute>
-            //     ),
-            // },
             {
                 path: "chat",
                 element: (
                     <ProtectedRoute requiredRole={["user"]}>
-                        <AdminChat />
+                        <ChatPage />
                     </ProtectedRoute>
                 ),
             },
@@ -175,7 +159,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "payments",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["superAdmin"]}>
                         <AdminPayments />
                     </ProtectedRoute>
                 ),
@@ -183,9 +167,8 @@ const appRouter = createBrowserRouter([
             {
                 path: "chat",
                 element: (
-                    // need to remove superAdmin for making chat with _id
                     <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
-                        <AdminChat />
+                        <ChatPage />
                     </ProtectedRoute>
                 ),
             },
@@ -200,7 +183,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "reports",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["superAdmin"]}>
                         <AdminReports />
                     </ProtectedRoute>
                 ),
@@ -208,7 +191,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "settings",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["superAdmin"]}>
                         <AdminSettings />
                     </ProtectedRoute>
                 ),

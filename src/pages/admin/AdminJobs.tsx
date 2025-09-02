@@ -5,8 +5,7 @@ import { Plus, Eye, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import dayjs from "dayjs";
 import type { AppDispatch, RootState } from '@/store/store';
-import { adminFetchAllJobs } from '@/utils/apis/adminApi';
-import { deleteJob } from '@/utils/apis/jobApi';
+import { adminFetchAllJobs, deleteJob } from '@/utils/apis/jobApi';
 import CommonTable from '@/components/common/CommonTable';
 import { toggleAddJobForm, openEditJobForm, openViewDetailsModal, closeViewDetailsModal, removeJob } from '@/store/slices/jobSlice';
 import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/admin';
@@ -24,7 +23,7 @@ interface AdminJobsProps {
 const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
-  const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId, jobs } =
+  const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId } =
     useSelector((state: RootState) => state.job);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
 
@@ -53,10 +52,9 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
       } else {
         toast.error('Failed to delete job');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Delete job error:', error);
-      const errorMessage = error?.response?.data?.message || 'Failed to delete job';
-      toast.error(errorMessage);
+      toast.error("Error");
     } finally {
       setDeletingJobId(null);
     }

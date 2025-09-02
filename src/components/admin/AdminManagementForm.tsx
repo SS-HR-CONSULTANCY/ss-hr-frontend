@@ -1,12 +1,12 @@
 import { Button } from '../ui/button';
 import { toast } from 'react-toastify';
 import FormField from '../form/FormFiled';
+import type { Role } from '@/types/entities/user';
 import React, { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import noProfile from '../../assets/defaultImgaes/noProfile.png';
-import { fetchAdmins, createAdmin, blockAdmin, deleteAdmin } from '@/utils/apis/adminSettingsApi';
-import type { CreateAdminRequest, CreateAdminResponse, BlockAdminRequest, BlockAdminResponse, DeleteAdminRequest } from '@/types/apiTypes/admin';
-import type { Role } from '@/types/entities/user';
+import { fetchAdmins, createAdmin, deleteAdmin } from '@/utils/apis/adminSettingsApi';
+import type { CreateAdminRequest, CreateAdminResponse, DeleteAdminRequest } from '@/types/apiTypes/admin';
 
 interface AdminManagementFormProps {
   role: Role
@@ -59,20 +59,6 @@ const AdminManagementForm: React.FC<AdminManagementFormProps> = ({
       setSelectedImage(null);
     } catch {
       toast.error("Failed to create admin");
-    }
-  };
-
-  // Block/Unblock admin
-  const handleBlock = async (id: string, isBlocked: boolean) => {
-    try {
-      const payload: BlockAdminRequest = { _id: id, isBlocked: !isBlocked };
-      const updatedAdmin: BlockAdminResponse = await blockAdmin(payload);
-      toast.success(
-        `${updatedAdmin.fullName} is now ${updatedAdmin.isBlocked ? 'blocked' : 'unblocked'
-        }`
-      );
-    } catch {
-      toast.error('Failed to update admin status');
     }
   };
 
@@ -132,13 +118,13 @@ const AdminManagementForm: React.FC<AdminManagementFormProps> = ({
             alt="Profile"
           />
           <FormField<CreateAdminRequest>
-  id="profileImage"
-  label="Profile Image"
-  type="file"
-  register={register}
-  error={errors.profileImage?.message}
-  onFileSelect={(url) => setSelectedImage(url)} // 👈 update preview state
-/>
+            id="profileImage"
+            label="Profile Image"
+            type="file"
+            register={register}
+            error={errors.profileImage?.message}
+            onFileSelect={(url) => setSelectedImage(url)} // 👈 update preview state
+          />
           <FormField<CreateAdminRequest>
             id="role"
             label="Role"
@@ -171,9 +157,6 @@ const AdminManagementForm: React.FC<AdminManagementFormProps> = ({
                   <p><strong>Phone :</strong> {a.phone}</p>
                   <p><strong>CreatedAt :</strong> {a.createdAt ? 'No' : 'Yes'}</p>
                   <div className="flex gap-2 mt-2">
-                    <Button variant="outline" size="sm" onClick={() => handleBlock(a._id, a.isBlocked || false)}>
-                      {a.isBlocked ? 'Unblock' : 'Block'}
-                    </Button>
                     <Button variant="destructive" size="sm" onClick={() => handleDelete(a._id)}>Delete</Button>
                   </div>
                 </div>
