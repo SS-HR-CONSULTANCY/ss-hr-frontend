@@ -1,7 +1,7 @@
-import { axiosInstance } from "@/components/lib/axios";
+import { axiosInstance } from "@/lib/axios";
 import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
 import { type ApiPaginatedResponse, type FetchFunctionParams } from "@/types/commonTypes";
-import type { AdminfetchAllApplicationsResponse, AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllPaymentsResponse, AdminfetchAllReviewsResponse, AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewGraphsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportApplicationsGraphsDataResponse, AdminFetchReportPaymentsGraphsDataResponse, AdminFetchReportTableDataResponse, AdminFetchReportUserswGraphsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
+import type { AdminfetchAllApplicationsResponse, AdminfetchAllComapniesResponse, AdminfetchAllPackagesResponse, AdminfetchAllPaymentsResponse, AdminfetchAllReviewsResponse, AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewGraphsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportApplicationsGraphsDataResponse, AdminFetchReportPaymentsGraphsDataResponse, AdminFetchReportTableDataResponse, AdminFetchReportUserswGraphsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
 
 export const adminFetchAllUsers = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminfetchAllUsersResponse>> => {
     const query = buildQueryParams(params);
@@ -13,12 +13,6 @@ export const adminFetchAllCompanies = async (params?: FetchFunctionParams): Prom
     const query = buildQueryParams(params);
     const response = await axiosInstance.get(`/admin/companies${query ? `?${query}` : ''}`);
     return parseNewCommonResponse<AdminfetchAllComapniesResponse>(response.data);
-};
-
-export const adminFetchAllJobs = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminfetchAllJobsResponse>> => {
-    const query = buildQueryParams(params);
-    const response = await axiosInstance.get(`/admin/jobs${query ? `?${query}` : ''}`);
-    return parseNewCommonResponse<AdminfetchAllJobsResponse>(response.data);
 };
 
 export const adminFetchAllPackages = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminfetchAllPackagesResponse>> => {
@@ -93,6 +87,3 @@ export const AdminFetchReportTableData = async (params?: FetchFunctionParams) : 
     const response = await axiosInstance.get(`/admin/reportTableData${query ? `?${query}` : ''}`);
     return parseNewCommonResponse<AdminFetchReportTableDataResponse>(response.data);
 }
-
-
-

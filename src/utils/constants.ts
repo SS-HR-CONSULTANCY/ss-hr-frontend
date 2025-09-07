@@ -1,15 +1,15 @@
-import wevDev from '../assets/servicesImages/webDevService.jpg';
+// import wevDev from '../assets/servicesImages/webDevService.jpg';
 import type { Route, statsMapIntrface } from '@/types/commonTypes';
 import visaService from '../assets/servicesImages/visaService.png';
 import cvWriting from '../assets/servicesImages/cvWritingService.jpg';
 import type { ContactItem } from '@/types/componentTypes/contactTypes';
-import travelService from '../assets/servicesImages/travelService.jpg';
+// import travelService from '../assets/servicesImages/travelService.jpg';
 import ticketService from '../assets/servicesImages/ticketService.png';
 import type { PackageProps } from '@/types/componentTypes/packageTypes';
 import type { ServiceProps } from '@/types/componentTypes/servicesTypes';
 import jobRecruitment from '../assets/servicesImages/jobRecruitmentService.png';
 import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
-import labourSupplyService from '../assets/servicesImages/labourSupplyService.jpg';
+// import labourSupplyService from '../assets/servicesImages/labourSupplyService.jpg';
 import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
 import medicalRecruitment from '../assets/servicesImages/medicalRecruitmentService.jpg';
 import certificateBanner from '../assets/serviceBanners/certificateBanner.jpg';
@@ -21,8 +21,12 @@ import visaServiceBanner from '../assets/serviceBanners/visaServiceBanner.jpg';
 import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
-import { Briefcase, Building2, ClipboardList, CreditCard, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
+import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
 import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/admin';
+
+import webDev from '../assets/svgs/serviceSvg/webDev.svg';
+import labourSupply from '../assets/svgs/serviceSvg/labourSupply.svg';
+import toursAndTravels from '../assets/svgs/serviceSvg/toursAndTravels.svg';
 
 export const companyName = "ShahaalamGroups";
 
@@ -66,7 +70,7 @@ export const services: ServiceProps[] = [
     title: "Tours & Travels",
     description: "Comprehensive travel planning and support for your international needs.",
     hoverDescription: "Our comprehensive travel services cover everything from flight bookings and hotel arrangements to itinerary planning and travel insurance. We ensure a smooth and stress-free journey by handling all the essential details, so you can focus on enjoying your trip. Benefit: End-to-end travel support for a seamless experience.",
-    imageUrl: travelService,
+    imageUrl: toursAndTravels,
     href: "#services",
 
     banner: "",
@@ -234,7 +238,7 @@ export const services: ServiceProps[] = [
     title: "Web Development",
     description: "Building modern, responsive, and scalable websites tailored to your needs.",
     hoverDescription: "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
-    imageUrl: wevDev,
+    imageUrl: webDev,
     href: "#services",
 
     banner: webDevBanner,
@@ -258,7 +262,7 @@ export const services: ServiceProps[] = [
     title: "Labour Supply",
     description: "Enhance your productivity with our skilled and reliable workforce tailored to meet your project needs.",
     hoverDescription: "Our labour supply service provides expert workers and dedicated staff to support your business operations. From short-term staffing to long-term workforce solutions, we ensure efficiency, reliability, and quality to help your projects succeed.",
-    imageUrl: labourSupplyService,
+    imageUrl: labourSupply,
     href: "#services",
 
     banner: labourSupplyBanner,
@@ -501,15 +505,14 @@ export const userApplicationRoutes: Route[] = [
 export const adminApplicationRoutes: Route[] = [
   { path: "overview", name: "Overview", roles: ["admin", "superAdmin", "systemAdmin"] },
   { path: "users", name: "Users", roles: ["admin", "superAdmin", "systemAdmin"] },
-  { path: "companies", name: "Companies", roles: ["admin", "superAdmin", "systemAdmin"] },
   { path: "jobs", name: "Jobs", roles: ["admin", "superAdmin", "admin", "systemAdmin"] },
   { path: "packages", name: "Packages", roles: ["admin", "superAdmin", "systemAdmin"] },
   { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "systemAdmin"] },
   { path: "chat", name: "Chat", roles: ["superAdmin", "admin"] },
   { path: "payments", name: "Payments", roles: ["admin", "superAdmin", "systemAdmin"] },
   { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin", "systemAdmin"] },
-  { path: "reports", name: "Reports", roles: ["admin", "superAdmin", "systemAdmin"] },
-  { path: "settings", name: "Settings", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "reports", name: "Reports", roles: ["superAdmin", "systemAdmin"] },
+  { path: "settings", name: "Settings", roles: ["superAdmin"] },
 ];
 
 
@@ -652,17 +655,6 @@ export const statsMapForAdminOverview: Array<statsMapIntrface<AdminFetchOverview
     title: "Total Positions",
     key: "totalPostions",
     icon: ClipboardList,
-  },
-  {
-    title: "Payments",
-    key: "totalPayments",
-    icon: CreditCard,
-  },
-  {
-    title: "Total Revenue",
-    key: "totalRevenue",
-    icon: Landmark,
-    price: true,
   },
   {
     title: "Applications",

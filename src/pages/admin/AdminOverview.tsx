@@ -54,11 +54,11 @@ const AdminOverview: React.FC = () => {
                     />
 
                     <BarChartVertical
-                        title="Payment Chart"
-                        description="Package and Hiring Payment"
-                        chartData={dashboardGraphData?.paymentsGraphData}
-                        dataKeyOne="package"
-                        dataKeyTwo="hiring"
+                        title="Applications Chart"
+                        description="Application count detail chart"
+                        chartData={dashboardGraphData?.applicationsGraphData}
+                        dataKeyOne="users"
+                        dataKeyTwo="applications"
                         chartConfig={overviewPaymentsDataChartConfig}
                     />
                 </div>
@@ -78,11 +78,11 @@ const AdminOverview: React.FC = () => {
                 />
 
                 <BarChartVertical
-                    title="Payment Chart"
-                    description="Package and Hiring Payment"
+                    title="Applications Chart"
+                    description="Application count detail chart"
                     chartData={overviewPaymentsDummyData}
-                    dataKeyOne="package"
-                    dataKeyTwo="hiring"
+                    dataKeyOne="users"
+                    dataKeyTwo="applications"
                     chartConfig={overviewPaymentsDataChartConfig}
                 />
             </div>

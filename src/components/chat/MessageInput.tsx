@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import { Image, Send, Trash } from "lucide-react";
 import { sendMessage } from "@/utils/apis/chatApi";
 import { useDispatch, useSelector } from "react-redux";
+import { socket } from "@/utils/services/socketService";
 import type { AppDispatch, RootState } from "@/store/store";
 import type { MessageInputProps } from "@/types/componentTypes/chatTypes";
 
@@ -16,7 +17,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
     const [text, setText] = useState<string>("");
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const { selectedUser, chatSocket } = useSelector((store: RootState) => store.chat);
+    const { selectedUser } = useSelector((store: RootState) => store.chat);
     const { user } = useSelector((store: RootState) => store.auth);
 
     const [file, setFile] = useState<File | null>(null);
@@ -73,9 +74,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
         if (!isTyping) {
             setIsTyping(true);
-            if (chatSocket) {
+            if (socket) {
                 setMessageSenderId(user._id ?? null);
-                chatSocket.emit("typing", {
+                socket.emit("typing", {
                     fromUserId: user._id,
                     toUserId: selectedUser?._id,
                 });
@@ -86,9 +87,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
         typingTimeoutRef.current = setTimeout(() => {
             setIsTyping(false);
-            if (chatSocket) {
+            if (socket) {
                 setMessageSenderId(user._id ?? null);
-                chatSocket.emit("stopTyping", {
+                socket.emit("stopTyping", {
                     fromUserId: user._id,
                     toUserId: selectedUser._id,
                 });

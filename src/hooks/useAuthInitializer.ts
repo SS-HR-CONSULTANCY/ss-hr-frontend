@@ -1,6 +1,6 @@
 import { useEffect } from "react";
+import { axiosInstance } from "@/lib/axios";
 import { useAppDispatch } from "@/hooks/redux";
-import { axiosInstance } from "@/components/lib/axios";
 import { setAuthUser } from "@/store/slices/authSlice";
 
 export function useAuthInitializer() {

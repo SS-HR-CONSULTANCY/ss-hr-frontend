@@ -1,14 +1,14 @@
 import React from 'react';
 import { jobsDummyData } from '@/utils/dummyData';
 import CommonTable from '@/components/common/CommonTable';
-import { adminFetchAllJobs } from '@/utils/apis/adminApi';
+import { userFetchAllJobs } from '@/utils/apis/user/userApi';
 import type { UserfetchAllJobsResponse } from '@/types/apiTypes/user';
-import { UserJobsTableColumns } from '@/components/table/tableColumns/UserTableColumns';
+import { UserJobsTableColumns } from '@/components/table/tableColumns/UserJobsColumns';
 
 const UserJobs: React.FC = () => {
     return (
         <CommonTable<UserfetchAllJobsResponse>
-            fetchApiFunction={adminFetchAllJobs}
+            fetchApiFunction={userFetchAllJobs}
             queryKey="jobs"
             heading="Jobs"
             description='Lit of jobs according to the comapnies'

@@ -55,11 +55,11 @@ const Footer = ({
             </div>
           </FooterColumn>
         </FooterContent>
-        <FooterContent className="w-full flex justify-center">
-          <h1 className="text-[250px] font-extrabold">
-            <span className="text-[#ffd93e]">S</span>
-            <span className="text-[#ffd93e]">S</span>
-            <span className="text-[#ffd93e]">GROUPS</span>
+        <FooterContent className="w-full flex justify-center overflow-hidden md:py-10">
+          <h1 className="font-extrabold text-center leading-none text-[clamp(2rem,12vw,12rem)] text-transparent stroke-text">
+            <span className="stroke-text">S</span>
+            <span className="stroke-text">S</span>
+            <span className="stroke-text">GROUPS</span>
           </h1>
         </FooterContent>
         <FooterBottom className="border-t">
