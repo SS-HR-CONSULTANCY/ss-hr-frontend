@@ -31,16 +31,16 @@ export   const overviewUserDummyData = [
     ];
 
     export const overviewPaymentsDummyData = [
-        { date: "01-08-2025", package: 12, hiring: 8 },
-        { date: "02-08-2025", package: 15, hiring: 11 },
-        { date: "03-08-2025", package: 9, hiring: 5 },
-        { date: "04-08-2025", package: 18, hiring: 14 },
-        { date: "05-08-2025", package: 22, hiring: 17 },
-        { date: "06-08-2025", package: 14, hiring: 9 },
-        { date: "07-08-2025", package: 19, hiring: 13 },
-        { date: "08-08-2025", package: 25, hiring: 20 },
-        { date: "09-08-2025", package: 11, hiring: 7 },
-        { date: "10-08-2025", package: 16, hiring: 12 },
+        { date: "01-08-2025", users: 12, applications: 8 },
+        { date: "02-08-2025", users: 15, applications: 11 },
+        { date: "03-08-2025", users: 9,  applications: 5 },
+        { date: "04-08-2025", users: 18, applications: 14 },
+        { date: "05-08-2025", users: 22, applications: 17 },
+        { date: "06-08-2025", users: 14, applications: 9 },
+        { date: "07-08-2025", users: 19, applications: 13 },
+        { date: "08-08-2025", users: 25, applications: 20 },
+        { date: "09-08-2025", users: 11, applications: 7 },
+        { date: "10-08-2025", users: 16, applications: 12 },
     ];
 
 
@@ -74,8 +74,6 @@ export const dummyAdminOverviewStats: AdminFetchOverviewStatsDataResponse = {
   totalJobsAvailable: 340,
   totalCompanies: 85,
   totalPostions: 420,
-  totalPayments: 1750,
-  totalRevenue: 985000,
   totalApplications: 3100,
 };
 

@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
           placeholder="Filter values"
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
+          className="max-w-sm border border-gray-400 dark:border-gray-300"
         />
         <DropdownMenu>
           <div className="ml-auto">
@@ -128,11 +128,11 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
       </div>
       
-      <div className="rounded-md border">
+      <div className="rounded-md border border-gray-400 dark:border-gray-300">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="border-b border-gray-400 dark:border-gray-300">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -151,6 +151,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="border-b border-gray-400 dark:border-gray-300"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
