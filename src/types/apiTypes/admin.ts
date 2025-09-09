@@ -12,7 +12,7 @@ export type AdminfetchAllComapniesResponse = Pick<Company, "_id" | "companyLogo"
 
 export type AdminfetchAllJobsResponse = Pick<Job, "_id" | "companyName" | "designation" | "vacancy" | "createdAt">;
 
-export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "price" | "features" | "createdAt">;
+export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "priceIN" | "priceUAE" | "packageType" | "features" | "createdAt">;
 
 export type AdminfetchAllPaymentsResponse = Pick<Payment, "_id" | "transactionId" | "totalAmount" | "discountAmount" | "paymentStatus" | "createdAt" | "username">;
 
