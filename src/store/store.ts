@@ -4,6 +4,7 @@ import chatReducer from './slices/chatSlice';
 import adminReducer from './slices/adminSlice';
 import jobReducer from "./slices/jobSlice";
 import userReducer from "./slices/userSlice";
+import testimonialReducer from "./slices/testimonialSlice"
 import localStorage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
@@ -20,6 +21,7 @@ const rootReducers = {
   chat: chatReducer,
   job : jobReducer,
   user : userReducer,
+  testimonial : testimonialReducer,
 };
 
 const persistedReducer = persistReducer(persistConfig, combineReducers(rootReducers));

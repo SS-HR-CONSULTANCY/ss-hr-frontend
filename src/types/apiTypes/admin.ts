@@ -122,15 +122,6 @@ export interface AdminFetchReportTableDataResponse {
 }
 
 
-
-
-
-
-
-
-
-
-
 // Create new admin api request
 export interface CreateAdminRequest extends Pick<User, "fullName" | "email" | "phone"> {
     password: string;
@@ -149,3 +140,13 @@ export type UpdateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isB
 
 // Delete admin
 export type DeleteAdminRequest = Pick<User, "_id">;
+
+export interface AdminfetchAllTestimonialsResponse {
+  _id: string;
+  clientName: string;
+  clientPhoto: string;
+  designation: string;
+  testimonial: string;
+  isVisible: boolean;
+  createdAt: string;
+}
