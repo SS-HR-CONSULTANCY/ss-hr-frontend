@@ -43,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     'packages': <LayoutGrid />,
     'applications': <CalendarCheck />,
     'payments': <HandCoins />,
-    'reviews': <Star />,
+    'testimonials': <Star />,
     'reports': <Notebook />,
     'logout': <LogOut />,
     'chat': <MessageCircle />,
