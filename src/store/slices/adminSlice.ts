@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { adminSliceIntialState } from "@/types/slice/adminSliceTypes";
-import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
+import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/adminApiTypes";
 
 const initialState: adminSliceIntialState = {
     reportData: null,

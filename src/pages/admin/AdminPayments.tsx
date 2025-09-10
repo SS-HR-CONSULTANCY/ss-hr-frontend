@@ -2,11 +2,11 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import type { AppDispatch, RootState } from "@/store/store";
-import { getAllPayments } from "@/utils/apis/paymentApi";
+import { getAllPayments } from "@/utils/apis/adminPaymentApi";
 import {
   toggleAddPaymentForm,
 } from "@/store/slices/paymentSlice";
-import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/paymentApi";
+import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi";
 import CommonTable from "@/components/common/CommonTable";
 import { PaymentTableColumns } from "@/components/table/tableColumns/PaymentTableColumns";
 import AddPaymentForm from "@/components/admin/AddPaymentForm";

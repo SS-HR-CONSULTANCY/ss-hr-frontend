@@ -7,7 +7,7 @@ import AreaGroupedChart from '@/components/chart/AreaGroupedChart';
 import BarChartVertical from '@/components/chart/BarChartVertical';
 import DashboardStats from '@/components/dashboard/dashboardStats';
 import DataFetchingError from '@/components/common/DataFetchingError';
-import type { AdminFetchOverviewStatsDataResponse } from "@/types/apiTypes/admin";
+import type { AdminFetchOverviewStatsDataResponse } from "@/types/apiTypes/adminApiTypes";
 import { overviewPaymentsDataChartConfig, overviewUserDataChartConfig } from '@/utils/chartConfig';
 import { adminFetchOverviewGrraphData, adminFetchOverviewStatsData } from '@/utils/apis/adminApi';
 import { dummyAdminOverviewStats, overviewPaymentsDummyData, overviewUserDummyData } from '@/utils/dummyData';

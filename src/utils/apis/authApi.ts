@@ -1,47 +1,9 @@
 import type { AxiosError } from "axios";
-import type { User } from "@/types/entities/user";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { RegisterRequest } from "@/types/slice/authSliceTypes";
 import { axiosInstance } from "@/lib/axios";
-
-export interface ApiBaseResponse {
-  success?: boolean;
-  message?: string;
-}
-
-export interface SignupResponse extends ApiBaseResponse {
-    user: User;
-}
-
-export type VerifyOtpRequest = Pick<User, "otp" | "verificationToken" | "role">;
-
-export type SigninRequest = Pick<User, "email" | "role"> & {
-    password: string;
-};
-
-export interface SigninResponse extends ApiBaseResponse {
-    user: User;
-}
-
-export interface ResendOtpResponse extends ApiBaseResponse {
-    user: User;
-}
-
-export type ResendOtpRequest = Pick<User, "role" | "verificationToken"> & {
-    email?: string;
-};
-
-export type UpdatePasswordRequest = Pick<User, "role" | "verificationToken"> & {
-    password: string;
-    confirmPassword: string;
-};
-
-export interface updateProfileImageResponse extends ApiBaseResponse {
-  data: User["profileImage"]
-}
-
-export type updateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo">;
-export interface updateUserInfoResponse extends ApiBaseResponse, updateUserInfo {}
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { ApiBaseResponse } from "@/types/commonTypes";
+import type { RegisterRequest } from "@/types/slice/authSliceTypes";
+import type { ResendOtpRequest, ResendOtpResponse, SigninRequest, SigninResponse, SignupResponse, UpdatePasswordRequest, updateProfileImageResponse, updateUserInfo, updateUserInfoResponse, VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
 
 
 export const signup = createAsyncThunk<SignupResponse, RegisterRequest>('auth/signup',
@@ -71,6 +33,7 @@ export const verifyOtp = createAsyncThunk<ApiBaseResponse,VerifyOtpRequest>("aut
 export const signin = createAsyncThunk<SigninResponse, SigninRequest>("auth/signin",
     async (userData: SigninRequest, thunkAPI) => {
         try {
+            console.log("userData : ",userData);
             const response = await axiosInstance.post('/auth/login', userData);
             return response.data;
         } catch (err) {

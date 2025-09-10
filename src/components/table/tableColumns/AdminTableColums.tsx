@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import noProfile from '../../../assets/defaultImgaes/noProfile.png';
-import type { AdminfetchAllApplicationsResponse, AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllPaymentsResponse, AdminfetchAllReviewsResponse, AdminfetchAllUsersResponse, AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
+import type { AdminfetchAllApplicationsResponse, AdminfetchAllComapniesResponse, AdminfetchAllJobsResponse, AdminfetchAllPackagesResponse, AdminfetchAllPaymentsResponse, AdminfetchAllReviewsResponse, AdminfetchAllUsersResponse, AdminFetchReportTableDataResponse } from "@/types/apiTypes/adminApiTypes";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 

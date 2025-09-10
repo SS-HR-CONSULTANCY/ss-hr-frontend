@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeViewPackageDetails } from "@/store/slices/packageSlice";
-import { getPackageById } from "@/utils/apis/packageApi";
+import { getPackageById } from "@/utils/apis/adminPackageApi";
 
 const PackageDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

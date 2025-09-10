@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AppDispatch } from "@/store/store";
 import { openEditPaymentForm, openViewPaymentDetails } from "@/store/slices/paymentSlice";
-import { deletePayment } from "@/utils/apis/paymentApi";
-import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/paymentApi";
+import { deletePayment } from "@/utils/apis/adminPaymentApi";
+import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi";
 
 export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
   {

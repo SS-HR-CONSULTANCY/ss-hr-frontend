@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AppDispatch } from "@/store/store";
 import { toggleAddPackageForm } from "@/store/slices/packageSlice";
-import { createPackage } from "@/utils/apis/packageApi";
+import { createPackage } from "@/utils/apis/adminPackageApi";
 import type { CreatePackageFormData } from "@/types/entities/package";
 
 const AddPackageForm: React.FC = () => {

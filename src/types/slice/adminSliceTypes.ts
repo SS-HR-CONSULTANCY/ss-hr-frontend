@@ -1,4 +1,4 @@
-import type { AdminFetchReportTableDataResponse } from "../apiTypes/admin";
+import type { AdminFetchReportTableDataResponse } from "../apiTypes/adminApiTypes";
 
 export interface adminSliceIntialState {
     reportData: Array<AdminFetchReportTableDataResponse> | null;

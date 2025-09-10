@@ -1,20 +1,20 @@
 import dayjs from "dayjs";
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
-import { Plus, Eye, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import type { AppDispatch, RootState } from '@/store/store';
-import { adminFetchAllJobs, deleteJob } from '@/utils/apis/jobApi';
-import CommonTable from '@/components/common/CommonTable';
-import { toggleAddJobForm, openEditJobForm, openViewDetailsModal, closeViewDetailsModal, removeJob } from '@/store/slices/jobSlice';
-import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/admin';
-import { DataTableColumnHeader } from '@/components/table/DataTableColumnHeader';
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useDispatch, useSelector } from 'react-redux';
 import type { ColumnDef } from '@tanstack/react-table';
 import AddJobForm from '@/components/admin/AddJobForm';
-import EditJobForm from '@/components/admin/EditJobForm';
-import JobDetailsModal from '@/components/admin/JobDetails';
 import { useQueryClient } from '@tanstack/react-query';
+import { Plus, Eye, Pencil, Trash2 } from 'lucide-react';
+import EditJobForm from '@/components/admin/EditJobForm';
+import CommonTable from '@/components/common/CommonTable';
+import type { AppDispatch, RootState } from '@/store/store';
+import JobDetailsModal from '@/components/admin/JobDetails';
+import { adminFetchAllJobs, deleteJob } from '@/utils/apis/adminJobApi';
+import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/adminApiTypes';
+import { DataTableColumnHeader } from '@/components/table/DataTableColumnHeader';
+import { toggleAddJobForm, openEditJobForm, openViewDetailsModal, closeViewDetailsModal } from '@/store/slices/jobSlice';
 
 interface AdminJobsProps {
   showButton?: boolean;
@@ -24,7 +24,7 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
   const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId } =
-  useSelector((state: RootState) => state.job);
+    useSelector((state: RootState) => state.job);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
 
   const handleViewDetails = (jobId: string) => {
@@ -45,9 +45,7 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
 
       if (response.success) {
         toast.success(response.message || 'Job deleted successfully!');
-        dispatch(removeJob(jobId));
-        
-        // Invalidate React Query cache to refresh table
+
         queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });
       } else {
         toast.error('Failed to delete job');
@@ -64,25 +62,14 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
     {
       accessorKey: "companyName",
       header: ({ column }) => (<DataTableColumnHeader column={column} title="Company Name" />),
-      cell: ({ row }) => (
-        <div className="font-medium text-blue-400">{row.original.companyName}</div>
-      )
     },
     {
       accessorKey: "designation",
       header: ({ column }) => (<DataTableColumnHeader column={column} title="Position" />),
-      cell: ({ row }) => (
-        <div className="font-medium text-blue-400">{row.original.designation}</div>
-      )
     },
     {
       accessorKey: "vacancy",
       header: ({ column }) => (<DataTableColumnHeader column={column} title="Openings" />),
-      cell: ({ row }) => (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900/50 text-blue-300 border border-blue-700">
-          {row.original.vacancy} positions
-        </span>
-      )
     },
     {
       accessorKey: "createdAt",
@@ -91,7 +78,7 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
       ),
       cell: ({ row }) => {
         const date = dayjs(row.original.createdAt).format("DD MMM YYYY");
-        return <span className="text-blue-400">{date}</span>;
+        return <span>{date}</span>;
       },
     },
     {
@@ -138,50 +125,43 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header Section */}
-        <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="space-y-2">
-              <h1 className="text-4xl font-bold text-black">
-                Job Management
-              </h1>
-            </div>
-            
-            {showButton && (
-              <Button 
-                onClick={() => dispatch(toggleAddJobForm())}
-                className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold"
-              >
-                <Plus className="h-5 w-5" />
-                Add New Job
-              </Button>
-            )}
+    <div className="">
+
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-bold">Job Management</h1>
+            <p className="">Manage all jobs from the companies</p>
           </div>
+          {showButton && (
+            <Button
+              onClick={() => dispatch(toggleAddJobForm())}
+              variant={"outline"}
+            >
+              <Plus className="h-5 w-5" />
+              Add New Job
+            </Button>
+          )}
         </div>
 
         {/* CommonTable */}
-        <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700">
-          <CommonTable<AdminfetchAllJobsResponse>
-            fetchApiFunction={adminFetchAllJobs}
-            queryKey="admin-jobs"
-            column={AdminJobsTableColumns}
-            columnsCount={5}
-            pageSize={10}
-          />
-        </div>
+        <CommonTable<AdminfetchAllJobsResponse>
+          fetchApiFunction={adminFetchAllJobs}
+          queryKey="admin-jobs"
+          column={AdminJobsTableColumns}
+          columnsCount={5}
+          pageSize={10}
+        />
 
         {/* Modals */}
         {isAddJobFormOpen && <AddJobForm />}
         {isEditJobFormOpen && <EditJobForm />}
         {isViewDetailsModalOpen && viewingJobId && (
-          <JobDetailsModal 
-            jobId={viewingJobId} 
-            onClose={() => dispatch(closeViewDetailsModal())} 
+          <JobDetailsModal
+            jobId={viewingJobId}
+            onClose={() => dispatch(closeViewDetailsModal())}
           />
         )}
-      </div>
+
     </div>
   );
 };

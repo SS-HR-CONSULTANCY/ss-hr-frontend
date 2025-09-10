@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { AppDispatch } from "@/store/store";
 import { toggleAddPaymentForm } from "@/store/slices/paymentSlice";
-import { createPayment } from "@/utils/apis/paymentApi";
+import { createPayment } from "@/utils/apis/adminPaymentApi";
 import type { CreatePaymentFormData } from "@/types/entities/payment";
 
 const AddPaymentForm: React.FC = () => {

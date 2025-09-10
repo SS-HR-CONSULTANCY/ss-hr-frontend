@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import noProfile from '../../assets/defaultImgaes/noProfile.png';
 import { fetchAdmins, createAdmin, deleteAdmin } from '@/utils/apis/adminSettingsApi';
-import type { CreateAdminRequest, CreateAdminResponse, DeleteAdminRequest } from '@/types/apiTypes/admin';
+import type { CreateAdminRequest, CreateAdminResponse, DeleteAdminRequest } from '@/types/apiTypes/adminApiTypes';
 
 interface AdminManagementFormProps {
   role: Role

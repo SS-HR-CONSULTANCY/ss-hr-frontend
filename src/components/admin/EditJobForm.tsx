@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
+import { toast } from 'react-toastify';
+import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { X, Building2, Briefcase, Users, Loader } from 'lucide-react';
-import { toast } from 'react-toastify';
-import type { AppDispatch, RootState } from '@/store/store';
-import { closeEditJobForm, updateJob } from '@/store/slices/jobSlice';
-import { updateJob as updateJobApi } from '@/utils/apis/jobApi';
+import { Button } from '@/components/ui/button';
 import { useQueryClient } from '@tanstack/react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeEditJobForm } from '@/store/slices/jobSlice';
+import type { AppDispatch, RootState } from '@/store/store';
+import { X, Building2, Briefcase, Users, Loader } from 'lucide-react';
 
 interface EditJobFormData {
   companyName: string;
@@ -17,29 +16,19 @@ interface EditJobFormData {
 }
 
 const EditJobForm: React.FC = () => {
+
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
-  const { selectedJobId, jobs } = useSelector((state: RootState) => state.job);
+  const { selectedJobId } = useSelector((state: RootState) => state.job);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<EditJobFormData>({
     companyName: '',
     designation: '',
     vacancy: 1
   });
+
   const [errors, setErrors] = useState<Partial<Record<keyof EditJobFormData, string>>>({});
 
-  // Find the job being edited
-  const currentJob = jobs.find(job => job._id === selectedJobId);
-
-  useEffect(() => {
-    if (currentJob) {
-      setFormData({
-        companyName: currentJob.companyName,
-        designation: currentJob.designation,
-        vacancy: currentJob.vacancy
-      });
-    }
-  }, [currentJob]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof EditJobFormData, string>> = {};
@@ -84,7 +73,7 @@ const EditJobForm: React.FC = () => {
       
       if (response.success) {
         toast.success(response.message || 'Job updated successfully!');
-        dispatch(updateJob(response.job));
+        dispatch(adminUpdateJob(response.job));
         
         // Invalidate React Query cache to refresh table
         queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });

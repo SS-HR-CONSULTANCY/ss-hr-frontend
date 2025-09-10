@@ -4,7 +4,7 @@ import FormField from '../form/FormFiled';
 import React, { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { FooterSettingsFormValues } from '@/types/componentTypes/adminSettings';
-import type { AdminGetFooterCurrentDataResponse } from '@/types/apiTypes/admin';
+import type { AdminGetFooterCurrentDataResponse } from '@/types/apiTypes/adminApiTypes';
 import { adminGetWebsiteFooterCurrentData, adminUpdateWebsiteFooterData } from '@/utils/apis/adminSettingsApi';
 
 const AdminWebsiteFooterDataForm: React.FC = () => {

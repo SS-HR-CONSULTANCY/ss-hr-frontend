@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { 
@@ -7,21 +7,18 @@ import {
   Building2, 
   Briefcase, 
   Users, 
-  Calendar, 
-  Clock,
   Edit,
   Trash2,
   ExternalLink,
-  User,
   Copy,
   CheckCircle
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import type { AppDispatch, RootState } from '@/store/store';
-import { openEditJobForm, removeJob } from '@/store/slices/jobSlice';
-import { deleteJob } from '@/utils/apis/jobApi';
+import type { AppDispatch } from '@/store/store';
+import { openEditJobForm } from '@/store/slices/jobSlice';
+import { deleteJob } from '@/utils/apis/adminJobApi';
 import { useQueryClient } from '@tanstack/react-query';
 
 // Extend dayjs with relative time plugin
@@ -35,12 +32,9 @@ interface JobDetailsProps {
 const JobDetails: React.FC<JobDetailsProps> = ({ jobId, onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
-  const { jobs } = useSelector((state: RootState) => state.job);
   const [deleting, setDeleting] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Find the job by ID
-  const job = jobs.find(j => j._id === jobId);
 
   if (!job) {
     return (
@@ -78,7 +72,6 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobId, onClose }) => {
       
       if (response.success) {
         toast.success(response.message || 'Job deleted successfully!');
-        dispatch(removeJob(job._id));
         
         // Invalidate React Query cache to refresh table
         queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });

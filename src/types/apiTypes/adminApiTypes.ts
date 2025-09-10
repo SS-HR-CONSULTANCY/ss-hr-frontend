@@ -1,16 +1,27 @@
 import type { Job } from "../entities/job";
 import type { User } from "../entities/user";
 import type { Review } from "../entities/review";
-import type { Company } from "../entities/company";
 import type { Package } from "../entities/package";
 import type { Payment } from "../entities/payment";
 import type { Application } from "../entities/application";
+import type { ApiBaseResponse } from "../commonTypes";
+
+// **** job
+type JobBaseType = Pick<Job, "_id" | "companyName" | "designation" | "vacancy" | "salary">;
+
+export type AdminCreateNewJob = Pick<Job, "companyName" | "designation" | "industry" | "jobDescription" | "benifits" | "salary" | "skills" | "nationality" | "vacancy">;
+export type AsminCreateJobResponse = ApiBaseResponse & JobBaseType;
+
+export type AdminfetchAllJobsResponse = Pick<Job, "_id" | "companyName" | "designation" | "vacancy" | "salary" | "createdAt">;
+
+type GetJobResponse = JobBaseType;
+export type AdminGetJobResponse = ApiBaseResponse & GetJobResponse;
+
+export type AdminUpdateJobRequest = JobBaseType;
+export type AdminUpdateJobResponse = ApiBaseResponse & AdminUpdateJobRequest;
+
 
 export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked" | "isVerified" | "profileImage" | "fullName" | "createdAt">;
-
-export type AdminfetchAllComapniesResponse = Pick<Company, "_id" | "companyLogo" | "companyName" | "email" | "availableJobCount" | "createdAt">;
-
-export type AdminfetchAllJobsResponse = Pick<Job, "_id" | "companyName" | "designation" | "vacancy" | "createdAt">;
 
 export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "priceIN" | "priceUAE" | "packageType" | "features" | "createdAt">;
 

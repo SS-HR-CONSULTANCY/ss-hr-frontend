@@ -6,7 +6,6 @@ interface JobState {
   isViewDetailsModalOpen: boolean;
   selectedJobId: string | null;
   viewingJobId: string | null;
-  jobs: any[];
   isLoading: boolean;
   error: string | null;
 }
@@ -17,7 +16,6 @@ const initialState: JobState = {
   isViewDetailsModalOpen: false,
   selectedJobId: null,
   viewingJobId: null,
-  jobs: [],
   isLoading: false,
   error: null,
 };
@@ -76,22 +74,6 @@ const jobSlice = createSlice({
       state.error = action.payload;
     },
 
-    // Job data
-    setJobs: (state, action: PayloadAction<any[]>) => {
-      state.jobs = action.payload;
-    },
-    addJob: (state, action: PayloadAction<any>) => {
-      state.jobs.push(action.payload);
-    },
-    updateJob: (state, action: PayloadAction<any>) => {
-      const index = state.jobs.findIndex(job => job._id === action.payload._id);
-      if (index !== -1) {
-        state.jobs[index] = action.payload;
-      }
-    },
-    removeJob: (state, action: PayloadAction<string>) => {
-      state.jobs = state.jobs.filter(job => job._id !== action.payload);
-    },
   },
 });
 
@@ -106,10 +88,6 @@ export const {
   closeViewDetailsModal,
   setLoading,
   setError,
-  setJobs,
-  addJob,
-  updateJob,
-  removeJob,
 } = jobSlice.actions;
 
 export default jobSlice.reducer;

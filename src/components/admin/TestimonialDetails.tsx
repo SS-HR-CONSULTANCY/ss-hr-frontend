@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeViewTestimonialDetails } from "@/store/slices/testimonialSlice";
-import { getTestimonialById } from "@/utils/apis/testimonialApi";
+import { getTestimonialById } from "@/utils/apis/adminTestimonialApi";
 import noProfile from '@/assets/defaultImgaes/noProfile.png';
 
 const TestimonialDetails: React.FC = () => {
