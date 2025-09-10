@@ -12,7 +12,7 @@ export type AdminfetchAllComapniesResponse = Pick<Company, "_id" | "companyLogo"
 
 export type AdminfetchAllJobsResponse = Pick<Job, "_id" | "companyName" | "designation" | "vacancy" | "createdAt">;
 
-export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "price" | "features" | "createdAt">;
+export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "priceIN" | "priceUAE" | "packageType" | "features" | "createdAt">;
 
 export type AdminfetchAllPaymentsResponse = Pick<Payment, "_id" | "transactionId" | "totalAmount" | "discountAmount" | "paymentStatus" | "createdAt" | "username">;
 
@@ -122,15 +122,6 @@ export interface AdminFetchReportTableDataResponse {
 }
 
 
-
-
-
-
-
-
-
-
-
 // Create new admin api request
 export interface CreateAdminRequest extends Pick<User, "fullName" | "email" | "phone"> {
     password: string;
@@ -149,3 +140,13 @@ export type UpdateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "isB
 
 // Delete admin
 export type DeleteAdminRequest = Pick<User, "_id">;
+
+export interface AdminfetchAllTestimonialsResponse {
+  _id: string;
+  clientName: string;
+  clientPhoto: string;
+  designation: string;
+  testimonial: string;
+  isVisible: boolean;
+  createdAt: string;
+}

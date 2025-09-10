@@ -21,7 +21,7 @@ import visaServiceBanner from '../assets/serviceBanners/visaServiceBanner.jpg';
 import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
-import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
+import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users,MessageSquare } from 'lucide-react';
 import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/admin';
 
 import webDev from '../assets/svgs/serviceSvg/webDev.svg';
@@ -35,7 +35,7 @@ export const siteUrlConfig: SiteUrlConfigProps = {
   home: '/',
   aboutus: "/#aboutus",
   travelpackages: "/toursandtravels",
-  reviews: "/#reviews",
+  webdevelopment: "/webdevelopment",
   contact: "/contact",
   services: '/#services',
   signIn: "/login",
@@ -56,7 +56,7 @@ export const navLinks: navLinkProps[] = [
   { text: "Services", href: siteUrlConfig.services, content: "components", isForDesk: true },
   { text: "Services", href: siteUrlConfig.services, isForMob: true },
   { text: "Tours & Travels", href: siteUrlConfig.travelpackages, isLink: true, isForDesk: true, isForMob: true },
-  { text: "Reviews", href: siteUrlConfig.reviews, isLink: true, isForDesk: true, isForMob: true },
+  { text: "Web Development", href: siteUrlConfig.webdevelopment, isLink: true, isForDesk: true, isForMob: true },
   { text: "Contact", href: siteUrlConfig.contact, isLink: true, isForDesk: true, isForMob: true },
   { text: "SignIn", href: siteUrlConfig.signIn, isLink: true, isForMob: true },
   { text: "SignUp", href: siteUrlConfig.signUp, isLink: true, isForMob: true },
@@ -395,7 +395,7 @@ export const footerData = [
       { text: "About Us", href: "#aboutus" },
       { text: "Services", href: "#services" },
       { text: "Packages", href: "#packages" },
-      { text: "Reviews", href: "#reviews" },
+      { text: "Web Development", href: "/web-development" },
       { text: "Contact", href: "#contact" },
     ]
   },
@@ -510,7 +510,7 @@ export const adminApplicationRoutes: Route[] = [
   { path: "applications", name: "Applications", roles: ["admin", "superAdmin", "systemAdmin"] },
   { path: "chat", name: "Chat", roles: ["superAdmin", "admin"] },
   { path: "payments", name: "Payments", roles: ["admin", "superAdmin", "systemAdmin"] },
-  { path: "reviews", name: "Reviews", roles: ["admin", "superAdmin", "systemAdmin"] },
+  { path: "testimonials", name: "Testimonials", roles: ["admin", "superAdmin", "systemAdmin"] },
   { path: "reports", name: "Reports", roles: ["superAdmin", "systemAdmin"] },
   { path: "settings", name: "Settings", roles: ["superAdmin"] },
 ];

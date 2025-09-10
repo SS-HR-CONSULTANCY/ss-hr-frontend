@@ -15,7 +15,7 @@ const AdminJobs = lazy(() => import("@/pages/admin/AdminJobs"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
 const ContactPage = lazy(() => import("@/pages/user/ContactPage"));
 const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
-const AdminReviews = lazy(() => import("@/pages/admin/AdminReviews"));
+const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const AdminReports = lazy(() => import("@/pages/admin/AdminReports"));
 const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
@@ -41,7 +41,7 @@ const appRouter = createBrowserRouter([
             { path: "/certificationservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "certificationservice")!} /> },
             { path: "/medicalrecruit", element: <ServiceDetailedContent {...services.find((s) => s.id === "medicalrecruitservice")!} /> },
             { path: "/cvwriting", element: <ServiceDetailedContent {...services.find((s) => s.id === "cvwritingservice")!} /> },
-            { path: "/webservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "webservice")!} /> },
+            { path: "/webdevelopment", element: <ServiceDetailedContent {...services.find((s) => s.id === "webdevelopment")!} /> },
             { path: "/labourservices", element: <ServiceDetailedContent {...services.find((s) => s.id === "laboursupplyservice")!} /> },
             { path: '*', element: <Error404 /> },
         ]
@@ -159,7 +159,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "payments",
                 element: (
-                    <ProtectedRoute requiredRole={["superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
                         <AdminPayments />
                     </ProtectedRoute>
                 ),
@@ -173,10 +173,10 @@ const appRouter = createBrowserRouter([
                 ),
             },
             {
-                path: "reviews",
+                path: "testimonials",
                 element: (
                     <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
-                        <AdminReviews />
+                        <AdminTestimonials />
                     </ProtectedRoute>
                 ),
             },
