@@ -81,7 +81,7 @@ export const adminFetchReportPaymentsGraphData = async () : Promise<AdminFetchRe
     return response.data.data;
 }
 
-// Report table data
+
 export const AdminFetchReportTableData = async (params?: FetchFunctionParams) : Promise<ApiPaginatedResponse<AdminFetchReportTableDataResponse>> => {
     const query = buildQueryParams(params);
     const response = await axiosInstance.get(`/admin/reportTableData${query ? `?${query}` : ''}`);

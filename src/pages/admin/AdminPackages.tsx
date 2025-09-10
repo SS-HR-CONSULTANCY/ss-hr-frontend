@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import type { AppDispatch, RootState } from "@/store/store";
 import { getAllPackages } from "@/utils/apis/packageApi";
-import {
-  toggleAddPackageForm,
-  closeAllPackageModals,
-} from "@/store/slices/packageSlice";
+import {toggleAddPackageForm} from "@/store/slices/packageSlice";
 import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/admin";
 import CommonTable from "@/components/common/CommonTable";
 import { PackageTableColumns } from "@/components/table/tableColumns/PackageTableColumns";
@@ -14,7 +11,11 @@ import AddPackageForm from "@/components/admin/AddPackageForm";
 import EditPackageForm from "@/components/admin/EditPackageForm";
 import PackageDetails from "@/components/admin/PackageDetails";
 
-const AdminPackages: React.FC = () => {
+interface AdminPackagesProps {
+  showButton?: boolean;
+}
+
+const AdminPackages: React.FC<AdminPackagesProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const {
     isAddPackageFormOpen,
@@ -22,9 +23,6 @@ const AdminPackages: React.FC = () => {
     isViewPackageDetailsOpen,
   } = useSelector((state: RootState) => state.package);
 
-  const handleCloseModals = () => {
-    dispatch(closeAllPackageModals());
-  };
 
   return (
     <div className="min-h-screen bg-gray-900">
