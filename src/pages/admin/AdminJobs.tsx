@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { toast } from 'react-toastify';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import JobDetails from "@/pages/common/JobDetailsPage";
 import { useDispatch, useSelector } from 'react-redux';
 import type { ColumnDef } from '@tanstack/react-table';
 import AddJobForm from '@/components/admin/AddJobForm';
@@ -10,8 +11,7 @@ import { Plus, Eye, Pencil, Trash2 } from 'lucide-react';
 import EditJobForm from '@/components/admin/EditJobForm';
 import CommonTable from '@/components/common/CommonTable';
 import type { AppDispatch, RootState } from '@/store/store';
-import JobDetailsModal from '@/components/admin/JobDetails';
-import { adminFetchAllJobs, deleteJob } from '@/utils/apis/adminJobApi';
+import { adminFetchAllJobs, adminGetJobById, deleteJob } from '@/utils/apis/adminJobApi';
 import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/adminApiTypes';
 import { DataTableColumnHeader } from '@/components/table/DataTableColumnHeader';
 import { toggleAddJobForm, openEditJobForm, openViewDetailsModal, closeViewDetailsModal } from '@/store/slices/jobSlice';
@@ -23,8 +23,7 @@ interface AdminJobsProps {
 const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
-  const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId } =
-    useSelector((state: RootState) => state.job);
+  const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId } = useSelector((state: RootState) => state.job);
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
 
   const handleViewDetails = (jobId: string) => {
@@ -127,40 +126,41 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   return (
     <div className="">
 
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">Job Management</h1>
-            <p className="">Manage all jobs from the companies</p>
-          </div>
-          {showButton && (
-            <Button
-              onClick={() => dispatch(toggleAddJobForm())}
-              variant={"outline"}
-            >
-              <Plus className="h-5 w-5" />
-              Add New Job
-            </Button>
-          )}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Job Management</h1>
+          <p className="">Manage all jobs from the companies</p>
         </div>
-
-        {/* CommonTable */}
-        <CommonTable<AdminfetchAllJobsResponse>
-          fetchApiFunction={adminFetchAllJobs}
-          queryKey="admin-jobs"
-          column={AdminJobsTableColumns}
-          columnsCount={5}
-          pageSize={10}
-        />
-
-        {/* Modals */}
-        {isAddJobFormOpen && <AddJobForm />}
-        {isEditJobFormOpen && <EditJobForm />}
-        {isViewDetailsModalOpen && viewingJobId && (
-          <JobDetailsModal
-            jobId={viewingJobId}
-            onClose={() => dispatch(closeViewDetailsModal())}
-          />
+        {showButton && (
+          <Button
+            onClick={() => dispatch(toggleAddJobForm())}
+            variant={"outline"}
+          >
+            <Plus className="h-5 w-5" />
+            Add New Job
+          </Button>
         )}
+      </div>
+
+      {/* CommonTable */}
+      <CommonTable<AdminfetchAllJobsResponse>
+        fetchApiFunction={adminFetchAllJobs}
+        queryKey="admin-jobs"
+        column={AdminJobsTableColumns}
+        columnsCount={5}
+        pageSize={10}
+      />
+
+      {/* Modals */}
+      {isAddJobFormOpen && <AddJobForm />}
+      {isEditJobFormOpen && <EditJobForm />}
+      {isViewDetailsModalOpen && viewingJobId && (
+        <JobDetails
+          jobId={viewingJobId}
+          onClose={() => dispatch(closeViewDetailsModal())}
+          fetchJobById={() => adminGetJobById(viewingJobId)}
+        />
+      )}
 
     </div>
   );

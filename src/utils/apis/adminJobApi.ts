@@ -1,9 +1,10 @@
 import { axiosInstance } from "@/lib/axios";
 import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
 import type { ApiBaseResponse, ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";
-import type { AdminCreateNewJob, AdminfetchAllJobsResponse, AdminGetJobResponse, AdminUpdateJobRequest, AdminUpdateJobResponse, AsminCreateJobResponse } from "@/types/apiTypes/adminApiTypes";
+import type { AdminCreateNewJob, AdminfetchAllJobsResponse, AdminUpdateJobRequest } from "@/types/apiTypes/adminApiTypes";
+import type { FetchJobDetailsResponse } from "@/types/apiTypes/commonApiTypes";
 
-export const createJob = async (jobData: AdminCreateNewJob): Promise<AsminCreateJobResponse> => {
+export const createJob = async (jobData: AdminCreateNewJob): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.post('/admin/jobs', jobData);
   return response.data;
 };
@@ -15,13 +16,13 @@ export const adminFetchAllJobs = async (params?: FetchFunctionParams): Promise<A
 };
 
 
-export const getJobById = async (jobId: string): Promise<AdminGetJobResponse> => {
+export const adminGetJobById = async (jobId: string): Promise<FetchJobDetailsResponse> => {
   const response = await axiosInstance.get(`/admin/jobs/${jobId}`);
-  return response.data;
+  return response.data.data;
 };
 
-export const adminUpdateJob = async (jobData: AdminUpdateJobRequest): Promise<AdminUpdateJobResponse> => {
-  const response = await axiosInstance.put(`/admin/jobs/${jobData._id}`, jobData);
+export const adminUpdateJob = async (jobId: string, jobData: AdminUpdateJobRequest): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.put(`/admin/jobs/${jobId}`, jobData);
   return response.data;
 };
 

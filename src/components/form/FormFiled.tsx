@@ -134,6 +134,7 @@ interface FormFieldProps<T extends FieldValues> {
   children?: React.ReactNode;
   onFileSelect?: (url: string) => void;
   rows?: number; // ✅ for textarea
+defaultValue?: string | number | boolean;
 }
 
 const FormField = <T extends FieldValues>({
@@ -149,7 +150,9 @@ const FormField = <T extends FieldValues>({
   children,
   onFileSelect,
   rows = 3,
+  defaultValue
 }: FormFieldProps<T>) => {
+  console.log("defaultValue : ",defaultValue);
   const [show, setShow] = useState(false);
 
   // ✅ File input
@@ -205,6 +208,7 @@ const FormField = <T extends FieldValues>({
         </Label>
         <textarea
           id={id}
+          defaultValue={defaultValue as string}
           rows={rows}
           placeholder={placeholder}
           {...register(id, registerOptions)}
@@ -233,6 +237,7 @@ const FormField = <T extends FieldValues>({
           id={id}
           type={inputType}
           autoComplete={autoComplete}
+          defaultValue={defaultValue as string | number}
           placeholder={placeholder}
           className={`${error ? "border-destructive" : ""} text-sm`}
           {...register(id, registerOptions)}
