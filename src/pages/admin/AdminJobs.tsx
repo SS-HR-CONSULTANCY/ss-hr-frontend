@@ -11,9 +11,10 @@ import { Plus, Eye, Pencil, Trash2 } from 'lucide-react';
 import EditJobForm from '@/components/admin/EditJobForm';
 import CommonTable from '@/components/common/CommonTable';
 import type { AppDispatch, RootState } from '@/store/store';
-import { adminFetchAllJobs, adminGetJobById, deleteJob } from '@/utils/apis/adminJobApi';
+import ConfirmDialog from "@/components/common/ConfirmDialog";
 import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/adminApiTypes';
 import { DataTableColumnHeader } from '@/components/table/DataTableColumnHeader';
+import { adminFetchAllJobs, adminGetJobById, deleteJob } from '@/utils/apis/adminJobApi';
 import { toggleAddJobForm, openEditJobForm, openViewDetailsModal, closeViewDetailsModal } from '@/store/slices/jobSlice';
 
 interface AdminJobsProps {
@@ -35,10 +36,7 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
   };
 
   const handleDelete = async (jobId: string) => {
-    if (!confirm('Are you sure you want to delete this job?')) return;
-
     setDeletingJobId(jobId);
-
     try {
       const response = await deleteJob(jobId);
 
@@ -49,8 +47,7 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
       } else {
         toast.error('Failed to delete job');
       }
-    } catch (error) {
-      console.error('Delete job error:', error);
+    } catch {
       toast.error("Error");
     } finally {
       setDeletingJobId(null);
@@ -104,27 +101,34 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
           >
             <Pencil className="h-4 w-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleDelete(row.original._id)}
-            disabled={deletingJobId === row.original._id}
-            className="h-8 w-8 p-0 hover:bg-red-900/30 hover:text-red-400 transition-colors"
-            title="Delete Job"
-          >
-            {deletingJobId === row.original._id ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent"></div>
-            ) : (
-              <Trash2 className="h-4 w-4" />
-            )}
-          </Button>
+          <ConfirmDialog
+            trigger={
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={deletingJobId === row.original._id}
+                className="h-8 w-8 p-0 hover:bg-red-900/30 hover:text-red-400 transition-colors"
+                title="Delete Job"
+              >
+                {deletingJobId === row.original._id ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent"></div>
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
+              </Button>
+            }
+            title="Are you sure you want to delete this job?"
+            description="This action cannot be undone."
+            confirmText="Delete"
+            onConfirm={() => handleDelete(row.original._id)}
+          />
         </div>
       )
     },
   ];
 
   return (
-    <div className="">
+    <div>
 
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -142,7 +146,6 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
         )}
       </div>
 
-      {/* CommonTable */}
       <CommonTable<AdminfetchAllJobsResponse>
         fetchApiFunction={adminFetchAllJobs}
         queryKey="admin-jobs"
@@ -151,7 +154,6 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
         pageSize={10}
       />
 
-      {/* Modals */}
       {isAddJobFormOpen && <AddJobForm />}
       {isEditJobFormOpen && <EditJobForm />}
       {isViewDetailsModalOpen && viewingJobId && (
@@ -161,7 +163,6 @@ const AdminJobs: React.FC<AdminJobsProps> = ({ showButton = true }) => {
           fetchJobById={() => adminGetJobById(viewingJobId)}
         />
       )}
-
     </div>
   );
 };

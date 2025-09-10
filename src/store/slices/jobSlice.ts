@@ -73,7 +73,6 @@ const jobSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-
   },
 });
 
