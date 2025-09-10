@@ -41,7 +41,7 @@ const appRouter = createBrowserRouter([
             { path: "/certificationservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "certificationservice")!} /> },
             { path: "/medicalrecruit", element: <ServiceDetailedContent {...services.find((s) => s.id === "medicalrecruitservice")!} /> },
             { path: "/cvwriting", element: <ServiceDetailedContent {...services.find((s) => s.id === "cvwritingservice")!} /> },
-            { path: "/webservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "webservice")!} /> },
+            { path: "/webdevelopment", element: <ServiceDetailedContent {...services.find((s) => s.id === "webdevelopment")!} /> },
             { path: "/labourservices", element: <ServiceDetailedContent {...services.find((s) => s.id === "laboursupplyservice")!} /> },
             { path: '*', element: <Error404 /> },
         ]
@@ -159,7 +159,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "payments",
                 element: (
-                    <ProtectedRoute requiredRole={["superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
                         <AdminPayments />
                     </ProtectedRoute>
                 ),
