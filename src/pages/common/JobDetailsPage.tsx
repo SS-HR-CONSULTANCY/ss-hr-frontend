@@ -14,9 +14,9 @@ import type { AppDispatch } from '@/store/store';
 import { deleteJob } from '@/utils/apis/adminJobApi';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { openEditJobForm } from '@/store/slices/jobSlice';
-import DataFetchingError from '../../components/common/DataFetchingError';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import InfoDisplay from '../../components/common/InfoDisplay';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import DataFetchingError from '../../components/common/DataFetchingError';
 import type { FetchJobDetailsResponse } from '@/types/apiTypes/commonApiTypes';
 
 dayjs.extend(relativeTime);
@@ -101,21 +101,20 @@ fetchJobById,
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-700 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden border border-black">
+      <div className="bg-white dark:bg-gray-700 rounded-2xl shadow-2xl max-w-4xl overflow-y-scroll h-screen border border-black max-h-[70%]">
 
-        <div className="px-6 py-4 border-b border-black bg-white">
+        <div className="px-6 py-4 border-b border-black">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-black">
-                <Briefcase className="h-5 w-5 text-black" />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center border border-black">
+                <Briefcase className="h-5 w-5" />
               </div>
-              <h3 className="text-xl font-bold text-black">Job Details</h3>
+              <h3 className="text-xl font-bold">Job Details</h3>
             </div>
             <Button
-              variant="ghost"
+              variant={"outline"}
               size="sm"
               onClick={onClose}
-              className="h-8 w-8 p-0 hover:bg-white transition-colors text-black hover:text-black"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -133,14 +132,15 @@ fetchJobById,
            <InfoDisplay label='Skills' value={data.skills} />
            <InfoDisplay label='JobDescription' value={data.jobDescription} />
            <InfoDisplay label='Benifits' value={data.benifits} />
-           <InfoDisplay label='Posted On' value={data.createdAt} />
+           <InfoDisplay label='Posted On' value={data.createdAt} isDate />
           </>
         )}
 
-        <div className="px-6 py-4 bg-white border-t border-black flex flex-col sm:flex-row gap-3">
+        <div className="px-6 py-4 border-t border-black flex flex-col sm:flex-row gap-3">
           <Button
             onClick={handleEdit}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+            variant={"outline"}
+            className="hover:bg-blue-500 hover:text-white cursor-pointer"
             disabled={deleting}
           >
             <Edit className="h-4 w-4 mr-2" />
@@ -150,7 +150,7 @@ fetchJobById,
           <Button
             onClick={handleDelete}
             variant="outline"
-            className="flex-1 border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
+            className="hover:bg-red-500 hover:text-white cursor-pointer"
             disabled={deleting}
           >
             {deleting ? (

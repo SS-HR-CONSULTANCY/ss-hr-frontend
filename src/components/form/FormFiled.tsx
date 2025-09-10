@@ -175,7 +175,7 @@ const FormField = <T extends FieldValues>({
             }
             registerOptions?.onChange?.(e);
           }}
-          className={`${error ? "border-destructive" : ""} text-sm`}
+          className={`${error ? "border-destructive" : ""} text-sm border border-black`}
         />
         {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
@@ -190,7 +190,7 @@ const FormField = <T extends FieldValues>({
         <select
           id={id}
           {...register(id, registerOptions)}
-          className={`w-full border rounded p-2 ${error ? "border-destructive" : ""}`}
+          className={`w-full border rounded p-2 border border-black ${error ? "border-destructive" : ""}`}
         >
           {children}
         </select>
@@ -212,7 +212,7 @@ const FormField = <T extends FieldValues>({
           rows={rows}
           placeholder={placeholder}
           {...register(id, registerOptions)}
-          className={`w-full border rounded p-2 text-sm ${error ? "border-destructive" : ""}`}
+          className={`w-full border rounded p-2 text-sm border border-black ${error ? "border-destructive" : ""}`}
         />
         {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
@@ -239,7 +239,7 @@ const FormField = <T extends FieldValues>({
           autoComplete={autoComplete}
           defaultValue={defaultValue as string | number}
           placeholder={placeholder}
-          className={`${error ? "border-destructive" : ""} text-sm`}
+          className={`${error ? "border-destructive" : ""} text-sm border border-black`}
           {...register(id, registerOptions)}
         />
         {showTogglePassword && (

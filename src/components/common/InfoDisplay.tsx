@@ -1,11 +1,9 @@
+import { formatBoolean, formatDate } from "@/utils/helpers/infoDisplayHelper";
 import { Copy } from "lucide-react";
-
-const formatBoolean = (val: boolean) => (val ? "Yes" : "No");
 
 export interface InfoDisplayProps {
   label: string;
   value: string | boolean | number | string[] | Date | undefined | null;
-  formatDate?: (dateString: string) => string;
   copyToClipboard?: (text: string) => void;
   link?: boolean;
   isBoolean?: boolean;
@@ -15,17 +13,18 @@ export interface InfoDisplayProps {
   selectedRadioValue?: string | null;
   onRadioChange?: (value: string) => void;
   role?: string;
+  isDate?: boolean;
 }
 
 const InfoDisplay: React.FC<InfoDisplayProps> = ({
     label,
     value,
-    formatDate,
     copyToClipboard,
     isBoolean,
     link,
     isPrice,
     isLast,
+    isDate,
 }) => {
 
     let displayValue: React.ReactNode;
@@ -34,6 +33,8 @@ const InfoDisplay: React.FC<InfoDisplayProps> = ({
         displayValue = "Not Yet added";
     } else if (isBoolean) {
         displayValue = formatBoolean(value as boolean);
+    } else if (isDate) {
+        displayValue = formatDate(value as string);
     } else if (isPrice) {
         displayValue = `₹ ${value as string} INR`;
     } else if (copyToClipboard && typeof value === "string") {
@@ -50,8 +51,6 @@ const InfoDisplay: React.FC<InfoDisplayProps> = ({
                 )}
             </div>
         );
-    } else if (formatDate && typeof value === "string") {
-        displayValue = formatDate(value);
     } else if (link && typeof value === "string") {
         displayValue = (
             <a href={value} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">

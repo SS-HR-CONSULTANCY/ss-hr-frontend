@@ -101,7 +101,7 @@ const EditJobForm: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-700 text-black dark:text-white rounded-2xl shadow-2xl max-w-5xl w-full mx-4 overflow-hidden border border-black">
+      <div className="bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-2xl shadow-2xl max-w-5xl w-full mx-4 overflow-hidden border border-black">
 
         <AdminFormHeader Icon={Briefcase} closeFn={handleClose} title='Edit Job' />
 
@@ -188,16 +188,17 @@ const EditJobForm: React.FC = () => {
                   placeholder="e.g., Health Insurance, Work From Home"
                   error={errors.benifits?.message as string}
                   register={register}
-                  rows={3}
+                  rows={4}
                   />
 
                 <FormField<AdminUpdateJobRequest>
                   id="skills"
                   label="Required Skills (comma separated)"
-                  type="text"
+                  type="textarea"
                   placeholder="e.g., React, Node.js"
                   error={errors.skills?.message as string}
                   register={register}
+                  rows={4}
                 />
 
               </div>
@@ -208,15 +209,16 @@ const EditJobForm: React.FC = () => {
                 type="button"
                 onClick={handleClose}
                 variant="outline"
-                className="hover:bg-red-500 cursor-pointer"
+                className="hover:bg-red-500 cursor-pointer hover:text-white"
                 disabled={loading || !watchedValues.benifits || !watchedValues.companyName || !watchedValues.designation || !watchedValues.industry || !watchedValues.jobDescription || !watchedValues.jobDescription || !watchedValues.nationality || !watchedValues.salary || !watchedValues.skills || !watchedValues.vacancy}
-              >
+                >
                 Cancel
               </Button>
               <Button
                 type="submit"
+                variant="outline"
                 disabled={loading || !watchedValues.benifits || !watchedValues.companyName || !watchedValues.designation || !watchedValues.industry || !watchedValues.jobDescription || !watchedValues.jobDescription || !watchedValues.nationality || !watchedValues.salary || !watchedValues.skills || !watchedValues.vacancy}
-                className="hover:bg-blue-500 cursor-pointer"
+                className="hover:bg-blue-500 cursor-pointer hover:text-white"
               >
                 {loading ? (
                   <div className="flex items-center gap-2">
