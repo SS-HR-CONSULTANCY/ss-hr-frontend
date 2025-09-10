@@ -100,23 +100,18 @@ const CommonTable = <T,>({
         <div className="mt-2">
           <TableShimmer columnsCount={columnsCount} />
         </div>
-      ) : tableData.length > 0 ?  (
+      )  : isError && error ? (
+        <DataFetchingError
+          message={(error as Error).message}
+          className="min-h-full"
+        />
+      ) : (
         <DataTable
           columns={column}
           data={tableData}
           pageCount={totalPages}
           pagination={pagination}
           onPaginationChange={handlePaginationChange}
-        />
-      ) : isError && error ? (
-        <DataFetchingError
-          message={(error as Error).message}
-          className="min-h-full"
-        />
-      ) : (
-        <DataFetchingError
-          message={`No ${queryKey} found in database`}
-          className="min-h-full"
         />
       )}
     </div>

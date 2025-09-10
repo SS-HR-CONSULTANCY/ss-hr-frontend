@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify';
-import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import FormField from '../form/FormFiled';
 import { Button } from '@/components/ui/button';
 import AdminFormHeader from './AdminFormHeader';
+import React, { useEffect, useState } from 'react';
 import { Briefcase, Loader } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,10 +16,10 @@ import type { AdminUpdateJobRequest } from '@/types/apiTypes/adminApiTypes';
 
 const EditJobForm: React.FC = () => {
 
-  const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
-  const { selectedJobId } = useSelector((state: RootState) => state.job);
+  const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
+  const { selectedJobId } = useSelector((state: RootState) => state.job);
 
   const { data, isLoading, isError, error } = useQuery({
     queryFn: () => adminGetJobById(selectedJobId!),
@@ -51,7 +51,6 @@ const EditJobForm: React.FC = () => {
   });
 
   const watchedValues = watch();
-
 
   useEffect(() => {
   if (data) {
@@ -96,8 +95,6 @@ const EditJobForm: React.FC = () => {
   const handleClose = () => {
     dispatch(closeEditJobForm());
   };
-
-  console.log("data : ",data);
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
