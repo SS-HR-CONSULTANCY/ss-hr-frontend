@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeEditPackageForm } from "@/store/slices/packageSlice";
-import { getPackageById, updatePackage } from "@/utils/apis/packageApi";
+import { getPackageById, updatePackage } from "@/utils/apis/adminPackageApi";
 import type { UpdatePackageFormData } from "@/types/entities/package";
 
 const EditPackageForm: React.FC = () => {

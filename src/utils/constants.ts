@@ -22,7 +22,7 @@ import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
 import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users,MessageSquare } from 'lucide-react';
-import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/admin';
+import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/adminApiTypes';
 
 import webDev from '../assets/svgs/serviceSvg/webDev.svg';
 import labourSupply from '../assets/svgs/serviceSvg/labourSupply.svg';

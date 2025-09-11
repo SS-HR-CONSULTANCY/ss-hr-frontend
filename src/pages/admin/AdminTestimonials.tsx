@@ -2,12 +2,12 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import type { AppDispatch, RootState } from "@/store/store";
-import { getAllTestimonials } from "@/utils/apis/testimonialApi";
+import { getAllTestimonials } from "@/utils/apis/adminTestimonialApi";
 import {
   toggleAddTestimonialForm,
   closeAllTestimonialModals,
 } from "@/store/slices/testimonialSlice";
-import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/admin";
+import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 import CommonTable from "@/components/common/CommonTable";
 import { TestimonialTableColumns } from "@/components/table/tableColumns/TestimonialTableColumns";
 import AddTestimonialForm from "@/components/admin/AddTestimonialForm";

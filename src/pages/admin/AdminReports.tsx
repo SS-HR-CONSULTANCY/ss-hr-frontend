@@ -16,7 +16,7 @@ import { reportPageTabs, statsMapForAdminUserStats, statsMapForApplications, sta
 import { applicationConfig, radialChartConfig, reportUserDummyDataConfig, revenueDummyDataConfig } from "@/utils/chartConfig";
 import { adminFetchApplicationsReportStatsData, adminFetchReportApplicationGraphData, adminFetchReportPaymentsGraphData, AdminFetchReportTableData, adminFetchReportUserGraphData, adminFetchRevenueReportStatsData, adminFetchUserReportStatsData } from "@/utils/apis/adminApi";
 import { applicationDummyData, dummyAdminApplicationsReportStats, dummyAdminRevenueReportStats, dummyAdminUserReportStats, reportTableDataDummyData, reportUserDummyData, revenueDummyData, weeklyApplicationDummyData, weeklyPaymentsDummyData, weeklyUsersDummyData } from "@/utils/dummyData";
-import { type AdminFetchApplicationsReportStatsDataResponse, type AdminFetchReportApplicationsGraphsDataResponse, type AdminFetchReportPaymentsGraphsDataResponse, type AdminFetchReportTableDataResponse, type AdminFetchReportUserswGraphsDataResponse, type AdminFetchRevenueReportStatsDataResponse, type AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
+import { type AdminFetchApplicationsReportStatsDataResponse, type AdminFetchReportApplicationsGraphsDataResponse, type AdminFetchReportPaymentsGraphsDataResponse, type AdminFetchReportTableDataResponse, type AdminFetchReportUserswGraphsDataResponse, type AdminFetchRevenueReportStatsDataResponse, type AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/adminApiTypes";
 
 const AdminReports: React.FC = () => {
 

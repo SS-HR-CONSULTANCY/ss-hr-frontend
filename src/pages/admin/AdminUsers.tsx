@@ -1,16 +1,16 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import CommonTable from '@/components/common/CommonTable';
-import { adminFetchAllUsers } from '@/utils/apis/userApi';
-import { UserTableColumns } from '@/components/table/tableColumns/UserTableColums';
-import { openAddUserModal } from '@/store/slices/userSlice';
-import { Button } from '@/components/ui/button';
 import { UserPlus } from 'lucide-react';
-import AddUserForm from '@/components/admin/AddUserForm';
-import EditUserForm from '@/components/admin/EditUserForm';
-import UserDetails from '@/components/admin/UserDetails';
-import type { User } from '@/types/entities/user';
 import type { RootState } from '@/store/store';
+import { Button } from '@/components/ui/button';
+import type { User } from '@/types/entities/user';
+import { useDispatch, useSelector } from 'react-redux';
+import UserDetails from '@/components/admin/UserDetails';
+import AddUserForm from '@/components/admin/AddUserForm';
+import CommonTable from '@/components/common/CommonTable';
+import EditUserForm from '@/components/admin/EditUserForm';
+import { openAddUserModal } from '@/store/slices/userSlice';
+import { UserTableColumns } from '@/components/table/tableColumns/UserTableColums';
+import { adminFetchAllUsers } from '@/utils/apis/adminUserApi';
 
 const AdminUsers: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,34 +19,31 @@ const AdminUsers: React.FC = () => {
   );
 
   return (
-    <div className="bg-gray-900 min-h-screen">
-      <div className="p-6">
-        {/* Header with Create Button */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-white">User Management</h1>
-            <p className="text-gray-400">Manage application users and their permissions</p>
-          </div>
-          <Button
-            onClick={() => dispatch(openAddUserModal())}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Add User
-          </Button>
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">User Management</h1>
+          <p className="">Manage application users and their permissions</p>
         </div>
-
-        {/* Table - Change UserResponse to User */}
-        <CommonTable<User>
-          fetchApiFunction={adminFetchAllUsers}
-          queryKey="admin-users"
-          heading=""
-          description=""
-          column={UserTableColumns}
-          columnsCount={6}
-          showDummyData={false}
-        />
+        <Button
+          onClick={() => dispatch(openAddUserModal())}
+          variant={'outline'}
+        >
+          <UserPlus className="h-4 w-4 mr-2" />
+          Add User
+        </Button>
       </div>
+
+      <CommonTable<User>
+        fetchApiFunction={adminFetchAllUsers}
+        queryKey="admin-users"
+        heading="Users"
+        description=""
+        column={UserTableColumns}
+        columnsCount={6}
+        showDummyData={false}
+      />
+
 
       {/* Modals */}
       {isAddUserModalOpen && <AddUserForm />}

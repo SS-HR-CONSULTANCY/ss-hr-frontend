@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { AppDispatch } from "@/store/store";
 import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
-import { createTestimonial } from "@/utils/apis/testimonialApi";
+import { createTestimonial } from "@/utils/apis/adminTestimonialApi";
 import type { CreateTestimonialFormData } from "@/types/entities/testimonial";
 
 const AddTestimonialForm: React.FC = () => {

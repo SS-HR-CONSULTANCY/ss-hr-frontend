@@ -34,8 +34,9 @@ const Header: React.FC = ({
   const theme = useSelector((state: RootState) => state.app.theme);
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const route: string = user?.role === "admin" || user?.role === "superAdmin" || user?.role === "systemAdmin" ? '/admin/login' : user?.role === "user" ? "/login" : '/'
 
-  const { handleLogout } = useAuthHook({ route: "/" });
+  const { handleLogout } = useAuthHook({route});
 
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>

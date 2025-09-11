@@ -1,4 +1,4 @@
-import type { AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportTableDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/admin";
+import type { AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportTableDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/adminApiTypes";
 import type { WeeklyData } from "@/types/componentTypes/areportTypes";
 import type { Application } from "@/types/entities/application";
 import type { Company } from "@/types/entities/company";

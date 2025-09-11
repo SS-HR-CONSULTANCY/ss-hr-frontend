@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import * as Switch from "@radix-ui/react-switch";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeEditTestimonialForm } from "@/store/slices/testimonialSlice";
-import { getTestimonialById, updateTestimonial } from "@/utils/apis/testimonialApi";
+import { getTestimonialById, updateTestimonial } from "@/utils/apis/adminTestimonialApi";
 import type { UpdateTestimonialFormData } from "@/types/entities/testimonial";
 
 const EditTestimonialForm: React.FC = () => {

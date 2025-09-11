@@ -1,14 +1,18 @@
 export interface Payment {
   _id: string;
   customerId: string;
+  username: string;
   packageId: string;
+  transactionId: string;
   customerName: string;
   packageName: string;
   totalAmount: number;
   paidAmount: number;
+  discountAmount: number;
   balanceAmount: number;
   paymentMethod: 'googlepay' | 'banktransfer' | 'cash';
   paymentDate: string;
+  paymentStatus: string;
   referenceId: string;
   paymentProof: string;
   adminNotes: string;

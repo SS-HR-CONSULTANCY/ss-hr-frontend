@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import FormField from '../form/FormFiled';
 import React, { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import type { AdminGetWebsiteSettingsResponse } from '@/types/apiTypes/admin';
+import type { AdminGetWebsiteSettingsResponse } from '@/types/apiTypes/adminApiTypes';
 import type { WebsiteSettingsFormValues } from '@/types/componentTypes/adminSettings';
 import { adminUpdateWebsiteLogoAndName, adminGetWebsiteCurrentCompanyNameAndLogo } from '@/utils/apis/adminSettingsApi';
 

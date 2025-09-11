@@ -4,7 +4,7 @@ import type {
   CreateAdminResponse, 
   UpdateAdminResponse,
   AdminFetchAllAdminsResponse, 
-} from "@/types/apiTypes/admin";
+} from "@/types/apiTypes/adminApiTypes";
 import { axiosInstance } from "@/lib/axios";
 import type { ApiBaseResponse } from "@/types/commonTypes";
 

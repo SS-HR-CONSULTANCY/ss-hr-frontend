@@ -8,8 +8,8 @@ import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AppDispatch } from "@/store/store";
 import { openEditTestimonialForm, openViewTestimonialDetails } from "@/store/slices/testimonialSlice";
-import { deleteTestimonial } from "@/utils/apis/testimonialApi";
-import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/admin";
+import { deleteTestimonial } from "@/utils/apis/adminTestimonialApi";
+import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 import noProfile from '../../../assets/defaultImgaes/noProfile.png';
 
 export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsResponse>[] = [

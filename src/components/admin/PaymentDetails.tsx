@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeViewPaymentDetails } from "@/store/slices/paymentSlice";
-import { getPaymentById } from "@/utils/apis/paymentApi";
+import { getPaymentById } from "@/utils/apis/adminPaymentApi";
 
 const PaymentDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

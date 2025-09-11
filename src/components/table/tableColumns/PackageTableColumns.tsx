@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AppDispatch } from "@/store/store";
 import { openEditPackageForm, openViewPackageDetails } from "@/store/slices/packageSlice";
-import { deletePackage } from "@/utils/apis/packageApi";
-import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/admin";
+import { deletePackage } from "@/utils/apis/adminPackageApi";
+import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/adminApiTypes";
 
 export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
   {
