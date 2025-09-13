@@ -12,7 +12,7 @@ export interface ServiceProps {
   id: string;
   title: string;
   description: string;
-  imageUrl?: string;
+  imageUrl: string;
   hoverDescription: string;
   href?: string;
 
@@ -26,4 +26,6 @@ export interface ServiceProps {
   contactText: string;
   contactUrl: string;
   contactButtonText: string;
+
+  heroTitle: string;
 }

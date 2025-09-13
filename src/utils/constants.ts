@@ -1,32 +1,29 @@
-// import wevDev from '../assets/servicesImages/webDevService.jpg';
+import webDev from '../assets/svgs/serviceSvg/webDev.svg';
+import visaService from '../assets/svgs/serviceSvg/visa.svg';
+import cvWriting from '../assets/svgs/serviceSvg/cvWriting.svg';
+import ticketService from '../assets/svgs/serviceSvg/ticket.svg';
+import jobRecruitment from '../assets/svgs/serviceSvg/hiring.svg';
 import type { Route, statsMapIntrface } from '@/types/commonTypes';
-import visaService from '../assets/servicesImages/visaService.png';
-import cvWriting from '../assets/servicesImages/cvWritingService.jpg';
+import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
+import labourSupply from '../assets/svgs/serviceSvg/labourSupply.svg';
+import medicalRecruitment from '../assets/svgs/serviceSvg/medical.svg';
 import type { ContactItem } from '@/types/componentTypes/contactTypes';
-// import travelService from '../assets/servicesImages/travelService.jpg';
-import ticketService from '../assets/servicesImages/ticketService.png';
 import type { PackageProps } from '@/types/componentTypes/packageTypes';
 import type { ServiceProps } from '@/types/componentTypes/servicesTypes';
-import jobRecruitment from '../assets/servicesImages/jobRecruitmentService.png';
-import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
-// import labourSupplyService from '../assets/servicesImages/labourSupplyService.jpg';
-import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
-import medicalRecruitment from '../assets/servicesImages/medicalRecruitmentService.jpg';
-import certificateBanner from '../assets/serviceBanners/certificateBanner.jpg';
 import cvWritingBanner from '../assets/serviceBanners/cvWritingBanner.jpg';
-import labourSupplyBanner from '../assets/serviceBanners/labourSupplyBanner.jpg';
+import toursAndTravels from '../assets/svgs/serviceSvg/toursAndTravels.svg';
 import medicalRecBanner from '../assets/serviceBanners/medicalRecBanner.jpg';
-import ticketServiceBanner from '../assets/serviceBanners/ticketServiceBanner.jpg';
+import certificateBanner from '../assets/serviceBanners/certificateBanner.jpg';
 import visaServiceBanner from '../assets/serviceBanners/visaServiceBanner.jpg';
-import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
+import labourSupplyBanner from '../assets/serviceBanners/labourSupplyBanner.jpg';
+import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
+import ticketServiceBanner from '../assets/serviceBanners/ticketServiceBanner.jpg';
+import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
+import certificateAttestationService from '../assets/svgs/serviceSvg/certificate.svg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
-import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
-import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users,MessageSquare } from 'lucide-react';
+import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
 import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/adminApiTypes';
 
-import webDev from '../assets/svgs/serviceSvg/webDev.svg';
-import labourSupply from '../assets/svgs/serviceSvg/labourSupply.svg';
-import toursAndTravels from '../assets/svgs/serviceSvg/toursAndTravels.svg';
 
 export const companyName = "ShahaalamGroups";
 
@@ -88,6 +85,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for this service, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Discover Stress-Free Tours Around The World",
   },
   {
     id: "visaservice",
@@ -112,6 +110,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about this service, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Fast And Reliable Visa Processing Support",
   },
   {
     id: "ticketservice",
@@ -136,6 +135,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for ticket booking, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Book Affordable Tickets Quickly And Easily",
   },
   {
     id: "certificationservice",
@@ -160,6 +160,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about attestation services, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Smooth And Hassle-Free Certificate Attestation",
   },
   {
     id: "medicalrecruitservice",
@@ -184,6 +185,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about medical recruitment, please get in touch.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Trusted Recruitment For Healthcare Professionals",
   },
   {
     id: "jobrecruitservice",
@@ -208,6 +210,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about job recruitment, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Find The Right Career Opportunities Here",
   },
   {
     id: "cvwritingservice",
@@ -232,6 +235,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about CV writing services, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Stand Out With A Professionally Written CV",
   },
   {
     id: "webservice",
@@ -256,6 +260,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for web development, please get in touch.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Build A Modern And Scalable Website Today",
   },
   {
     id: "laboursupplyservice",
@@ -280,8 +285,10 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for labour supply, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Reliable Workforce Solutions For Every Business",
   },
 ];
+
 
 
 // About component constants
