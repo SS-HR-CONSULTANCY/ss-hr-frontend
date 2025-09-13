@@ -1,7 +1,8 @@
 import React from 'react';
+import Lottie from "lottie-react";
 import Heading from '../common/Heading';
 import { words } from '@/utils/constants';
-import aboutOne from '../../assets/aboutImages/aboutOne.png';
+import world from '../../assets/lotteFiles/world.json';
 import { TextGenerateEffect } from '../ui/text-generate-effect';
 
 const About: React.FC = () => {
@@ -18,11 +19,10 @@ const About: React.FC = () => {
           <TextGenerateEffect duration={2} filter={false} words={words} />
         </div>
         <div className="col-span-12 md:col-span-4 flex justify-center items-center">
-          <img
-            src={aboutOne}
-            className="w-[500px] object-center"
-            alt="About Us"
-            data-aos="flip-right"
+          <Lottie
+            animationData={world}
+            loop={true}
+            className="w-64 h-64"
           />
         </div>
       </div>
