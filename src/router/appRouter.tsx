@@ -2,6 +2,7 @@ import { lazy } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
 import { adminApplicationRoutes, services, userApplicationRoutes } from "@/utils/constants";
+import AboutUs from "@/pages/user/AboutUs";
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
@@ -27,7 +28,6 @@ const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
 
-
 const appRouter = createBrowserRouter([
     {
         path: '/',
@@ -36,6 +36,7 @@ const appRouter = createBrowserRouter([
             { path: '/', element: <Landing /> },
             { path: '/toursandtravels', element: <ToursAndTravels /> },
             { path: '/contact', element: <ContactPage /> },
+            { path: '/aboutUs', element: <AboutUs /> },
             { path: "/visaservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "visaservice")!} /> },
             { path: "/ticketservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "ticketservice")!} /> },
             { path: "/certificationservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "certificationservice")!} /> },

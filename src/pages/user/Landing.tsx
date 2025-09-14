@@ -1,5 +1,4 @@
 import React from 'react';
-import About from '@/components/sections/About';
 import Hero2 from '@/components/sections/Hero2';
 import Reviews from '@/components/sections/Reviews';
 import Services from '@/components/sections/Services';
@@ -11,7 +10,6 @@ const Landing: React.FC = () => {
       <Hero2 />
       <CallToAction />
       <Services />
-      <About />
       <Reviews />
     </div>
   )

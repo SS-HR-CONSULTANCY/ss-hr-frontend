@@ -24,6 +24,9 @@ import certificateAttestationService from '../assets/svgs/serviceSvg/certificate
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
 import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/adminApiTypes';
+import type { mdDataProps } from '@/types/componentTypes/aboutTypes';
+import md1 from '../assets/aboutImages/md1.jpg';
+import md2 from '../assets/aboutImages/md2.jpg';
 
 
 export const companyName = "ShahaalamGroups";
@@ -31,7 +34,7 @@ export const companyName = "ShahaalamGroups";
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {
   home: '/',
-  aboutus: "/#aboutus",
+  aboutus: "/aboutUs",
   travelpackages: "/toursandtravels",
   webdevelopment: "/webdevelopment",
   contact: "/contact",
@@ -661,3 +664,15 @@ export const statsMapForAdminOverview: Array<statsMapIntrface<AdminFetchOverview
 ];
 
 
+    export const mdData: mdDataProps[] = [
+        {
+            profileImage: md1,
+            name: "Shine Son",
+            quote: ""
+        },
+        {
+            profileImage: md2,
+            name: "Shine",
+            quote: ""
+        }
+    ]
