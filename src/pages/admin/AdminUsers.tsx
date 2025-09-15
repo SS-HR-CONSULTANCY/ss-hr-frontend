@@ -2,21 +2,28 @@ import React from 'react';
 import { UserPlus } from 'lucide-react';
 import type { RootState } from '@/store/store';
 import { Button } from '@/components/ui/button';
-import type { User } from '@/types/entities/user';
 import { useDispatch, useSelector } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 import UserDetails from '@/components/admin/UserDetails';
 import AddUserForm from '@/components/admin/AddUserForm';
 import CommonTable from '@/components/common/CommonTable';
 import EditUserForm from '@/components/admin/EditUserForm';
 import { openAddUserModal } from '@/store/slices/userSlice';
-import { UserTableColumns } from '@/components/table/tableColumns/UserTableColums';
 import { adminFetchAllUsers } from '@/utils/apis/adminUserApi';
+import { AdminUserHelper } from '@/utils/helpers/adminUserHelper';
+import type { AdminfetchAllUsersResponse } from '@/types/apiTypes/adminApiTypes';
+import { AdminUserTableColumns } from '@/components/table/tableColumns/AdminUserTableColumn';
 
 const AdminUsers: React.FC = () => {
+
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const { handleDelete, handleEdit, handleViewDetails } = AdminUserHelper(dispatch, queryClient)
   const { isAddUserModalOpen, isEditUserModalOpen, isUserDetailsModalOpen } = useSelector(
     (state: RootState) => state.user
   );
+
+  const columns = AdminUserTableColumns( handleDelete, handleEdit, handleViewDetails)
 
   return (
     <div>
@@ -34,12 +41,12 @@ const AdminUsers: React.FC = () => {
         </Button>
       </div>
 
-      <CommonTable<User>
+      <CommonTable<AdminfetchAllUsersResponse>
         fetchApiFunction={adminFetchAllUsers}
         queryKey="admin-users"
         heading="Users"
         description=""
-        column={UserTableColumns}
+        column={columns}
         columnsCount={6}
         showDummyData={false}
       />

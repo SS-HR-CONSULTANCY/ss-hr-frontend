@@ -5,8 +5,8 @@ import { X, User, Copy,CheckCircle,UserCheck,Loader} from 'lucide-react';
 import { toast } from 'react-toastify';
 import type { AppDispatch, RootState } from '@/store/store';
 import { closeUserDetailsModal } from '@/store/slices/userSlice';
-import { adminFetchUserById } from '@/utils/apis/userApi';
 import type { User as UserType } from '@/types/entities/user';
+import { adminFetchUserById } from '@/utils/apis/adminUserApi';
 
 const UserDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,7 +46,7 @@ const UserDetails: React.FC = () => {
       setCopied(true);
       toast.success('User ID copied to clipboard');
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy User ID');
     }
   };

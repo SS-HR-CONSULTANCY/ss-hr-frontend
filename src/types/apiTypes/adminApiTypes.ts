@@ -13,7 +13,7 @@ export type AdminfetchAllJobsResponse = Pick<Job, "_id" | "companyName" | "desig
 export type AdminUpdateJobRequest = Pick<Job, "companyName" | "designation" | "industry" | "jobDescription" | "benifits" | "salary" | "skills" | "nationality" | "vacancy">;
 
 
-export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked" | "isVerified" | "profileImage" | "fullName" | "createdAt">;
+export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked" | "isVerified" | "profileImage" | "fullName" | "createdAt" | "serialNumber">;
 
 export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "priceIN" | "priceUAE" | "packageType" | "features" | "createdAt">;
 
