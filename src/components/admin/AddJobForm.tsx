@@ -167,7 +167,6 @@ const AddJobForm: React.FC = () => {
               type="button"
               onClick={handleClose}
               variant="outline"
-              className='hover:bg-red-500 cursor-pointer hover:text-white'
               disabled={isLoading}
             >
               Cancel
@@ -178,7 +177,6 @@ const AddJobForm: React.FC = () => {
                 isLoading || !watchedValues.salary || !watchedValues.companyName || !watchedValues.designation || !watchedValues.vacancy
               }
               variant="outline"
-              className='hover:bg-blue-500 cursor-pointer hover:text-white'
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">

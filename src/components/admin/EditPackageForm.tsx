@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeEditPackageForm } from "@/store/slices/packageSlice";
-import { getPackageById, updatePackage } from "@/utils/apis/adminPackageApi";
 import type { UpdatePackageFormData } from "@/types/entities/package";
+import { getPackageById, updatePackage } from "@/utils/apis/adminPackageApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import FormLoading from "../form/FormLoading";
 
 const EditPackageForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -167,49 +168,38 @@ const EditPackageForm: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-4xl mx-auto">
-        <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded mb-4"></div>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-            <div className="h-20 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-      </div>
+      <FormLoading />
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-4xl mx-auto">
-      <h2 className="text-xl font-semibold text-black mb-6">Edit Package</h2>
+    <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-sm border max-w-4xl mx-auto">
+      <h2 className="text-xl font-semibold mb-6">Edit Package</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="packageName" className="text-black">Package Name</Label>
+          <div className="space-y-2">
+            <Label htmlFor="packageName" className="">Package Name</Label>
             <Input
               id="packageName"
               value={formData.packageName || ""}
               onChange={(e) => setFormData({ ...formData, packageName: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter package name"
             />
             {errors.packageName && <p className="text-red-500 text-sm mt-1">{errors.packageName}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="packageType" className="text-black">Package Type</Label>
+          <div className="space-y-2">
+            <Label htmlFor="packageType" className="">Package Type</Label>
             <Select
               value={formData.packageType || "jobpackage"}
               onValueChange={(value: 'jobpackage' | 'tourpackage') => 
                 setFormData({ ...formData, packageType: value })
               }
             >
-              <SelectTrigger className="bg-white text-black border-gray-300">
+              <SelectTrigger className="">
                 <SelectValue placeholder="Select package type" />
               </SelectTrigger>
               <SelectContent>
@@ -220,13 +210,13 @@ const EditPackageForm: React.FC = () => {
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="description" className="text-black">Description</Label>
+        <div className="space-y-2">
+          <Label htmlFor="description" className="">Description</Label>
           <Textarea
             id="description"
             value={formData.description || ""}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="bg-white text-black border-gray-300 min-h-24"
+            className=""
             placeholder="Enter package description..."
           />
           {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
@@ -234,32 +224,32 @@ const EditPackageForm: React.FC = () => {
 
         {/* Pricing & Duration */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <Label htmlFor="priceIN" className="text-black">Price (INR)</Label>
+          <div className="space-y-2">
+            <Label htmlFor="priceIN" className="">Price (INR)</Label>
             <Input
               id="priceIN"
               value={formData.priceIN || ""}
               onChange={handlePriceINChange}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="₹ 2,50,000"
             />
             {errors.priceIN && <p className="text-red-500 text-sm mt-1">{errors.priceIN}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="priceUAE" className="text-black">Price (AED)</Label>
+          <div className="space-y-2">
+            <Label htmlFor="priceUAE" className="">Price (AED)</Label>
             <Input
               id="priceUAE"
               value={formData.priceUAE || ""}
               onChange={handlePriceUAEChange}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="AED 8,500"
             />
             {errors.priceUAE && <p className="text-red-500 text-sm mt-1">{errors.priceUAE}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="packageDuration" className="text-black">Duration (Days)</Label>
+          <div className="space-y-2">
+            <Label htmlFor="packageDuration" className="">Duration (Days)</Label>
             <Input
               id="packageDuration"
               type="number"
@@ -267,7 +257,7 @@ const EditPackageForm: React.FC = () => {
               max="365"
               value={formData.packageDuration?.toString() || ""}
               onChange={(e) => setFormData({ ...formData, packageDuration: parseInt(e.target.value) || undefined })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter duration in days"
             />
             {errors.packageDuration && <p className="text-red-500 text-sm mt-1">{errors.packageDuration}</p>}
@@ -275,28 +265,28 @@ const EditPackageForm: React.FC = () => {
         </div>
 
         {/* Image */}
-        <div>
-          <Label htmlFor="image" className="text-black">Package Image URL</Label>
+        <div className="space-y-2">
+          <Label htmlFor="image" className="">Package Image URL</Label>
           <Input
             id="image"
             value={formData.image || ""}
             onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-            className="bg-white text-black border-gray-300"
+            className=""
             placeholder="https://example.com/package-image.jpg"
           />
           {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
         </div>
 
         {/* Features */}
-        <div>
-          <Label className="text-black">Package Features</Label>
+        <div className="space-y-2">
+          <Label className="">Package Features</Label>
           <div className="space-y-2 mt-2">
             {(formData.features || []).map((feature, index) => (
               <div key={index} className="flex gap-2">
                 <Input
                   value={feature}
                   onChange={(e) => updateFeature(index, e.target.value)}
-                  className="bg-white text-black border-gray-300"
+                  className=""
                   placeholder="Enter feature"
                 />
                 {(formData.features?.length || 0) > 1 && (
@@ -325,7 +315,7 @@ const EditPackageForm: React.FC = () => {
 
         {/* Services */}
         <div>
-          <Label className="text-black mb-3 block">Included Services</Label>
+          <Label className="mb-3 block">Included Services</Label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
               { key: 'food', label: 'Food' },
@@ -343,7 +333,7 @@ const EditPackageForm: React.FC = () => {
                     handleServiceChange(key as any, checked as boolean)
                   }
                 />
-                <Label htmlFor={key} className="text-black text-sm">
+                <Label htmlFor={key} className="text-sm">
                   {label}
                 </Label>
               </div>
@@ -354,16 +344,15 @@ const EditPackageForm: React.FC = () => {
         <div className="flex justify-end gap-3 pt-4">
           <Button
             type="button"
-            variant="outline"
+            variant={"outline"}
             onClick={handleCancel}
-            className="border-gray-300 text-black hover:bg-gray-50"
           >
             Cancel
           </Button>
           <Button
             type="submit"
+            variant={"outline"}
             disabled={updateMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             {updateMutation.isPending ? "Updating..." : "Update Package"}
           </Button>

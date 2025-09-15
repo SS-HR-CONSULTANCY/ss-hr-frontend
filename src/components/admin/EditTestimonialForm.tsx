@@ -11,6 +11,7 @@ import type { RootState, AppDispatch } from "@/store/store";
 import { closeEditTestimonialForm } from "@/store/slices/testimonialSlice";
 import { getTestimonialById, updateTestimonial } from "@/utils/apis/adminTestimonialApi";
 import type { UpdateTestimonialFormData } from "@/types/entities/testimonial";
+import FormLoading from "../form/FormLoading";
 
 const EditTestimonialForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -99,75 +100,66 @@ const EditTestimonialForm: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-2xl mx-auto">
-        <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded mb-4"></div>
-          <div className="space-y-4">
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-20 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-      </div>
+      <FormLoading />
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold text-black mb-6">Edit Testimonial</h2>
+    <div className="p-6 rounded-lg shadow-sm border max-w-2xl mx-auto">
+      <h2 className="text-xl font-semibold mb-6">Edit Testimonial</h2>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="clientName" className="text-black">Client Name</Label>
+          <div className="space-y-2">
+            <Label htmlFor="clientName" className="">Client Name</Label>
             <Input
               id="clientName"
               value={formData.clientName}
               onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter client name"
             />
             {errors.clientName && <p className="text-red-500 text-sm mt-1">{errors.clientName}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="designation" className="text-black">Designation</Label>
+          <div className="space-y-2">
+            <Label htmlFor="designation" className="">Designation</Label>
             <Input
               id="designation"
               value={formData.designation}
               onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter designation"
             />
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="clientPhoto" className="text-black">Client Photo URL</Label>
+        <div className="space-y-2">
+          <Label htmlFor="clientPhoto" className="">Client Photo URL</Label>
           <Input
             id="clientPhoto"
             value={formData.clientPhoto}
             onChange={(e) => setFormData({ ...formData, clientPhoto: e.target.value })}
-            className="bg-white text-black border-gray-300"
+            className=""
             placeholder="Enter photo URL"
           />
           {errors.clientPhoto && <p className="text-red-500 text-sm mt-1">{errors.clientPhoto}</p>}
         </div>
 
-        <div>
-          <Label htmlFor="testimonial" className="text-black">Testimonial</Label>
+        <div className="space-y-2">
+          <Label htmlFor="testimonial" className="">Testimonial</Label>
           <Textarea
             id="testimonial"
             value={formData.testimonial}
             onChange={(e) => setFormData({ ...formData, testimonial: e.target.value })}
-            className="bg-white text-black border-gray-300 min-h-32"
+            className=""
             placeholder="Enter client testimonial..."
           />
           {errors.testimonial && <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>}
         </div>
 
         <div className="flex items-center">
-          <label className="pr-[15px] text-[15px] leading-none text-black" htmlFor="isVisible">
+          <label className="pr-[15px] text-[15px] leading-none" htmlFor="isVisible">
             Make testimonial visible to public
           </label>
           <Switch.Root 
@@ -185,14 +177,13 @@ const EditTestimonialForm: React.FC = () => {
             type="button"
             variant="outline"
             onClick={handleCancel}
-            className="border-gray-300 text-black hover:bg-gray-50"
-          >
+            >
             Cancel
           </Button>
           <Button
             type="submit"
+            variant="outline"
             disabled={updateMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             {updateMutation.isPending ? "Updating..." : "Update Testimonial"}
           </Button>

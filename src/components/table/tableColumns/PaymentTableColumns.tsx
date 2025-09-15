@@ -16,16 +16,12 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Customer" />
     ),
-    cell: ({ row }) => {
-      const customerName = row.original.customerName;
-      const packageName = row.original.packageName;
-      return (
-        <div className="flex flex-col">
-          <span className="font-medium text-black">{customerName}</span>
-          <span className="text-xs text-gray-600 mt-1">{packageName}</span>
-        </div>
-      );
-    },
+  },
+  {
+    accessorKey: "packageName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Package" />
+    ),
   },
   {
     accessorKey: "totalAmount",
@@ -33,7 +29,7 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
       <DataTableColumnHeader column={column} title="Total" />
     ),
     cell: ({ row }) => {
-      return <span className="font-medium text-black">₹{row.original.totalAmount.toLocaleString()}</span>;
+      return <span className="font-medium">₹{row.original.totalAmount.toLocaleString()}</span>;
     },
   },
   {
@@ -42,7 +38,7 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
       <DataTableColumnHeader column={column} title="Paid" />
     ),
     cell: ({ row }) => {
-      return <span className="font-medium text-green-600">₹{row.original.paidAmount.toLocaleString()}</span>;
+      return <span className="font-medium">₹{row.original.paidAmount.toLocaleString()}</span>;
     },
   },
   {
@@ -53,7 +49,7 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
     cell: ({ row }) => {
       const balance = row.original.balanceAmount;
       return (
-        <span className={`font-medium ${balance > 0 ? 'text-red-600' : 'text-gray-500'}`}>
+        <span className={`font-medium ${balance > 0 ? 'text-red-500' : ''}`}>
           ₹{balance.toLocaleString()}
         </span>
       );
@@ -69,13 +65,13 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
       const getStatusStyle = (status: string) => {
         switch (status) {
           case 'pending':
-            return "border-yellow-200 text-yellow-700 bg-yellow-50";
+            return "text-yellow-500";
           case 'partiallypaid':
-            return "border-blue-200 text-blue-700 bg-blue-50";
+            return "text-blue-500";
           case 'fullypaid':
-            return "border-green-200 text-green-700 bg-green-50";
+            return "text-green-500";
           default:
-            return "border-gray-200 text-gray-700 bg-gray-50";
+            return "text-gray-500";
         }
       };
 
@@ -172,7 +168,7 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
             variant="ghost"
             size="sm"
             onClick={handleView}
-            className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+            className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50 cursor-pointer"
             title="View Details"
           >
             <Eye className="h-4 w-4" />
@@ -182,7 +178,7 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
             variant="ghost"
             size="sm"
             onClick={handleEdit}
-            className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+            className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50 cursor-pointer"
             title="Edit Payment"
           >
             <Edit className="h-4 w-4" />
@@ -192,7 +188,7 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
             variant="ghost"
             size="sm"
             onClick={handleDelete}
-            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer"
             title="Delete Payment"
             disabled={deleteMutation.isPending}
           >

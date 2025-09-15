@@ -50,7 +50,7 @@ export const AdminJobsTableColumns = (
           variant="ghost"
           size="sm"
           onClick={() => handleViewDetails(row.original._id)}
-          className="h-8 w-8 p-0 hover:bg-blue-900/30 hover:text-blue-400 transition-colors"
+          className="text-blue-500 cursor-pointer h-8 w-8 p-0 hover:bg-blue-500/20 hover:text-blue-500 transition-colors"
           title="View Details"
         >
           <Eye className="h-4 w-4" />
@@ -59,7 +59,7 @@ export const AdminJobsTableColumns = (
           variant="ghost"
           size="sm"
           onClick={() => handleEdit(row.original._id)}
-          className="h-8 w-8 p-0 hover:bg-blue-900/30 hover:text-blue-400 transition-colors"
+          className="text-green-500 cursor-pointer h-8 w-8 p-0 hover:bg-green-500/20 hover:text-green-500 transition-colors"
           title="Edit Job"
         >
           <Pencil className="h-4 w-4" />
@@ -70,7 +70,7 @@ export const AdminJobsTableColumns = (
               variant="ghost"
               size="sm"
               disabled={deletingJobId === row.original._id}
-              className="h-8 w-8 p-0 hover:bg-red-900/30 hover:text-red-400 transition-colors"
+              className="text-red-500 cursor-pointer h-8 w-8 p-0 hover:bg-red-500/20 hover:text-red-500 transition-colors"
               title="Delete Job"
             >
               {deletingJobId === row.original._id ? (

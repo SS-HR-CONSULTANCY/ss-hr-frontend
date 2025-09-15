@@ -6,6 +6,7 @@ import type { RootState, AppDispatch } from "@/store/store";
 import { closeViewTestimonialDetails } from "@/store/slices/testimonialSlice";
 import { getTestimonialById } from "@/utils/apis/adminTestimonialApi";
 import noProfile from '@/assets/defaultImgaes/noProfile.png';
+import FormLoading from "../form/FormLoading";
 
 const TestimonialDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,20 +24,7 @@ const TestimonialDetails: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="p-6 max-w-2xl mx-auto">
-        <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded mb-4"></div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded"></div>
-          </div>
-          <div className="mt-4 space-y-2">
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-          </div>
-        </div>
-      </div>
+      <FormLoading />
     );
   }
 
@@ -59,7 +47,7 @@ const TestimonialDetails: React.FC = () => {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-black">Testimonial Details</h2>
+        <h2 className="text-xl font-semibold ">Testimonial Details</h2>
         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
           testimonial.isVisible 
             ? "bg-green-100 text-green-800" 
@@ -71,29 +59,29 @@ const TestimonialDetails: React.FC = () => {
 
       <div className="space-y-6">
         {/* Client Profile Section */}
-        <div className="p-4 border border-gray-200 rounded-lg">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Client Information</h3>
+        <div className="p-4 border  rounded-lg">
+          <h3 className="text-sm font-medium  mb-3">Client Information</h3>
           <div className="flex items-center gap-4">
             <img
               src={testimonial.clientPhoto || noProfile}
               alt={testimonial.clientName}
-              className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+              className="w-16 h-16 rounded-full object-cover border"
               onError={(e) => {
                 e.currentTarget.src = noProfile;
               }}
             />
             <div>
-              <h4 className="text-lg font-semibold text-black">{testimonial.clientName}</h4>
-              <p className="text-gray-600 font-medium">{testimonial.designation}</p>
+              <h4 className="text-lg font-semibold ">{testimonial.clientName}</h4>
+              <p className="font-medium">{testimonial.designation}</p>
             </div>
           </div>
         </div>
 
         {/* Testimonial Content */}
         <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Client Testimonial</h3>
-          <div className="p-4 border border-gray-200 rounded-lg border-l-4 border-l-blue-500">
-            <p className="text-black leading-relaxed italic">
+          <h3 className="text-sm font-medium mb-2">Client Testimonial</h3>
+          <div className="p-4 border rounded-lg border-l-4">
+            <p className="leading-relaxed italic">
               "{testimonial.testimonial}"
             </p>
           </div>
@@ -105,7 +93,6 @@ const TestimonialDetails: React.FC = () => {
         <Button
           onClick={handleClose}
           variant="outline"
-          className="border-gray-300 text-black hover:bg-gray-50"
         >
           Close
         </Button>

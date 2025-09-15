@@ -71,7 +71,7 @@ export const createPackage = async (packageData: CreatePackageRequest): Promise<
 
 export const getPackageById = async (packageId: string): Promise<SinglePackageResponse> => {
   const response = await axiosInstance.get(`/admin/packages/${packageId}`);
-  return response.data;
+  return response.data.package;
 };
 
 export const updatePackage = async (packageId: string, packageData: UpdatePackageRequest): Promise<ApiBaseResponse> => {

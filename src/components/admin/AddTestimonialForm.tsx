@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import type { AppDispatch } from "@/store/store";
-import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
+import { Textarea } from "@/components/ui/textarea";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTestimonial } from "@/utils/apis/adminTestimonialApi";
+import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { CreateTestimonialFormData } from "@/types/entities/testimonial";
 
 const AddTestimonialForm: React.FC = () => {
@@ -96,55 +96,55 @@ const AddTestimonialForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold text-black mb-6">Add New Testimonial</h2>
+    <div className="p-6 rounded-lg shadow-sm border max-w-2xl mx-auto">
+      <h2 className="text-xl font-semibold mb-6">Add New Testimonial</h2>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="clientName" className="text-black">Client Name</Label>
+          <div className="space-y-2">
+            <Label htmlFor="clientName" className="">Client Name</Label>
             <Input
               id="clientName"
               value={formData.clientName}
               onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter client name"
             />
             {errors.clientName && <p className="text-red-500 text-sm mt-1">{errors.clientName}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="designation" className="text-black">Designation</Label>
+          <div className="space-y-2">
+            <Label htmlFor="designation" className="">Designation</Label>
             <Input
               id="designation"
               value={formData.designation}
               onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter designation"
             />
             {errors.designation && <p className="text-red-500 text-sm mt-1">{errors.designation}</p>}
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="clientPhoto" className="text-black">Client Photo URL (Optional)</Label>
+        <div className="space-y-2">
+          <Label htmlFor="clientPhoto" className="">Client Photo URL (Optional)</Label>
           <Input
             id="clientPhoto"
             value={formData.clientPhoto}
             onChange={(e) => setFormData({ ...formData, clientPhoto: e.target.value })}
-            className="bg-white text-black border-gray-300"
+            className=""
             placeholder="Enter photo URL"
           />
           {errors.clientPhoto && <p className="text-red-500 text-sm mt-1">{errors.clientPhoto}</p>}
         </div>
 
-        <div>
-          <Label htmlFor="testimonial" className="text-black">Testimonial</Label>
+        <div className="space-y-2">
+          <Label htmlFor="testimonial" className="">Testimonial</Label>
           <Textarea
             id="testimonial"
             value={formData.testimonial}
             onChange={(e) => setFormData({ ...formData, testimonial: e.target.value })}
-            className="bg-white text-black border-gray-300 min-h-32"
+            className=""
             placeholder="Enter client testimonial about your HR consultancy services..."
           />
           {errors.testimonial && <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>}
@@ -155,14 +155,13 @@ const AddTestimonialForm: React.FC = () => {
             type="button"
             variant="outline"
             onClick={handleCancel}
-            className="border-gray-300 text-black hover:bg-gray-50"
-          >
+            >
             Cancel
           </Button>
           <Button
             type="submit"
+            variant="outline"
             disabled={createMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             {createMutation.isPending ? "Creating..." : "Create Testimonial"}
           </Button>
