@@ -1,3 +1,5 @@
+import md1 from '../assets/aboutImages/md1.jpg';
+import md2 from '../assets/aboutImages/md2.jpg';
 import webDev from '../assets/svgs/serviceSvg/webDev.svg';
 import visaService from '../assets/svgs/serviceSvg/visa.svg';
 import cvWriting from '../assets/svgs/serviceSvg/cvWriting.svg';
@@ -5,9 +7,10 @@ import ticketService from '../assets/svgs/serviceSvg/ticket.svg';
 import jobRecruitment from '../assets/svgs/serviceSvg/hiring.svg';
 import type { Route, statsMapIntrface } from '@/types/commonTypes';
 import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
+import type { mdDataProps } from '@/types/componentTypes/aboutTypes';
 import labourSupply from '../assets/svgs/serviceSvg/labourSupply.svg';
-import medicalRecruitment from '../assets/svgs/serviceSvg/medical.svg';
 import type { ContactItem } from '@/types/componentTypes/contactTypes';
+import medicalRecruitment from '../assets/svgs/serviceSvg/medical.svg';
 import type { PackageProps } from '@/types/componentTypes/packageTypes';
 import type { ServiceProps } from '@/types/componentTypes/servicesTypes';
 import cvWritingBanner from '../assets/serviceBanners/cvWritingBanner.jpg';
@@ -24,9 +27,6 @@ import certificateAttestationService from '../assets/svgs/serviceSvg/certificate
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
 import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
 import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/adminApiTypes';
-import type { mdDataProps } from '@/types/componentTypes/aboutTypes';
-import md1 from '../assets/aboutImages/md1.jpg';
-import md2 from '../assets/aboutImages/md2.jpg';
 
 
 export const companyName = "ShahaalamGroups";
@@ -38,7 +38,7 @@ export const siteUrlConfig: SiteUrlConfigProps = {
   travelpackages: "/toursandtravels",
   webdevelopment: "/webdevelopment",
   contact: "/contact",
-  services: '/#services',
+  services: '#services',
   signIn: "/login",
   signUp: "/register"
 };
@@ -242,7 +242,7 @@ export const services: ServiceProps[] = [
     heroTitle: "Stand Out With A Professionally Written CV",
   },
   {
-    id: "webservice",
+    id: "webdevelopment",
     title: "Web Development",
     description: "Building modern, responsive, and scalable websites tailored to your needs.",
     hoverDescription: "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
@@ -253,7 +253,7 @@ export const services: ServiceProps[] = [
     bannerTitle: "Modern Scalable Web Development Services",
     showButton: true,
     buttonText: "Build One",
-    buttonUrl: "/webservice",
+    buttonUrl: "/webdevelopment",
     points: [
       "We design and develop modern websites that are responsive across all devices and platforms.",
       "Our development approach ensures scalability so your website grows as your business expands.",
