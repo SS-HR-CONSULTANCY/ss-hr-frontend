@@ -13,7 +13,7 @@ export type AdminfetchAllJobsResponse = Pick<Job, "_id" | "companyName" | "desig
 export type AdminUpdateJobRequest = Pick<Job, "companyName" | "designation" | "industry" | "jobDescription" | "benifits" | "salary" | "skills" | "nationality" | "vacancy">;
 
 
-export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked" | "isVerified" | "profileImage" | "fullName" | "createdAt">;
+export type AdminfetchAllUsersResponse = Pick<User, "_id" | "email" | "isBlocked" | "isVerified" | "profileImage" | "fullName" | "createdAt" | "serialNumber">;
 
 export type AdminfetchAllPackagesResponse = Pick<Package, "_id" | "packageName" | "description" | "priceIN" | "priceUAE" | "packageType" | "features" | "createdAt">;
 
@@ -135,7 +135,7 @@ export interface CreateAdminRequest extends Pick<User, "fullName" | "email" | "p
 // Create new admin api response
 export type CreateAdminResponse = Pick<User, "_id" | "fullName" | "email" | "phone" | "profileImage" | "role" | "isBlocked" | "createdAt">;
 // Fetch all admins (subadmin and superAdmin)
-export type AdminFetchAllAdminsResponse = Array<Pick<User, "_id" | "fullName" | "email" | "phone" | "profileImage" | "role" | "isBlocked" | "createdAt">>;
+export type AdminFetchAllAdminsResponse = Pick<User, "_id" | "fullName" | "email" | "phone" | "profileImage" | "role" | "isBlocked" | "createdAt">;
 
 // Update admin info
 export type UpdateAdminRequest = Pick<User, "_id" | "fullName" | "email" | "isBlocked" | "profileImage" | "role">;

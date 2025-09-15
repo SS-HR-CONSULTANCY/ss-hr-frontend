@@ -220,7 +220,6 @@ const AddUserForm: React.FC = () => {
               className="w-full px-3 py-2 border border-black rounded-md bg-white text-black focus:border-black focus:ring-black transition-all duration-200"
             >
               <option value="user">User</option>
-              <option value="admin">Admin</option>
             </select>
           </div>
 

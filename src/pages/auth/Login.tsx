@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { signin } from "@/utils/apis/authApi";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import FormHeader from "@/components/form/FormHeader";
 import { loginSchema } from "../../utils/validationSchema";
 import { HomeIcon, LoaderCircle, UserPlus } from "lucide-react";
 import RememberMeWithFP from "@/components/form/RememberMeWithFP";
-import { signin, type SigninRequest } from "@/utils/apis/authApi";
+import type { SigninRequest } from "@/types/apiTypes/authApiTypes";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
@@ -135,7 +136,7 @@ const Login: React.FC = () => {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full mt-2 border-slate-500 hover:bg-slate-600 hover:text-white"
+                className="w-full mt-2 border-slate-500 hover:bg-slate-600 hover:text-white cursor-pointer"
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
               >

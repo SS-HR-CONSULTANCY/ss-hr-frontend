@@ -1,7 +1,8 @@
 import { axiosInstance } from "@/lib/axios";
+import type { User } from "@/types/entities/user";
+import type { AdminfetchAllUsersResponse } from "@/types/apiTypes/adminApiTypes";
 import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
 import type { ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";
-import type { AdminfetchAllUsersResponse } from "@/types/apiTypes/adminApiTypes";
 
 export interface UserResponse {
     success: boolean;
@@ -61,10 +62,4 @@ export const adminDeleteUser = async (userId: string) => {
 
 export const adminFetchUserStats = async () => {
     return await axiosInstance.get('/admin/users/stats');
-};
-
-export const adminFetchAllJobs = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<any>> => {
-    const query = buildQueryParams(params);
-    const response = await axiosInstance.get(`/user/jobs${query ? `?${query}` : ''}`);
-    return parseNewCommonResponse<any>(response.data);
 };

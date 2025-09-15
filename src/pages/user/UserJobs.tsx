@@ -1,7 +1,7 @@
 import React from 'react';
 import { jobsDummyData } from '@/utils/dummyData';
-import CommonTable from '@/components/common/CommonTable';
 import { userFetchAllJobs } from '@/utils/apis/userApi';
+import CommonTable from '@/components/common/CommonTable';
 import type { UserfetchAllJobsResponse } from '@/types/apiTypes/userApiTypes';
 import { UserJobsTableColumns } from '@/components/table/tableColumns/UserJobsColumns';
 

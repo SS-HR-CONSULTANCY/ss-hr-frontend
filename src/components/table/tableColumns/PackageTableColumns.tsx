@@ -16,24 +16,12 @@ export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Package Name" />
     ),
-    cell: ({ row }) => {
-      const packageName = row.original.packageName;
-      const packageType = row.original.packageType;
-      return (
-        <div className="flex flex-col">
-          <span className="font-medium text-black">{packageName}</span>
-          <span 
-            className={`w-fit text-xs mt-1 px-2 py-1 rounded-full font-medium border ${
-              packageType === 'jobpackage' 
-                ? "border-blue-200 text-blue-700 bg-blue-50" 
-                : "border-green-200 text-green-700 bg-green-50"
-            }`}
-          >
-            {packageType === 'jobpackage' ? 'Job Package' : 'Tour Package'}
-          </span>
-        </div>
-      );
-    },
+  },
+  {
+    accessorKey: "packageType",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Package Type" />
+    ),
   },
   {
     accessorKey: "description",
@@ -43,14 +31,7 @@ export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
     cell: ({ row }) => {
       const text = row.original.description;
       const truncatedText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
-      return (
-        <span 
-          className="max-w-xs cursor-pointer hover:text-blue-600" 
-          title={text}
-        >
-          {truncatedText}
-        </span>
-      );
+      return (truncatedText);
     },
   },
   {
@@ -58,18 +39,12 @@ export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Price (INR)" />
     ),
-    cell: ({ row }) => {
-      return <span className="font-medium text-black">{row.original.priceIN}</span>;
-    },
   },
   {
     accessorKey: "priceUAE",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Price (AED)" />
     ),
-    cell: ({ row }) => {
-      return <span className="font-medium text-black">{row.original.priceUAE}</span>;
-    },
   },
   {
     accessorKey: "actions",
@@ -79,7 +54,6 @@ export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
       const packageData = row.original;
       const dispatch = useDispatch<AppDispatch>();
       const queryClient = useQueryClient();
-
       const deleteMutation = useMutation({
         mutationFn: () => deletePackage(packageData._id),
         onSuccess: () => {
@@ -142,7 +116,7 @@ export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
             variant="ghost"
             size="sm"
             onClick={handleView}
-            className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+            className="h-8 w-8 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500 hover:bg-blue-50"
             title="View Details"
           >
             <Eye className="h-4 w-4" />
@@ -152,7 +126,7 @@ export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
             variant="ghost"
             size="sm"
             onClick={handleEdit}
-            className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+            className="h-8 w-8 p-0 text-green-500 cursor-pointer hover:bg-green-500/20 hover:text-green-500"
             title="Edit Package"
           >
             <Edit className="h-4 w-4" />
@@ -162,7 +136,7 @@ export const PackageTableColumns: ColumnDef<AdminfetchAllPackagesResponse>[] = [
             variant="ghost"
             size="sm"
             onClick={handleDelete}
-            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="h-8 w-8 p-0 text-red-500 cursor-pointer hover:bg-red-500/20 hover:text-red-500"
             title="Delete Package"
             disabled={deleteMutation.isPending}
           >

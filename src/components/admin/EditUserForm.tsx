@@ -7,8 +7,8 @@ import { X, User, Mail, Phone, UserCheck, Loader, Shield, ShieldOff } from 'luci
 import { toast } from 'react-toastify';
 import type { AppDispatch, RootState } from '@/store/store';
 import { closeEditUserModal } from '@/store/slices/userSlice';
-import { adminUpdateUser, adminFetchUserById } from '@/utils/apis/userApi';
 import { useQueryClient } from '@tanstack/react-query';
+import { adminFetchUserById, adminUpdateUser } from '@/utils/apis/adminUserApi';
 
 interface EditUserFormData {
   fullName: string;
@@ -110,10 +110,8 @@ const EditUserForm: React.FC = () => {
       } else {
         toast.error('Failed to update user');
       }
-    } catch (error: any) {
-      console.error('Update user error:', error);
-      const errorMessage = error?.response?.data?.message || 'Failed to update user';
-      toast.error(errorMessage);
+    } catch {
+      toast.error("Failed to update user.");
     } finally {
       setLoading(false);
     }

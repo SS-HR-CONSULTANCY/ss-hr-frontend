@@ -1,12 +1,12 @@
 import type { 
-  DeleteAdminRequest, 
   UpdateAdminRequest, 
   CreateAdminResponse, 
   UpdateAdminResponse,
   AdminFetchAllAdminsResponse, 
 } from "@/types/apiTypes/adminApiTypes";
 import { axiosInstance } from "@/lib/axios";
-import type { ApiBaseResponse } from "@/types/commonTypes";
+import type { ApiBaseResponse, ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";
+import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
 
 // Create Admin
 export const createAdmin = async (payload: FormData): Promise<CreateAdminResponse> => {
@@ -16,9 +16,10 @@ export const createAdmin = async (payload: FormData): Promise<CreateAdminRespons
 };
 
 // Fetch Admins
-export const fetchAdmins = async (): Promise<AdminFetchAllAdminsResponse> => {
-  const response = await axiosInstance.get('/admin/settings/admins');
-  return response.data.data;
+export const fetchAdmins = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminFetchAllAdminsResponse>> => {
+  const query = buildQueryParams(params);
+  const response = await axiosInstance.get(`/admin/settings/admins${query ? `?${query}` : ''}`);
+  return parseNewCommonResponse<AdminFetchAllAdminsResponse>(response.data.data);
 };
 
 // Update Admin
@@ -28,7 +29,7 @@ export const updateAdmin = async (payload: UpdateAdminRequest): Promise<UpdateAd
 };
 
 // Delete Admin
-export const deleteAdmin = async (payload: DeleteAdminRequest): Promise<ApiBaseResponse> => {
-  const response = await axiosInstance.delete(`/admin/settings/${payload._id}`);
-  return response.data.data;
+export const deleteAdmin = async (adminId: string): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.delete(`/admin/settings/${adminId}`);
+  return response.data;
 };

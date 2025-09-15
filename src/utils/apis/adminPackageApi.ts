@@ -54,14 +54,8 @@ export interface UpdatePackageRequest {
 
 export const getAllPackages = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<Package>> => {
   const query = buildQueryParams(params);
-  const response = await axiosInstance.get(`/admin/packages${query ? `?${query}` : ''}`);
-  
-  console.log("Raw backend response:", response.data);
-  
-  const parsed = parseNewCommonResponse<Package>(response.data);
-  console.log("Parsed response:", parsed);
-  
-  return parsed;
+  const response = await axiosInstance.get(`/admin/packages${query ? `?${query}` : ''}`);  
+  return parseNewCommonResponse<Package>(response.data);  
 };
 
 export const createPackage = async (packageData: CreatePackageRequest): Promise<ApiBaseResponse> => {
@@ -71,7 +65,7 @@ export const createPackage = async (packageData: CreatePackageRequest): Promise<
 
 export const getPackageById = async (packageId: string): Promise<SinglePackageResponse> => {
   const response = await axiosInstance.get(`/admin/packages/${packageId}`);
-  return response.data;
+  return response.data.package;
 };
 
 export const updatePackage = async (packageId: string, packageData: UpdatePackageRequest): Promise<ApiBaseResponse> => {
@@ -91,8 +85,6 @@ export const getPackageStats = async (): Promise<ApiBaseResponse & { stats?: { t
 
 export const getPackagesByType = async (packageType: string, params?: FetchFunctionParams): Promise<ApiPaginatedResponse<Package>> => {
   const query = buildQueryParams(params);
-  const response = await axiosInstance.get(`/admin/packages/type/${packageType}${query ? `?${query}` : ''}`);
-  
-  const parsed = parseNewCommonResponse<Package>(response.data);
-  return parsed;
+  const response = await axiosInstance.get(`/admin/packages/type/${packageType}${query ? `?${query}` : ''}`);  
+  return parseNewCommonResponse<Package>(response.data);
 };

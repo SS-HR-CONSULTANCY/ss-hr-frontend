@@ -1,54 +1,55 @@
-// import wevDev from '../assets/servicesImages/webDevService.jpg';
+import md1 from '../assets/aboutImages/md1.jpg';
+import md2 from '../assets/aboutImages/md2.jpg';
+import webDev from '../assets/svgs/serviceSvg/webDev.svg';
+import visaService from '../assets/svgs/serviceSvg/visa.svg';
+import cvWriting from '../assets/svgs/serviceSvg/cvWriting.svg';
+import ticketService from '../assets/svgs/serviceSvg/ticket.svg';
+import jobRecruitment from '../assets/svgs/serviceSvg/hiring.svg';
 import type { Route, statsMapIntrface } from '@/types/commonTypes';
-import visaService from '../assets/servicesImages/visaService.png';
-import cvWriting from '../assets/servicesImages/cvWritingService.jpg';
+import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
+import type { mdDataProps } from '@/types/componentTypes/aboutTypes';
+import labourSupply from '../assets/svgs/serviceSvg/labourSupply.svg';
 import type { ContactItem } from '@/types/componentTypes/contactTypes';
-// import travelService from '../assets/servicesImages/travelService.jpg';
-import ticketService from '../assets/servicesImages/ticketService.png';
+import medicalRecruitment from '../assets/svgs/serviceSvg/medical.svg';
 import type { PackageProps } from '@/types/componentTypes/packageTypes';
 import type { ServiceProps } from '@/types/componentTypes/servicesTypes';
-import jobRecruitment from '../assets/servicesImages/jobRecruitmentService.png';
-import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
-// import labourSupplyService from '../assets/servicesImages/labourSupplyService.jpg';
-import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
-import medicalRecruitment from '../assets/servicesImages/medicalRecruitmentService.jpg';
-import certificateBanner from '../assets/serviceBanners/certificateBanner.jpg';
 import cvWritingBanner from '../assets/serviceBanners/cvWritingBanner.jpg';
-import labourSupplyBanner from '../assets/serviceBanners/labourSupplyBanner.jpg';
+import toursAndTravels from '../assets/svgs/serviceSvg/toursAndTravels.svg';
 import medicalRecBanner from '../assets/serviceBanners/medicalRecBanner.jpg';
-import ticketServiceBanner from '../assets/serviceBanners/ticketServiceBanner.jpg';
+import certificateBanner from '../assets/serviceBanners/certificateBanner.jpg';
 import visaServiceBanner from '../assets/serviceBanners/visaServiceBanner.jpg';
-import webDevBanner from '../assets/serviceBanners/webDevBanner.jpg';
+import labourSupplyBanner from '../assets/serviceBanners/labourSupplyBanner.jpg';
+import type { CallToActionProps } from '@/types/componentTypes/callToActionTypes';
+import ticketServiceBanner from '../assets/serviceBanners/ticketServiceBanner.jpg';
+import type { ImageGridDataProps } from '@/types/componentTypes/imageGridDataTypes';
+import type { dataSelectListItemInterface } from '@/types/componentTypes/chartTypes';
+import certificateAttestationService from '../assets/svgs/serviceSvg/certificate.svg';
 import type { navLinkProps, SiteUrlConfigProps } from '@/types/componentTypes/headerTypes';
-import certificateAttestationService from '../assets/servicesImages/certificateAttestationService.png';
-import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users,MessageSquare } from 'lucide-react';
+import { Briefcase, Building2, ClipboardList, FileText, Landmark, Mail, MapPin, Package, Phone, Users } from 'lucide-react';
 import type { AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from '@/types/apiTypes/adminApiTypes';
 
-import webDev from '../assets/svgs/serviceSvg/webDev.svg';
-import labourSupply from '../assets/svgs/serviceSvg/labourSupply.svg';
-import toursAndTravels from '../assets/svgs/serviceSvg/toursAndTravels.svg';
 
 export const companyName = "ShahaalamGroups";
 
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {
   home: '/',
-  aboutus: "/#aboutus",
+  aboutus: "/aboutUs",
   travelpackages: "/toursandtravels",
   webdevelopment: "/webdevelopment",
   contact: "/contact",
-  services: '/#services',
+  services: '#services',
   signIn: "/login",
   signUp: "/register"
 };
 
- export const links: { url: string, text: string }[] = [
-    { url: '/user', text: "Dashboard" },
-    { url: '/user/profile', text: "Profile" },
-    { url: '/user/jobs', text: "Jobs" },
-    { url: '/user/applications', text: 'Applications' },
-    { url: '/user/chat', text: 'Chat' },
-  ]
+export const links: { url: string, text: string }[] = [
+  { url: '/user', text: "Dashboard" },
+  { url: '/user/profile', text: "Profile" },
+  { url: '/user/jobs', text: "Jobs" },
+  { url: '/user/applications', text: 'Applications' },
+  { url: '/user/chat', text: 'Chat' },
+]
 
 export const navLinks: navLinkProps[] = [
   { text: "Home", href: siteUrlConfig.home, content: "default", isLink: true, isForDesk: true, isForMob: true },
@@ -88,6 +89,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for this service, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Discover Stress-Free Tours Around The World",
   },
   {
     id: "visaservice",
@@ -112,6 +114,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about this service, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Fast And Reliable Visa Processing Support",
   },
   {
     id: "ticketservice",
@@ -136,6 +139,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for ticket booking, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Book Affordable Tickets Quickly And Easily",
   },
   {
     id: "certificationservice",
@@ -160,6 +164,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about attestation services, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Smooth And Hassle-Free Certificate Attestation",
   },
   {
     id: "medicalrecruitservice",
@@ -184,6 +189,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about medical recruitment, please get in touch.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Trusted Recruitment For Healthcare Professionals",
   },
   {
     id: "jobrecruitservice",
@@ -208,6 +214,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about job recruitment, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Find The Right Career Opportunities Here",
   },
   {
     id: "cvwritingservice",
@@ -232,9 +239,10 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to enquire about CV writing services, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Stand Out With A Professionally Written CV",
   },
   {
-    id: "webservice",
+    id: "webdevelopment",
     title: "Web Development",
     description: "Building modern, responsive, and scalable websites tailored to your needs.",
     hoverDescription: "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
@@ -245,7 +253,7 @@ export const services: ServiceProps[] = [
     bannerTitle: "Modern Scalable Web Development Services",
     showButton: true,
     buttonText: "Build One",
-    buttonUrl: "/webservice",
+    buttonUrl: "/webdevelopment",
     points: [
       "We design and develop modern websites that are responsive across all devices and platforms.",
       "Our development approach ensures scalability so your website grows as your business expands.",
@@ -256,6 +264,7 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for web development, please get in touch.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Build A Modern And Scalable Website Today",
   },
   {
     id: "laboursupplyservice",
@@ -280,8 +289,10 @@ export const services: ServiceProps[] = [
     contactText: "If you would like to make an enquiry for labour supply, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
+    heroTitle: "Reliable Workforce Solutions For Every Business",
   },
 ];
+
 
 
 // About component constants
@@ -305,14 +316,6 @@ export const packages: PackageProps[] = [
     ],
     price: 100000,
     popular: true,
-    className: "md:col-span-2",
-    thumbnail:
-      "https://images.unsplash.com/photo-1476231682828-37e571bc172f?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3",
-    content: {
-      title: "House in the woods",
-      description: "A serene and tranquil retreat, this house in the woods offers a peaceful escape from the hustle and bustle of city life."
-    }
-    ,
   },
   {
     id: 2,
@@ -329,13 +332,6 @@ export const packages: PackageProps[] = [
       "Free Water",
     ],
     price: 100000,
-    className: "col-span-1",
-    thumbnail:
-      "https://images.unsplash.com/photo-1464457312035-3d7d0e0c058e?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
-    content: {
-      title: "House above the clouds",
-      description: "Perched high above the world, this house offers breathtaking views and a unique living experience. It’s a place where the sky meets home, and tranquility is a way of life."
-    }
   },
   {
     id: 3,
@@ -352,13 +348,6 @@ export const packages: PackageProps[] = [
       "Laundry Services",
     ],
     price: 150000,
-    className: "col-span-1",
-    thumbnail:
-      "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
-    content: {
-      title: "Greens all over",
-      description: "A house surrounded by greenery and nature’s beauty. It’s the perfect place to relax, unwind, and enjoy life."
-    }
   },
   {
     id: 4,
@@ -375,13 +364,24 @@ export const packages: PackageProps[] = [
       "Wellness & Fitness Membership",
     ],
     price: 300000,
-    className: "md:col-span-2",
-    thumbnail:
-      "https://images.unsplash.com/photo-1475070929565-c985b496cb9f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
-    content: {
-      title: "Rivers are serene",
-      description: "A house by the river is a place of peace and tranquility. It’s the perfect place to relax, unwind, and enjoy life."
-    },
+  },
+];
+
+
+export const ImageGridData: ImageGridDataProps[] = [
+  {
+    id: 1,
+    imageUrl: "",
+    title: "",
+    description: "",
+    className: "md:col-span-2"
+  },
+  {
+    id: 2,
+    imageUrl: "",
+    title: "",
+    description: "",
+    className: "md:col-span-1"
   },
 ];
 
@@ -664,3 +664,26 @@ export const statsMapForAdminOverview: Array<statsMapIntrface<AdminFetchOverview
 ];
 
 
+export const mdData: mdDataProps[] = [
+  {
+    profileImage: md1,
+    name: "Shine Son",
+    quote: "I want to make people happy when they travel and work around the world just like my dad."
+  },
+  {
+    profileImage: md2,
+    name: "Shine",
+    quote: "Our mission is to build opportunities that shape brighter futures for our clients, our partners, and most importantly, for the next generation."
+  }
+]
+
+export const achievements: string[] = [
+  "Successfully placed 10,000+ candidates globally",
+  "Partnered with 200+ leading companies worldwide",
+  "Awarded for excellence in overseas recruitment",
+  "Launched tech-driven travel & visa solutions",
+  "Expanding into multiple industries including IT & tourism",
+  "3000+ job recruitments successfully completed",
+  "Offering multiple sector services worldwide",
+  "Adopting tech-driven workflows for efficiency",
+];
