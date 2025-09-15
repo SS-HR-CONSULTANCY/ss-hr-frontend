@@ -664,15 +664,26 @@ export const statsMapForAdminOverview: Array<statsMapIntrface<AdminFetchOverview
 ];
 
 
-    export const mdData: mdDataProps[] = [
-        {
-            profileImage: md1,
-            name: "Shine Son",
-            quote: ""
-        },
-        {
-            profileImage: md2,
-            name: "Shine",
-            quote: ""
-        }
-    ]
+export const mdData: mdDataProps[] = [
+  {
+    profileImage: md1,
+    name: "Shine Son",
+    quote: "I want to make people happy when they travel and work around the world just like my dad."
+  },
+  {
+    profileImage: md2,
+    name: "Shine",
+    quote: "Our mission is to build opportunities that shape brighter futures for our clients, our partners, and most importantly, for the next generation."
+  }
+]
+
+export const achievements: string[] = [
+  "Successfully placed 10,000+ candidates globally",
+  "Partnered with 200+ leading companies worldwide",
+  "Awarded for excellence in overseas recruitment",
+  "Launched tech-driven travel & visa solutions",
+  "Expanding into multiple industries including IT & tourism",
+  "3000+ job recruitments successfully completed",
+  "Offering multiple sector services worldwide",
+  "Adopting tech-driven workflows for efficiency",
+];

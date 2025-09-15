@@ -1,8 +1,8 @@
 import { lazy } from "react";
+import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
 import { adminApplicationRoutes, services, userApplicationRoutes } from "@/utils/constants";
-import AboutUs from "@/pages/user/AboutUs";
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
