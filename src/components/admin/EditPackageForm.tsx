@@ -26,7 +26,6 @@ const EditPackageForm: React.FC = () => {
     priceUAE: "",
     packageType: "jobpackage",
     packageDuration: undefined,
-    image: "",
     features: [],
     food: false,
     accommodation: false,
@@ -36,7 +35,7 @@ const EditPackageForm: React.FC = () => {
     jobGuidance: false,
   });
 
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const { data: packageData, isLoading } = useQuery({
     queryKey: ["package", selectedPackageId],
@@ -51,44 +50,33 @@ const EditPackageForm: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["packages"] });
       dispatch(closeEditPackageForm());
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update package");
+    onError: () => {
+      toast.error("Failed to update package");
     },
   });
 
   useEffect(() => {
-    if (packageData?.package) {
+    if (packageData) {
       setFormData({
-        packageName: packageData.package.packageName,
-        description: packageData.package.description,
-        priceIN: packageData.package.priceIN,
-        priceUAE: packageData.package.priceUAE,
-        packageType: packageData.package.packageType,
-        packageDuration: packageData.package.packageDuration,
-        image: packageData.package.image,
-        features: packageData.package.features,
-        food: packageData.package.food,
-        accommodation: packageData.package.accommodation,
-        travelCard: packageData.package.travelCard,
-        utilityBills: packageData.package.utilityBills,
-        airportPickup: packageData.package.airportPickup,
-        jobGuidance: packageData.package.jobGuidance,
+        packageName: packageData.packageName,
+        description: packageData.description,
+        priceIN: packageData.priceIN,
+        priceUAE: packageData.priceUAE,
+        packageType: packageData.packageType,
+        packageDuration: packageData.packageDuration,
+        features: packageData.features,
+        food: packageData.food,
+        accommodation: packageData.accommodation,
+        travelCard: packageData.travelCard,
+        utilityBills: packageData.utilityBills,
+        airportPickup: packageData.airportPickup,
+        jobGuidance: packageData.jobGuidance,
       });
     }
   }, [packageData]);
 
-  const isValidUrl = (string: string): boolean => {
-    if (!string) return true;
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-
   const validateForm = (): boolean => {
-    const newErrors: {[key: string]: string} = {};
+    const newErrors: { [key: string]: string } = {};
 
     if (formData.packageName && formData.packageName.length < 2) {
       newErrors.packageName = "Package name must be at least 2 characters";
@@ -100,10 +88,6 @@ const EditPackageForm: React.FC = () => {
 
     if (formData.packageDuration && (formData.packageDuration < 1 || formData.packageDuration > 365)) {
       newErrors.packageDuration = "Duration must be between 1 and 365 days";
-    }
-
-    if (formData.image && !isValidUrl(formData.image)) {
-      newErrors.image = "Please enter a valid image URL";
     }
 
     if (formData.features && formData.features.length > 0) {
@@ -175,7 +159,7 @@ const EditPackageForm: React.FC = () => {
   return (
     <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-sm border max-w-4xl mx-auto">
       <h2 className="text-xl font-semibold mb-6">Edit Package</h2>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -195,7 +179,7 @@ const EditPackageForm: React.FC = () => {
             <Label htmlFor="packageType" className="">Package Type</Label>
             <Select
               value={formData.packageType || "jobpackage"}
-              onValueChange={(value: 'jobpackage' | 'tourpackage') => 
+              onValueChange={(value: 'jobpackage' | 'tourpackage') =>
                 setFormData({ ...formData, packageType: value })
               }
             >
@@ -264,19 +248,6 @@ const EditPackageForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Image */}
-        <div className="space-y-2">
-          <Label htmlFor="image" className="">Package Image URL</Label>
-          <Input
-            id="image"
-            value={formData.image || ""}
-            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-            className=""
-            placeholder="https://example.com/package-image.jpg"
-          />
-          {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
-        </div>
-
         {/* Features */}
         <div className="space-y-2">
           <Label className="">Package Features</Label>
@@ -292,9 +263,8 @@ const EditPackageForm: React.FC = () => {
                 {(formData.features?.length || 0) > 1 && (
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="destructive"
                     onClick={() => removeFeature(index)}
-                    className="border-red-300 text-red-600 hover:bg-red-50"
                   >
                     Remove
                   </Button>
@@ -305,7 +275,6 @@ const EditPackageForm: React.FC = () => {
               type="button"
               variant="outline"
               onClick={addFeature}
-              className="border-blue-300 text-blue-600 hover:bg-blue-50"
             >
               Add Feature
             </Button>
@@ -329,8 +298,8 @@ const EditPackageForm: React.FC = () => {
                 <Checkbox
                   id={key}
                   checked={(formData[key as keyof typeof formData] as boolean) || false}
-                  onCheckedChange={(checked) => 
-                    handleServiceChange(key as any, checked as boolean)
+                  onCheckedChange={(checked) =>
+                    handleServiceChange(key as 'food' | 'accommodation' | 'travelCard' | 'utilityBills' | 'airportPickup' | 'jobGuidance', checked as boolean)
                   }
                 />
                 <Label htmlFor={key} className="text-sm">

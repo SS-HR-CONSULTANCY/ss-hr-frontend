@@ -7,7 +7,6 @@ export interface Package {
   priceUAE: string;
   packageType: 'jobpackage' | 'tourpackage';
   packageDuration: number;
-  image: string;
   features: string[];
   food: boolean;
   accommodation: boolean;
@@ -26,7 +25,6 @@ export interface CreatePackageFormData {
   priceUAE: string;
   packageType: 'jobpackage' | 'tourpackage';
   packageDuration: number;
-  image: string;
   features: string[];
   food: boolean;
   accommodation: boolean;
@@ -43,7 +41,6 @@ export interface UpdatePackageFormData {
   priceUAE?: string;
   packageType?: 'jobpackage' | 'tourpackage';
   packageDuration?: number;
-  image?: string;
   features?: string[];
   food?: boolean;
   accommodation?: boolean;
