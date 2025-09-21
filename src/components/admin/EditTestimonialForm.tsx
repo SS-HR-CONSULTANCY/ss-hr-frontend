@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import * as Switch from "@radix-ui/react-switch";
-import type { RootState, AppDispatch } from "@/store/store";
-import { closeEditTestimonialForm } from "@/store/slices/testimonialSlice";
-import { getTestimonialById, updateTestimonial } from "@/utils/apis/adminTestimonialApi";
-import type { UpdateTestimonialFormData } from "@/types/entities/testimonial";
 import FormLoading from "../form/FormLoading";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import * as Switch from "@radix-ui/react-switch";
+import React, { useState, useEffect } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState, AppDispatch } from "@/store/store";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { closeEditTestimonialForm } from "@/store/slices/testimonialSlice";
+import type { UpdateTestimonialFormData } from "@/types/entities/testimonial";
+import { getTestimonialById, updateTestimonial } from "@/utils/apis/adminTestimonialApi";
 
 const EditTestimonialForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,13 +20,15 @@ const EditTestimonialForm: React.FC = () => {
 
   const [formData, setFormData] = useState<UpdateTestimonialFormData>({
     clientName: "",
-    clientPhoto: "",
+    clientPhoto: null,
     designation: "",
     testimonial: "",
     isVisible: true,
   });
 
   const [errors, setErrors] = useState<Partial<UpdateTestimonialFormData>>({});
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
 
   const { data: testimonialData, isLoading } = useQuery({
     queryKey: ["testimonial", selectedTestimonialId],
@@ -34,17 +36,14 @@ const EditTestimonialForm: React.FC = () => {
     enabled: !!selectedTestimonialId,
   });
 
-  const updateMutation = useMutation({
-    mutationFn: (data: UpdateTestimonialFormData) => updateTestimonial(selectedTestimonialId!, data),
-    onSuccess: () => {
-      toast.success("Testimonial updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["testimonials"] });
-      dispatch(closeEditTestimonialForm());
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update testimonial");
-    },
-  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFormData({ ...formData, clientPhoto: file });
+    setPreviewImage(URL.createObjectURL(file));
+  };
 
   useEffect(() => {
     if (testimonialData?.testimonial) {
@@ -58,16 +57,6 @@ const EditTestimonialForm: React.FC = () => {
     }
   }, [testimonialData]);
 
-  const isValidUrl = (string: string): boolean => {
-    if (!string) return true;
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-
   const validateForm = (): boolean => {
     const newErrors: Partial<UpdateTestimonialFormData> = {};
 
@@ -79,20 +68,41 @@ const EditTestimonialForm: React.FC = () => {
       newErrors.testimonial = "Testimonial must be at least 20 characters";
     }
 
-    if (formData.clientPhoto && !isValidUrl(formData.clientPhoto)) {
-      newErrors.clientPhoto = "Please enter a valid photo URL";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      updateMutation.mutate(formData);
+
+    if (!validateForm()) return;
+
+    const data = new FormData();
+    data.append("clientName", formData.clientName ?? "");
+    data.append("designation", formData.designation ?? "");
+    data.append("testimonial", formData.testimonial ?? "");
+    data.append("isVisible", formData.isVisible ? "true" : "false");
+
+    if (formData.clientPhoto instanceof File) {
+      data.append("clientPhoto", formData.clientPhoto);
+    }
+
+    const res = await updateTestimonial({
+      testimonialId: selectedTestimonialId!,
+      testimonialData: data,
+    });
+
+    if (res) {
+      if (res.success) {
+        toast.success("Testimonial updated successfully");
+        queryClient.invalidateQueries({ queryKey: ["testimonials"] });
+        dispatch(closeEditTestimonialForm());
+      }
+    } else {
+      toast.error("Failed to update testimonial");
     }
   };
+
 
   const handleCancel = () => {
     dispatch(closeEditTestimonialForm());
@@ -107,7 +117,7 @@ const EditTestimonialForm: React.FC = () => {
   return (
     <div className="p-6 rounded-lg shadow-sm border max-w-2xl mx-auto">
       <h2 className="text-xl font-semibold mb-6">Edit Testimonial</h2>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -135,15 +145,21 @@ const EditTestimonialForm: React.FC = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="clientPhoto" className="">Client Photo URL</Label>
-          <Input
+          <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
+          <input
+            type="file"
             id="clientPhoto"
-            value={formData.clientPhoto}
-            onChange={(e) => setFormData({ ...formData, clientPhoto: e.target.value })}
-            className=""
-            placeholder="Enter photo URL"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="block w-full text-sm border p-2"
           />
-          {errors.clientPhoto && <p className="text-red-500 text-sm mt-1">{errors.clientPhoto}</p>}
+          {previewImage && (
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="mt-2 w-24 h-24 object-cover rounded-full border"
+            />
+          )}
         </div>
 
         <div className="space-y-2">
@@ -162,8 +178,8 @@ const EditTestimonialForm: React.FC = () => {
           <label className="pr-[15px] text-[15px] leading-none" htmlFor="isVisible">
             Make testimonial visible to public
           </label>
-          <Switch.Root 
-            className="relative h-[25px] w-[42px] cursor-default rounded-full bg-gray-300 shadow-[0_2px_10px] shadow-gray-400 outline-none focus:shadow-[0_0_0_2px] focus:shadow-blue-500 data-[state=checked]:bg-blue-600" 
+          <Switch.Root
+            className="relative h-[25px] w-[42px] cursor-default rounded-full bg-gray-300 shadow-[0_2px_10px] shadow-gray-400 outline-none focus:shadow-[0_0_0_2px] focus:shadow-blue-500 data-[state=checked]:bg-blue-600"
             id="isVisible"
             checked={formData.isVisible}
             onCheckedChange={(checked) => setFormData({ ...formData, isVisible: checked })}
@@ -177,15 +193,14 @@ const EditTestimonialForm: React.FC = () => {
             type="button"
             variant="outline"
             onClick={handleCancel}
-            >
+          >
             Cancel
           </Button>
           <Button
             type="submit"
             variant="outline"
-            disabled={updateMutation.isPending}
           >
-            {updateMutation.isPending ? "Updating..." : "Update Testimonial"}
+            {"Update Testimonial"}
           </Button>
         </div>
       </form>

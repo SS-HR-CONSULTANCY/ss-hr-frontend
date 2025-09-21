@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
-import type { ApiPaginatedResponse, FetchFunctionParams, ApiBaseResponse } from "@/types/commonTypes";
-import { buildQueryParams, parseNewCommonResponse } from "@/utils/helpers/apiHelpers";
 import type { Testimonial } from "@/types/entities/testimonial";
+import { buildQueryParams, parseNewCommonResponse } from "@/utils/helpers/apiHelpers";
+import type { ApiPaginatedResponse, FetchFunctionParams, ApiBaseResponse } from "@/types/commonTypes";
 
 export interface TestimonialResponse {
   success: boolean;
@@ -27,7 +27,7 @@ export interface CreateTestimonialRequest {
 
 export interface UpdateTestimonialRequest {
   clientName?: string;
-  clientPhoto?: string;
+  clientPhoto?: File;
   designation?: string;
   testimonial?: string;
   isVisible?: boolean;
@@ -49,8 +49,8 @@ export const getTestimonialById = async (testimonialId: string): Promise<SingleT
   return response.data;
 };
 
-export const updateTestimonial = async (testimonialId: string, testimonialData: UpdateTestimonialRequest): Promise<ApiBaseResponse> => {
-  const response = await axiosInstance.put(`/admin/testimonials/${testimonialId}`, testimonialData);
+export const updateTestimonial = async ({testimonialId, testimonialData}: {testimonialId: string,  testimonialData: FormData}): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.patch(`/admin/testimonials/${testimonialId}`, testimonialData);
   return response.data;
 };
 

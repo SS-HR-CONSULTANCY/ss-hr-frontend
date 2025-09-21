@@ -28,6 +28,8 @@ const TestimonialDetails: React.FC = () => {
     );
   }
 
+  console.log("data : ",testimonialData)
+
   if (!testimonialData?.testimonial) {
     return (
       <div className="p-6 max-w-2xl mx-auto">
@@ -58,7 +60,6 @@ const TestimonialDetails: React.FC = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Client Profile Section */}
         <div className="p-4 border  rounded-lg">
           <h3 className="text-sm font-medium  mb-3">Client Information</h3>
           <div className="flex items-center gap-4">

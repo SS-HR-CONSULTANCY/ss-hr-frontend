@@ -18,7 +18,7 @@ export interface CreateTestimonialFormData {
 
 export interface UpdateTestimonialFormData {
   clientName?: string;
-  clientPhoto?: File | null;
+  clientPhoto?: File | null | string;
   designation?: string;
   testimonial?: string;
   isVisible?: boolean;

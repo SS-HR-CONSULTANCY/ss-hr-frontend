@@ -126,7 +126,6 @@ const AddTestimonialForm: React.FC = () => {
           </div>
         </div>
 
-        {/* File upload for client photo */}
         <div className="space-y-2">
           <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
           <input
@@ -134,7 +133,7 @@ const AddTestimonialForm: React.FC = () => {
             id="clientPhoto"
             accept="image/*"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-700"
+            className="block w-full text-sm border p-2"
           />
           {previewImage && (
             <img
