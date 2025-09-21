@@ -3,7 +3,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import type { UserfetchAllJobsResponse } from "@/types/apiTypes/user";
+import type { UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export const UserJobsTableColumns: ColumnDef<UserfetchAllJobsResponse>[] = [

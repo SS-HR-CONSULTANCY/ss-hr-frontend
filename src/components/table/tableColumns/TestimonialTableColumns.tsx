@@ -1,16 +1,16 @@
 import dayjs from "dayjs";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
+import { Eye, Edit, Trash2 } from "lucide-react";
+import type { AppDispatch } from "@/store/store";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AppDispatch } from "@/store/store";
-import { openEditTestimonialForm, openViewTestimonialDetails } from "@/store/slices/testimonialSlice";
-import { deleteTestimonial } from "@/utils/apis/testimonialApi";
-import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/admin";
 import noProfile from '../../../assets/defaultImgaes/noProfile.png';
+import { deleteTestimonial } from "@/utils/apis/adminTestimonialApi";
+import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
+import { openEditTestimonialForm, openViewTestimonialDetails } from "@/store/slices/testimonialSlice";
 
 export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsResponse>[] = [
   {
@@ -116,7 +116,6 @@ export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsRespons
       };
 
       const handleDelete = () => {
-        // Custom delete confirmation with react-toastify
         const confirmToast = toast(
           ({ closeToast }) => (
             <div>
@@ -158,7 +157,7 @@ export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsRespons
             variant="ghost"
             size="sm"
             onClick={handleView}
-            className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+            className="h-8 w-8 p-0 text-blue-500 hover:text-blue-500 hover:bg-blue-500/20 cursor-pointer"
             title="View Details"
           >
             <Eye className="h-4 w-4" />
@@ -168,7 +167,7 @@ export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsRespons
             variant="ghost"
             size="sm"
             onClick={handleEdit}
-            className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+            className="h-8 w-8 p-0 text-green-500 hover:text-green-500 hover:bg-green-500/20 cursor-pointer"
             title="Edit Testimonial"
           >
             <Edit className="h-4 w-4" />
@@ -178,7 +177,7 @@ export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsRespons
             variant="ghost"
             size="sm"
             onClick={handleDelete}
-            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="h-8 w-8 p-0 text-red-500 hover:text-red-500 hover:bg-red-500/20 cursor-pointer"
             title="Delete Testimonial"
             disabled={deleteMutation.isPending}
           >

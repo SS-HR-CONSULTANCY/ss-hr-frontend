@@ -1,15 +1,17 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import type { AppDispatch, RootState } from "@/store/store";
-import { getAllPackages } from "@/utils/apis/packageApi";
-import {toggleAddPackageForm} from "@/store/slices/packageSlice";
-import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/admin";
+import { useDispatch, useSelector } from "react-redux";
 import CommonTable from "@/components/common/CommonTable";
-import { PackageTableColumns } from "@/components/table/tableColumns/PackageTableColumns";
+import type { AppDispatch, RootState } from "@/store/store";
+import { getAllPackages } from "@/utils/apis/adminPackageApi";
 import AddPackageForm from "@/components/admin/AddPackageForm";
-import EditPackageForm from "@/components/admin/EditPackageForm";
 import PackageDetails from "@/components/admin/PackageDetails";
+import EditPackageForm from "@/components/admin/EditPackageForm";
+import { toggleAddPackageForm } from "@/store/slices/packageSlice";
+import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/adminApiTypes";
+import { PackageTableColumns } from "@/components/table/tableColumns/PackageTableColumns";
+import TablePageHeader from "@/components/common/TablePageHeader";
+import { Plus } from "lucide-react";
 
 interface AdminPackagesProps {
   showButton?: boolean;
@@ -25,26 +27,21 @@ const AdminPackages: React.FC<AdminPackagesProps> = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Header with Add Button */}
-      <div className="flex justify-between items-center p-4">
-        <div>
-          <h1 className="text-2xl lg:text-3xl font-bold text-white">
-            Packages
-          </h1>
-          <p className="text-sm font-normal text-gray-400">
-            Job and tour packages for HR consultancy services
-          </p>
-        </div>
-        <Button
-          onClick={() => dispatch(toggleAddPackageForm())}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          Add Package
-        </Button>
-      </div>
+    <>
+      <TablePageHeader
+        title="Packages"
+        subtitle="Job and tour packages for HR consultancy services"
+        actionButton={
+          <Button
+            onClick={() => dispatch(toggleAddPackageForm())}
+            variant="outline"
+          >
+            <Plus className="h-5 w-5" />
+            Add New Package
+          </Button>
+        }
+      />
 
-      {/* Packages Table */}
       <CommonTable<AdminfetchAllPackagesResponse>
         fetchApiFunction={getAllPackages}
         queryKey="packages"
@@ -56,7 +53,6 @@ const AdminPackages: React.FC<AdminPackagesProps> = () => {
         pageSize={10}
       />
 
-      {/* Add Package Modal */}
       {isAddPackageFormOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -65,7 +61,6 @@ const AdminPackages: React.FC<AdminPackagesProps> = () => {
         </div>
       )}
 
-      {/* Edit Package Modal */}
       {isEditPackageFormOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -82,7 +77,7 @@ const AdminPackages: React.FC<AdminPackagesProps> = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

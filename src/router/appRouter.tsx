@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
 import { adminApplicationRoutes, services, userApplicationRoutes } from "@/utils/constants";
@@ -11,22 +12,21 @@ const Register = lazy(() => import("@/pages/auth/Register"));
 const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
 const ChatPage = lazy(() => import("@/pages/common/ChatPage"));
 const Error404 = lazy(() => import("@/pages/common/Error404"));
-const AdminJobs = lazy(() => import("@/pages/admin/AdminJobs"));
+const AdminLogin = lazy(() => import("@/pages/auth/AdminLogin"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
 const ContactPage = lazy(() => import("@/pages/user/ContactPage"));
 const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
-const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const AdminReports = lazy(() => import("@/pages/admin/AdminReports"));
 const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
+const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
 const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
 const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
 const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
-const AdminCompanies = lazy(() => import("@/pages/admin/AdminCompanies"));
 const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
+const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
-
 
 const appRouter = createBrowserRouter([
     {
@@ -36,6 +36,7 @@ const appRouter = createBrowserRouter([
             { path: '/', element: <Landing /> },
             { path: '/toursandtravels', element: <ToursAndTravels /> },
             { path: '/contact', element: <ContactPage /> },
+            { path: '/aboutUs', element: <AboutUs /> },
             { path: "/visaservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "visaservice")!} /> },
             { path: "/ticketservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "ticketservice")!} /> },
             { path: "/certificationservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "certificationservice")!} /> },
@@ -47,10 +48,9 @@ const appRouter = createBrowserRouter([
         ]
     },
     { path: 'register', element: <Register /> },
-    { path: 'login', element: <Login role="user" title="User Sign In" /> },
+    { path: 'login', element: <Login /> },
     { path: 'verifyOtp', element: <Otp /> },
-    { path: 'admin/login', element: <Login role="admin" title="Admin Sign In" /> },
-    { path: 'superAdmin/login', element: <Login role="superAdmin" title="Super Admin Sign In" /> },
+    { path: 'admin/login', element: <AdminLogin /> },
     {
         path: '/user',
         element: <DashboardLayout showMobileScreenWarning={false} routes={userApplicationRoutes} />,
@@ -103,7 +103,7 @@ const appRouter = createBrowserRouter([
         children: [
             {
                 index: true, element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <AdminOverview />
                     </ProtectedRoute>
                 )
@@ -111,7 +111,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "overview",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <AdminOverview />
                     </ProtectedRoute>
                 ),
@@ -119,31 +119,23 @@ const appRouter = createBrowserRouter([
             {
                 path: "users",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <AdminUsers />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "companies",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
-                        <AdminCompanies />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "jobs",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
-                        <AdminJobs showButton />
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+                        <AdminJobsPage />
                     </ProtectedRoute>
                 ),
             },
             {
                 path: "packages",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <AdminPackages showButton />
                     </ProtectedRoute>
                 ),
@@ -151,7 +143,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "applications",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <AdminApplications />
                     </ProtectedRoute>
                 ),
@@ -159,7 +151,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "payments",
                 element: (
-                    <ProtectedRoute requiredRole={["admin","superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <AdminPayments />
                     </ProtectedRoute>
                 ),
@@ -167,7 +159,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "chat",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <ChatPage />
                     </ProtectedRoute>
                 ),
@@ -175,7 +167,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "testimonials",
                 element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin"]}>
+                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
                         <AdminTestimonials />
                     </ProtectedRoute>
                 ),
@@ -183,7 +175,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "reports",
                 element: (
-                    <ProtectedRoute requiredRole={["superAdmin"]}>
+                    <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
                         <AdminReports />
                     </ProtectedRoute>
                 ),
@@ -191,7 +183,7 @@ const appRouter = createBrowserRouter([
             {
                 path: "settings",
                 element: (
-                    <ProtectedRoute requiredRole={["superAdmin"]}>
+                    <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
                         <AdminSettings />
                     </ProtectedRoute>
                 ),

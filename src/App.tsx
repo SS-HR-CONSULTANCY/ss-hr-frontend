@@ -19,11 +19,11 @@ const AppContent = () => {
 
   return (
     <ThemeWrapper>
-      <ToastContainer theme={theme} />
-      <Suspense fallback={<Loading />}>
-        <RouterProvider router={appRouter} />
-      </Suspense>
-    </ThemeWrapper>
+        <ToastContainer theme={theme} autoClose={2500} />
+        <Suspense fallback={<Loading />}>
+          <RouterProvider router={appRouter} />
+        </Suspense>
+      </ThemeWrapper>
   );
 };
 

@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { adminSliceIntialState } from "@/types/slice/adminSliceTypes";
-import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
+import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/adminApiTypes";
+import type { User } from "@/types/entities/user";
 
 const initialState: adminSliceIntialState = {
     reportData: null,
@@ -9,6 +10,7 @@ const initialState: adminSliceIntialState = {
     showAddJobForm: false,
     showAddPackageForm: false,
     showAddReviewForm: false,
+    selectedAdmin: null,
 }
 
 const adminSlice = createSlice({
@@ -37,6 +39,9 @@ const adminSlice = createSlice({
         toggleAddReviewForm: (state) => {
             state.showAddReviewForm = !state.showAddReviewForm;
         },
+        setSelectedAdminId: (state, action: PayloadAction<User>) => {
+            state.selectedAdmin = action.payload
+        }
     }
 });
 
@@ -47,5 +52,6 @@ export const {
     toggleAddJobForm,
     toggleAddPackageForm,
     toggleAddReviewForm,
+    setSelectedAdminId
 } = adminSlice.actions;
 export default adminSlice.reducer;

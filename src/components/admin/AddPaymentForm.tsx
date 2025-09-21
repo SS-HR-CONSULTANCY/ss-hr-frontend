@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import type { AppDispatch } from "@/store/store";
+import { Textarea } from "@/components/ui/textarea";
+import { createPayment } from "@/utils/apis/adminPaymentApi";
 import { toggleAddPaymentForm } from "@/store/slices/paymentSlice";
-import { createPayment } from "@/utils/apis/paymentApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CreatePaymentFormData } from "@/types/entities/payment";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const AddPaymentForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -130,31 +130,31 @@ const AddPaymentForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-4xl mx-auto">
-      <h2 className="text-xl font-semibold text-black mb-6">Add New Payment</h2>
+    <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-sm border  max-w-4xl mx-auto">
+      <h2 className="text-xl font-semibold mb-6">Add New Payment</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Customer & Package Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="customerName" className="text-black">Customer Name</Label>
+          <div className="space-y-2">
+            <Label htmlFor="customerName" className="">Customer Name</Label>
             <Input
               id="customerName"
               value={formData.customerName}
               onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter customer name"
             />
             {errors.customerName && <p className="text-red-500 text-sm mt-1">{errors.customerName}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="packageName" className="text-black">Package Name</Label>
+          <div className="space-y-2">
+            <Label htmlFor="packageName" className="">Package Name</Label>
             <Input
               id="packageName"
               value={formData.packageName}
               onChange={(e) => setFormData({ ...formData, packageName: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="Enter package name"
             />
             {errors.packageName && <p className="text-red-500 text-sm mt-1">{errors.packageName}</p>}
@@ -163,25 +163,25 @@ const AddPaymentForm: React.FC = () => {
 
         {/* Payment Amounts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="totalAmount" className="text-black">Total Amount (₹)</Label>
+          <div className="space-y-2">
+            <Label htmlFor="totalAmount" className="">Total Amount (₹)</Label>
             <Input
               id="totalAmount"
               value={formatCurrency(formData.totalAmount.toString())}
               onChange={(e) => handleAmountChange('totalAmount', e.target.value)}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="50,000"
             />
             {errors.totalAmount && <p className="text-red-500 text-sm mt-1">{errors.totalAmount}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="paidAmount" className="text-black">Paid Amount (₹)</Label>
+          <div className="space-y-2">
+            <Label htmlFor="paidAmount" className="">Paid Amount (₹)</Label>
             <Input
               id="paidAmount"
               value={formatCurrency(formData.paidAmount.toString())}
               onChange={(e) => handleAmountChange('paidAmount', e.target.value)}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="20,000"
             />
             {errors.paidAmount && <p className="text-red-500 text-sm mt-1">{errors.paidAmount}</p>}
@@ -190,8 +190,8 @@ const AddPaymentForm: React.FC = () => {
 
         {/* Balance Display */}
         {formData.totalAmount > 0 && (
-          <div className="p-3 bg-gray-50 rounded-lg border">
-            <span className="text-sm text-gray-600">Balance Amount: </span>
+          <div className="p-3 rounded-lg border">
+            <span className="text-sm">Balance Amount: </span>
             <span className={`font-medium ${(formData.totalAmount - formData.paidAmount) > 0 ? 'text-red-600' : 'text-green-600'}`}>
               ₹{formatCurrency((formData.totalAmount - formData.paidAmount).toString())}
             </span>
@@ -200,15 +200,15 @@ const AddPaymentForm: React.FC = () => {
 
         {/* Payment Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="paymentMethod" className="text-black">Payment Method</Label>
+          <div className="space-y-2">
+            <Label htmlFor="paymentMethod" className="">Payment Method</Label>
             <Select
               value={formData.paymentMethod}
               onValueChange={(value: 'googlepay' | 'banktransfer' | 'cash') => 
                 setFormData({ ...formData, paymentMethod: value })
               }
             >
-              <SelectTrigger className="bg-white text-black border-gray-300">
+              <SelectTrigger className="">
                 <SelectValue placeholder="Select payment method" />
               </SelectTrigger>
               <SelectContent>
@@ -219,39 +219,39 @@ const AddPaymentForm: React.FC = () => {
             </Select>
           </div>
 
-          <div>
-            <Label htmlFor="paymentDate" className="text-black">Payment Date</Label>
+          <div className="space-y-2">
+            <Label htmlFor="paymentDate" className="">Payment Date</Label>
             <Input
               id="paymentDate"
               type="date"
               value={formData.paymentDate}
               onChange={(e) => setFormData({ ...formData, paymentDate: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
             />
             {errors.paymentDate && <p className="text-red-500 text-sm mt-1">{errors.paymentDate}</p>}
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="referenceId" className="text-black">Reference ID</Label>
+          <div className="space-y-2">
+            <Label htmlFor="referenceId" className="">Reference ID</Label>
             <Input
               id="referenceId"
               value={formData.referenceId}
               onChange={(e) => setFormData({ ...formData, referenceId: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="GP123456789"
             />
             {errors.referenceId && <p className="text-red-500 text-sm mt-1">{errors.referenceId}</p>}
           </div>
 
-          <div>
-            <Label htmlFor="paymentProof" className="text-black">Payment Proof URL</Label>
+          <div className="space-y-2">
+            <Label htmlFor="paymentProof" className="">Payment Proof URL</Label>
             <Input
               id="paymentProof"
               value={formData.paymentProof}
               onChange={(e) => setFormData({ ...formData, paymentProof: e.target.value })}
-              className="bg-white text-black border-gray-300"
+              className=""
               placeholder="https://drive.google.com/file/d/..."
             />
             {errors.paymentProof && <p className="text-red-500 text-sm mt-1">{errors.paymentProof}</p>}
@@ -259,13 +259,13 @@ const AddPaymentForm: React.FC = () => {
         </div>
 
         {/* Admin Notes */}
-        <div>
-          <Label htmlFor="adminNotes" className="text-black">Admin Notes</Label>
+        <div className="space-y-2">
+          <Label htmlFor="adminNotes" className="">Admin Notes</Label>
           <Textarea
             id="adminNotes"
             value={formData.adminNotes}
             onChange={(e) => setFormData({ ...formData, adminNotes: e.target.value })}
-            className="bg-white text-black border-gray-300 min-h-20"
+            className=""
             placeholder="Enter any additional notes..."
           />
         </div>
@@ -275,14 +275,13 @@ const AddPaymentForm: React.FC = () => {
             type="button"
             variant="outline"
             onClick={handleCancel}
-            className="border-gray-300 text-black hover:bg-gray-50"
-          >
+            >
             Cancel
           </Button>
           <Button
             type="submit"
+            variant="outline"
             disabled={createMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             {createMutation.isPending ? "Creating..." : "Create Payment"}
           </Button>

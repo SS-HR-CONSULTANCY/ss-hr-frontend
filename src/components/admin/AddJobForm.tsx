@@ -1,235 +1,194 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { X, Building2, Briefcase, Users, Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
-import type { AppDispatch, RootState } from '@/store/store';
-import { closeAddJobForm, addJob } from '@/store/slices/jobSlice';
-import { createJob } from '@/utils/apis/jobApi';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import FormField from '../form/FormFiled';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import AdminFormHeader from './AdminFormHeader';
+import type { AppDispatch } from '@/store/store';
+import { Briefcase, Loader } from 'lucide-react';
+import { createJob } from '@/utils/apis/adminJobApi';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from '@tanstack/react-query';
-
-interface AddJobFormData {
-  companyName: string;
-  designation: string;
-  vacancy: number;
-}
+import { closeAddJobForm } from '@/store/slices/jobSlice';
+import { CreateJobZodSchema } from '@/utils/validationSchema';
+import type { AdminCreateNewJob } from '@/types/apiTypes/adminApiTypes';
 
 const AddJobForm: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+
   const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<AddJobFormData>({
-    companyName: '',
-    designation: '',
-    vacancy: 1
+  const dispatch = useDispatch<AppDispatch>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<AdminCreateNewJob>({
+    resolver: zodResolver(CreateJobZodSchema),
+    defaultValues: {
+      companyName: "",
+      designation: "",
+      industry: "",
+      jobDescription: "",
+      benifits: "",
+      salary: 0,
+      skills: "",
+      nationality: "",
+      vacancy: 1,
+    },
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof AddJobFormData, string>>>({});
 
-  const validateForm = (): boolean => {
-    const newErrors: Partial<Record<keyof AddJobFormData, string>> = {};
+  const watchedValues = watch();
 
-    if (!formData.companyName.trim()) {
-      newErrors.companyName = 'Company name is required';
-    }
-
-    if (!formData.designation.trim()) {
-      newErrors.designation = 'Designation is required';
-    }
-
-    if (!formData.vacancy || formData.vacancy < 1) {
-      newErrors.vacancy = 'Vacancy must be at least 1';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleInputChange = (field: keyof AddJobFormData, value: string | number) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      [field]: field === 'vacancy' ? Number(value) : value 
-    }));
-    
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-
-    setLoading(true);
-
+  const onSubmit = async (data: AdminCreateNewJob) => {
+    setIsLoading(true);
     try {
-      const response = await createJob(formData);
-      
+      const response = await createJob(data);
       if (response.success) {
         toast.success(response.message || 'Job created successfully!');
-        dispatch(addJob(response.job));
-        
-        // Invalidate React Query cache to refresh table
         queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });
-        
         dispatch(closeAddJobForm());
-        
-        // Reset form
-        setFormData({
-          companyName: '',
-          designation: '',
-          vacancy: 1
-        });
-        setErrors({});
       } else {
         toast.error('Failed to create job');
       }
-    } catch (error: any) {
-      console.error('Create job error:', error);
-      const errorMessage = error?.response?.data?.message || 'Failed to create job';
-      toast.error(errorMessage);
+    } catch {
+      toast.error("Job adding failed");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleClose = () => {
     dispatch(closeAddJobForm());
-    // Reset form when closing
-    setFormData({
-      companyName: '',
-      designation: '',
-      vacancy: 1
-    });
-    setErrors({});
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-black">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-black bg-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-black">
-                <Briefcase className="h-5 w-5 text-black" />
-              </div>
-              <h3 className="text-xl font-bold text-black">Add New Job</h3>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-700 text-black dark:text-white rounded-2xl shadow-2xl max-w-5xl w-full mx-4 border border-black max-h-screen overflow-y-scroll">
+        <AdminFormHeader Icon={Briefcase} closeFn={handleClose} title='Add New Job' />
+
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+          <div className="flex justify-around space-x-6">
+            <div className="space-y-2 w-full">
+              <FormField<AdminCreateNewJob>
+                id="companyName"
+                label="Company Name"
+                type="text"
+                placeholder="Enter company name"
+                error={errors.companyName?.message}
+                register={register}
+              />
+
+              <FormField<AdminCreateNewJob>
+                id="designation"
+                label="Position/Designation"
+                type="text"
+                placeholder="e.g., Senior Software Engineer"
+                error={errors.designation?.message}
+                register={register}
+              />
+
+              <FormField<AdminCreateNewJob>
+                id="industry"
+                label="Industry"
+                type="text"
+                placeholder="e.g., IT Services"
+                error={errors.industry?.message}
+                register={register}
+              />
+
+              <FormField<AdminCreateNewJob>
+                id="nationality"
+                label="Preferred Nationality"
+                type="text"
+                placeholder="e.g., Indian"
+                error={errors.nationality?.message}
+                register={register}
+              />
+
+              <FormField<AdminCreateNewJob>
+                id="salary"
+                label="Average Salary (LPA)"
+                type="number"
+                placeholder="Enter salary"
+                error={errors.salary?.message}
+                register={register}
+                registerOptions={{ valueAsNumber: true }}
+              />
+
+              <FormField<AdminCreateNewJob>
+                id="vacancy"
+                label="Number of Openings"
+                type="number"
+                placeholder="Enter number of positions"
+                error={errors.vacancy?.message}
+                register={register}
+                registerOptions={{ valueAsNumber: true }}
+              />
             </div>
+
+            <div className="space-y-2 w-full">
+              <FormField<AdminCreateNewJob>
+                id="jobDescription"
+                label="Job Description"
+                type="textarea"
+                placeholder="Describe the job role..."
+                error={errors.jobDescription?.message}
+                register={register}
+                rows={4}
+              />
+
+              <FormField<AdminCreateNewJob>
+                id="benifits"
+                label="Benefits (comma separated)"
+                type="textarea"
+                placeholder="e.g., Health Insurance, Work From Home"
+                error={errors.benifits?.message as string}
+                register={register}
+                rows={3}
+              />
+
+              <FormField<AdminCreateNewJob>
+                id="skills"
+                label="Required Skills (comma separated)"
+                type="text"
+                placeholder="e.g., React, Node.js"
+                error={errors.skills?.message as string}
+                register={register}
+              />
+
+            </div>
+          </div>
+
+          <div className="px-6 py-4 border-t border-black flex gap-3">
             <Button
-              variant="ghost"
-              size="sm"
+              type="button"
               onClick={handleClose}
-              className="h-8 w-8 p-0 hover:bg-white transition-colors text-black hover:text-black"
+              variant="outline"
+              disabled={isLoading}
             >
-              <X className="h-4 w-4" />
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={
+                isLoading || !watchedValues.salary || !watchedValues.companyName || !watchedValues.designation || !watchedValues.vacancy
+              }
+              variant="outline"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader className="h-4 w-4 animate-spin" />
+                  Creating...
+                </div>
+              ) : (
+                'Create Job'
+              )}
             </Button>
           </div>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* Company Name */}
-          <div className="space-y-2">
-            <Label htmlFor="companyName" className="flex items-center gap-2 text-sm font-medium text-black">
-              <Building2 className="h-4 w-4 text-black" />
-              Company Name
-            </Label>
-            <Input
-              id="companyName"
-              type="text"
-              value={formData.companyName}
-              onChange={(e) => handleInputChange('companyName', e.target.value)}
-              placeholder="Enter company name"
-              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
-                errors.companyName 
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
-                  : 'focus:border-black focus:ring-black'
-              }`}
-            />
-            {errors.companyName && (
-              <p className="text-red-500 text-xs">{errors.companyName}</p>
-            )}
-          </div>
-
-          {/* Designation */}
-          <div className="space-y-2">
-            <Label htmlFor="designation" className="flex items-center gap-2 text-sm font-medium text-black">
-              <Briefcase className="h-4 w-4 text-black" />
-              Position/Designation
-            </Label>
-            <Input
-              id="designation"
-              type="text"
-              value={formData.designation}
-              onChange={(e) => handleInputChange('designation', e.target.value)}
-              placeholder="e.g., Senior Software Engineer"
-              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
-                errors.designation 
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
-                  : 'focus:border-black focus:ring-black'
-              }`}
-            />
-            {errors.designation && (
-              <p className="text-red-500 text-xs">{errors.designation}</p>
-            )}
-          </div>
-
-          {/* Vacancy */}
-          <div className="space-y-2">
-            <Label htmlFor="vacancy" className="flex items-center gap-2 text-sm font-medium text-black">
-              <Users className="h-4 w-4 text-black" />
-              Number of Openings
-            </Label>
-            <Input
-              id="vacancy"
-              type="number"
-              min="1"
-              value={formData.vacancy}
-              onChange={(e) => handleInputChange('vacancy', parseInt(e.target.value) || 1)}
-              placeholder="Enter number of positions"
-              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
-                errors.vacancy 
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
-                  : 'focus:border-black focus:ring-black'
-              }`}
-            />
-            {errors.vacancy && (
-              <p className="text-red-500 text-xs">{errors.vacancy}</p>
-            )}
-          </div>
         </form>
-
-        {/* Footer */}
-        <div className="px-6 py-4 bg-white border-t border-black flex gap-3">
-          <Button 
-            type="button"
-            onClick={handleClose}
-            variant="outline"
-            className="flex-1 hover:bg-white transition-colors border-black text-black hover:text-black"
-            disabled={loading}
-          >
-            Cancel
-          </Button>
-          <Button 
-            type="submit"
-            onClick={handleSubmit}
-            disabled={loading}
-            className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            {loading ? (
-              <div className="flex items-center gap-2">
-                <Loader className="h-4 w-4 animate-spin" />
-                Creating...
-              </div>
-            ) : (
-              'Create Job'
-            )}
-          </Button>
-        </div>
       </div>
     </div>
   );

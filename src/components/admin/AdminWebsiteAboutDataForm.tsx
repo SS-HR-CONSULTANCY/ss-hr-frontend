@@ -4,7 +4,7 @@ import FormField from '../form/FormFiled';
 import React, { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { AboutSettingsFormValues } from '@/types/componentTypes/adminSettings';
-import type { AdminGetAboutCurrentDataResponse } from '@/types/apiTypes/admin';
+import type { AdminGetAboutCurrentDataResponse } from '@/types/apiTypes/adminApiTypes';
 import { adminGetWebsiteAboutCurrentData, adminUpdateWebsiteAboutData } from '@/utils/apis/adminSettingsApi';
 
 const AdminWebsiteAboutDataForm: React.FC = () => {

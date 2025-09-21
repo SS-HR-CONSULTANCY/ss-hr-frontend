@@ -7,8 +7,8 @@ import { X, User, Mail, Lock, Phone, UserCheck, Loader } from 'lucide-react';
 import { toast } from 'react-toastify';
 import type { AppDispatch } from '@/store/store';
 import { closeAddUserModal } from '@/store/slices/userSlice';
-import { adminCreateUser } from '@/utils/apis/userApi';
 import { useQueryClient } from '@tanstack/react-query';
+import { adminCreateUser } from '@/utils/apis/adminUserApi';
 
 interface AddUserFormData {
   fullName: string;
@@ -93,10 +93,8 @@ const AddUserForm: React.FC = () => {
       } else {
         toast.error('Failed to create user');
       }
-    } catch (error: any) {
-      console.error('Create user error:', error);
-      const errorMessage = error?.response?.data?.message || 'Failed to create user';
-      toast.error(errorMessage);
+    } catch {
+      toast.error("User adding failed");
     } finally {
       setLoading(false);
     }
@@ -222,7 +220,6 @@ const AddUserForm: React.FC = () => {
               className="w-full px-3 py-2 border border-black rounded-md bg-white text-black focus:border-black focus:ring-black transition-all duration-200"
             >
               <option value="user">User</option>
-              <option value="admin">Admin</option>
             </select>
           </div>
 

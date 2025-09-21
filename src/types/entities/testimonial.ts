@@ -11,14 +11,14 @@ export interface Testimonial {
 
 export interface CreateTestimonialFormData {
   clientName: string;
-  clientPhoto: string;
+  clientPhoto: File | null;
   designation: string;
   testimonial: string;
 }
 
 export interface UpdateTestimonialFormData {
   clientName?: string;
-  clientPhoto?: string;
+  clientPhoto?: File | null | string;
   designation?: string;
   testimonial?: string;
   isVisible?: boolean;

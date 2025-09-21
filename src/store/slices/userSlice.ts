@@ -2,10 +2,10 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { UserSliceState } from '../../types/slice/userSliceTypes';
 
 const initialState: UserSliceState = {
+  selectedUserId: null,
   isAddUserModalOpen: false,
   isEditUserModalOpen: false,
   isUserDetailsModalOpen: false,
-  selectedUserId: null,
 };
 
 const userSlice = createSlice({

@@ -2,10 +2,11 @@ import { toast } from "react-toastify";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSelector, useDispatch } from "react-redux";
+import { updateProfileImage } from "@/utils/apis/userApi";
 import type { AppDispatch, RootState } from "@/store/store";
 import UpdateUserInfo from "@/components/form/UpdateUserInfo";
 import noProfileImage from "../../assets/defaultImgaes/noProfile.png";
-import { updateProfileImage, type updateProfileImageResponse } from "@/utils/apis/authApi";
+import type { updateProfileImageResponse } from "@/types/apiTypes/authApiTypes";
 
 const UserProfile: React.FC = () => {
 

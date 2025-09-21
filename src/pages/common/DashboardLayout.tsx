@@ -37,7 +37,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <MobileWarning />
         </div>
       )}
-      <div className="h-screen bg-gradient-to-r from-slate-50 to-stone-200 dark:from-slate-800 dark:to-zinc-800 text-balck dark:text-white flex">
+      <div className="h-screen bg-gradient-to-r from-white to-white dark:from-slate-800 dark:to-zinc-800 text-balck dark:text-white flex">
         <Sidebar routes={routes} />
         <div className={`flex-1 flex flex-col ${sidebarOpen ? "w-[85%]" : "w-[95%]"}`}>
           <div className="shrink-0">

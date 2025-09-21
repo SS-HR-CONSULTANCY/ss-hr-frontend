@@ -2,10 +2,10 @@ import { toast } from "react-toastify";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { signin } from "@/utils/apis/authApi";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
-import type { Role } from "@/types/entities/user";
 import { useAppDispatch } from "../../hooks/redux";
 import FormField from "@/components/form/FormFiled";
 import CustomLink from "@/components/form/CustomLink";
@@ -14,14 +14,14 @@ import FormHeader from "@/components/form/FormHeader";
 import { loginSchema } from "../../utils/validationSchema";
 import { HomeIcon, LoaderCircle, UserPlus } from "lucide-react";
 import RememberMeWithFP from "@/components/form/RememberMeWithFP";
-import { signin, type SigninRequest } from "@/utils/apis/authApi";
-import type { LoginProps } from "@/types/componentTypes/loginTypes";
+import type { SigninRequest } from "@/types/apiTypes/authApiTypes";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
-const Login: React.FC<LoginProps> = ({ role, title }) => {
-  const dispatch = useAppDispatch();
+const Login: React.FC = () => {
+
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { isLoading, isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
   );
@@ -36,23 +36,23 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
     defaultValues: {
       email: "",
       password: "",
-      role: role as Role,
+      role: "user"
     },
   });
 
   const watchedValues = watch();
 
   useEffect(() => {
-  if (isAuthenticated && user) {
-    if (user.role === 'user') {
-      navigate('/', { replace: true });
-    } else if (user.role === 'admin' || user.role === 'superAdmin') {
-      navigate('/admin', { replace: true });
-    } else {
-      navigate('/', { replace: true });
+    if (isAuthenticated && user) {
+      if (user.role === 'user') {
+        navigate('/', { replace: true });
+      } else if (user.role === 'admin' || user.role === 'superAdmin' || user.role === "systemAdmin") {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     }
-  }
-}, [isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user, navigate]);
 
   const onSubmit = async (data: SigninRequest) => {
     await dispatch(signin(data))
@@ -71,9 +71,9 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
 
   const handleGoogleLogin = () => {
     try {
-      const apiUrl =   import.meta.env.VITE_ENVIRONMENT === "development"
-    ? import.meta.env.VITE_APP_API_BASE_URL
-    : import.meta.env.VITE_BACKEND_PRODUCTION_URL;
+      const apiUrl = import.meta.env.VITE_ENVIRONMENT === "development"
+        ? import.meta.env.VITE_APP_API_BASE_URL
+        : import.meta.env.VITE_BACKEND_PRODUCTION_URL;
       window.location.href = `${apiUrl}/auth/google`;
     } catch (error) {
       toast.error("Failed to initiate Google login");
@@ -86,7 +86,7 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
       <BackgroundBeamsWithCollision>
         <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
           <FormHeader
-            title={title}
+            title="Sign In With your credentials"
             description="Enter your credentials to access your account"
           />
           <CardContent>
@@ -136,7 +136,7 @@ const Login: React.FC<LoginProps> = ({ role, title }) => {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full mt-2 border-slate-500 hover:bg-slate-600 hover:text-white"
+                className="w-full mt-2 border-slate-500 hover:bg-slate-600 hover:text-white cursor-pointer"
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
               >
