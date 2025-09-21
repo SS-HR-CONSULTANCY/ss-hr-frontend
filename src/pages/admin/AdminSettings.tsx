@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
 import CommonTable from "@/components/common/CommonTable";
 import { fetchAdmins } from "@/utils/apis/adminSettingsApi";
 import TablePageHeader from "@/components/common/TablePageHeader";
 import AdminManagementForm from "@/components/admin/AdminManagementForm";
+import { AdminSettingsHelper } from "@/utils/helpers/adminSettingsHelper";
 import type { AdminFetchAllAdminsResponse } from "@/types/apiTypes/adminApiTypes";
 import { AdminAdminsTableColumns } from "@/components/table/tableColumns/AdminAdminsTableColumn";
-import { AdminSettingsHelper } from "@/utils/helpers/adminSettingsHelper";
-import { useQueryClient } from "@tanstack/react-query";
 
 const AdminSettings: React.FC = () => {
 

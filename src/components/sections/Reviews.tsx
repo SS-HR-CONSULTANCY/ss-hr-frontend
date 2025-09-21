@@ -1,11 +1,31 @@
-import React from 'react';
 import { motion } from "framer-motion";
 import Heading from '../common/Heading';
-import { reviews } from '@/utils/constants';
+import { useQuery } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
+import { dummyTestimonials } from "@/utils/dummyData";
 import { AuroraBackground } from '../ui/aurora-background';
+import type { Testimonial } from "@/types/entities/testimonial";
 import { InfiniteMovingCards } from '../ui/infinite-moving-cards';
+import { fetchTestimonials } from '@/utils/apis/userTestimonialApi';
 
 const Reviews: React.FC = () => {
+
+    const [testmonials, setTestimonials] = useState<Testimonial[]>();
+
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ['testimonials'],
+        queryFn: fetchTestimonials,
+        staleTime: 10 * 60 * 1000,
+    });
+
+    useEffect(() => {
+        if (!data || data.length === 0 || isLoading || (isError && error)) {
+            setTestimonials(dummyTestimonials)
+        } else {
+            setTestimonials(data);
+        }
+    }, [data, error, isError, isLoading])
+
     return (
         <section id="reviews" className="py-16">
             <Heading
@@ -38,14 +58,14 @@ const Reviews: React.FC = () => {
                 >
                     <div className="relative w-full max-w-screen overflow-hidden">
                         <InfiniteMovingCards
-                            items={reviews}
+                            items={testmonials || dummyTestimonials}
                             direction="right"
                             speed="normal"
                         />
                     </div>
                     <div className="relative w-full max-w-screen overflow-hidden mt-4 hidden md:block">
                         <InfiniteMovingCards
-                            items={reviews}
+                            items={testmonials || dummyTestimonials}
                             direction="left"
                             speed="normal"
                         />

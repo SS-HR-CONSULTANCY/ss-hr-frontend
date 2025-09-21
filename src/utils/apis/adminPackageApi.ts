@@ -25,7 +25,6 @@ export interface CreatePackageRequest {
   priceUAE: string;
   packageType: 'jobpackage' | 'tourpackage';
   packageDuration: number;
-  image: string;
   features: string[];
   food: boolean;
   accommodation: boolean;
@@ -42,7 +41,6 @@ export interface UpdatePackageRequest {
   priceUAE?: string;
   packageType?: 'jobpackage' | 'tourpackage';
   packageDuration?: number;
-  image?: string;
   features?: string[];
   food?: boolean;
   accommodation?: boolean;
@@ -63,7 +61,7 @@ export const createPackage = async (packageData: CreatePackageRequest): Promise<
   return response.data;
 };
 
-export const getPackageById = async (packageId: string): Promise<SinglePackageResponse> => {
+export const getPackageById = async (packageId: string): Promise<Package> => {
   const response = await axiosInstance.get(`/admin/packages/${packageId}`);
   return response.data.package;
 };

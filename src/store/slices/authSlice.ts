@@ -1,7 +1,9 @@
 import type { User } from '@/types/entities/user';
+import { updateProfileImage } from '@/utils/apis/userApi';
 import type { AuthState } from '@/types/slice/authSliceTypes';
 import { createSlice, type PayloadAction, type ActionReducerMapBuilder } from '@reduxjs/toolkit';
 import { resendOtp, signin, signout, signup, updatePassword, verifyOtp } from '@/utils/apis/authApi';
+import type { updateProfileImageResponse } from '@/types/apiTypes/authApiTypes';
 
 const initialState: AuthState = {
   user: null,
@@ -50,10 +52,10 @@ const authSlice = createSlice({
       state.user = null;
     },
     setProfileImage: (state, action: PayloadAction<string>) => {
-            if(state.user){
-                state.user.profileImage = action.payload;
-            }
-        },
+      if (state.user) {
+        state.user.profileImage = action.payload;
+      }
+    },
     setOtpForUpdatePassword: (state, action) => {
       state.otpForUpdatePassword = action.payload
     }
@@ -138,7 +140,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = action.payload.user;
-        state.error = null;state.otpRemainingTime = 60;
+        state.error = null; state.otpRemainingTime = 60;
         state.otpTimerIsRunning = true;
       })
       .addCase(resendOtp.rejected, (state: AuthState, action) => {
@@ -165,6 +167,19 @@ const authSlice = createSlice({
         state.user = null;
         state.error = action.payload as string;
       });
+
+    builder.addCase(updateProfileImage.pending, (state) => {
+      state.profileImageUpdating = true;
+    })
+      .addCase(updateProfileImage.fulfilled, (state, action: PayloadAction<updateProfileImageResponse>) => {
+        state.profileImageUpdating = false;
+        if (state.user) {
+          state.user.profileImage = action.payload.data.profileImage;
+        }
+      })
+      .addCase(updateProfileImage.rejected, (state) => {
+        state.profileImageUpdating = true;
+      })
   },
 });
 

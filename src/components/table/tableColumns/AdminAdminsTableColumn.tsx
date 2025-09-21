@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
@@ -61,15 +61,6 @@ export const AdminAdminsTableColumns = (
             id: "actions",
             cell: ({ row }) => (
                 <div className="flex items-center space-x-2">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        // onClick={() => handleViewDetails(row.original._id)}
-                        className="text-blue-500 cursor-pointer h-8 w-8 p-0 hover:bg-blue-500/20 hover:text-blue-500 transition-colors"
-                        title="View Details"
-                    >
-                        <Eye className="h-4 w-4" />
-                    </Button>
                     <Button
                         variant="ghost"
                         size="sm"

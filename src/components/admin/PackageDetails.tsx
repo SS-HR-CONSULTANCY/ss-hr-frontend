@@ -76,14 +76,6 @@ const PackageDetails: React.FC = () => {
         {/* Package Header */}
         <div className="p-4 border border-gray-200 dark:border-black rounded-lg">
           <div className="flex items-start gap-4">
-            <img
-              src={data.image}
-              alt={data.packageName}
-              className="w-24 h-24 rounded-lg object-cover border-2 border-gray-200 dark:border-black"
-              onError={(e) => {
-                e.currentTarget.src = 'https://via.placeholder.com/150x150?text=Package+Image';
-              }}
-            />
             <div className="flex-1">
               <h3 className="text-xl font-bold mb-2">{data.packageName}</h3>
               <p className="leading-relaxed">{data.description}</p>

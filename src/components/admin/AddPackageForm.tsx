@@ -25,7 +25,6 @@ const AddPackageForm: React.FC = () => {
     priceUAE: "",
     packageType: "jobpackage",
     packageDuration: 0,
-    image: "",
     features: [""],
     food: false,
     accommodation: false,
@@ -58,7 +57,6 @@ const AddPackageForm: React.FC = () => {
       priceUAE: "",
       packageType: "jobpackage",
       packageDuration: 0,
-      image: "",
       features: [""],
       food: false,
       accommodation: false,
@@ -97,12 +95,6 @@ const AddPackageForm: React.FC = () => {
       newErrors.packageDuration = "Duration must be between 1 and 365 days";
     }
 
-    if (!formData.image.trim()) {
-      newErrors.image = "Package image URL is required";
-    } else if (!isValidUrl(formData.image)) {
-      newErrors.image = "Please enter a valid image URL";
-    }
-
     const validFeatures = formData.features.filter(f => f.trim());
     if (validFeatures.length === 0) {
       newErrors.features = "At least one feature is required";
@@ -110,15 +102,6 @@ const AddPackageForm: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const isValidUrl = (string: string): boolean => {
-    try {
-      new URL(string);
-      return true;
-    } catch {
-      return false;
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -259,19 +242,6 @@ const AddPackageForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Image */}
-        <div className="space-y-2">
-          <Label htmlFor="image" className="">Package Image URL</Label>
-          <Input
-            id="image"
-            value={formData.image}
-            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-            className=""
-            placeholder="https://example.com/package-image.jpg"
-          />
-          {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
-        </div>
-
         {/* Features */}
         <div className="space-y-2">
           <Label className="">Package Features</Label>
@@ -324,7 +294,7 @@ const AddPackageForm: React.FC = () => {
                   id={key}
                   checked={formData[key as keyof typeof formData] as boolean}
                   onCheckedChange={(checked) => 
-                    handleServiceChange(key, checked as boolean)
+                    handleServiceChange(key as 'food' | 'accommodation' | 'travelCard' | 'utilityBills' | 'airportPickup' | 'jobGuidance', checked as boolean)
                   }
                 />
                 <Label htmlFor={key} className="text-sm">

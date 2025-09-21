@@ -1,17 +1,17 @@
 import React from "react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import CommonTable from "@/components/common/CommonTable";
 import type { AppDispatch, RootState } from "@/store/store";
+import TablePageHeader from "@/components/common/TablePageHeader";
 import { getAllTestimonials } from "@/utils/apis/adminTestimonialApi";
 import AddTestimonialForm from "@/components/admin/AddTestimonialForm";
 import TestimonialDetails from "@/components/admin/TestimonialDetails";
 import EditTestimonialForm from "@/components/admin/EditTestimonialForm";
+import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 import { TestimonialTableColumns } from "@/components/table/tableColumns/TestimonialTableColumns";
-import { toggleAddTestimonialForm, closeAllTestimonialModals } from "@/store/slices/testimonialSlice";
-import TablePageHeader from "@/components/common/TablePageHeader";
-import { Plus } from "lucide-react";
 
 const AdminTestimonials: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,10 +20,6 @@ const AdminTestimonials: React.FC = () => {
     isEditTestimonialFormOpen,
     isViewTestimonialDetailsOpen,
   } = useSelector((state: RootState) => state.testimonial);
-
-  const handleCloseModals = () => {
-    dispatch(closeAllTestimonialModals());
-  };
 
   return (
     <>
@@ -48,7 +44,7 @@ const AdminTestimonials: React.FC = () => {
         heading=""
         description=""
         column={TestimonialTableColumns}
-        columnsCount={7}
+        columnsCount={6}
         showDummyData={false}
         pageSize={10}
       />
@@ -75,12 +71,12 @@ const AdminTestimonials: React.FC = () => {
       {isViewTestimonialDetailsOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
           {isViewTestimonialDetailsOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-700 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <TestimonialDetails />
-          </div>
-        </div>
-      )}
+            <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+              <div className="bg-white dark:bg-gray-700 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <TestimonialDetails />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>

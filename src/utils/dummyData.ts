@@ -1,11 +1,12 @@
-import type { AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportTableDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/adminApiTypes";
-import type { WeeklyData } from "@/types/componentTypes/areportTypes";
-import type { Application } from "@/types/entities/application";
-import type { Company } from "@/types/entities/company";
 import type { Job } from "@/types/entities/job";
+import type { Review } from "@/types/entities/review";
+import type { Company } from "@/types/entities/company";
 import type { Package } from "@/types/entities/package";
 import type { Payment } from "@/types/entities/payment";
-import type { Review } from "@/types/entities/review";
+import type { Application } from "@/types/entities/application";
+import type { WeeklyData } from "@/types/componentTypes/areportTypes";
+import type { AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportTableDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/adminApiTypes";
+import type { Testimonial } from "@/types/entities/testimonial";
 
 // Overview page
 export   const overviewUserDummyData = [
@@ -1126,5 +1127,63 @@ export const MOCK_COMPANIES = [
     trustScore: 98,
     since: 2016,
     industries: ['Ecommerce', 'Logistics'],
+  },
+];
+
+// Reviews compoenent constats
+export const dummyTestimonials: Testimonial[] = [
+  {
+    _id: "1",
+    clientName: "Charles Dickens",
+    clientPhoto: "/images/charles-dickens.jpg", // placeholder image
+    designation: "Author - A Tale of Two Cities",
+    testimonial:
+      "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
+    isVisible: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    _id: "2",
+    clientName: "William Shakespeare",
+    clientPhoto: "/images/shakespeare.jpg",
+    designation: "Playwright - Hamlet",
+    testimonial:
+      "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
+    isVisible: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    _id: "3",
+    clientName: "Edgar Allan Poe",
+    clientPhoto: "/images/poe.jpg",
+    designation: "Poet - A Dream Within a Dream",
+    testimonial: "All that we see or seem is but a dream within a dream.",
+    isVisible: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    _id: "4",
+    clientName: "Jane Austen",
+    clientPhoto: "/images/jane-austen.jpg",
+    designation: "Author - Pride and Prejudice",
+    testimonial:
+      "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+    isVisible: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    _id: "5",
+    clientName: "Herman Melville",
+    clientPhoto: "/images/melville.jpg",
+    designation: "Author - Moby-Dick",
+    testimonial:
+      "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
+    isVisible: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];

@@ -1,7 +1,6 @@
 import type { 
-  UpdateAdminRequest, 
   CreateAdminResponse, 
-  UpdateAdminResponse,
+  // UpdateAdminResponse,
   AdminFetchAllAdminsResponse, 
 } from "@/types/apiTypes/adminApiTypes";
 import { axiosInstance } from "@/lib/axios";
@@ -23,10 +22,10 @@ export const fetchAdmins = async (params?: FetchFunctionParams): Promise<ApiPagi
 };
 
 // Update Admin
-export const updateAdmin = async (payload: UpdateAdminRequest): Promise<UpdateAdminResponse> => {
-  const response = await axiosInstance.patch(`/admin/settings/${payload._id}`, payload);
-  return response.data.data;
-};
+// export const updateAdmin = async (adminId: string, payload: FormData): Promise<UpdateAdminResponse> => {
+//   const response = await axiosInstance.patch(`/admin/settings/${adminId}`, payload);
+//   return response.data.data;
+// };
 
 // Delete Admin
 export const deleteAdmin = async (adminId: string): Promise<ApiBaseResponse> => {
