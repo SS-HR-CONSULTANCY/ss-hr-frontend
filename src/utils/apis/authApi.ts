@@ -3,7 +3,7 @@ import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ApiBaseResponse } from "@/types/commonTypes";
 import type { RegisterRequest } from "@/types/slice/authSliceTypes";
-import type { ResendOtpRequest, ResendOtpResponse, SigninRequest, SigninResponse, SignupResponse, UpdatePasswordRequest, updateProfileImageResponse, updateUserInfo, updateUserInfoResponse, VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
+import type { ResendOtpRequest, ResendOtpResponse, SigninRequest, SigninResponse, SignupResponse, UpdatePasswordRequest, updateUserInfo, updateUserInfoResponse, VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
 
 
 export const signup = createAsyncThunk<SignupResponse, RegisterRequest>('auth/signup',
@@ -84,13 +84,6 @@ export const checkUserStatus = createAsyncThunk("auth/checkUserStatus",
         await axiosInstance.get("/auth/checkUserStatus", { withCredentials: true });
     }
 );
-
-export const updateProfileImage = createAsyncThunk<updateProfileImageResponse, FormData>('/auth/UpdateProfileImage',
-    async (formData: FormData) => {
-        const response = await axiosInstance.post('/auth/updateProfileImage', formData);
-        return response.data;
-    }
-)
 
 export const updateProfileInfo = createAsyncThunk<updateUserInfoResponse, updateUserInfo>('/auth/UpdateProfileImage',
     async (data: updateUserInfo) => {

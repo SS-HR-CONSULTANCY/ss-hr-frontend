@@ -29,7 +29,9 @@ export type UpdatePasswordRequest = Pick<User, "role" | "verificationToken"> & {
 };
 
 export interface updateProfileImageResponse extends ApiBaseResponse {
-  data: User["profileImage"]
+    data: {
+        profileImage: User["profileImage"]
+    }
 }
 
 export type updateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo">;
