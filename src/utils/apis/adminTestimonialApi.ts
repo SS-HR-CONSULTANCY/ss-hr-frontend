@@ -35,18 +35,12 @@ export interface UpdateTestimonialRequest {
 
 export const getAllTestimonials = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<Testimonial>> => {
   const query = buildQueryParams(params);
-  const response = await axiosInstance.get(`/admin/testimonials${query ? `?${query}` : ''}`);
-  
-  console.log("Raw backend response:", response.data);
-  
-  const parsed = parseNewCommonResponse<Testimonial>(response.data);
-  console.log("Parsed response:", parsed);
-  
-  return parsed;
-};
+  const response = await axiosInstance.get(`/admin/testimonials${query ? `?${query}` : ''}`);  
+  return parseNewCommonResponse<Testimonial>(response.data);
+  };
 
-export const createTestimonial = async (testimonialData: CreateTestimonialRequest): Promise<ApiBaseResponse> => {
-  const response = await axiosInstance.post('/admin/testimonials', testimonialData);
+export const createTestimonial = async (data: FormData): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.post('/admin/testimonials', data);
   return response.data;
 };
 
