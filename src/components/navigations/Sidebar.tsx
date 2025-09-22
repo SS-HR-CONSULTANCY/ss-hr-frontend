@@ -91,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <ul className='p-4'>
         <SingleTab
           icon={theme === "dark" ? <Sun /> : <Moon />}
-          text={theme}
+          text={theme === "dark" ? "Light" : "Dark"}
           onClick={() => dispatch(toggleTheme())}
           sidebarOpen={sidebarOpen}
         />

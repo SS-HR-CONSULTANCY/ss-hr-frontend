@@ -8,7 +8,6 @@ import { buildQueryParams, parseNewCommonResponse } from "@/utils/helpers/apiHel
 export const updateProfileImage = createAsyncThunk<updateProfileImageResponse, FormData>('/auth/UpdateProfileImage',
     async (formData: FormData) => {
         const response = await axiosInstance.patch('/user/prfileImage', formData);
-        console.log("response : ",response);
         return response.data;
     }
 )

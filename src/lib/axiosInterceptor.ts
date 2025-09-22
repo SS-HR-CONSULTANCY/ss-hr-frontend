@@ -1,7 +1,7 @@
 import { store } from "@/store/store";
 import { toast } from "react-toastify";
-import { setAuthUser } from "@/store/slices/authSlice";
 import { axiosInstance } from "./axios";
+import { setAuthUser } from "@/store/slices/authSlice";
 
 export const setupAxiosInterceptors = () => {
 

@@ -39,7 +39,6 @@ export const exportToPDF = (fileName: string, title: string, data: object[]) => 
 
 export const handleExportExcel = async (e: React.MouseEvent<HTMLButtonElement>, reportData: Array<AdminFetchReportTableDataResponse>, activeTab: string) => {
     e.preventDefault();
-    console.log("hi")
     
     if (!reportData || !Array.isArray(reportData)) {
         toast.error("No report in the table");

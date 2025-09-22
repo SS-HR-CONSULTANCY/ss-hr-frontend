@@ -9,7 +9,6 @@ import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers"
 
 // Create Admin
 export const createAdmin = async (payload: FormData): Promise<CreateAdminResponse> => {
-  payload.forEach(item =>  console.log(item))
   const response = await axiosInstance.post('/admin/settings/admins', payload);
   return response.data.data;
 };

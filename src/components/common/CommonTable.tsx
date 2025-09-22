@@ -70,8 +70,6 @@ const CommonTable = <T,>({
     dispatch(saveReportData(data?.data as Array<AdminFetchReportTableDataResponse>));
   }, [data, saveDataInStore, dispatch]);
 
-  console.log("tableData : ",tableData)
-
   return (
     <div>
       <div className="flex justify-between items-center">
