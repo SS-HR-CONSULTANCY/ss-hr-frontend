@@ -12,7 +12,6 @@ const ContentCard = ({
   buttonUrl
 }: ContentCardProps) => {
 
-  console.log("buttonTrext : ", buttonText);
   const navigate = useNavigate();
 
   return (

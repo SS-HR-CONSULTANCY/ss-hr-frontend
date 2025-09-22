@@ -52,7 +52,6 @@ const AdminLogin: React.FC = () => {
     }, [isAuthenticated, user, navigate]);
 
     const onSubmit = async (data: SigninRequest) => {
-        console.log("submitting")
         await dispatch(signin(data))
             .unwrap()
             .then((res) => {

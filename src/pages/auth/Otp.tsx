@@ -73,7 +73,6 @@ const Otp: React.FC = () => {
     };
 
     const handleResendOtp = (): void => {
-        console.log("user : ",user);
         if (user?.verificationToken && user?.role) {
             const { verificationToken, role } = user;
             setResendLoading(true);
