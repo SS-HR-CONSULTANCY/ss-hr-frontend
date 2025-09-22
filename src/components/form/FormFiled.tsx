@@ -22,7 +22,7 @@ interface FormFieldProps<T extends FieldValues> {
   children?: React.ReactNode;
   onFileSelect?: (url: string) => void;
   rows?: number; // ✅ for textarea
-defaultValue?: string | number | boolean;
+  defaultValue?: string | number | boolean;
 }
 
 const FormField = <T extends FieldValues>({
@@ -40,7 +40,6 @@ const FormField = <T extends FieldValues>({
   rows = 3,
   defaultValue
 }: FormFieldProps<T>) => {
-  console.log("defaultValue : ",defaultValue);
   const [show, setShow] = useState(false);
 
   // ✅ File input
