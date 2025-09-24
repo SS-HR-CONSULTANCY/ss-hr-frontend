@@ -1,7 +1,7 @@
 import React from 'react';
 import Heading from '../common/Heading';
-import { packages } from '@/utils/constants';
 import { LayoutGrid } from '../ui/layout-grid';
+import { ImageGridData } from '@/utils/constants';
 import type { PackageContent } from '@/types/componentTypes/imageGridTypes';
 
 const ImageGrid: React.FC = () => {
@@ -32,9 +32,9 @@ const PackageContent: React.FC<PackageContent> = ({ title, description }) => {
     );
 };
 
-const cards = packages.map((pkg) => ({
+const cards = ImageGridData.map((pkg) => ({
     id: pkg.id,
-    content: <PackageContent title={pkg.content.title} description={pkg.content.description} />,
+    content: <PackageContent title={pkg.title} description={pkg.description} />,
     className: pkg.className,
-    thumbnail: pkg.thumbnail,
+    thumbnail: pkg.imageUrl,
 }));

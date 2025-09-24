@@ -4,7 +4,7 @@ import FormField from '../form/FormFiled';
 import React, { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { AboutSettingsFormValues } from '@/types/componentTypes/adminSettings';
-import type { AdminGetAboutCurrentDataResponse } from '@/types/apiTypes/admin';
+import type { AdminGetAboutCurrentDataResponse } from '@/types/apiTypes/adminApiTypes';
 import { adminGetWebsiteAboutCurrentData, adminUpdateWebsiteAboutData } from '@/utils/apis/adminSettingsApi';
 
 const AdminWebsiteAboutDataForm: React.FC = () => {
@@ -44,7 +44,7 @@ const AdminWebsiteAboutDataForm: React.FC = () => {
 
     return (
         <section className="shadow-md p-4 bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black rounded-md">
-            <h2 className="text-2xl font-bold mb-4">About Settings</h2>
+            <h2 className="text-2xl font-bold mb-4">About</h2>
 
             <div className="flex flex-col md:flex-row gap-6">
                 {/* Left: Current Data */}

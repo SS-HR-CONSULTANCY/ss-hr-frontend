@@ -1,16 +1,17 @@
 import ChatHeader from "./ChatHeader";
 import { Ellipsis } from "lucide-react";
 import MessageInput from "./MessageInput";
-import { useMessage } from "@/hooks/useSocketHook";
-import { getMessages } from "@/utils/apis/chatApi";
 import { useDispatch, useSelector } from "react-redux";
 import type { Message } from "@/types/entities/message";
+import { socket } from "@/utils/services/socketService";
 import React, { useEffect, useRef, useState } from "react";
 import type { AppDispatch, RootState } from "@/store/store";
 import ChatBubbleProfileImage from "./ChatBubbleProfileImage";
 import { formatTo24HourTime } from "@/utils/helpers/chatHelper";
+import avatarImage from '../../assets/defaultImgaes/noProfile.png'
 import NoChatSelectedSShimmer from "../shimmer/NoChatSelectedSShimmer";
 import type { SocketDataInterface } from "@/types/componentTypes/chatTypes";
+import { connectChatSocket, disconnectChatSocket, getMessages } from "@/utils/apis/chatApi";
 
 const ChatContainer: React.FC = () => {
 
@@ -18,18 +19,17 @@ const ChatContainer: React.FC = () => {
     const [isTyping, setIsTyping] = useState<boolean>(false);
     const [messageSenderId, setMessageSenderId] = useState<string | null>(null);
     const messageEndRef = useRef<HTMLDivElement | null>(null);
-    const { selectedUser, chatSocket, messages, isMessagesLoading } = useSelector((store: RootState) => store.chat);
+    const { selectedUser, messages, isMessagesLoading } = useSelector((store: RootState) => store.chat);
     const { user } = useSelector((store: RootState) => store.auth);
-    const { subscribeToMessages, unsubscribeFromMessages } = useMessage();
 
     useEffect(() => {
         if (!selectedUser || !user) return;
-
+        
         dispatch(getMessages({ selectedUserId: selectedUser._id }));
-        subscribeToMessages();
+        dispatch(connectChatSocket());
 
         return () => {
-            unsubscribeFromMessages();
+            dispatch(disconnectChatSocket());
         };
     }, [dispatch, selectedUser, user]);
 
@@ -40,9 +40,9 @@ const ChatContainer: React.FC = () => {
     }, [messages, isTyping]);
 
     useEffect(() => {
-        if (!chatSocket || !user) return;
+        if (!socket || !user) return;
 
-        chatSocket.on("typing", (socketData: SocketDataInterface) => {
+        socket.on("typing", (socketData: SocketDataInterface) => {
             const { fromUserId, toUserId } = socketData;
             if (fromUserId === selectedUser?._id && toUserId === user._id) {
                 setMessageSenderId(fromUserId);
@@ -50,7 +50,7 @@ const ChatContainer: React.FC = () => {
             }
         });
 
-        chatSocket.on("stopTyping", (socketData: SocketDataInterface) => {
+        socket.on("stopTyping", (socketData: SocketDataInterface) => {
             const { fromUserId, toUserId } = socketData;
             if (fromUserId === selectedUser?._id && toUserId === user._id) {
                 setIsTyping(false);
@@ -59,10 +59,10 @@ const ChatContainer: React.FC = () => {
         });
 
         return () => {
-            chatSocket.off("typing");
-            chatSocket.off("stopTyping");
+            socket?.off("typing");
+            socket?.off("stopTyping");
         };
-    }, [chatSocket, selectedUser]);
+    }, [socket, selectedUser]);
 
     if (!selectedUser) return <NoChatSelectedSShimmer className="w-9/12" />;
 
@@ -79,10 +79,10 @@ const ChatContainer: React.FC = () => {
                             ref={messageEndRef}
                         >
                             {message.senderId !== user?._id && (
-                                <ChatBubbleProfileImage profileImage={selectedUser?.profileImg || "/user_avatar.jpg"} />
+                                <ChatBubbleProfileImage profileImage={selectedUser?.profileImage || avatarImage} />
                             )}
 
-                            <div className={`flex flex-col rounded-md bg-[var(--menuItemHoverBg)] px-4 py-2 max-w-8/12 ${message.senderId !== user?._id ? "ml-3" : "mr-3"}`}>
+                            <div className={`flex flex-col rounded-md bg-gray-200 dark:bg-gray-700 px-4 py-1 max-w-8/12 ${message.senderId !== user?._id ? "ml-3" : "mr-3"}`}>
                                 {message.image && (
                                     <img
                                         src={message.image}
@@ -93,13 +93,13 @@ const ChatContainer: React.FC = () => {
                                 {message.text && (
                                     <p className="text-[13px] md:text-[15px]">{message.text}</p>
                                 )}
-                                <time className="text-[10px] md:text-xs opacity-50 ml-auto">
+                                <time className="text-[10px] opacity-50 ml-auto">
                                     {formatTo24HourTime(message.createdAt)}
                                 </time>
                             </div>
 
                             {message.senderId === user?._id && (
-                                <ChatBubbleProfileImage profileImage={user?.profileImg || "/user_avatar.jpg"} />
+                                <ChatBubbleProfileImage profileImage={user?.profileImage || avatarImage} />
                             )}
 
                         </div>

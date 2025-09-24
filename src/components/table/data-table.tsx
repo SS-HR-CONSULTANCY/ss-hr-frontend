@@ -1,4 +1,12 @@
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import {
   type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
@@ -11,29 +19,16 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table"
-
-import { Button } from "../ui/button"
-
-import * as React from "react"
-
-import { Input } from "../ui/input"
-
+} from "@tanstack/react-table";
+import * as React from "react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu"
+} from "../ui/dropdown-menu";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -100,7 +95,7 @@ export function DataTable<TData, TValue>({
           placeholder="Filter values"
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
+          className="max-w-sm border border-gray-400 dark:border-gray-300"
         />
         <DropdownMenu>
           <div className="ml-auto">
@@ -128,11 +123,11 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
       </div>
       
-      <div className="rounded-md border">
+      <div className="rounded-md border border-gray-400 dark:border-gray-300">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="border-b border-gray-400 dark:border-gray-300">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -151,6 +146,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="border-b border-gray-400 dark:border-gray-300"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -162,7 +158,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                  No Data Found In Database.
                 </TableCell>
               </TableRow>
             )}

@@ -20,7 +20,7 @@ const UpdateUserInfo: React.FC = () => {
     } = useForm<updateUserInfo>({
         defaultValues: {
             fullName: user?.fullName || "",
-            phoneOne: user?.phoneOne || "",
+            phone: user?.phone || "",
             phoneTwo: user?.phoneTwo || "",
         },
     });
@@ -59,12 +59,12 @@ const UpdateUserInfo: React.FC = () => {
                     />
 
                     <FormField<updateUserInfo>
-                        id="phoneOne"
+                        id="phone"
                         label="Phone 1"
                         placeholder="Enter phone number"
                         type="text"
                         register={register}
-                        error={errors.phoneOne?.message}
+                        error={errors.phone?.message}
                     />
 
                     <FormField<updateUserInfo>

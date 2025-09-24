@@ -7,15 +7,12 @@ import TableShimmer from "../shimmer/TableShimmer";
 import DataFetchingError from "./DataFetchingError";
 import { saveReportData } from "@/store/slices/adminSlice";
 import { type OnChangeFn, type PaginationState } from "@tanstack/react-table";
-import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
+import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/adminApiTypes";
 import type { CommonTableComponentProps } from "@/types/componentTypes/commonTableTypes";
 
 const CommonTable = <T,>({
   fetchApiFunction,
   queryKey,
-  heading,
-  description,
-  headingClassName,
   column,
   columnsCount,
   id,
@@ -74,16 +71,8 @@ const CommonTable = <T,>({
   }, [data, saveDataInStore, dispatch]);
 
   return (
-    <div className="p-4">
+    <div>
       <div className="flex justify-between items-center">
-        <div>
-          {heading && (
-            <h2 className={`text-2xl lg:text-3xl font-bold ${headingClassName}`}>{heading}</h2>
-          )}
-          {description && (
-            <h2 className={`text-sm font-normal`}>{description}</h2>
-          )}
-        </div>
         <div className="flex items-center space-x-4 space-y-2">
           {showDatePicker && (
             <div>
@@ -109,23 +98,18 @@ const CommonTable = <T,>({
         <div className="mt-2">
           <TableShimmer columnsCount={columnsCount} />
         </div>
-      ) : tableData.length > 0 ? (
+      )  : isError && error ? (
+        <DataFetchingError
+          message={(error as Error).message}
+          className="min-h-full"
+        />
+      ) : (
         <DataTable
           columns={column}
           data={tableData}
           pageCount={totalPages}
           pagination={pagination}
           onPaginationChange={handlePaginationChange}
-        />
-      ) : isError && error ? (
-        <DataFetchingError
-          message={(error as Error).message}
-          className="min-h-full"
-        />
-      ) : (
-        <DataFetchingError
-          message={`No ${queryKey} found in database`}
-          className="min-h-full"
         />
       )}
     </div>

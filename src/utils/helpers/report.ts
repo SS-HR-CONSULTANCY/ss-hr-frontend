@@ -1,4 +1,4 @@
-import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/admin";
+import type { AdminFetchReportTableDataResponse } from "@/types/apiTypes/adminApiTypes";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
@@ -39,7 +39,6 @@ export const exportToPDF = (fileName: string, title: string, data: object[]) => 
 
 export const handleExportExcel = async (e: React.MouseEvent<HTMLButtonElement>, reportData: Array<AdminFetchReportTableDataResponse>, activeTab: string) => {
     e.preventDefault();
-    console.log("hi")
     
     if (!reportData || !Array.isArray(reportData)) {
         toast.error("No report in the table");

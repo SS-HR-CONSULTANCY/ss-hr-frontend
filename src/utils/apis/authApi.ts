@@ -1,47 +1,9 @@
 import type { AxiosError } from "axios";
-import type { User } from "@/types/entities/user";
+import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { axiosInstance } from "@/components/lib/axios";
+import type { ApiBaseResponse } from "@/types/commonTypes";
 import type { RegisterRequest } from "@/types/slice/authSliceTypes";
-
-export interface ApiBaseResponse {
-  success?: boolean;
-  message?: string;
-}
-
-export interface SignupResponse extends ApiBaseResponse {
-    user: User;
-}
-
-export type VerifyOtpRequest = Pick<User, "otp" | "verificationToken" | "role">;
-
-export type SigninRequest = Pick<User, "email" | "role"> & {
-    password: string;
-};
-
-export interface SigninResponse extends ApiBaseResponse {
-    user: User;
-}
-
-export interface ResendOtpResponse extends ApiBaseResponse {
-    user: User;
-}
-
-export type ResendOtpRequest = Pick<User, "role" | "verificationToken"> & {
-    email?: string;
-};
-
-export type UpdatePasswordRequest = Pick<User, "role" | "verificationToken"> & {
-    password: string;
-    confirmPassword: string;
-};
-
-export interface updateProfileImageResponse extends ApiBaseResponse {
-  data: User["profileImg"]
-}
-
-export type updateUserInfo = Pick<User, "fullName" | "phoneOne" | "phoneTwo">;
-export interface updateUserInfoResponse extends ApiBaseResponse, updateUserInfo {}
+import type { ResendOtpRequest, ResendOtpResponse, SigninRequest, SigninResponse, SignupResponse, UpdatePasswordRequest, updateUserInfo, updateUserInfoResponse, VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
 
 
 export const signup = createAsyncThunk<SignupResponse, RegisterRequest>('auth/signup',
@@ -122,13 +84,6 @@ export const checkUserStatus = createAsyncThunk("auth/checkUserStatus",
     }
 );
 
-export const updateProfileImage = createAsyncThunk<updateProfileImageResponse, FormData>('/auth/UpdateProfileImage',
-    async (formData: FormData) => {
-        const response = await axiosInstance.post('/auth/updateProfileImage', formData);
-        return response.data;
-    }
-)
-
 export const updateProfileInfo = createAsyncThunk<updateUserInfoResponse, updateUserInfo>('/auth/UpdateProfileImage',
     async (data: updateUserInfo) => {
         const response = await axiosInstance.post('/auth/updateuserInfo', data);
@@ -136,6 +91,15 @@ export const updateProfileInfo = createAsyncThunk<updateUserInfoResponse, update
     }
 )
 
-// export const handleGoogleLogin = async () : Promise<any> => {
-//     const response = axiosInstance.get()
-// }
+
+export const googleSignin = createAsyncThunk<SigninResponse, void>("auth/googleSignin",
+  async (_, thunkAPI) => {
+    try {
+      window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
+      return { success: true, message: "Redirecting to Google..." } as SigninResponse;
+    } catch (err) {
+      const error = err as AxiosError<ApiBaseResponse>;
+      return thunkAPI.rejectWithValue(error.response?.data || { success: false, message: "Something went wrong" });
+    }
+  }
+);

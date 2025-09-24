@@ -1,5 +1,5 @@
-import { Socket } from 'socket.io-client';
 import type { User } from '@/types/entities/user';
+import { sendMessage } from '@/utils/apis/chatApi';
 import type { Message } from '@/types/entities/message';
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -11,14 +11,15 @@ type LastMessages = Record<
     }
 >;
 
-type SelectedUser = Pick<User, "_id" | "fullName" | "profileImg"> 
+type SelectedUser = Pick<User, "_id" | "fullName" | "profileImage"> 
 
 
 interface chatSliceInitalState {
     onlineUsers: string[] | null;
     lastMessages: LastMessages,
     selectedUser: SelectedUser | null,
-    chatSocket: Socket | null;
+    socketId: string | null;
+    isConnected: boolean;
     messages: Message[] | null;
     isMessagesLoading: boolean;
 }
@@ -27,7 +28,8 @@ const intitalState: chatSliceInitalState = {
     onlineUsers: null,
     lastMessages: {},
     selectedUser: null,
-    chatSocket: null,
+    socketId: null,
+    isConnected: false,
     messages: null,
     isMessagesLoading: false,
 }
@@ -44,7 +46,6 @@ const chatSlice = createSlice({
             state.lastMessages[userId] = { message, date };
         },
         setSelectedUser: (state, action: PayloadAction<SelectedUser | null>) => {
-            console.log("action.payload : ",action.payload);
             state.selectedUser = action.payload
         },
         setMessages: (state, action: PayloadAction<Array<Message> | null>) => {
@@ -53,10 +54,30 @@ const chatSlice = createSlice({
         addNewMessage: (state, action: PayloadAction<Message>) => {
             state.messages?.push(action.payload);
         },
-        sendNewMessage: (state, action: PayloadAction<Message>) => {
-            state.messages?.push(action.payload);
-        }
+        setSocketConnected: (state,action: PayloadAction<{ socketId: string }>
+        ) => {
+            state.socketId = action.payload.socketId;
+            state.isConnected = true;
+        },
+        setSocketDisconnected: (state) => {
+            state.socketId = null;
+            state.isConnected = false;
+        },
+        clearChatSlice: (state) => {
+            state.onlineUsers = null;
+            state.lastMessages = {};
+            state.selectedUser = null;
+            state.socketId = null;
+            state.isConnected = false;
+            state.messages = null;
+            state.isMessagesLoading = false;
+        },
     },
+    extraReducers: (builder) => {
+        builder.addCase(sendMessage.fulfilled,(state, action) => {
+            state.messages?.push(action.payload);
+        })
+    }
 });
 
 export const { 
@@ -65,6 +86,8 @@ export const {
     setSelectedUser, 
     setMessages ,
     addNewMessage,
-    sendNewMessage
+    clearChatSlice,
+    setSocketConnected,
+    setSocketDisconnected
 } = chatSlice.actions;
 export default chatSlice.reducer;

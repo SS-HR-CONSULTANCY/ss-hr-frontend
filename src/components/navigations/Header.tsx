@@ -8,16 +8,19 @@ import { cn } from "@/lib/utils";
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import useAuthHook from '@/hooks/useAuthHook';
 import { useAppSelector } from '@/hooks/redux';
-import { Menu, Moon, Sun } from "lucide-react";
+import { Menu, Moon, Sun, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from '@/store/slices/appSlice';
 import type { AppDispatch, RootState } from '@/store/store';
-import logoTransparent from '../../assets/logos/logo-tranparent.png';
+import noprofileImage from '../../assets/defaultImgaes/noProfile.png';
+import logoTransparent from '../../assets/logos/logo-transparent.png';
 import type { NavbarProps } from '@/types/componentTypes/headerTypes';
-import { siteUrlConfig, navLinks, companyName } from "@/utils/constants";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { siteUrlConfig, navLinks, companyName, links } from "@/utils/constants";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 const Header: React.FC = ({
   name = companyName,
@@ -31,12 +34,16 @@ const Header: React.FC = ({
   const theme = useSelector((state: RootState) => state.app.theme);
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const route: string = user?.role === "admin" || user?.role === "superAdmin" || user?.role === "systemAdmin" ? '/admin/login' : user?.role === "user" ? "/login" : '/'
+
+  const { handleLogout } = useAuthHook({ route });
 
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>
       <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto px-4 md:px-0">
         <NavbarComponent>
+
           <NavbarLeft>
             <Link to={homeUrl} >
               <img src={logoTransparent} alt="SS HR" className="size-10 cursor-pointer" />
@@ -45,24 +52,44 @@ const Header: React.FC = ({
             {showNavigation && (customNavigation || <Navigation />)}
           </NavbarLeft>
           <NavbarRight>
-            
-            {(user && isAuthenticated) ? (
+
+            {user && isAuthenticated ? (
               <div className="hidden md:block">
-                <img
-                  src={user.profileImg || "/default-profile.png"}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
-                />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    {user.profileImage ? (
+                      <img
+                        src={user.profileImage || noprofileImage}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
+                      />
+                    ) : (
+                      <UserCircle className="cursor-pointer" />
+                    )}
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent className="w-40" align="end" sideOffset={8}>
+                    {user.role === "user" &&
+                      links.map((link) => (
+                        <DropdownMenuItem asChild key={link.url}>
+                          <Link to={link.url}>{link.text}</Link>
+                        </DropdownMenuItem>
+                      ))
+                    }
+
+                    {user.role === "admin" && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin/dashboard">Dashboard</Link>
+                      </DropdownMenuItem>
+                    )}
+
+                    <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             ) : (
-              <Button
-                variant="default"
-                asChild
-                className="hidden md:block"
-              >
-                <a href="/login">
-                  Sign In
-                </a>
+              <Button variant="default" asChild className="hidden md:block">
+                <a href="/login">Sign In</a>
               </Button>
             )}
 

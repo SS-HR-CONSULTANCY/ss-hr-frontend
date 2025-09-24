@@ -6,10 +6,4 @@ export interface PackageProps {
   features: string[];
   price: number;
   popular?: boolean;
-  className: string;
-  thumbnail: string;
-  content: {
-    title: string;
-    description: string;
-  };
 }

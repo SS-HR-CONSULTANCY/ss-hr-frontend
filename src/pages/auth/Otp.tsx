@@ -9,11 +9,12 @@ import FormField from '@/components/form/FormFiled';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormHeader from '@/components/form/FormHeader';
 import { otpSchema } from '../../utils/validationSchema';
+import { resendOtp, verifyOtp } from '@/utils/apis/authApi';
 import { formatTime } from '@/utils/helpers/timerFormatterForOtp';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import type { VerifyOtpRequest } from '@/types/apiTypes/authApiTypes';
 import { clearError, stopTimer, updateTimer } from '../../store/slices/authSlice';
-import { resendOtp, verifyOtp, type VerifyOtpRequest } from '@/utils/apis/authApi';
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision';
 
 const Otp: React.FC = () => {
@@ -72,7 +73,6 @@ const Otp: React.FC = () => {
     };
 
     const handleResendOtp = (): void => {
-        console.log("user : ",user);
         if (user?.verificationToken && user?.role) {
             const { verificationToken, role } = user;
             setResendLoading(true);

@@ -30,9 +30,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((store: RootState) => store.auth);
-  const { handleLogout } = useAuthHook({
-    route: user?.role === "admin" ? "/admin/login" : user?.role === "user" ? "/login" : '/superAdmin/login'
-  });
+  const route: string = user?.role === "admin" || user?.role === "superAdmin" || user?.role === "systemAdmin" ? '/admin/login' : user?.role === "user" ? "/login" : '/'
+  const { handleLogout } = useAuthHook({route});
   const { theme, sidebarOpen } = useSelector((state: RootState) => state.app);
 
   const iconMap: Record<string, React.ReactNode> = {
@@ -43,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     'packages': <LayoutGrid />,
     'applications': <CalendarCheck />,
     'payments': <HandCoins />,
-    'reviews': <Star />,
+    'testimonials': <Star />,
     'reports': <Notebook />,
     'logout': <LogOut />,
     'chat': <MessageCircle />,
@@ -92,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <ul className='p-4'>
         <SingleTab
           icon={theme === "dark" ? <Sun /> : <Moon />}
-          text={theme}
+          text={theme === "dark" ? "Light" : "Dark"}
           onClick={() => dispatch(toggleTheme())}
           sidebarOpen={sidebarOpen}
         />

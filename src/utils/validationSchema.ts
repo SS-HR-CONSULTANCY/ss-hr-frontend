@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import type { Role } from '@/types/entities/user';
+import { z } from "zod";
 
 // Register Form Schema
 export const registerSchema = yup.object({
@@ -46,10 +47,56 @@ export const loginSchema = yup.object({
     .string()
     .min(8, 'Password must be at least 8 characters')
     .required('Password is required'),
-  role: yup.mixed<Role>().oneOf(["user", "admin", "superAdmin"]).required()
+  role: yup.mixed<Role>().oneOf(["user", "admin", "superAdmin", "systemAdmin"]).required()
 });
 
+// Add job  Form Schema
+export const CreateJobZodSchema = z.object({
+   companyName: z
+    .string()
+    .min(2, "Company name must be at least 2 characters")
+    .max(100, "Company name must be at most 100 characters")
+    .trim(),
 
-// Type definitions
-export type LoginFormData = yup.InferType<typeof loginSchema>;
-export type RegisterFormData = yup.InferType<typeof registerSchema>;
+  designation: z
+    .string()
+    .min(2, "Designation must be at least 2 characters")
+    .max(100, "Designation must be at most 100 characters")
+    .trim(),
+
+  industry: z
+    .string()
+    .min(2, "Industry must be at least 2 characters")
+    .max(100, "Industry must be at most 100 characters")
+    .trim(),
+
+  jobDescription: z
+    .string()
+    .min(10, "Job description must be at least 10 characters"),
+
+  benifits: z
+    .string()
+    .min(2, "Benefits must be at least 2 characters"),
+
+  salary: z
+     .number()
+    .int()
+    .min(1, "Salary must be at least 1")
+    .max(100, "Salary cannot exceed 1000"),
+
+  skills: z
+    .string()
+    .min(2, "Skills must be at least 2 characters"),
+
+  nationality: z
+    .string()
+    .min(2, "Nationality must be at least 2 characters"),
+
+  vacancy: z
+    .number()
+    .int()
+    .min(1, "Vacancy must be at least 1")
+    .max(1000, "Vacancy cannot exceed 1000"),
+});
+
+export type CreateJobZodType = z.infer<typeof CreateJobZodSchema>;

@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "./card";
+import type { Testimonial } from "@/types/entities/testimonial";
 
 export const InfiniteMovingCards = ({
   items,
@@ -9,11 +10,7 @@ export const InfiniteMovingCards = ({
   pauseOnHover = true,
   className,
 }: {
-  items: {
-    quote: string;
-    name: string;
-    title: string;
-  }[];
+  items: Testimonial[];
   direction?: "left" | "right";
   speed?: "fast" | "normal" | "slow";
   pauseOnHover?: boolean;
@@ -86,7 +83,7 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item) => (
           <Card
-            key={item.name}
+            key={item._id}
             className="h-auto relative w-[250px] max-w-full shrink-0 
                rounded-2xl border border-b-0 border-zinc-200 
                bg-[linear-gradient(180deg,#fafafa,#f5f5f5)] 
@@ -104,17 +101,17 @@ export const InfiniteMovingCards = ({
 
                 {/* Quote text */}
                 <span className="relative z-20 text-sm leading-[1.6] font-normal text-black dark:text-white">
-                  {item.quote}
+                  {item.testimonial}
                 </span>
 
                 {/* Footer at bottom */}
                 <div className="relative z-20 mt-auto flex flex-row items-center pt-6">
                   <span className="flex flex-col gap-1">
                     <span className="text-sm leading-[1.6] font-semibold text-black dark:text-white">
-                      {item.name}
+                      {item.clientName}
                     </span>
                     <span className="text-sm leading-[1.6] font-normal text-gray-500 dark:text-gray-300">
-                      {item.title}
+                      {item.designation}
                     </span>
                   </span>
                 </div>

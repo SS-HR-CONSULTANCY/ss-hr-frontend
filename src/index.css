@@ -13,6 +13,12 @@ html, body {
   padding: 0;
 }
 
+.stroke-text {
+  -webkit-text-stroke: 1px #ffd93e;
+  color: transparent;
+}
+
+
 /* CSS Custom Properties for consistent theming */
 :root {
   /* Primary Colors */

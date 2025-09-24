@@ -9,6 +9,8 @@ import ChatSidebarShimmer from "../shimmer/ChatSidebarShimmer";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { setLatMessageProps, UserProps } from "@/types/componentTypes/chatTypes";
 import { setLastMessage, setOnlineUsers, setSelectedUser } from "@/store/slices/chatSlice";
+import { socket } from "@/utils/services/socketService";
+import avatarImage from '../../assets/defaultImgaes/noProfile.png';
 
 const formatDate = (date: string) => {
     const now = new Date();
@@ -41,10 +43,9 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
 
     const dispatch = useDispatch<AppDispatch>();
     const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+    const [useDummy] = useState(false);
 
-    const [useDummy] = useState(true);
-
-    const { selectedUser, lastMessages, onlineUsers, chatSocket } = useSelector((store: RootState) => store.chat);
+    const { selectedUser, lastMessages, onlineUsers } = useSelector((store: RootState) => store.chat);
     const getLastMessage = (userId: string): { message: string; date: string } | null => {
         return lastMessages?.[userId] || null;
     };
@@ -70,17 +71,17 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
     }, [dispatch]);
 
     useEffect(() => {
-        chatSocket?.on("getOnlineUsers", handleOnlineUsers);
-        return () => { chatSocket?.off("getOnlineUsers", handleOnlineUsers) };
-    }, [chatSocket, handleOnlineUsers]);
+        socket?.on("getOnlineUsers", handleOnlineUsers);
+        return () => { socket?.off("getOnlineUsers", handleOnlineUsers) };
+    }, [socket, handleOnlineUsers]);
 
     useEffect(() => {
         const setNewMessage = (message: setLatMessageProps) => {
             setLastMessage({ userId: message.senderId, message: message.text ? message.text : "Image", date: message.createdAt });
         };
-        chatSocket?.on("newMessage", setNewMessage);
-        return () => { chatSocket?.off("newMessage", setNewMessage) };
-    }, [chatSocket]);
+        socket?.on("newMessage", setNewMessage);
+        return () => { socket?.off("newMessage", setNewMessage) };
+    }, [socket]);
 
     return (
         <aside className={`overflow-y-scroll h-full w-full md:w-4/12 flex flex-col transition-all duration-200 sticky border-r-2 no-scrollbar ${selectedUser ? "hidden md:block" : "block"}`}>
@@ -115,7 +116,7 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({
                             className={`w-full p-3 flex gap-3 items-center border-b transition-colors hover:bg-gray-200 dark:hover:bg-gray-500 ${selectedUser?._id === user._id ? "" : ""}`}>
                             <div className="relative w-fit">
                                 <img
-                                    src={user.profileImg || "/user_avatar.jpg"}
+                                    src={user.profileImage || avatarImage}
                                     alt={user.fullName}
                                     className="size-10 object-cover rounded-full"
                                 />
