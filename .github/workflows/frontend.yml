@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "ss-hr-frontend/**"
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -29,3 +30,4 @@ jobs:
             npm run build && \
             sudo systemctl restart nginx
           "
+
