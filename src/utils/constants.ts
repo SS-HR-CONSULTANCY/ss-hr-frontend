@@ -404,9 +404,9 @@ export const footerData = [
     links: [
       { text: "Instagram", href: "" },
       { text: "Facebook", href: "" },
-      { text: "X", href: "" },
-      { text: "Phone IN - +91 971543274799", href: "tel:+91 971543274799" },
-      { text: "Phone UAE - +97 0523664492", href: "tel:+970523664492" },
+      { text: "Linkedin", href: "https://www.linkedin.com/company/ss-human-resource-consultancy/" },
+      { text: "Phone (India)  +91 9349714742", href: "tel:+91 9349714742" },
+      { text: "Phone (UAE) +971 0523664492", href: "tel:+971 0523664492" },
       { text: "Email - aalamconsultancy0@gmail.com", href: "mailto:aalamconsultancy0@gmail.com" },
     ],
   },
@@ -417,7 +417,7 @@ export const footerPoliciesData = [
   { text: "Terms of Service", href: "" },
 ]
 
-export const footerCopyright = "© 2025 shahaalamGroups.com All rights reserved";
+export const footerCopyright = "© 2025 sshrconsultancy.com All rights reserved";
 export const footerAddress = "Al Qiyadah Metro Station Exit2, Old Labour Office Al Kazim Building Entrance B, Dubai, UAE"
 
 
@@ -425,14 +425,14 @@ export const footerAddress = "Al Qiyadah Metro Station Exit2, Old Labour Office 
 export const contactData: ContactItem[] = [
   {
     icon: Phone,
-    label: "Phone (IN)",
+    label: "Phone (India)",
     value: "+91 97154 3274799",
     href: "tel:+91971543274799",
   },
   {
     icon: Phone,
     label: "Phone (UAE)",
-    value: "+97 0523664492",
+    value: "+971 0523664492",
     href: "tel:0523664492",
   },
   {
