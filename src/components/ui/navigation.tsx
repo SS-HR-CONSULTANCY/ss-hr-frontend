@@ -5,13 +5,13 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "./navigation-menu";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import LaunchUI from "../logos/launch-ui";
 import { navLinks, services } from "@/utils/constants";
 import type { navLinkProps } from "@/types/componentTypes/headerTypes";
+import { navigationMenuTriggerStyle } from "./navigation-menu-variants";
 import type { ContentCardProps } from "@/types/componentTypes/servicesTypes";
 
 interface NavigationProps {
