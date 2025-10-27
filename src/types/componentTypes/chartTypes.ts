@@ -1,14 +1,14 @@
-export const THEMES = { light: "", dark: ".dark" } as const
+export const THEMES = { light: "", dark: ".dark" } as const;
 
 export type ChartConfig = {
   [k in string]: {
-    label?: React.ReactNode
-    icon?: React.ComponentType
+    label?: React.ReactNode;
+    icon?: React.ComponentType;
   } & (
     | { color?: string; theme?: never }
     | { color?: never; theme: Record<keyof typeof THEMES, string> }
-  )
-}
+  );
+};
 
 export type ChartDataItem = Record<string, string | number>;
 export interface RadialChartInterface<T extends ChartDataItem> {
@@ -21,21 +21,21 @@ export interface RadialChartInterface<T extends ChartDataItem> {
   isLocked?: boolean;
 }
 
-
-export type TimeRange = "7d"
+export type TimeRange =
+  | "7d"
   | "14d"
   | "30d"
   | "45d"
   | "60d"
   | "90d"
   | "180d"
-  | "365d"
-  
+  | "365d";
+
 export interface ChartHeaderInterface {
-    title: string;
-    description?: string;
-    onValueChange?: (value: TimeRange) => void;
-    value?: string;
+  title: string;
+  description?: string;
+  onValueChange?: (value: TimeRange) => void;
+  value?: string;
 }
 
 export interface dataSelectListItemInterface {
@@ -44,8 +44,8 @@ export interface dataSelectListItemInterface {
 }
 
 export interface DateSelectInterface {
-    onValueChange: (value: TimeRange) => void;
-    value: string;
+  onValueChange: (value: TimeRange) => void;
+  value: string;
 }
 
 export interface ChatComponentProps<T extends { date: string }> {
@@ -67,8 +67,39 @@ export type BaseChartData = {
   [key: string]: number | string | undefined;
 };
 
-export type AreaGroupChartProps = Pick<ChatComponentProps<BaseChartData>, "title" | "description" | "chartData" | "dataKeyOne" | "dataKeyTwo" | "dataKeyThree" | "chartConfig" | "isLocked">;
+export type AreaGroupChartProps = Pick<
+  ChatComponentProps<BaseChartData>,
+  | "title"
+  | "description"
+  | "chartData"
+  | "dataKeyOne"
+  | "dataKeyTwo"
+  | "dataKeyThree"
+  | "chartConfig"
+  | "isLocked"
+>;
 
-export type BarChartVerticalProps = Pick<ChatComponentProps<BaseChartData>, "title" | "description" | "chartData" | "dataKeyOne" | "dataKeyTwo" | "chartConfig" | "isLocked"> ;
+export type BarChartVerticalProps = Pick<
+  ChatComponentProps<BaseChartData>,
+  | "title"
+  | "description"
+  | "chartData"
+  | "dataKeyOne"
+  | "dataKeyTwo"
+  | "chartConfig"
+  | "isLocked"
+>;
 
-export type ChartLineMultipleProps = Pick<ChatComponentProps<BaseChartData>, "title" | "description" | "chartData" | "dataKeyOne" | "dataKeyTwo" | "dataKeyThree" | "dataKeyFour" | "dataKeyFive" | "chartConfig" | "isLocked"> ;
+export type ChartLineMultipleProps = Pick<
+  ChatComponentProps<BaseChartData>,
+  | "title"
+  | "description"
+  | "chartData"
+  | "dataKeyOne"
+  | "dataKeyTwo"
+  | "dataKeyThree"
+  | "dataKeyFour"
+  | "dataKeyFive"
+  | "chartConfig"
+  | "isLocked"
+>;

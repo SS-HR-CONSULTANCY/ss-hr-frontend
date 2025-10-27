@@ -28,8 +28,9 @@ export const PackageTableColumns = (
     ),
     cell: ({ row }) => {
       const text = row.original.description;
-      const truncatedText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
-      return (truncatedText);
+      const truncatedText =
+        text.length > 50 ? `${text.substring(0, 50)}...` : text;
+      return truncatedText;
     },
   },
   {
@@ -61,7 +62,7 @@ export const PackageTableColumns = (
           >
             <Eye className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -71,7 +72,7 @@ export const PackageTableColumns = (
           >
             <Edit className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"

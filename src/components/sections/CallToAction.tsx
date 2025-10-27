@@ -9,7 +9,11 @@ const CallToAction = () => {
         "w-full py-16 md:py-24 bg-gradient-to-b from-background to-muted text-center",
       )}
     >
-      <div className="container mx-auto max-w-3xl flex flex-col items-center gap-6 px-4" data-aos="fade-up" data-aos-duration="3000">
+      <div
+        className="container mx-auto max-w-3xl flex flex-col items-center gap-6 px-4"
+        data-aos="fade-up"
+        data-aos-duration="3000"
+      >
         <h2 className="text-3xl font-bold tracking-tight sm:text-5xl">
           {callToActionData.title}
         </h2>
@@ -37,7 +41,7 @@ const CallToAction = () => {
         )}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default CallToAction
+export default CallToAction;

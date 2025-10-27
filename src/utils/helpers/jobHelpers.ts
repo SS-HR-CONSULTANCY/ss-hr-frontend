@@ -8,7 +8,7 @@ import { openEditJobForm, openViewDetailsModal } from "@/store/slices/jobSlice";
 export const JobHandlers = (
   dispatch: AppDispatch,
   queryClient: QueryClient,
-  setDeletingJobId: Dispatch<SetStateAction<string | null>>
+  setDeletingJobId: Dispatch<SetStateAction<string | null>>,
 ) => {
   const handleViewDetails = (jobId: string) => {
     dispatch(openViewDetailsModal(jobId));

@@ -1,21 +1,20 @@
-import { toast } from 'react-toastify';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import FormField from '../form/FormFiled';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import AdminFormHeader from './AdminFormHeader';
-import type { AppDispatch } from '@/store/store';
-import { Briefcase, Loader } from 'lucide-react';
-import { createJob } from '@/utils/apis/adminJobApi';
+import { toast } from "react-toastify";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import FormField from "../form/FormFiled";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import AdminFormHeader from "./AdminFormHeader";
+import type { AppDispatch } from "@/store/store";
+import { Briefcase, Loader } from "lucide-react";
+import { createJob } from "@/utils/apis/adminJobApi";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from '@tanstack/react-query';
-import { closeAddJobForm } from '@/store/slices/jobSlice';
-import { CreateJobZodSchema } from '@/utils/validationSchema';
-import type { AdminCreateNewJob } from '@/types/apiTypes/adminApiTypes';
+import { useQueryClient } from "@tanstack/react-query";
+import { closeAddJobForm } from "@/store/slices/jobSlice";
+import { CreateJobZodSchema } from "@/utils/validationSchema";
+import type { AdminCreateNewJob } from "@/types/apiTypes/adminApiTypes";
 
 const AddJobForm: React.FC = () => {
-
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
@@ -47,11 +46,11 @@ const AddJobForm: React.FC = () => {
     try {
       const response = await createJob(data);
       if (response.success) {
-        toast.success(response.message || 'Job created successfully!');
-        queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });
+        toast.success(response.message || "Job created successfully!");
+        queryClient.invalidateQueries({ queryKey: ["admin-jobs"] });
         dispatch(closeAddJobForm());
       } else {
-        toast.error('Failed to create job');
+        toast.error("Failed to create job");
       }
     } catch {
       toast.error("Job adding failed");
@@ -67,7 +66,11 @@ const AddJobForm: React.FC = () => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-700 text-black dark:text-white rounded-2xl shadow-2xl max-w-5xl w-full mx-4 border border-black max-h-screen overflow-y-scroll">
-        <AdminFormHeader Icon={Briefcase} closeFn={handleClose} title='Add New Job' />
+        <AdminFormHeader
+          Icon={Briefcase}
+          closeFn={handleClose}
+          title="Add New Job"
+        />
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
           <div className="flex justify-around space-x-6">
@@ -158,7 +161,6 @@ const AddJobForm: React.FC = () => {
                 error={errors.skills?.message as string}
                 register={register}
               />
-
             </div>
           </div>
 
@@ -174,7 +176,11 @@ const AddJobForm: React.FC = () => {
             <Button
               type="submit"
               disabled={
-                isLoading || !watchedValues.salary || !watchedValues.companyName || !watchedValues.designation || !watchedValues.vacancy
+                isLoading ||
+                !watchedValues.salary ||
+                !watchedValues.companyName ||
+                !watchedValues.designation ||
+                !watchedValues.vacancy
               }
               variant="outline"
             >
@@ -184,7 +190,7 @@ const AddJobForm: React.FC = () => {
                   Creating...
                 </div>
               ) : (
-                'Create Job'
+                "Create Job"
               )}
             </Button>
           </div>

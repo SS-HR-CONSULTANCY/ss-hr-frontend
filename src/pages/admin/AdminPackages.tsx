@@ -20,16 +20,19 @@ interface AdminPackagesProps {
 }
 
 const AdminPackages: React.FC<AdminPackagesProps> = () => {
-
   const dispatch = useDispatch<AppDispatch>();
-  const { handleDeletePackage, handleEditPackage, handleViewPackage } = useAdminPackages();
-  const column = PackageTableColumns(handleDeletePackage, handleEditPackage, handleViewPackage)
+  const { handleDeletePackage, handleEditPackage, handleViewPackage } =
+    useAdminPackages();
+  const column = PackageTableColumns(
+    handleDeletePackage,
+    handleEditPackage,
+    handleViewPackage,
+  );
   const {
     isAddPackageFormOpen,
     isEditPackageFormOpen,
     isViewPackageDetailsOpen,
   } = useSelector((state: RootState) => state.package);
-
 
   return (
     <>
@@ -60,9 +63,9 @@ const AdminPackages: React.FC<AdminPackagesProps> = () => {
 
       <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          {isAddPackageFormOpen && (<AddPackageForm />)}
-          {isEditPackageFormOpen && (<EditPackageForm />)}
-          {isViewPackageDetailsOpen && (<PackageDetails />)}
+          {isAddPackageFormOpen && <AddPackageForm />}
+          {isEditPackageFormOpen && <EditPackageForm />}
+          {isViewPackageDetailsOpen && <PackageDetails />}
         </div>
       </div>
     </>

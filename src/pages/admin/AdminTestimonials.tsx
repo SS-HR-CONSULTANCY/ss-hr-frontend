@@ -21,14 +21,14 @@ const AdminTestimonials: React.FC = () => {
     handleDeleteTestimonial,
     handleEditTestimonial,
     handleViewTestimonial,
-    isDeleting
+    isDeleting,
   } = useAdminTestimonials();
 
   const column = TestimonialTableColumns(
     handleDeleteTestimonial,
     handleEditTestimonial,
     handleViewTestimonial,
-    isDeleting
+    isDeleting,
   );
 
   const {
@@ -64,7 +64,9 @@ const AdminTestimonials: React.FC = () => {
         pageSize={10}
       />
 
-      {(isAddTestimonialFormOpen || isEditTestimonialFormOpen || isViewTestimonialDetailsOpen) && (
+      {(isAddTestimonialFormOpen ||
+        isEditTestimonialFormOpen ||
+        isViewTestimonialDetailsOpen) && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-700 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {isAddTestimonialFormOpen && <AddTestimonialForm />}

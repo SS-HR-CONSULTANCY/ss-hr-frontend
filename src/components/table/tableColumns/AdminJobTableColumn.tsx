@@ -10,7 +10,7 @@ export const AdminJobsTableColumns = (
   handleViewDetails: (id: string) => void,
   handleEdit: (id: string) => void,
   handleDelete: (id: string) => void,
-  deletingJobId: string | null
+  deletingJobId: string | null,
 ): ColumnDef<AdminfetchAllJobsResponse>[] => [
   {
     accessorKey: "companyName",

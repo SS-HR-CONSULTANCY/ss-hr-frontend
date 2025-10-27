@@ -1,5 +1,3 @@
-
-
 export interface PackageSliceState {
   isAddPackageFormOpen: boolean;
   isEditPackageFormOpen: boolean;

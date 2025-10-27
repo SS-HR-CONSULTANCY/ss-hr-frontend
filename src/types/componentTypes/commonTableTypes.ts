@@ -2,7 +2,9 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { ApiPaginatedResponse, FetchFunctionParams } from "../commonTypes";
 
 export interface CommonTableComponentProps<T> {
-  fetchApiFunction: (params?: FetchFunctionParams) => Promise<ApiPaginatedResponse<T>>;
+  fetchApiFunction: (
+    params?: FetchFunctionParams,
+  ) => Promise<ApiPaginatedResponse<T>>;
   queryKey: string;
   heading?: string;
   description?: string;

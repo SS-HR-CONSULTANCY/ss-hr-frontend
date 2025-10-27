@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import noProfile from '../../../assets/defaultImgaes/noProfile.png';
+import noProfile from "../../../assets/defaultImgaes/noProfile.png";
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 
-export const TestimonialTableColumns = (  
+export const TestimonialTableColumns = (
   handleDeleteTestimonial: (testimonialId: string) => void,
   handleEditTestimonial: (testimonialId: string) => void,
   handleViewTestimonial: (testimonialId: string) => void,
@@ -47,10 +47,11 @@ export const TestimonialTableColumns = (
     ),
     cell: ({ row }) => {
       const text = row.original.testimonial;
-      const truncatedText = text.length > 50 ? `${text.substring(0, 50)}...` : text;
+      const truncatedText =
+        text.length > 50 ? `${text.substring(0, 50)}...` : text;
       return (
-        <span 
-          className="max-w-xs cursor-pointer hover:text-blue-600" 
+        <span
+          className="max-w-xs cursor-pointer hover:text-blue-600"
           title={text}
         >
           {truncatedText}
@@ -66,11 +67,13 @@ export const TestimonialTableColumns = (
     cell: ({ row }) => {
       const isVisible = row.original.isVisible;
       return (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          isVisible 
-            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" 
-            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-        }`}>
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            isVisible
+              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+          }`}
+        >
           {isVisible ? "Visible" : "Hidden"}
         </span>
       );
@@ -104,7 +107,7 @@ export const TestimonialTableColumns = (
           >
             <Eye className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -114,7 +117,7 @@ export const TestimonialTableColumns = (
           >
             <Edit className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"

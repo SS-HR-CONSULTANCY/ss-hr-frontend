@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { PackageSliceState } from '@/types/slice/packageSliceTypes';
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { PackageSliceState } from "@/types/slice/packageSliceTypes";
 
 const initialState: PackageSliceState = {
   isAddPackageFormOpen: false,
@@ -10,7 +10,7 @@ const initialState: PackageSliceState = {
 };
 
 const packageSlice = createSlice({
-  name: 'package',
+  name: "package",
   initialState,
   reducers: {
     toggleAddPackageForm: (state) => {

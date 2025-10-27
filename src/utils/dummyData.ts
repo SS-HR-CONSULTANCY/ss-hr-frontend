@@ -5,68 +5,77 @@ import type { Package } from "@/types/entities/package";
 import type { Payment } from "@/types/entities/payment";
 import type { Application } from "@/types/entities/application";
 import type { WeeklyData } from "@/types/componentTypes/areportTypes";
-import type { AdminfetchAllUsersResponse, AdminFetchApplicationsReportStatsDataResponse, AdminFetchOverviewStatsDataResponse, AdminFetchReportTableDataResponse, AdminFetchRevenueReportStatsDataResponse, AdminFetchUserReportStatsDataResponse } from "@/types/apiTypes/adminApiTypes";
+import type {
+  AdminfetchAllUsersResponse,
+  AdminFetchApplicationsReportStatsDataResponse,
+  AdminFetchOverviewStatsDataResponse,
+  AdminFetchReportTableDataResponse,
+  AdminFetchRevenueReportStatsDataResponse,
+  AdminFetchUserReportStatsDataResponse,
+} from "@/types/apiTypes/adminApiTypes";
 import type { Testimonial } from "@/types/entities/testimonial";
 
 // Overview page
-export   const overviewUserDummyData = [
-        { date: "01-08-2025", newUsers: 12, oldUsers: 40 },
-        { date: "02-08-2025", newUsers: 15, oldUsers: 42 },
-        { date: "03-08-2025", newUsers: 9, oldUsers: 38 },
-        { date: "04-08-2025", newUsers: 14, oldUsers: 41 },
-        { date: "05-08-2025", newUsers: 18, oldUsers: 44 },
-        { date: "06-08-2025", newUsers: 20, oldUsers: 46 },
-        { date: "07-08-2025", newUsers: 11, oldUsers: 39 },
-        { date: "08-08-2025", newUsers: 17, oldUsers: 45 },
-        { date: "09-08-2025", newUsers: 13, oldUsers: 40 },
-        { date: "10-08-2025", newUsers: 22, oldUsers: 48 },
-        { date: "11-08-2025", newUsers: 10, oldUsers: 37 },
-        { date: "12-08-2025", newUsers: 19, oldUsers: 43 },
-        { date: "13-08-2025", newUsers: 15, oldUsers: 42 },
-        { date: "14-08-2025", newUsers: 21, oldUsers: 47 },
-        { date: "15-08-2025", newUsers: 16, oldUsers: 41 },
-        { date: "16-08-2025", newUsers: 23, oldUsers: 49 },
-        { date: "17-08-2025", newUsers: 12, oldUsers: 39 },
-        { date: "18-08-2025", newUsers: 14, oldUsers: 42 },
-        { date: "19-08-2025", newUsers: 20, oldUsers: 45 },
-    ];
+export const overviewUserDummyData = [
+  { date: "01-08-2025", newUsers: 12, oldUsers: 40 },
+  { date: "02-08-2025", newUsers: 15, oldUsers: 42 },
+  { date: "03-08-2025", newUsers: 9, oldUsers: 38 },
+  { date: "04-08-2025", newUsers: 14, oldUsers: 41 },
+  { date: "05-08-2025", newUsers: 18, oldUsers: 44 },
+  { date: "06-08-2025", newUsers: 20, oldUsers: 46 },
+  { date: "07-08-2025", newUsers: 11, oldUsers: 39 },
+  { date: "08-08-2025", newUsers: 17, oldUsers: 45 },
+  { date: "09-08-2025", newUsers: 13, oldUsers: 40 },
+  { date: "10-08-2025", newUsers: 22, oldUsers: 48 },
+  { date: "11-08-2025", newUsers: 10, oldUsers: 37 },
+  { date: "12-08-2025", newUsers: 19, oldUsers: 43 },
+  { date: "13-08-2025", newUsers: 15, oldUsers: 42 },
+  { date: "14-08-2025", newUsers: 21, oldUsers: 47 },
+  { date: "15-08-2025", newUsers: 16, oldUsers: 41 },
+  { date: "16-08-2025", newUsers: 23, oldUsers: 49 },
+  { date: "17-08-2025", newUsers: 12, oldUsers: 39 },
+  { date: "18-08-2025", newUsers: 14, oldUsers: 42 },
+  { date: "19-08-2025", newUsers: 20, oldUsers: 45 },
+];
 
-    export const overviewPaymentsDummyData = [
-        { date: "01-08-2025", users: 12, applications: 8 },
-        { date: "02-08-2025", users: 15, applications: 11 },
-        { date: "03-08-2025", users: 9,  applications: 5 },
-        { date: "04-08-2025", users: 18, applications: 14 },
-        { date: "05-08-2025", users: 22, applications: 17 },
-        { date: "06-08-2025", users: 14, applications: 9 },
-        { date: "07-08-2025", users: 19, applications: 13 },
-        { date: "08-08-2025", users: 25, applications: 20 },
-        { date: "09-08-2025", users: 11, applications: 7 },
-        { date: "10-08-2025", users: 16, applications: 12 },
-    ];
+export const overviewPaymentsDummyData = [
+  { date: "01-08-2025", users: 12, applications: 8 },
+  { date: "02-08-2025", users: 15, applications: 11 },
+  { date: "03-08-2025", users: 9, applications: 5 },
+  { date: "04-08-2025", users: 18, applications: 14 },
+  { date: "05-08-2025", users: 22, applications: 17 },
+  { date: "06-08-2025", users: 14, applications: 9 },
+  { date: "07-08-2025", users: 19, applications: 13 },
+  { date: "08-08-2025", users: 25, applications: 20 },
+  { date: "09-08-2025", users: 11, applications: 7 },
+  { date: "10-08-2025", users: 16, applications: 12 },
+];
 
-
-    // Report page
-    // ✅ Dummy user Report Stats
-export const dummyAdminUserReportStats: AdminFetchUserReportStatsDataResponse = {
-  totalUsers: 1200,
-  newUsers: 150,
-  oldUsers: 1050,
-  jobApplications: 320,
-  packageUsedUsers: 480,
-};
+// Report page
+// ✅ Dummy user Report Stats
+export const dummyAdminUserReportStats: AdminFetchUserReportStatsDataResponse =
+  {
+    totalUsers: 1200,
+    newUsers: 150,
+    oldUsers: 1050,
+    jobApplications: 320,
+    packageUsedUsers: 480,
+  };
 
 // ✅ Dummy Applications Report Stats
-export const dummyAdminApplicationsReportStats: AdminFetchApplicationsReportStatsDataResponse = {
-  totalApplications: 210,
-  successfulPlacements: 75,
-};
+export const dummyAdminApplicationsReportStats: AdminFetchApplicationsReportStatsDataResponse =
+  {
+    totalApplications: 210,
+    successfulPlacements: 75,
+  };
 
 // ✅ Dummy Revenue Report Stats
-export const dummyAdminRevenueReportStats: AdminFetchRevenueReportStatsDataResponse = {
-  totalRevenue: 18000,
-  packageRevenue: 12000,
-  hiringRevenue: 6000,
-};
+export const dummyAdminRevenueReportStats: AdminFetchRevenueReportStatsDataResponse =
+  {
+    totalRevenue: 18000,
+    packageRevenue: 12000,
+    hiringRevenue: 6000,
+  };
 
 // ✅ Dummy overview Report Stats
 export const dummyAdminOverviewStats: AdminFetchOverviewStatsDataResponse = {
@@ -191,18 +200,67 @@ export const reportTableDataDummyData: AdminFetchReportTableDataResponse[] = [
   },
 ];
 
-
 export const revenueDummyData = [
-  { date: "01-08-2025", totalRevenue: 12000, packageRevenue: 8000, hiringRevenue: 4000 },
-  { date: "02-08-2025", totalRevenue: 15000, packageRevenue: 9500, hiringRevenue: 5500 },
-  { date: "03-08-2025", totalRevenue: 11000, packageRevenue: 7000, hiringRevenue: 4000 },
-  { date: "04-08-2025", totalRevenue: 17000, packageRevenue: 11000, hiringRevenue: 6000 },
-  { date: "05-08-2025", totalRevenue: 14000, packageRevenue: 9000, hiringRevenue: 5000 },
-  { date: "06-08-2025", totalRevenue: 18000, packageRevenue: 12000, hiringRevenue: 6000 },
-  { date: "07-08-2025", totalRevenue: 16000, packageRevenue: 10000, hiringRevenue: 6000 },
-  { date: "08-08-2025", totalRevenue: 20000, packageRevenue: 13000, hiringRevenue: 7000 },
-  { date: "09-08-2025", totalRevenue: 19000, packageRevenue: 12500, hiringRevenue: 6500 },
-  { date: "10-08-2025", totalRevenue: 22000, packageRevenue: 14000, hiringRevenue: 8000 },
+  {
+    date: "01-08-2025",
+    totalRevenue: 12000,
+    packageRevenue: 8000,
+    hiringRevenue: 4000,
+  },
+  {
+    date: "02-08-2025",
+    totalRevenue: 15000,
+    packageRevenue: 9500,
+    hiringRevenue: 5500,
+  },
+  {
+    date: "03-08-2025",
+    totalRevenue: 11000,
+    packageRevenue: 7000,
+    hiringRevenue: 4000,
+  },
+  {
+    date: "04-08-2025",
+    totalRevenue: 17000,
+    packageRevenue: 11000,
+    hiringRevenue: 6000,
+  },
+  {
+    date: "05-08-2025",
+    totalRevenue: 14000,
+    packageRevenue: 9000,
+    hiringRevenue: 5000,
+  },
+  {
+    date: "06-08-2025",
+    totalRevenue: 18000,
+    packageRevenue: 12000,
+    hiringRevenue: 6000,
+  },
+  {
+    date: "07-08-2025",
+    totalRevenue: 16000,
+    packageRevenue: 10000,
+    hiringRevenue: 6000,
+  },
+  {
+    date: "08-08-2025",
+    totalRevenue: 20000,
+    packageRevenue: 13000,
+    hiringRevenue: 7000,
+  },
+  {
+    date: "09-08-2025",
+    totalRevenue: 19000,
+    packageRevenue: 12500,
+    hiringRevenue: 6500,
+  },
+  {
+    date: "10-08-2025",
+    totalRevenue: 22000,
+    packageRevenue: 14000,
+    hiringRevenue: 8000,
+  },
 ];
 
 export const applicationDummyData = [
@@ -465,13 +523,13 @@ export const usersDummyData: AdminfetchAllUsersResponse[] = [
   },
 ];
 
-
-// Company dummy data 
+// Company dummy data
 export const companiesDummyData: Company[] = [
   {
     _id: "c1",
     companyName: "TechNova Solutions",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "hr@technova.com",
     createdAt: "2024-08-01T10:20:30Z",
     updatedAt: "2024-08-10T14:25:00Z",
@@ -485,7 +543,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c2",
     companyName: "GreenField Pvt Ltd",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "careers@greenfield.com",
     createdAt: "2024-07-12T09:15:10Z",
     updatedAt: "2024-08-05T11:45:00Z",
@@ -499,7 +558,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c3",
     companyName: "Skyline Industries",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "jobs@skyline.com",
     createdAt: "2024-06-20T12:05:00Z",
     updatedAt: "2024-07-01T08:40:00Z",
@@ -513,7 +573,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c4",
     companyName: "BrightWave Tech",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "brightwave.hr@gmail.com",
     createdAt: "2024-05-15T14:10:00Z",
     updatedAt: "2024-06-01T17:45:00Z",
@@ -526,7 +587,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c5",
     companyName: "NextGen Labs",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "recruit@nextgenlabs.io",
     createdAt: "2024-09-01T08:25:00Z",
     updatedAt: "2024-09-05T09:10:00Z",
@@ -540,7 +602,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c6",
     companyName: "BlueOcean Ventures",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "talent@blueocean.com",
     createdAt: "2024-03-12T07:45:00Z",
     updatedAt: "2024-04-01T10:30:00Z",
@@ -554,7 +617,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c7",
     companyName: "UrbanWorks Pvt Ltd",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "urbanworks.hr@jobs.com",
     createdAt: "2024-01-25T11:20:00Z",
     updatedAt: "2024-02-14T13:40:00Z",
@@ -567,7 +631,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c8",
     companyName: "CyberNet Systems",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "cybernet.jobs@company.com",
     createdAt: "2024-02-10T10:15:00Z",
     updatedAt: "2024-03-01T12:10:00Z",
@@ -581,7 +646,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c9",
     companyName: "QuantumSoft",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "quantumsoft@hr.com",
     createdAt: "2024-04-08T09:40:00Z",
     updatedAt: "2024-04-20T11:00:00Z",
@@ -595,7 +661,8 @@ export const companiesDummyData: Company[] = [
   {
     _id: "c10",
     companyName: "AeroSpace Dynamics",
-    companyLogo: "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+    companyLogo:
+      "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
     email: "careers@aerospace.com",
     createdAt: "2024-06-01T13:00:00Z",
     updatedAt: "2024-06-15T16:20:00Z",
@@ -607,10 +674,9 @@ export const companiesDummyData: Company[] = [
   },
 ];
 
-
 // Jobs dummy data
 export const jobsDummyData: Job[] = [
- {
+  {
     _id: "j1",
     companyName: "TechNova Solutions",
     designation: "Software Engineer",
@@ -692,20 +758,20 @@ export const jobsDummyData: Job[] = [
   },
 ];
 
-
 // Package dummy data
 export const packageDummyData: Package[] = [
   {
     _id: "p1",
     packageName: "Dubai Essentials",
-    description: "Perfect 3-day trip covering the must-see attractions of Dubai.",
+    description:
+      "Perfect 3-day trip covering the must-see attractions of Dubai.",
     price: "1500 AED",
     features: [
       "3 Nights Hotel Stay (3-Star)",
       "Airport Transfers",
       "Dubai City Tour",
       "Desert Safari with BBQ Dinner",
-      "Dhow Cruise at Dubai Marina"
+      "Dhow Cruise at Dubai Marina",
     ],
     createdAt: "2025-07-01T10:00:00Z",
     updatedAt: "2025-08-15T09:30:00Z",
@@ -713,7 +779,8 @@ export const packageDummyData: Package[] = [
   {
     _id: "p2",
     packageName: "Luxury Dubai Getaway",
-    description: "Experience Dubai in luxury with 5-star accommodation and premium tours.",
+    description:
+      "Experience Dubai in luxury with 5-star accommodation and premium tours.",
     price: "4500 AED",
     features: [
       "4 Nights 5-Star Hotel Stay",
@@ -722,7 +789,7 @@ export const packageDummyData: Package[] = [
       "Premium Desert Safari with Quad Biking",
       "Dubai Marina Yacht Dinner Cruise",
       "Shopping Tour with Personal Guide",
-      "Day Trip to Abu Dhabi"
+      "Day Trip to Abu Dhabi",
     ],
     createdAt: "2025-06-20T12:15:00Z",
     updatedAt: "2025-08-10T11:45:00Z",
@@ -738,7 +805,7 @@ export const packageDummyData: Package[] = [
       "Dune Bashing & Sandboarding",
       "Atlantis Aquaventure Waterpark",
       "Jet Ski Experience in Jumeirah Beach",
-      "Dubai Frame & Museum of the Future"
+      "Dubai Frame & Museum of the Future",
     ],
     createdAt: "2025-07-10T08:20:00Z",
     updatedAt: "2025-08-12T14:00:00Z",
@@ -746,7 +813,8 @@ export const packageDummyData: Package[] = [
   {
     _id: "p4",
     packageName: "Family Fun Dubai",
-    description: "Special family-friendly package with activities for all ages.",
+    description:
+      "Special family-friendly package with activities for all ages.",
     price: "2800 AED",
     features: [
       "5 Nights Hotel Stay (Family Suite)",
@@ -756,7 +824,7 @@ export const packageDummyData: Package[] = [
       "Global Village Visit",
       "Desert Safari with Kids Activities",
       "IMG Worlds of Adventure",
-      "Day Trip to Miracle Garden"
+      "Day Trip to Miracle Garden",
     ],
     createdAt: "2025-07-18T09:40:00Z",
     updatedAt: "2025-08-14T10:20:00Z",
@@ -764,7 +832,8 @@ export const packageDummyData: Package[] = [
   {
     _id: "p5",
     packageName: "Romantic Dubai Escape",
-    description: "A romantic Dubai experience tailored for couples & honeymooners.",
+    description:
+      "A romantic Dubai experience tailored for couples & honeymooners.",
     price: "3700 AED",
     features: [
       "4 Nights Luxury Hotel Stay",
@@ -773,13 +842,12 @@ export const packageDummyData: Package[] = [
       "Sunset Desert Safari",
       "Couple Spa Experience",
       "Burj Khalifa Sky Lounge Visit",
-      "Hot Air Balloon Ride"
+      "Hot Air Balloon Ride",
     ],
     createdAt: "2025-07-25T11:10:00Z",
     updatedAt: "2025-08-16T13:45:00Z",
-  }
+  },
 ];
-
 
 // Payment dummy data
 export const paymentsDummyData: Payment[] = [
@@ -845,7 +913,6 @@ export const paymentsDummyData: Payment[] = [
   },
 ];
 
-
 // Review dummy data
 export const reviewsDummyData: Review[] = [
   {
@@ -894,7 +961,6 @@ export const reviewsDummyData: Review[] = [
     updatedAt: "2025-08-12T18:05:00Z",
   },
 ];
-
 
 // Application dummy data
 export const applicationsDummyData: Application[] = [
@@ -955,178 +1021,177 @@ export const applicationsDummyData: Application[] = [
   },
 ];
 
-
 export const MOCK_COMPANIES = [
   {
-    id: 'co-1',
-    name: 'Google',
-    logo: 'https://logo.clearbit.com/google.com',
-    tagline: 'Trusted by teams worldwide',
+    id: "co-1",
+    name: "Google",
+    logo: "https://logo.clearbit.com/google.com",
+    tagline: "Trusted by teams worldwide",
     trustScore: 80,
     since: 1998,
-    industries: ['Cloud', 'AI'],
+    industries: ["Cloud", "AI"],
   },
   {
-    id: 'co-2',
-    name: 'Microsoft',
-    logo: 'https://logo.clearbit.com/microsoft.com',
-    tagline: 'Powering digital transformation',
+    id: "co-2",
+    name: "Microsoft",
+    logo: "https://logo.clearbit.com/microsoft.com",
+    tagline: "Powering digital transformation",
     trustScore: 81,
     since: 1999,
-    industries: ['Cloud', 'AI'],
+    industries: ["Cloud", "AI"],
   },
   {
-    id: 'co-3',
-    name: 'Amazon',
-    logo: 'https://logo.clearbit.com/amazon.com',
-    tagline: 'Delivering value at scale',
+    id: "co-3",
+    name: "Amazon",
+    logo: "https://logo.clearbit.com/amazon.com",
+    tagline: "Delivering value at scale",
     trustScore: 82,
     since: 2000,
-    industries: ['Ecommerce', 'Logistics'],
+    industries: ["Ecommerce", "Logistics"],
   },
   {
-    id: 'co-4',
-    name: 'Netflix',
-    logo: 'https://logo.clearbit.com/netflix.com',
-    tagline: 'Streaming innovation',
+    id: "co-4",
+    name: "Netflix",
+    logo: "https://logo.clearbit.com/netflix.com",
+    tagline: "Streaming innovation",
     trustScore: 83,
     since: 2001,
-    industries: ['Media', 'Streaming'],
+    industries: ["Media", "Streaming"],
   },
   {
-    id: 'co-5',
-    name: 'Meta',
-    logo: 'https://logo.clearbit.com/meta.com',
-    tagline: 'Connecting communities',
+    id: "co-5",
+    name: "Meta",
+    logo: "https://logo.clearbit.com/meta.com",
+    tagline: "Connecting communities",
     trustScore: 84,
     since: 2002,
-    industries: ['DevTools', 'SaaS'],
+    industries: ["DevTools", "SaaS"],
   },
   {
-    id: 'co-6',
-    name: 'Stripe',
-    logo: 'https://logo.clearbit.com/stripe.com',
-    tagline: 'Trusted by teams worldwide',
+    id: "co-6",
+    name: "Stripe",
+    logo: "https://logo.clearbit.com/stripe.com",
+    tagline: "Trusted by teams worldwide",
     trustScore: 85,
     since: 2003,
-    industries: ['Fintech', 'Payments'],
+    industries: ["Fintech", "Payments"],
   },
   {
-    id: 'co-7',
-    name: 'Shopify',
-    logo: 'https://logo.clearbit.com/shopify.com',
-    tagline: 'Powering digital transformation',
+    id: "co-7",
+    name: "Shopify",
+    logo: "https://logo.clearbit.com/shopify.com",
+    tagline: "Powering digital transformation",
     trustScore: 86,
     since: 2004,
-    industries: ['Ecommerce', 'Logistics'],
+    industries: ["Ecommerce", "Logistics"],
   },
   {
-    id: 'co-8',
-    name: 'Airbnb',
-    logo: 'https://logo.clearbit.com/airbnb.com',
-    tagline: 'Delivering value at scale',
+    id: "co-8",
+    name: "Airbnb",
+    logo: "https://logo.clearbit.com/airbnb.com",
+    tagline: "Delivering value at scale",
     trustScore: 87,
     since: 2005,
-    industries: ['Media', 'Streaming'],
+    industries: ["Media", "Streaming"],
   },
   {
-    id: 'co-9',
-    name: 'Uber',
-    logo: 'https://logo.clearbit.com/uber.com',
-    tagline: 'Streaming innovation',
+    id: "co-9",
+    name: "Uber",
+    logo: "https://logo.clearbit.com/uber.com",
+    tagline: "Streaming innovation",
     trustScore: 88,
     since: 2006,
-    industries: ['DevTools', 'SaaS'],
+    industries: ["DevTools", "SaaS"],
   },
   {
-    id: 'co-10',
-    name: 'PayPal',
-    logo: 'https://logo.clearbit.com/paypal.com',
-    tagline: 'Connecting communities',
+    id: "co-10",
+    name: "PayPal",
+    logo: "https://logo.clearbit.com/paypal.com",
+    tagline: "Connecting communities",
     trustScore: 89,
     since: 2007,
-    industries: ['Fintech', 'Payments'],
+    industries: ["Fintech", "Payments"],
   },
   {
-    id: 'co-11',
-    name: 'Adobe',
-    logo: 'https://logo.clearbit.com/adobe.com',
-    tagline: 'Trusted by teams worldwide',
+    id: "co-11",
+    name: "Adobe",
+    logo: "https://logo.clearbit.com/adobe.com",
+    tagline: "Trusted by teams worldwide",
     trustScore: 90,
     since: 2008,
-    industries: ['Cloud', 'AI'],
+    industries: ["Cloud", "AI"],
   },
   {
-    id: 'co-12',
-    name: 'Salesforce',
-    logo: 'https://logo.clearbit.com/salesforce.com',
-    tagline: 'Powering digital transformation',
+    id: "co-12",
+    name: "Salesforce",
+    logo: "https://logo.clearbit.com/salesforce.com",
+    tagline: "Powering digital transformation",
     trustScore: 91,
     since: 2009,
-    industries: ['Ecommerce', 'Logistics'],
+    industries: ["Ecommerce", "Logistics"],
   },
   {
-    id: 'co-13',
-    name: 'Intel',
-    logo: 'https://logo.clearbit.com/intel.com',
-    tagline: 'Delivering value at scale',
+    id: "co-13",
+    name: "Intel",
+    logo: "https://logo.clearbit.com/intel.com",
+    tagline: "Delivering value at scale",
     trustScore: 92,
     since: 2010,
-    industries: ['Fintech', 'Payments'],
+    industries: ["Fintech", "Payments"],
   },
   {
-    id: 'co-14',
-    name: 'NVIDIA',
-    logo: 'https://logo.clearbit.com/nvidia.com',
-    tagline: 'Streaming innovation',
+    id: "co-14",
+    name: "NVIDIA",
+    logo: "https://logo.clearbit.com/nvidia.com",
+    tagline: "Streaming innovation",
     trustScore: 93,
     since: 2011,
-    industries: ['Media', 'Streaming'],
+    industries: ["Media", "Streaming"],
   },
   {
-    id: 'co-15',
-    name: 'Atlassian',
-    logo: 'https://logo.clearbit.com/atlassian.com',
-    tagline: 'Connecting communities',
+    id: "co-15",
+    name: "Atlassian",
+    logo: "https://logo.clearbit.com/atlassian.com",
+    tagline: "Connecting communities",
     trustScore: 94,
     since: 2012,
-    industries: ['DevTools', 'SaaS'],
+    industries: ["DevTools", "SaaS"],
   },
   {
-    id: 'co-16',
-    name: 'Twilio',
-    logo: 'https://logo.clearbit.com/twilio.com',
-    tagline: 'Trusted by teams worldwide',
+    id: "co-16",
+    name: "Twilio",
+    logo: "https://logo.clearbit.com/twilio.com",
+    tagline: "Trusted by teams worldwide",
     trustScore: 95,
     since: 2013,
-    industries: ['Fintech', 'Payments'],
+    industries: ["Fintech", "Payments"],
   },
   {
-    id: 'co-17',
-    name: 'Spotify',
-    logo: 'https://logo.clearbit.com/spotify.com',
-    tagline: 'Powering digital transformation',
+    id: "co-17",
+    name: "Spotify",
+    logo: "https://logo.clearbit.com/spotify.com",
+    tagline: "Powering digital transformation",
     trustScore: 96,
     since: 2014,
-    industries: ['Media', 'Streaming'],
+    industries: ["Media", "Streaming"],
   },
   {
-    id: 'co-18',
-    name: 'Zoom',
-    logo: 'https://logo.clearbit.com/zoom.us',
-    tagline: 'Delivering value at scale',
+    id: "co-18",
+    name: "Zoom",
+    logo: "https://logo.clearbit.com/zoom.us",
+    tagline: "Delivering value at scale",
     trustScore: 97,
     since: 2015,
-    industries: ['DevTools', 'SaaS'],
+    industries: ["DevTools", "SaaS"],
   },
   {
-    id: 'co-19',
-    name: 'DoorDash',
-    logo: 'https://logo.clearbit.com/doordash.com',
-    tagline: 'Streaming innovation',
+    id: "co-19",
+    name: "DoorDash",
+    logo: "https://logo.clearbit.com/doordash.com",
+    tagline: "Streaming innovation",
     trustScore: 98,
     since: 2016,
-    industries: ['Ecommerce', 'Logistics'],
+    industries: ["Ecommerce", "Logistics"],
   },
 ];
 

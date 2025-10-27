@@ -11,12 +11,17 @@ import type { RootState, AppDispatch } from "@/store/store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { closeEditTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { UpdateTestimonialFormData } from "@/types/entities/testimonial";
-import { getTestimonialById, updateTestimonial } from "@/utils/apis/adminTestimonialApi";
+import {
+  getTestimonialById,
+  updateTestimonial,
+} from "@/utils/apis/adminTestimonialApi";
 
 const EditTestimonialForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
-  const { selectedTestimonialId } = useSelector((state: RootState) => state.testimonial);
+  const { selectedTestimonialId } = useSelector(
+    (state: RootState) => state.testimonial,
+  );
 
   const [formData, setFormData] = useState<UpdateTestimonialFormData>({
     clientName: "",
@@ -29,13 +34,11 @@ const EditTestimonialForm: React.FC = () => {
   const [errors, setErrors] = useState<Partial<UpdateTestimonialFormData>>({});
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-
   const { data: testimonialData, isLoading } = useQuery({
     queryKey: ["testimonial", selectedTestimonialId],
     queryFn: () => getTestimonialById(selectedTestimonialId!),
     enabled: !!selectedTestimonialId,
   });
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -103,15 +106,12 @@ const EditTestimonialForm: React.FC = () => {
     }
   };
 
-
   const handleCancel = () => {
     dispatch(closeEditTestimonialForm());
   };
 
   if (isLoading) {
-    return (
-      <FormLoading />
-    );
+    return <FormLoading />;
   }
 
   return (
@@ -121,23 +121,33 @@ const EditTestimonialForm: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="clientName" className="">Client Name</Label>
+            <Label htmlFor="clientName" className="">
+              Client Name
+            </Label>
             <Input
               id="clientName"
               value={formData.clientName}
-              onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, clientName: e.target.value })
+              }
               className=""
               placeholder="Enter client name"
             />
-            {errors.clientName && <p className="text-red-500 text-sm mt-1">{errors.clientName}</p>}
+            {errors.clientName && (
+              <p className="text-red-500 text-sm mt-1">{errors.clientName}</p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="designation" className="">Designation</Label>
+            <Label htmlFor="designation" className="">
+              Designation
+            </Label>
             <Input
               id="designation"
               value={formData.designation}
-              onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, designation: e.target.value })
+              }
               className=""
               placeholder="Enter designation"
             />
@@ -163,43 +173,47 @@ const EditTestimonialForm: React.FC = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="testimonial" className="">Testimonial</Label>
+          <Label htmlFor="testimonial" className="">
+            Testimonial
+          </Label>
           <Textarea
             id="testimonial"
             value={formData.testimonial}
-            onChange={(e) => setFormData({ ...formData, testimonial: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, testimonial: e.target.value })
+            }
             className=""
             placeholder="Enter client testimonial..."
           />
-          {errors.testimonial && <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>}
+          {errors.testimonial && (
+            <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>
+          )}
         </div>
 
         <div className="flex items-center">
-          <label className="pr-[15px] text-[15px] leading-none" htmlFor="isVisible">
+          <label
+            className="pr-[15px] text-[15px] leading-none"
+            htmlFor="isVisible"
+          >
             Make testimonial visible to public
           </label>
           <Switch.Root
             className="relative h-[25px] w-[42px] cursor-default rounded-full bg-gray-300 shadow-[0_2px_10px] shadow-gray-400 outline-none focus:shadow-[0_0_0_2px] focus:shadow-blue-500 data-[state=checked]:bg-blue-600"
             id="isVisible"
             checked={formData.isVisible}
-            onCheckedChange={(checked) => setFormData({ ...formData, isVisible: checked })}
+            onCheckedChange={(checked) =>
+              setFormData({ ...formData, isVisible: checked })
+            }
           >
             <Switch.Thumb className="block size-[21px] translate-x-0.5 rounded-full bg-white shadow-[0_2px_2px] shadow-gray-400 transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
           </Switch.Root>
         </div>
 
         <div className="flex justify-end gap-3 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleCancel}
-          >
+          <Button type="button" variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="outline"
-          >
+          <Button type="submit" variant="outline">
             {"Update Testimonial"}
           </Button>
         </div>

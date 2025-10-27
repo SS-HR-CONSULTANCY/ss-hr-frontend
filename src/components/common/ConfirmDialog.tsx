@@ -36,14 +36,13 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          {description && <AlertDialogDescription>{description}</AlertDialogDescription>}
+          {description && (
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          )}
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            className={confirmVariant}
-          >
+          <AlertDialogAction onClick={onConfirm} className={confirmVariant}>
             {confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>

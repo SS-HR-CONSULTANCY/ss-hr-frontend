@@ -1,33 +1,44 @@
-import { Plus } from 'lucide-react';
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Plus } from "lucide-react";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import JobDetails from "@/pages/common/JobDetailsPage";
-import { useDispatch, useSelector } from 'react-redux';
-import AddJobForm from '@/components/admin/AddJobForm';
-import { useQueryClient } from '@tanstack/react-query';
-import EditJobForm from '@/components/admin/EditJobForm';
-import CommonTable from '@/components/common/CommonTable';
-import { JobHandlers } from '@/utils/helpers/jobHelpers';
-import type { AppDispatch, RootState } from '@/store/store';
-import TablePageHeader from '@/components/common/TablePageHeader';
-import { adminFetchAllJobs, adminGetJobById } from '@/utils/apis/adminJobApi';
-import type { AdminfetchAllJobsResponse } from '@/types/apiTypes/adminApiTypes';
-import { toggleAddJobForm, closeViewDetailsModal } from '@/store/slices/jobSlice';
+import { useDispatch, useSelector } from "react-redux";
+import AddJobForm from "@/components/admin/AddJobForm";
+import { useQueryClient } from "@tanstack/react-query";
+import EditJobForm from "@/components/admin/EditJobForm";
+import CommonTable from "@/components/common/CommonTable";
+import { JobHandlers } from "@/utils/helpers/jobHelpers";
+import type { AppDispatch, RootState } from "@/store/store";
+import TablePageHeader from "@/components/common/TablePageHeader";
+import { adminFetchAllJobs, adminGetJobById } from "@/utils/apis/adminJobApi";
+import type { AdminfetchAllJobsResponse } from "@/types/apiTypes/adminApiTypes";
+import {
+  toggleAddJobForm,
+  closeViewDetailsModal,
+} from "@/store/slices/jobSlice";
 import { AdminJobsTableColumns } from "@/components/table/tableColumns/AdminJobTableColumn";
 
 const AdminJobsPage: React.FC = () => {
-
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
-  const { handleViewDetails, handleEdit, handleDelete } = JobHandlers(dispatch, queryClient, setDeletingJobId);
-  const { isAddJobFormOpen, isEditJobFormOpen, isViewDetailsModalOpen, viewingJobId } = useSelector((state: RootState) => state.job);
+  const { handleViewDetails, handleEdit, handleDelete } = JobHandlers(
+    dispatch,
+    queryClient,
+    setDeletingJobId,
+  );
+  const {
+    isAddJobFormOpen,
+    isEditJobFormOpen,
+    isViewDetailsModalOpen,
+    viewingJobId,
+  } = useSelector((state: RootState) => state.job);
 
   const columns = AdminJobsTableColumns(
     handleViewDetails,
     handleEdit,
     handleDelete,
-    deletingJobId
+    deletingJobId,
   );
 
   return (

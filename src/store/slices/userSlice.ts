@@ -1,5 +1,5 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { UserSliceState } from '../../types/slice/userSliceTypes';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { UserSliceState } from "../../types/slice/userSliceTypes";
 
 const initialState: UserSliceState = {
   selectedUserId: null,
@@ -9,7 +9,7 @@ const initialState: UserSliceState = {
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     openAddUserModal: (state) => {

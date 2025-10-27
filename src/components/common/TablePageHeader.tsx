@@ -6,7 +6,11 @@ interface TablePageHeaderProps {
   actionButton?: ReactNode;
 }
 
-const TablePageHeader = ({ title, subtitle, actionButton }: TablePageHeaderProps) => {
+const TablePageHeader = ({
+  title,
+  subtitle,
+  actionButton,
+}: TablePageHeaderProps) => {
   return (
     <div className="flex justify-between items-center mb-6">
       <div>

@@ -2,7 +2,11 @@ import { lazy } from "react";
 import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
-import { adminApplicationRoutes, services, userApplicationRoutes } from "@/utils/constants";
+import {
+  adminApplicationRoutes,
+  services,
+  userApplicationRoutes,
+} from "@/utils/constants";
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
@@ -26,172 +30,235 @@ const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
-const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
+const ServiceDetailedContent = lazy(
+  () => import("@/components/sections/ServiceDetailedContent"),
+);
 
 const appRouter = createBrowserRouter([
-    {
-        path: '/',
-        element: <Home />,
-        children: [
-            { path: '/', element: <Landing /> },
-            { path: '/toursandtravels', element: <ToursAndTravels /> },
-            { path: '/contact', element: <ContactPage /> },
-            { path: '/aboutUs', element: <AboutUs /> },
-            { path: "/visaservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "visaservice")!} /> },
-            { path: "/ticketservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "ticketservice")!} /> },
-            { path: "/certificationservice", element: <ServiceDetailedContent {...services.find((s) => s.id === "certificationservice")!} /> },
-            { path: "/medicalrecruit", element: <ServiceDetailedContent {...services.find((s) => s.id === "medicalrecruitservice")!} /> },
-            { path: "/cvwriting", element: <ServiceDetailedContent {...services.find((s) => s.id === "cvwritingservice")!} /> },
-            { path: "/webdevelopment", element: <ServiceDetailedContent {...services.find((s) => s.id === "webdevelopment")!} /> },
-            { path: "/labourservices", element: <ServiceDetailedContent {...services.find((s) => s.id === "laboursupplyservice")!} /> },
-            { path: '*', element: <Error404 /> },
-        ]
-    },
-    { path: 'register', element: <Register /> },
-    { path: 'login', element: <Login /> },
-    { path: 'verifyOtp', element: <Otp /> },
-    { path: 'admin/login', element: <AdminLogin /> },
-    {
-        path: '/user',
-        element: <DashboardLayout showMobileScreenWarning={false} routes={userApplicationRoutes} />,
-        children: [
-            {
-                index: true, element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <UserProfile />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'profile',
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <UserProfile />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: "jobs",
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <UserJobs />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "applications",
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <AdminApplications />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "chat",
-                element: (
-                    <ProtectedRoute requiredRole={["user"]}>
-                        <ChatPage />
-                    </ProtectedRoute>
-                ),
-            },
-            { path: "*", element: <Error404 /> }
-        ]
-    },
-    {
-        path: "/admin",
-        element: <DashboardLayout showMobileScreenWarning={true} routes={adminApplicationRoutes} />,
-        children: [
-            {
-                index: true, element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminOverview />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: "overview",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminOverview />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "users",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminUsers />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "jobs",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminJobsPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "packages",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminPackages showButton />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "applications",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminApplications />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "payments",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminPayments />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "chat",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <ChatPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "testimonials",
-                element: (
-                    <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
-                        <AdminTestimonials />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "reports",
-                element: (
-                    <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
-                        <AdminReports />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "settings",
-                element: (
-                    <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
-                        <AdminSettings />
-                    </ProtectedRoute>
-                ),
-            },
-            { path: '*', element: <Error404 /> },
-        ],
-    },
-    { path: '*', element: <Error404 /> },
-])
+  {
+    path: "/",
+    element: <Home />,
+    children: [
+      { path: "/", element: <Landing /> },
+      { path: "/toursandtravels", element: <ToursAndTravels /> },
+      { path: "/contact", element: <ContactPage /> },
+      { path: "/aboutUs", element: <AboutUs /> },
+      {
+        path: "/visaservice",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "visaservice")!}
+          />
+        ),
+      },
+      {
+        path: "/ticketservice",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "ticketservice")!}
+          />
+        ),
+      },
+      {
+        path: "/certificationservice",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "certificationservice")!}
+          />
+        ),
+      },
+      {
+        path: "/medicalrecruit",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "medicalrecruitservice")!}
+          />
+        ),
+      },
+      {
+        path: "/cvwriting",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "cvwritingservice")!}
+          />
+        ),
+      },
+      {
+        path: "/webdevelopment",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "webdevelopment")!}
+          />
+        ),
+      },
+      {
+        path: "/labourservices",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "laboursupplyservice")!}
+          />
+        ),
+      },
+      { path: "*", element: <Error404 /> },
+    ],
+  },
+  { path: "register", element: <Register /> },
+  { path: "login", element: <Login /> },
+  { path: "verifyOtp", element: <Otp /> },
+  { path: "admin/login", element: <AdminLogin /> },
+  {
+    path: "/user",
+    element: (
+      <DashboardLayout
+        showMobileScreenWarning={false}
+        routes={userApplicationRoutes}
+      />
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute requiredRole={["user"]}>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute requiredRole={["user"]}>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "jobs",
+        element: (
+          <ProtectedRoute requiredRole={["user"]}>
+            <UserJobs />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "applications",
+        element: (
+          <ProtectedRoute requiredRole={["user"]}>
+            <AdminApplications />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "chat",
+        element: (
+          <ProtectedRoute requiredRole={["user"]}>
+            <ChatPage />
+          </ProtectedRoute>
+        ),
+      },
+      { path: "*", element: <Error404 /> },
+    ],
+  },
+  {
+    path: "/admin",
+    element: (
+      <DashboardLayout
+        showMobileScreenWarning={true}
+        routes={adminApplicationRoutes}
+      />
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminOverview />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "overview",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminOverview />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "users",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminUsers />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "jobs",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminJobsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "packages",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminPackages showButton />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "applications",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminApplications />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "payments",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminPayments />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "chat",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <ChatPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "testimonials",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+            <AdminTestimonials />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "reports",
+        element: (
+          <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
+            <AdminReports />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
+            <AdminSettings />
+          </ProtectedRoute>
+        ),
+      },
+      { path: "*", element: <Error404 /> },
+    ],
+  },
+  { path: "*", element: <Error404 /> },
+]);
 
-export default appRouter
+export default appRouter;

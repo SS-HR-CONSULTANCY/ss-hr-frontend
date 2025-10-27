@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeViewTestimonialDetails } from "@/store/slices/testimonialSlice";
 import { getTestimonialById } from "@/utils/apis/adminTestimonialApi";
-import noProfile from '@/assets/defaultImgaes/noProfile.png';
+import noProfile from "@/assets/defaultImgaes/noProfile.png";
 import FormLoading from "../form/FormLoading";
 
 const TestimonialDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedTestimonialId } = useSelector((state: RootState) => state.testimonial);
+  const { selectedTestimonialId } = useSelector(
+    (state: RootState) => state.testimonial,
+  );
 
   const { data: testimonialData, isLoading } = useQuery({
     queryKey: ["testimonial", selectedTestimonialId],
@@ -23,17 +25,19 @@ const TestimonialDetails: React.FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <FormLoading />
-    );
+    return <FormLoading />;
   }
 
   if (!testimonialData?.testimonial) {
     return (
       <div className="p-6 max-w-2xl mx-auto">
         <div className="text-center">
-          <p className="text-red-500 text-lg font-medium">Testimonial not found</p>
-          <p className="text-gray-600 mt-2">The requested testimonial could not be loaded.</p>
+          <p className="text-red-500 text-lg font-medium">
+            Testimonial not found
+          </p>
+          <p className="text-gray-600 mt-2">
+            The requested testimonial could not be loaded.
+          </p>
           <Button onClick={handleClose} className="mt-4" variant="outline">
             Close
           </Button>
@@ -48,11 +52,13 @@ const TestimonialDetails: React.FC = () => {
     <div className="p-6 max-w-2xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold ">Testimonial Details</h2>
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-          testimonial.isVisible 
-            ? "bg-green-100 text-green-800" 
-            : "bg-red-100 text-red-800"
-        }`}>
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium ${
+            testimonial.isVisible
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
           {testimonial.isVisible ? "Visible" : "Hidden"}
         </span>
       </div>
@@ -70,7 +76,9 @@ const TestimonialDetails: React.FC = () => {
               }}
             />
             <div>
-              <h4 className="text-lg font-semibold ">{testimonial.clientName}</h4>
+              <h4 className="text-lg font-semibold ">
+                {testimonial.clientName}
+              </h4>
               <p className="font-medium">{testimonial.designation}</p>
             </div>
           </div>
@@ -89,10 +97,7 @@ const TestimonialDetails: React.FC = () => {
 
       {/* Close Button */}
       <div className="flex justify-end pt-6 border-t">
-        <Button
-          onClick={handleClose}
-          variant="outline"
-        >
+        <Button onClick={handleClose} variant="outline">
           Close
         </Button>
       </div>

@@ -1,26 +1,31 @@
-import React from 'react';
+import React from "react";
 import {
   NavbarLeft,
   NavbarRight,
   Navbar as NavbarComponent,
 } from "@/components/ui/navbar";
 import { cn } from "@/lib/utils";
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import useAuthHook from '@/hooks/useAuthHook';
-import { useAppSelector } from '@/hooks/redux';
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import useAuthHook from "@/hooks/useAuthHook";
+import { useAppSelector } from "@/hooks/redux";
 import { Menu, Moon, Sun, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
-import { toggleTheme } from '@/store/slices/appSlice';
-import type { AppDispatch, RootState } from '@/store/store';
-import noprofileImage from '../../assets/defaultImgaes/noProfile.png';
-import logoTransparent from '../../assets/logos/logo-transparent.png';
-import type { NavbarProps } from '@/types/componentTypes/headerTypes';
+import { toggleTheme } from "@/store/slices/appSlice";
+import type { AppDispatch, RootState } from "@/store/store";
+import noprofileImage from "../../assets/defaultImgaes/noProfile.png";
+import logoTransparent from "../../assets/logos/logo-transparent.png";
+import type { NavbarProps } from "@/types/componentTypes/headerTypes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { siteUrlConfig, navLinks, companyName, links } from "@/utils/constants";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const Header: React.FC = ({
   name = companyName,
@@ -29,12 +34,18 @@ const Header: React.FC = ({
   customNavigation,
   className,
 }: NavbarProps) => {
-
   const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const route: string = user?.role === "admin" || user?.role === "superAdmin" || user?.role === "systemAdmin" ? '/admin/login' : user?.role === "user" ? "/login" : '/'
+  const route: string =
+    user?.role === "admin" ||
+    user?.role === "superAdmin" ||
+    user?.role === "systemAdmin"
+      ? "/admin/login"
+      : user?.role === "user"
+        ? "/login"
+        : "/";
 
   const { handleLogout } = useAuthHook({ route });
 
@@ -43,16 +54,20 @@ const Header: React.FC = ({
       <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto px-4 md:px-0">
         <NavbarComponent>
-
           <NavbarLeft>
-            <Link to={homeUrl} >
-              <img src={logoTransparent} alt="SS HR" className="size-10 cursor-pointer" />
+            <Link to={homeUrl}>
+              <img
+                src={logoTransparent}
+                alt="SS HR"
+                className="size-10 cursor-pointer"
+              />
             </Link>
-            <a href={homeUrl} className="items-center gap-2 text-xl font-bold" >{name}</a>
+            <a href={homeUrl} className="items-center gap-2 text-xl font-bold">
+              {name}
+            </a>
             {showNavigation && (customNavigation || <Navigation />)}
           </NavbarLeft>
           <NavbarRight>
-
             {user && isAuthenticated ? (
               <div className="hidden md:block">
                 <DropdownMenu>
@@ -68,14 +83,17 @@ const Header: React.FC = ({
                     )}
                   </DropdownMenuTrigger>
 
-                  <DropdownMenuContent className="w-40" align="end" sideOffset={8}>
+                  <DropdownMenuContent
+                    className="w-40"
+                    align="end"
+                    sideOffset={8}
+                  >
                     {user.role === "user" &&
                       links.map((link) => (
                         <DropdownMenuItem asChild key={link.url}>
                           <Link to={link.url}>{link.text}</Link>
                         </DropdownMenuItem>
-                      ))
-                    }
+                      ))}
 
                     {user.role === "admin" && (
                       <DropdownMenuItem asChild>
@@ -83,7 +101,9 @@ const Header: React.FC = ({
                       </DropdownMenuItem>
                     )}
 
-                    <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Logout
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -93,7 +113,10 @@ const Header: React.FC = ({
               </Button>
             )}
 
-            <div className="relative flex rounded-full cursor-pointer" onClick={() => dispatch(toggleTheme())}>
+            <div
+              className="relative flex rounded-full cursor-pointer"
+              onClick={() => dispatch(toggleTheme())}
+            >
               {theme === "dark" ? <Sun /> : <Moon />}
             </div>
 
@@ -120,10 +143,10 @@ const Header: React.FC = ({
                     .filter(
                       (link) =>
                         link.isForMob &&
-                        (!isAuthenticated || (link.text !== "SignIn" && link.text !== "SignUp"))
+                        (!isAuthenticated ||
+                          (link.text !== "SignIn" && link.text !== "SignUp")),
                     )
-                    .map((link, index) =>
-                    (
+                    .map((link, index) => (
                       <a
                         key={index}
                         href={link.href}
@@ -139,7 +162,7 @@ const Header: React.FC = ({
         </NavbarComponent>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

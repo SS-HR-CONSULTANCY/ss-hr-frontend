@@ -10,13 +10,13 @@ export interface Payment {
   paidAmount: number;
   discountAmount: number;
   balanceAmount: number;
-  paymentMethod: 'googlepay' | 'banktransfer' | 'cash';
+  paymentMethod: "googlepay" | "banktransfer" | "cash";
   paymentDate: string;
   paymentStatus: string;
   referenceId: string;
   paymentProof: string;
   adminNotes: string;
-  status: 'pending' | 'partiallypaid' | 'fullypaid';
+  status: "pending" | "partiallypaid" | "fullypaid";
   createdAt: string;
   updatedAt: string;
 }
@@ -28,7 +28,7 @@ export interface CreatePaymentFormData {
   packageName: string;
   totalAmount: number;
   paidAmount: number;
-  paymentMethod: 'googlepay' | 'banktransfer' | 'cash';
+  paymentMethod: "googlepay" | "banktransfer" | "cash";
   paymentDate: string;
   referenceId: string;
   paymentProof: string;
@@ -42,7 +42,7 @@ export interface UpdatePaymentFormData {
   packageName?: string;
   totalAmount?: number;
   paidAmount?: number;
-  paymentMethod?: 'googlepay' | 'banktransfer' | 'cash';
+  paymentMethod?: "googlepay" | "banktransfer" | "cash";
   paymentDate?: string;
   referenceId?: string;
   paymentProof?: string;

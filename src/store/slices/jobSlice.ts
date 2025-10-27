@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface JobState {
   isAddJobFormOpen: boolean;
@@ -21,7 +21,7 @@ const initialState: JobState = {
 };
 
 const jobSlice = createSlice({
-  name: 'job',
+  name: "job",
   initialState,
   reducers: {
     // Add Job Form
@@ -38,7 +38,7 @@ const jobSlice = createSlice({
       state.isAddJobFormOpen = false;
       state.selectedJobId = null;
     },
-    
+
     // Edit Job Form
     toggleEditJobForm: (state, action: PayloadAction<string | null>) => {
       state.isEditJobFormOpen = !state.isEditJobFormOpen;

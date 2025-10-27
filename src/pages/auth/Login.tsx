@@ -19,11 +19,10 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const Login: React.FC = () => {
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isLoading, isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const {
@@ -36,7 +35,7 @@ const Login: React.FC = () => {
     defaultValues: {
       email: "",
       password: "",
-      role: "user"
+      role: "user",
     },
   });
 
@@ -44,12 +43,16 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      if (user.role === 'user') {
-        navigate('/', { replace: true });
-      } else if (user.role === 'admin' || user.role === 'superAdmin' || user.role === "systemAdmin") {
-        navigate('/admin', { replace: true });
+      if (user.role === "user") {
+        navigate("/", { replace: true });
+      } else if (
+        user.role === "admin" ||
+        user.role === "superAdmin" ||
+        user.role === "systemAdmin"
+      ) {
+        navigate("/admin", { replace: true });
       } else {
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       }
     }
   }, [isAuthenticated, user, navigate]);
@@ -71,9 +74,10 @@ const Login: React.FC = () => {
 
   const handleGoogleLogin = () => {
     try {
-      const apiUrl = import.meta.env.VITE_ENVIRONMENT === "development"
-        ? import.meta.env.VITE_BACKEND_DEVELOPMENT_URL
-        : import.meta.env.VITE_BACKEND_PRODUCTION_URL;
+      const apiUrl =
+        import.meta.env.VITE_ENVIRONMENT === "development"
+          ? import.meta.env.VITE_BACKEND_DEVELOPMENT_URL
+          : import.meta.env.VITE_BACKEND_PRODUCTION_URL;
       window.location.href = `${apiUrl}/auth/google`;
     } catch (error) {
       toast.error("Failed to initiate Google login");

@@ -22,31 +22,40 @@ const CommonTable = <T,>({
   showDatePicker,
   saveDataInStore,
 }: CommonTableComponentProps<T>) => {
-
   const dispatch = useDispatch<AppDispatch>();
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: pageSize,
-  })
+  });
 
-  const handlePaginationChange: OnChangeFn<PaginationState> = (updaterOrValue) => {
+  const handlePaginationChange: OnChangeFn<PaginationState> = (
+    updaterOrValue,
+  ) => {
     setPagination(updaterOrValue);
   };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryFn: () => fetchApiFunction({
+    queryFn: () =>
+      fetchApiFunction({
+        id,
+        pagination: {
+          page: pagination.pageIndex + 1,
+          limit: pagination.pageSize,
+          fromDate,
+          toDate,
+        },
+      }),
+    queryKey: [
+      queryKey,
+      pagination.pageIndex,
+      pagination.pageSize,
       id,
-      pagination: {
-        page: pagination.pageIndex + 1,
-        limit: pagination.pageSize,
-        fromDate,
-        toDate
-      }
-    }),
-    queryKey: [queryKey, pagination.pageIndex, pagination.pageSize, id, fromDate, toDate],
+      fromDate,
+      toDate,
+    ],
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
     enabled: !showDummyData,
@@ -55,19 +64,21 @@ const CommonTable = <T,>({
   const tableData =
     showDummyData && dummyData && dummyData.length > 0
       ? dummyData.slice(
-        pagination.pageIndex * pagination.pageSize,
-        (pagination.pageIndex + 1) * pagination.pageSize
-      )
-      : data?.data ?? [];
+          pagination.pageIndex * pagination.pageSize,
+          (pagination.pageIndex + 1) * pagination.pageSize,
+        )
+      : (data?.data ?? []);
 
   const totalPages =
     showDummyData && dummyData
       ? Math.ceil(dummyData.length / pagination.pageSize)
-      : data?.totalPages ?? 0;
+      : (data?.totalPages ?? 0);
 
   useEffect(() => {
     if (!saveDataInStore || !data) return;
-    dispatch(saveReportData(data?.data as Array<AdminFetchReportTableDataResponse>));
+    dispatch(
+      saveReportData(data?.data as Array<AdminFetchReportTableDataResponse>),
+    );
   }, [data, saveDataInStore, dispatch]);
 
   return (
@@ -76,7 +87,9 @@ const CommonTable = <T,>({
         <div className="flex items-center space-x-4 space-y-2">
           {showDatePicker && (
             <div>
-              <h2 className={`text-lg font-normal`}>Pick specific date range</h2>
+              <h2 className={`text-lg font-normal`}>
+                Pick specific date range
+              </h2>
               <input
                 type="date"
                 value={fromDate}
@@ -98,7 +111,7 @@ const CommonTable = <T,>({
         <div className="mt-2">
           <TableShimmer columnsCount={columnsCount} />
         </div>
-      )  : isError && error ? (
+      ) : isError && error ? (
         <DataFetchingError
           message={(error as Error).message}
           className="min-h-full"

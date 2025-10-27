@@ -5,11 +5,12 @@ import type { AppDispatch } from "@/store/store";
 import { deletePayment } from "@/utils/apis/adminPaymentApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfirmToast } from "@/components/table/tableColumns/ConfirmToast";
-import { openEditPaymentForm, openViewPaymentDetails } from "@/store/slices/paymentSlice";
-
+import {
+  openEditPaymentForm,
+  openViewPaymentDetails,
+} from "@/store/slices/paymentSlice";
 
 export function useAdminPayments(paymentId?: string) {
-
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
@@ -35,17 +36,18 @@ export function useAdminPayments(paymentId?: string) {
   };
 
   const handleDeletePayment = () => {
-    toast(({ closeToast }) =>
-      React.createElement(ConfirmToast, {
-        message: "Are you sure you want to delete this payment?",
-        confirmText: "Delete",
-        cancelText: "Cancel",
-        onConfirm: () => {
-          deleteMutation.mutate();
-          closeToast();
-        },
-        onCancel: closeToast,
-      }),
+    toast(
+      ({ closeToast }) =>
+        React.createElement(ConfirmToast, {
+          message: "Are you sure you want to delete this payment?",
+          confirmText: "Delete",
+          cancelText: "Cancel",
+          onConfirm: () => {
+            deleteMutation.mutate();
+            closeToast();
+          },
+          onCancel: closeToast,
+        }),
       {
         position: "top-center",
         autoClose: false,
@@ -54,7 +56,7 @@ export function useAdminPayments(paymentId?: string) {
         pauseOnHover: true,
         draggable: false,
         closeButton: false,
-      }
+      },
     );
   };
 

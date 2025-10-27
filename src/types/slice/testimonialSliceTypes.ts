@@ -1,6 +1,3 @@
-
-
-
 export interface TestimonialSliceState {
   isAddTestimonialFormOpen: boolean;
   isEditTestimonialFormOpen: boolean;

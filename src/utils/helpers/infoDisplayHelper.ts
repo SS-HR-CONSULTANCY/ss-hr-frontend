@@ -2,8 +2,8 @@
 export const formatTime = (seconds: number): string => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
   return `${formattedMinutes}:${formattedSeconds}`;
 };
 
@@ -12,23 +12,27 @@ export const greetings = (): string => {
   const date = new Date();
   const hour = date.getHours();
   if (hour >= 12 && hour <= 12) {
-    return "Good Morning"
+    return "Good Morning";
   } else if (hour > 12 && hour < 4) {
-    return "Good Afternoon"
+    return "Good Afternoon";
   } else {
-    return "Good Evening"
+    return "Good Evening";
   }
-}
+};
 
 // **** Provider slot availability generator **** \\
 const format12HourTime = (time24: string): string => {
-  const [hours, minutes] = time24.split(':').map(Number);
-  const period = hours >= 12 ? 'PM' : 'AM';
+  const [hours, minutes] = time24.split(":").map(Number);
+  const period = hours >= 12 ? "PM" : "AM";
   const hour12 = hours % 12 === 0 ? 12 : hours % 12;
-  return `${hour12}:${String(minutes).padStart(2, '0')} ${period}`;
+  return `${hour12}:${String(minutes).padStart(2, "0")} ${period}`;
 };
 
-export const generateTimeSlots = (startTime: string, endTime: string, intervalMinutes: string): string[] => {
+export const generateTimeSlots = (
+  startTime: string,
+  endTime: string,
+  intervalMinutes: string,
+): string[] => {
   const slots: string[] = [];
   let currentTime = startTime;
   let interval = 0;
@@ -43,13 +47,13 @@ export const generateTimeSlots = (startTime: string, endTime: string, intervalMi
 
   while (currentTime <= endTime) {
     slots.push(format12HourTime(currentTime));
-    const [hours, minutes] = currentTime.split(':').map(Number);
+    const [hours, minutes] = currentTime.split(":").map(Number);
     const nextMinutes = minutes + interval;
     const nextHours = hours + Math.floor(nextMinutes / 60);
     const nextMinutesAdjusted = nextMinutes % 60;
-    currentTime = `${String(nextHours).padStart(2, '0')}:${String(nextMinutesAdjusted).padStart(2, '0')}`;
+    currentTime = `${String(nextHours).padStart(2, "0")}:${String(nextMinutesAdjusted).padStart(2, "0")}`;
   }
-  return slots
+  return slots;
 };
 
 // **** Formate date for infoDisplayCompoenent **** \\
@@ -72,4 +76,3 @@ export const copyToClipboard = (text: string) => {
 
 // **** Formating function for boolean value formatBoolean **** \\
 export const formatBoolean = (val: boolean) => (val ? "Yes" : "No");
-

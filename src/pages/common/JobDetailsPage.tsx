@@ -1,23 +1,18 @@
-import dayjs from 'dayjs';
-import { 
-  X, 
-  Briefcase, 
-  Edit,
-  Trash2,
-} from 'lucide-react';
-import { toast } from 'react-toastify';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import Loading from '@/pages/common/Loading';
-import { Button } from '@/components/ui/button';
-import type { AppDispatch } from '@/store/store';
-import { deleteJob } from '@/utils/apis/adminJobApi';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { openEditJobForm } from '@/store/slices/jobSlice';
-import InfoDisplay from '../../components/common/InfoDisplay';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import DataFetchingError from '../../components/common/DataFetchingError';
-import type { FetchJobDetailsResponse } from '@/types/apiTypes/commonApiTypes';
+import dayjs from "dayjs";
+import { X, Briefcase, Edit, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import Loading from "@/pages/common/Loading";
+import { Button } from "@/components/ui/button";
+import type { AppDispatch } from "@/store/store";
+import { deleteJob } from "@/utils/apis/adminJobApi";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { openEditJobForm } from "@/store/slices/jobSlice";
+import InfoDisplay from "../../components/common/InfoDisplay";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import DataFetchingError from "../../components/common/DataFetchingError";
+import type { FetchJobDetailsResponse } from "@/types/apiTypes/commonApiTypes";
 
 dayjs.extend(relativeTime);
 
@@ -27,17 +22,16 @@ interface JobDetailsPageProps {
   fetchJobById: (jobId: string) => Promise<FetchJobDetailsResponse>;
 }
 
-const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ 
+const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
   jobId,
   onClose,
-fetchJobById,
- }) => {
-  
+  fetchJobById,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
   const [deleting, setDeleting] = useState(false);
 
-   const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryFn: () => fetchJobById(jobId),
     queryKey: ["job-detail", jobId],
     staleTime: 1 * 60 * 1000,
@@ -63,14 +57,12 @@ fetchJobById,
     );
   }
 
-  if(isLoading) {
-    return (
-      <Loading />
-    )
+  if (isLoading) {
+    return <Loading />;
   }
 
-  if(isError && error) {
-    <DataFetchingError message='Data fetching error' />
+  if (isError && error) {
+    <DataFetchingError message="Data fetching error" />;
   }
 
   const handleEdit = () => {
@@ -79,18 +71,22 @@ fetchJobById,
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this job? This action cannot be undone.')) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this job? This action cannot be undone.",
+      )
+    ) {
       return;
     }
     setDeleting(true);
     try {
       const response = await deleteJob(jobId);
       if (response.success) {
-        toast.success(response.message || 'Job deleted successfully!');
-        queryClient.invalidateQueries({ queryKey: ['admin-jobs'] });        
+        toast.success(response.message || "Job deleted successfully!");
+        queryClient.invalidateQueries({ queryKey: ["admin-jobs"] });
         onClose();
       } else {
-        toast.error('Failed to delete job');
+        toast.error("Failed to delete job");
       }
     } catch {
       toast.error("Job deleting failed");
@@ -102,7 +98,6 @@ fetchJobById,
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-700 rounded-2xl shadow-2xl max-w-4xl overflow-y-scroll h-screen border border-black max-h-[70%]">
-
         <div className="px-6 py-4 border-b border-black">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -111,11 +106,7 @@ fetchJobById,
               </div>
               <h3 className="text-xl font-bold">Job Details</h3>
             </div>
-            <Button
-              variant={"outline"}
-              size="sm"
-              onClick={onClose}
-            >
+            <Button variant={"outline"} size="sm" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -123,16 +114,16 @@ fetchJobById,
 
         {data && (
           <>
-           <InfoDisplay label='Company' value={data.companyName} />
-           <InfoDisplay label='Designation' value={data.designation} />
-           <InfoDisplay label='Industry' value={data.industry} />
-           <InfoDisplay label='Nationality' value={data.nationality} />
-           <InfoDisplay label='Salary' value={data.salary} />
-           <InfoDisplay label='Vacancy' value={data.vacancy} />
-           <InfoDisplay label='Skills' value={data.skills} />
-           <InfoDisplay label='JobDescription' value={data.jobDescription} />
-           <InfoDisplay label='Benifits' value={data.benifits} />
-           <InfoDisplay label='Posted On' value={data.createdAt} isDate />
+            <InfoDisplay label="Company" value={data.companyName} />
+            <InfoDisplay label="Designation" value={data.designation} />
+            <InfoDisplay label="Industry" value={data.industry} />
+            <InfoDisplay label="Nationality" value={data.nationality} />
+            <InfoDisplay label="Salary" value={data.salary} />
+            <InfoDisplay label="Vacancy" value={data.vacancy} />
+            <InfoDisplay label="Skills" value={data.skills} />
+            <InfoDisplay label="JobDescription" value={data.jobDescription} />
+            <InfoDisplay label="Benifits" value={data.benifits} />
+            <InfoDisplay label="Posted On" value={data.createdAt} isDate />
           </>
         )}
 
@@ -146,7 +137,7 @@ fetchJobById,
             <Edit className="h-4 w-4 mr-2" />
             Edit Job
           </Button>
-          
+
           <Button
             onClick={handleDelete}
             variant="outline"
@@ -166,7 +157,6 @@ fetchJobById,
             )}
           </Button>
         </div>
-
       </div>
     </div>
   );

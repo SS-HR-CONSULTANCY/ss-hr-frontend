@@ -32,7 +32,6 @@ const Hero2 = () => {
             </motion.h1>
           </AnimatePresence>
 
-
           <AnimatePresence mode="wait">
             <motion.p
               key={services[index].hoverDescription}
@@ -53,12 +52,12 @@ const Hero2 = () => {
               <CardContent className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium">Sign up to your dream</p>
-                  <p className="text-xs">
-                    availability services
-                  </p>
+                  <p className="text-xs">availability services</p>
                 </div>
                 <div className="hidden items-center gap-3 md:flex">
-                  <div className="rounded-md border p-2 text-sm">{services[index].title}</div>
+                  <div className="rounded-md border p-2 text-sm">
+                    {services[index].title}
+                  </div>
                 </div>
               </CardContent>
             </Card>

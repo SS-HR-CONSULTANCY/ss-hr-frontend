@@ -1,8 +1,8 @@
 import React from "react";
 import { toast } from "react-toastify";
 import {
-    openEditTestimonialForm,
-    openViewTestimonialDetails,
+  openEditTestimonialForm,
+  openViewTestimonialDetails,
 } from "@/store/slices/testimonialSlice";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
@@ -36,15 +36,16 @@ export function useAdminTestimonials(testimonialId?: string) {
   };
 
   const handleDeleteTestimonial = () => {
-    toast(({ closeToast }) =>
-      React.createElement(ConfirmToast, {
-        message: "Are you sure you want to delete this testimonial?",
-        onConfirm: () => {
-          deleteMutation.mutate();
-          closeToast();
-        },
-        onCancel: closeToast,
-      }),
+    toast(
+      ({ closeToast }) =>
+        React.createElement(ConfirmToast, {
+          message: "Are you sure you want to delete this testimonial?",
+          onConfirm: () => {
+            deleteMutation.mutate();
+            closeToast();
+          },
+          onCancel: closeToast,
+        }),
       {
         position: "top-center",
         autoClose: false,
@@ -53,7 +54,7 @@ export function useAdminTestimonials(testimonialId?: string) {
         pauseOnHover: true,
         draggable: false,
         closeButton: false,
-      }
+      },
     );
   };
 

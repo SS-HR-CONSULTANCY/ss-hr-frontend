@@ -1,3 +1,3 @@
 export interface TableShimmerProps {
-    columnsCount?: number;
+  columnsCount?: number;
 }

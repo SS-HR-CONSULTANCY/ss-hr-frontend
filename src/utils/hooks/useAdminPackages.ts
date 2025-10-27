@@ -34,18 +34,19 @@ export function useAdminPackages() {
   };
 
   const handleDeletePackage = (packageId: string) => {
-    toast(({ closeToast }) =>
-      React.createElement(ConfirmToast, {
-        message: "Are you sure you want to delete this package?",
-        confirmText: "Delete",
-        cancelText: "Cancel",
-        onConfirm: () => {
-          deleteMutation.mutate(packageId);
-          closeToast();
-        },
-        onCancel: closeToast,
-      })
-      , {
+    toast(
+      ({ closeToast }) =>
+        React.createElement(ConfirmToast, {
+          message: "Are you sure you want to delete this package?",
+          confirmText: "Delete",
+          cancelText: "Cancel",
+          onConfirm: () => {
+            deleteMutation.mutate(packageId);
+            closeToast();
+          },
+          onCancel: closeToast,
+        }),
+      {
         position: "top-center",
         autoClose: false,
         hideProgressBar: true,
@@ -53,7 +54,8 @@ export function useAdminPackages() {
         pauseOnHover: true,
         draggable: false,
         closeButton: false,
-      });
+      },
+    );
   };
 
   return {

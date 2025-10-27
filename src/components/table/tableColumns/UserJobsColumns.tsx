@@ -1,19 +1,29 @@
 import dayjs from "dayjs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export const UserJobsTableColumns: ColumnDef<UserfetchAllJobsResponse>[] = [
   {
     accessorKey: "designation",
-    header: ({ column }) => (<DataTableColumnHeader column={column} title="Designation" />)
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Designation" />
+    ),
   },
   {
     accessorKey: "vacancy",
-    header: ({ column }) => (<DataTableColumnHeader column={column} title="Vacancy" />)
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Vacancy" />
+    ),
   },
   {
     accessorKey: "createdAt",
@@ -50,7 +60,7 @@ export const UserJobsTableColumns: ColumnDef<UserfetchAllJobsResponse>[] = [
             {/* <DropDownItemChangeProviderTrustTag providerId={provider._id} trustedBySlotflow={provider.trustedBySlotflow} /> */}
           </DropdownMenuContent>
         </DropdownMenu>
-      )
-    }
+      );
+    },
   },
-]
+];

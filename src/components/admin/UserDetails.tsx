@@ -1,12 +1,12 @@
-import { toast } from 'react-toastify';
-import { Button } from '@/components/ui/button';
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '@/store/store';
-import type { User as UserType } from '@/types/entities/user';
-import { adminFetchUserById } from '@/utils/apis/adminUserApi';
-import { closeUserDetailsModal } from '@/store/slices/userSlice';
-import { User, Copy, CheckCircle, UserCheck, Loader } from 'lucide-react';
+import { toast } from "react-toastify";
+import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/store/store";
+import type { User as UserType } from "@/types/entities/user";
+import { adminFetchUserById } from "@/utils/apis/adminUserApi";
+import { closeUserDetailsModal } from "@/store/slices/userSlice";
+import { User, Copy, CheckCircle, UserCheck, Loader } from "lucide-react";
 
 const UserDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,8 +31,8 @@ const UserDetails: React.FC = () => {
         setUser(response.data.user);
       }
     } catch (error) {
-      console.error('Fetch user error:', error);
-      toast.error('Failed to load user data');
+      console.error("Fetch user error:", error);
+      toast.error("Failed to load user data");
     } finally {
       setLoading(false);
     }
@@ -44,10 +44,10 @@ const UserDetails: React.FC = () => {
     try {
       await navigator.clipboard.writeText(user._id.toString());
       setCopied(true);
-      toast.success('User ID copied to clipboard');
+      toast.success("User ID copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error('Failed to copy User ID');
+      toast.error("Failed to copy User ID");
     }
   };
 
@@ -81,7 +81,10 @@ const UserDetails: React.FC = () => {
             </div>
             <h2 className="text-xl font-bold mb-2">User Not Found</h2>
             <p className="mb-6">The user you're looking for doesn't exist.</p>
-            <Button onClick={handleClose} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button
+              onClick={handleClose}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               Close
             </Button>
           </div>
@@ -132,14 +135,14 @@ const UserDetails: React.FC = () => {
               <div className="flex items-center justify-between p-3 border rounded-lg">
                 <span className="text-sm font-medium">Status</span>
                 <span className="text-sm font-medium">
-                  {user.isBlocked ? 'Blocked' : 'Active'}
+                  {user.isBlocked ? "Blocked" : "Active"}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 border rounded-lg">
                 <span className="text-sm font-medium">Verified</span>
                 <span className="ext-sm font-medium">
-                  {user.isVerified ? 'Yes' : 'No'}
+                  {user.isVerified ? "Yes" : "No"}
                 </span>
               </div>
 
@@ -153,7 +156,9 @@ const UserDetails: React.FC = () => {
               <div className="flex items-center justify-between p-3 border rounded-lg">
                 <span className="text-sm font-medium">User ID</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs">{user._id.toString().slice(-8)}</span>
+                  <span className="font-mono text-xs">
+                    {user._id.toString().slice(-8)}
+                  </span>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -171,10 +176,7 @@ const UserDetails: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-end pt-6 border-t">
-              <Button
-                onClick={handleClose}
-                variant="outline"
-              >
+              <Button onClick={handleClose} variant="outline">
                 Close
               </Button>
             </div>

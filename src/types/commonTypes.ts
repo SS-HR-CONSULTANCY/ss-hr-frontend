@@ -2,10 +2,10 @@ import type { LucideIcon } from "lucide-react";
 import type { Role } from "./entities/user";
 
 export interface ApiError {
-  message: string;           
-  status?: number;           
-  errors?: Record<string, string[]>; 
-  [key: string]: unknown;   
+  message: string;
+  status?: number;
+  errors?: Record<string, string[]>;
+  [key: string]: unknown;
 }
 
 export interface Route {
@@ -14,12 +14,10 @@ export interface Route {
   roles: Role[];
 }
 
-
 export interface ApiBaseResponse {
   success?: boolean;
   message?: string;
 }
-
 
 export interface ApiPaginatedResponse<T> extends ApiBaseResponse {
   data?: T[];

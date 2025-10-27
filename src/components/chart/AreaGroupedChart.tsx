@@ -1,7 +1,4 @@
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartLegend,
   ChartTooltip,
@@ -14,7 +11,10 @@ import ChartHeader from "./ChartHeader";
 import ChartDataNotAvailable from "./ChartDataNotAvailable";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { filterChartDataHelper } from "@/utils/helpers/chartDateFilter";
-import type { AreaGroupChartProps, TimeRange } from "@/types/componentTypes/chartTypes";
+import type {
+  AreaGroupChartProps,
+  TimeRange,
+} from "@/types/componentTypes/chartTypes";
 
 const AreaGroupedChart: React.FC<AreaGroupChartProps> = ({
   title,
@@ -24,15 +24,19 @@ const AreaGroupedChart: React.FC<AreaGroupChartProps> = ({
   dataKeyTwo,
   chartConfig,
 }) => {
-  
   const [timeRange, setTimeRange] = React.useState<TimeRange>("7d");
   const filteredData = filterChartDataHelper(chartData ?? [], timeRange);
 
   return (
     <Card className="relative overflow-hidden">
-      <ChartHeader title={title} description={description} onValueChange={setTimeRange} value={timeRange} />
+      <ChartHeader
+        title={title}
+        description={description}
+        onValueChange={setTimeRange}
+        value={timeRange}
+      />
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="min-h-[200px]" >
+        <ChartContainer config={chartConfig} className="min-h-[200px]">
           {chartData.length === 0 ? (
             <ChartDataNotAvailable />
           ) : (
@@ -64,11 +68,11 @@ const AreaGroupedChart: React.FC<AreaGroupChartProps> = ({
                 tickMargin={8}
                 minTickGap={32}
                 tickFormatter={(value) => {
-                  const date = new Date(value)
+                  const date = new Date(value);
                   return date.toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
-                  })
+                  });
                 }}
               />
               <ChartTooltip
@@ -79,7 +83,7 @@ const AreaGroupedChart: React.FC<AreaGroupChartProps> = ({
                       return new Date(value).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
-                      })
+                      });
                     }}
                     indicator="dot"
                   />
@@ -105,7 +109,7 @@ const AreaGroupedChart: React.FC<AreaGroupChartProps> = ({
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 export default AreaGroupedChart;

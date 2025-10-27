@@ -5,8 +5,7 @@ import { setTheme } from "@/store/slices/appSlice";
 import type { AppDispatch, RootState } from "@/store/store";
 
 const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
-    
-const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
 
   useEffect(() => {
@@ -19,7 +18,6 @@ const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
-
 
   return <>{children}</>;
 };

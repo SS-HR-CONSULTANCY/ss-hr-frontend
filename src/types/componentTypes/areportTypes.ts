@@ -1,1 +1,1 @@
-export type WeeklyData = { day: string; count: number, };
+export type WeeklyData = { day: string; count: number };

@@ -1,7 +1,4 @@
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -10,7 +7,10 @@ import {
 import ChartHeader from "./ChartHeader";
 import ChartDataNotAvailable from "./ChartDataNotAvailable";
 import { LabelList, RadialBar, RadialBarChart } from "recharts";
-import type { ChartDataItem, RadialChartInterface } from "@/types/componentTypes/chartTypes";
+import type {
+  ChartDataItem,
+  RadialChartInterface,
+} from "@/types/componentTypes/chartTypes";
 
 const RadialChart = <T extends ChartDataItem>({
   title,
@@ -20,7 +20,6 @@ const RadialChart = <T extends ChartDataItem>({
   dataKeyTwo,
   chartConfig,
 }: RadialChartInterface<T>) => {
-
   const coloredChartData = chartData.map((item) => {
     const key = item[dataKeyTwo];
     const keyString = String(key);
@@ -48,7 +47,9 @@ const RadialChart = <T extends ChartDataItem>({
             >
               <ChartTooltip
                 cursor={false}
-                content={<ChartTooltipContent hideLabel nameKey={String(dataKeyTwo)} />}
+                content={
+                  <ChartTooltipContent hideLabel nameKey={String(dataKeyTwo)} />
+                }
               />
               <RadialBar
                 dataKey={String(dataKeyOne)}

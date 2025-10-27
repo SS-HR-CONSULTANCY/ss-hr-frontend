@@ -1,8 +1,8 @@
-import React from 'react';
-import AosComponent from '@/utils/AosComponent';
-import ImageGrid from '@/components/sections/ImageGrid';
-import worldTour from '../../assets/serviceBanners/worldTour.png';
-import PackagesPricing from '@/components/sections/PackagesPricing';
+import React from "react";
+import AosComponent from "@/utils/AosComponent";
+import ImageGrid from "@/components/sections/ImageGrid";
+import worldTour from "../../assets/serviceBanners/worldTour.png";
+import PackagesPricing from "@/components/sections/PackagesPricing";
 
 const ToursAndTravels: React.FC = () => {
   return (
@@ -13,7 +13,10 @@ const ToursAndTravels: React.FC = () => {
           style={{ backgroundImage: `url(${worldTour})` }}
         >
           <div className="absolute inset-0 bg-black/50"></div>
-          <h1 className="relative z-10 text-4xl md:text-6xl font-bold text-white text-center" data-aos="fade-down">
+          <h1
+            className="relative z-10 text-4xl md:text-6xl font-bold text-white text-center"
+            data-aos="fade-down"
+          >
             Experience Your Perfect Journey With Us
           </h1>
         </div>
@@ -21,7 +24,7 @@ const ToursAndTravels: React.FC = () => {
         <PackagesPricing />
       </AosComponent>
     </div>
-  )
-}
+  );
+};
 
-export default ToursAndTravels
+export default ToursAndTravels;

@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { PaymentSliceState } from '@/types/entities/payment';
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { PaymentSliceState } from "@/types/entities/payment";
 
 const initialState: PaymentSliceState = {
   isAddPaymentFormOpen: false,
@@ -10,7 +10,7 @@ const initialState: PaymentSliceState = {
 };
 
 const paymentSlice = createSlice({
-  name: 'payment',
+  name: "payment",
   initialState,
   reducers: {
     toggleAddPaymentForm: (state) => {

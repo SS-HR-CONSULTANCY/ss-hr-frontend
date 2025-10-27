@@ -1,6 +1,11 @@
-import type { ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";
+import type {
+  ApiPaginatedResponse,
+  FetchFunctionParams,
+} from "@/types/commonTypes";
 
-export const buildQueryParams = (params?: Omit<FetchFunctionParams, 'id'>): string => {
+export const buildQueryParams = (
+  params?: Omit<FetchFunctionParams, "id">,
+): string => {
   const query = new URLSearchParams();
 
   if (params?.pagination) {
@@ -11,7 +16,9 @@ export const buildQueryParams = (params?: Omit<FetchFunctionParams, 'id'>): stri
   return query.toString();
 };
 
-export const parseNewCommonResponse = <T>(res: ApiPaginatedResponse<T>): ApiPaginatedResponse<T> => {
+export const parseNewCommonResponse = <T>(
+  res: ApiPaginatedResponse<T>,
+): ApiPaginatedResponse<T> => {
   return {
     data: res.data,
     totalCount: res.totalCount,

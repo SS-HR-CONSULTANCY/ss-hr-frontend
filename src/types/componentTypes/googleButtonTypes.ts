@@ -1,3 +1,3 @@
 export interface GoogleButtonProps {
-    onClick: () => void;
+  onClick: () => void;
 }

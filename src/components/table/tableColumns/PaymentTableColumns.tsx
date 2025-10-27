@@ -27,7 +27,11 @@ export const PaymentTableColumns = (
       <DataTableColumnHeader column={column} title="Total" />
     ),
     cell: ({ row }) => {
-      return <span className="font-medium">₹{row.original.totalAmount.toLocaleString()}</span>;
+      return (
+        <span className="font-medium">
+          ₹{row.original.totalAmount.toLocaleString()}
+        </span>
+      );
     },
   },
   {
@@ -36,7 +40,11 @@ export const PaymentTableColumns = (
       <DataTableColumnHeader column={column} title="Paid" />
     ),
     cell: ({ row }) => {
-      return <span className="font-medium">₹{row.original.paidAmount.toLocaleString()}</span>;
+      return (
+        <span className="font-medium">
+          ₹{row.original.paidAmount.toLocaleString()}
+        </span>
+      );
     },
   },
   {
@@ -47,7 +55,7 @@ export const PaymentTableColumns = (
     cell: ({ row }) => {
       const balance = row.original.balanceAmount;
       return (
-        <span className={`font-medium ${balance > 0 ? 'text-red-500' : ''}`}>
+        <span className={`font-medium ${balance > 0 ? "text-red-500" : ""}`}>
           ₹{balance.toLocaleString()}
         </span>
       );
@@ -62,11 +70,11 @@ export const PaymentTableColumns = (
       const status = row.original.status;
       const getStatusStyle = (status: string) => {
         switch (status) {
-          case 'pending':
+          case "pending":
             return "text-yellow-500";
-          case 'partiallypaid':
+          case "partiallypaid":
             return "text-blue-500";
-          case 'fullypaid':
+          case "fullypaid":
             return "text-green-500";
           default:
             return "text-gray-500";
@@ -75,19 +83,19 @@ export const PaymentTableColumns = (
 
       const getStatusLabel = (status: string) => {
         switch (status) {
-          case 'pending':
-            return 'Pending';
-          case 'partiallypaid':
-            return 'Partially Paid';
-          case 'fullypaid':
-            return 'Fully Paid';
+          case "pending":
+            return "Pending";
+          case "partiallypaid":
+            return "Partially Paid";
+          case "fullypaid":
+            return "Fully Paid";
           default:
             return status;
         }
       };
 
       return (
-        <span 
+        <span
           className={`w-fit text-xs px-2 py-1 rounded-full font-medium border ${getStatusStyle(status)}`}
         >
           {getStatusLabel(status)}
@@ -100,7 +108,7 @@ export const PaymentTableColumns = (
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const paymentData = row.original;      
+      const paymentData = row.original;
 
       return (
         <div className="flex items-center gap-1">
@@ -113,7 +121,7 @@ export const PaymentTableColumns = (
           >
             <Eye className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -123,7 +131,7 @@ export const PaymentTableColumns = (
           >
             <Edit className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="sm"

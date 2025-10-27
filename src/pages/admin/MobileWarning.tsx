@@ -5,7 +5,6 @@ import type { RootState } from "@/store/store";
 import DashboardHeader from "@/components/navigations/DashboardHeader";
 
 const MobileWarning: React.FC = () => {
-
   const { user } = useSelector((store: RootState) => store.auth);
 
   return (

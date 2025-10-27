@@ -5,12 +5,7 @@ import type { AppDispatch } from "@/store/store";
 import { toast } from "react-toastify";
 import { clearAuthStore } from "@/store/slices/authSlice";
 
-const useAuthHook = ({
-  route
-}: {
-  route: string
-}) => {
-
+const useAuthHook = ({ route }: { route: string }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -30,6 +25,6 @@ const useAuthHook = ({
   };
 
   return { handleLogout };
-}
+};
 
 export default useAuthHook;

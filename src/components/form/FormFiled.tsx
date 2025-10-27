@@ -38,7 +38,7 @@ const FormField = <T extends FieldValues>({
   children,
   onFileSelect,
   rows = 3,
-  defaultValue
+  defaultValue,
 }: FormFieldProps<T>) => {
   const [show, setShow] = useState(false);
 
@@ -55,7 +55,8 @@ const FormField = <T extends FieldValues>({
           accept="image/*"
           {...register(id, registerOptions)}
           onChange={(e) => {
-            const file: File | undefined = (e.target as HTMLInputElement).files?.[0];
+            const file: File | undefined = (e.target as HTMLInputElement)
+              .files?.[0];
             if (file && onFileSelect) {
               const imageUrl = URL.createObjectURL(file);
               onFileSelect(imageUrl);

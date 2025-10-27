@@ -1,5 +1,5 @@
 export interface mdDataProps {
-    profileImage: string;
-    name: string;
-    quote: string;
+  profileImage: string;
+  name: string;
+  quote: string;
 }

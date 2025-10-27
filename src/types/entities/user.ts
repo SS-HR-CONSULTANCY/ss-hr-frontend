@@ -1,7 +1,6 @@
-
 export interface User {
   _id: string;
-  serialNumber : string;
+  serialNumber: string;
   fullName: string;
   email: string;
   role: Role;
@@ -17,4 +16,4 @@ export interface User {
   updatedAt: string;
 }
 
-export type Role = 'user' | 'admin' | 'superAdmin' | "systemAdmin";
+export type Role = "user" | "admin" | "superAdmin" | "systemAdmin";

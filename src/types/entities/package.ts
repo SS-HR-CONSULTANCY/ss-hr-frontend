@@ -1,11 +1,10 @@
-
 export interface Package {
   _id: string;
   packageName: string;
   description: string;
   priceIN: string;
   priceUAE: string;
-  packageType: 'jobpackage' | 'tourpackage';
+  packageType: "jobpackage" | "tourpackage";
   packageDuration: number;
   features: string[];
   food: boolean;
@@ -23,7 +22,7 @@ export interface CreatePackageFormData {
   description: string;
   priceIN: string;
   priceUAE: string;
-  packageType: 'jobpackage' | 'tourpackage';
+  packageType: "jobpackage" | "tourpackage";
   packageDuration: number;
   features: string[];
   food: boolean;
@@ -39,7 +38,7 @@ export interface UpdatePackageFormData {
   description?: string;
   priceIN?: string;
   priceUAE?: string;
-  packageType?: 'jobpackage' | 'tourpackage';
+  packageType?: "jobpackage" | "tourpackage";
   packageDuration?: number;
   features?: string[];
   food?: boolean;

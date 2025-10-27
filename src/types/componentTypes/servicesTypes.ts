@@ -7,7 +7,6 @@ export interface ContentCardProps {
   buttonUrl: string;
 }
 
-
 export interface ServiceProps {
   id: string;
   title: string;

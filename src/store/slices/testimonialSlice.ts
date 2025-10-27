@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { TestimonialSliceState } from '@/types/slice/testimonialSliceTypes';
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { TestimonialSliceState } from "@/types/slice/testimonialSliceTypes";
 
 const initialState: TestimonialSliceState = {
   isAddTestimonialFormOpen: false,
@@ -10,7 +10,7 @@ const initialState: TestimonialSliceState = {
 };
 
 const testimonialSlice = createSlice({
-  name: 'testimonial',
+  name: "testimonial",
   initialState,
   reducers: {
     toggleAddTestimonialForm: (state) => {

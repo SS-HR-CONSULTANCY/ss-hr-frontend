@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { X, User, Mail, Phone, UserCheck, Loader, Shield, ShieldOff } from 'lucide-react';
-import { toast } from 'react-toastify';
-import type { AppDispatch, RootState } from '@/store/store';
-import { closeEditUserModal } from '@/store/slices/userSlice';
-import { useQueryClient } from '@tanstack/react-query';
-import { adminFetchUserById, adminUpdateUser } from '@/utils/apis/adminUserApi';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  X,
+  User,
+  Mail,
+  Phone,
+  UserCheck,
+  Loader,
+  Shield,
+  ShieldOff,
+} from "lucide-react";
+import { toast } from "react-toastify";
+import type { AppDispatch, RootState } from "@/store/store";
+import { closeEditUserModal } from "@/store/slices/userSlice";
+import { useQueryClient } from "@tanstack/react-query";
+import { adminFetchUserById, adminUpdateUser } from "@/utils/apis/adminUserApi";
 
 interface EditUserFormData {
   fullName: string;
@@ -26,14 +35,16 @@ const EditUserForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
   const [formData, setFormData] = useState<EditUserFormData>({
-    fullName: '',
-    email: '',
-    phone: '',
-    phoneTwo: '',
+    fullName: "",
+    email: "",
+    phone: "",
+    phoneTwo: "",
     isBlocked: false,
-    isVerified: false
+    isVerified: false,
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof EditUserFormData, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof EditUserFormData, string>>
+  >({});
 
   useEffect(() => {
     if (selectedUserId) {
@@ -43,7 +54,7 @@ const EditUserForm: React.FC = () => {
 
   const fetchUserData = async () => {
     if (!selectedUserId) return;
-    
+
     setLoadingUser(true);
     try {
       const response = await adminFetchUserById(selectedUserId);
@@ -52,15 +63,15 @@ const EditUserForm: React.FC = () => {
         setFormData({
           fullName: user.fullName,
           email: user.email,
-          phone: user.phone || '',
-          phoneTwo: user.phoneTwo || '',
+          phone: user.phone || "",
+          phoneTwo: user.phoneTwo || "",
           isBlocked: user.isBlocked,
-          isVerified: user.isVerified
+          isVerified: user.isVerified,
         });
       }
     } catch (error) {
-      console.error('Fetch user error:', error);
-      toast.error('Failed to load user data');
+      console.error("Fetch user error:", error);
+      toast.error("Failed to load user data");
     } finally {
       setLoadingUser(false);
     }
@@ -70,45 +81,48 @@ const EditUserForm: React.FC = () => {
     const newErrors: Partial<Record<keyof EditUserFormData, string>> = {};
 
     if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
+      newErrors.fullName = "Full name is required";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = "Invalid email format";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (field: keyof EditUserFormData, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
+  const handleInputChange = (
+    field: keyof EditUserFormData,
+    value: string | boolean,
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm() || !selectedUserId) return;
 
     setLoading(true);
 
     try {
       const response = await adminUpdateUser(selectedUserId, formData);
-      
+
       if (response.data.success) {
-        toast.success(response.data.message || 'User updated successfully!');
-        
-        queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-        
+        toast.success(response.data.message || "User updated successfully!");
+
+        queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+
         dispatch(closeEditUserModal());
       } else {
-        toast.error('Failed to update user');
+        toast.error("Failed to update user");
       }
     } catch {
       toast.error("Failed to update user.");
@@ -165,7 +179,10 @@ const EditUserForm: React.FC = () => {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Full Name */}
           <div className="space-y-2">
-            <Label htmlFor="fullName" className="flex items-center gap-2 text-sm font-medium text-black">
+            <Label
+              htmlFor="fullName"
+              className="flex items-center gap-2 text-sm font-medium text-black"
+            >
               <User className="h-4 w-4 text-black" />
               Full Name
             </Label>
@@ -173,12 +190,12 @@ const EditUserForm: React.FC = () => {
               id="fullName"
               type="text"
               value={formData.fullName}
-              onChange={(e) => handleInputChange('fullName', e.target.value)}
+              onChange={(e) => handleInputChange("fullName", e.target.value)}
               placeholder="Enter full name"
               className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
-                errors.fullName 
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
-                  : 'focus:border-black focus:ring-black'
+                errors.fullName
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "focus:border-black focus:ring-black"
               }`}
             />
             {errors.fullName && (
@@ -188,7 +205,10 @@ const EditUserForm: React.FC = () => {
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email" className="flex items-center gap-2 text-sm font-medium text-black">
+            <Label
+              htmlFor="email"
+              className="flex items-center gap-2 text-sm font-medium text-black"
+            >
               <Mail className="h-4 w-4 text-black" />
               Email Address
             </Label>
@@ -196,12 +216,12 @@ const EditUserForm: React.FC = () => {
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
+              onChange={(e) => handleInputChange("email", e.target.value)}
               placeholder="Enter email address"
               className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
-                errors.email 
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
-                  : 'focus:border-black focus:ring-black'
+                errors.email
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "focus:border-black focus:ring-black"
               }`}
             />
             {errors.email && (
@@ -211,7 +231,10 @@ const EditUserForm: React.FC = () => {
 
           {/* Phone */}
           <div className="space-y-2">
-            <Label htmlFor="phone" className="flex items-center gap-2 text-sm font-medium text-black">
+            <Label
+              htmlFor="phone"
+              className="flex items-center gap-2 text-sm font-medium text-black"
+            >
               <Phone className="h-4 w-4 text-black" />
               Phone Number
             </Label>
@@ -219,7 +242,7 @@ const EditUserForm: React.FC = () => {
               id="phone"
               type="tel"
               value={formData.phone}
-              onChange={(e) => handleInputChange('phone', e.target.value)}
+              onChange={(e) => handleInputChange("phone", e.target.value)}
               placeholder="Enter phone number"
               className="transition-all duration-200 bg-white border-black text-black placeholder-black focus:border-black focus:ring-black"
             />
@@ -227,7 +250,10 @@ const EditUserForm: React.FC = () => {
 
           {/* Phone Two */}
           <div className="space-y-2">
-            <Label htmlFor="phoneTwo" className="flex items-center gap-2 text-sm font-medium text-black">
+            <Label
+              htmlFor="phoneTwo"
+              className="flex items-center gap-2 text-sm font-medium text-black"
+            >
               <Phone className="h-4 w-4 text-black" />
               Secondary Phone (Optional)
             </Label>
@@ -235,7 +261,7 @@ const EditUserForm: React.FC = () => {
               id="phoneTwo"
               type="tel"
               value={formData.phoneTwo}
-              onChange={(e) => handleInputChange('phoneTwo', e.target.value)}
+              onChange={(e) => handleInputChange("phoneTwo", e.target.value)}
               placeholder="Enter secondary phone number"
               className="transition-all duration-200 bg-white border-black text-black placeholder-black focus:border-black focus:ring-black"
             />
@@ -250,16 +276,18 @@ const EditUserForm: React.FC = () => {
               </div>
               <Button
                 type="button"
-                onClick={() => handleInputChange('isVerified', !formData.isVerified)}
+                onClick={() =>
+                  handleInputChange("isVerified", !formData.isVerified)
+                }
                 variant="outline"
                 size="sm"
                 className={`${
-                  formData.isVerified 
-                    ? 'bg-green-100 border-green-500 text-green-700 hover:bg-green-200' 
-                    : 'bg-red-100 border-red-500 text-red-700 hover:bg-red-200'
+                  formData.isVerified
+                    ? "bg-green-100 border-green-500 text-green-700 hover:bg-green-200"
+                    : "bg-red-100 border-red-500 text-red-700 hover:bg-red-200"
                 }`}
               >
-                {formData.isVerified ? 'Verified' : 'Unverified'}
+                {formData.isVerified ? "Verified" : "Unverified"}
               </Button>
             </div>
 
@@ -270,16 +298,18 @@ const EditUserForm: React.FC = () => {
               </div>
               <Button
                 type="button"
-                onClick={() => handleInputChange('isBlocked', !formData.isBlocked)}
+                onClick={() =>
+                  handleInputChange("isBlocked", !formData.isBlocked)
+                }
                 variant="outline"
                 size="sm"
                 className={`${
-                  formData.isBlocked 
-                    ? 'bg-red-100 border-red-500 text-red-700 hover:bg-red-200' 
-                    : 'bg-green-100 border-green-500 text-green-700 hover:bg-green-200'
+                  formData.isBlocked
+                    ? "bg-red-100 border-red-500 text-red-700 hover:bg-red-200"
+                    : "bg-green-100 border-green-500 text-green-700 hover:bg-green-200"
                 }`}
               >
-                {formData.isBlocked ? 'Blocked' : 'Active'}
+                {formData.isBlocked ? "Blocked" : "Active"}
               </Button>
             </div>
           </div>
@@ -287,7 +317,7 @@ const EditUserForm: React.FC = () => {
 
         {/* Footer */}
         <div className="px-6 py-4 bg-white border-t border-black flex gap-3">
-          <Button 
+          <Button
             type="button"
             onClick={handleClose}
             variant="outline"
@@ -296,7 +326,7 @@ const EditUserForm: React.FC = () => {
           >
             Cancel
           </Button>
-          <Button 
+          <Button
             type="submit"
             onClick={handleSubmit}
             disabled={loading}
@@ -308,7 +338,7 @@ const EditUserForm: React.FC = () => {
                 Updating...
               </div>
             ) : (
-              'Update User'
+              "Update User"
             )}
           </Button>
         </div>

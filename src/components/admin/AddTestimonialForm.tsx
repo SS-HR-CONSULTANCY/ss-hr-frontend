@@ -92,9 +92,8 @@ const AddTestimonialForm: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ["testimonials"] });
       }
     } else {
-      toast.error('Testimonial adding failed');
+      toast.error("Testimonial adding failed");
     }
-
   };
 
   return (
@@ -108,10 +107,14 @@ const AddTestimonialForm: React.FC = () => {
             <Input
               id="clientName"
               value={formData.clientName}
-              onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, clientName: e.target.value })
+              }
               placeholder="Enter client name"
             />
-            {errors.clientName && <p className="text-red-500 text-sm mt-1">{errors.clientName}</p>}
+            {errors.clientName && (
+              <p className="text-red-500 text-sm mt-1">{errors.clientName}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -119,10 +122,14 @@ const AddTestimonialForm: React.FC = () => {
             <Input
               id="designation"
               value={formData.designation}
-              onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, designation: e.target.value })
+              }
               placeholder="Enter designation"
             />
-            {errors.designation && <p className="text-red-500 text-sm mt-1">{errors.designation}</p>}
+            {errors.designation && (
+              <p className="text-red-500 text-sm mt-1">{errors.designation}</p>
+            )}
           </div>
         </div>
 
@@ -149,17 +156,21 @@ const AddTestimonialForm: React.FC = () => {
           <Textarea
             id="testimonial"
             value={formData.testimonial}
-            onChange={(e) => setFormData({ ...formData, testimonial: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, testimonial: e.target.value })
+            }
             placeholder="Enter client testimonial..."
           />
-          {errors.testimonial && <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>}
+          {errors.testimonial && (
+            <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>
+          )}
         </div>
 
         <div className="flex justify-end gap-3 pt-4">
           <Button type="button" variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button type="submit" variant="outline" >
+          <Button type="submit" variant="outline">
             Creating testimonial
           </Button>
         </div>

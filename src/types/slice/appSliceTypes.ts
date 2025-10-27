@@ -1,4 +1,4 @@
 export interface appSliceInitialState {
-    theme: "light" | "dark";
-    sidebarOpen: boolean;
+  theme: "light" | "dark";
+  sidebarOpen: boolean;
 }

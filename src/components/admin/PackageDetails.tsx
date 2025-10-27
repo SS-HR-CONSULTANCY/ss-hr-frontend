@@ -8,9 +8,10 @@ import { getPackageById } from "@/utils/apis/adminPackageApi";
 import { closeViewPackageDetails } from "@/store/slices/packageSlice";
 
 const PackageDetails: React.FC = () => {
-
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedPackageId } = useSelector((state: RootState) => state.package);
+  const { selectedPackageId } = useSelector(
+    (state: RootState) => state.package,
+  );
 
   const { data, isLoading } = useQuery({
     queryKey: ["package", selectedPackageId],
@@ -23,9 +24,7 @@ const PackageDetails: React.FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <FormLoading />
-    );
+    return <FormLoading />;
   }
 
   if (!data) {
@@ -33,7 +32,9 @@ const PackageDetails: React.FC = () => {
       <div className="p-6 max-w-4xl mx-auto">
         <div className="text-center">
           <p className="text-red-500 text-lg font-medium">Package not found</p>
-          <p className="text-gray-600 mt-2">The requested package could not be loaded.</p>
+          <p className="text-gray-600 mt-2">
+            The requested package could not be loaded.
+          </p>
           <Button onClick={handleClose} className="mt-4" variant="outline">
             Close
           </Button>
@@ -43,31 +44,37 @@ const PackageDetails: React.FC = () => {
   }
 
   const getPackageTypeLabel = (type: string) => {
-    return type === 'jobpackage' ? 'Job Package' : 'Tour Package';
+    return type === "jobpackage" ? "Job Package" : "Tour Package";
   };
 
   const getPackageTypeBadge = (type: string) => {
-    return type === 'jobpackage' 
-      ? "bg-blue-100 text-blue-800" 
+    return type === "jobpackage"
+      ? "bg-blue-100 text-blue-800"
       : "bg-green-100 text-green-800";
   };
 
   const services = [
-    { key: 'food', label: 'Food', value: data.food },
-    { key: 'accommodation', label: 'Accommodation', value: data.accommodation },
-    { key: 'travelCard', label: 'Travel Card', value: data.travelCard },
-    { key: 'utilityBills', label: 'Utility Bills', value: data.utilityBills },
-    { key: 'airportPickup', label: 'Airport Pickup', value: data.airportPickup },
-    { key: 'jobGuidance', label: 'Job Guidance', value: data.jobGuidance },
+    { key: "food", label: "Food", value: data.food },
+    { key: "accommodation", label: "Accommodation", value: data.accommodation },
+    { key: "travelCard", label: "Travel Card", value: data.travelCard },
+    { key: "utilityBills", label: "Utility Bills", value: data.utilityBills },
+    {
+      key: "airportPickup",
+      label: "Airport Pickup",
+      value: data.airportPickup,
+    },
+    { key: "jobGuidance", label: "Job Guidance", value: data.jobGuidance },
   ];
 
-  const includedServices = services.filter(service => service.value);
+  const includedServices = services.filter((service) => service.value);
 
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white dark:bg-gray-700">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Package Details</h2>
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getPackageTypeBadge(data.packageType)}`}>
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium ${getPackageTypeBadge(data.packageType)}`}
+        >
           {getPackageTypeLabel(data.packageType)}
         </span>
       </div>
@@ -95,7 +102,9 @@ const PackageDetails: React.FC = () => {
           </div>
           <div className="p-4 border border-gray-200 dark:border-black rounded-lg">
             <h4 className="text-sm font-medium  mb-1">Duration</h4>
-            <p className="text-lg font-semibold ">{data.packageDuration} days</p>
+            <p className="text-lg font-semibold ">
+              {data.packageDuration} days
+            </p>
           </div>
         </div>
 
@@ -140,10 +149,7 @@ const PackageDetails: React.FC = () => {
 
       {/* Close Button */}
       <div className="flex justify-end pt-6 border-t">
-        <Button
-          onClick={handleClose}
-          variant="outline"
-        >
+        <Button onClick={handleClose} variant="outline">
           Close
         </Button>
       </div>

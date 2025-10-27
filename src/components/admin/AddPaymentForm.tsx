@@ -10,13 +10,21 @@ import { createPayment } from "@/utils/apis/adminPaymentApi";
 import { toggleAddPaymentForm } from "@/store/slices/paymentSlice";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CreatePaymentFormData } from "@/types/entities/payment";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const AddPaymentForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
-  const [formData, setFormData] = useState<Omit<CreatePaymentFormData, 'customerId' | 'packageId'>>({
+  const [formData, setFormData] = useState<
+    Omit<CreatePaymentFormData, "customerId" | "packageId">
+  >({
     customerName: "",
     packageName: "",
     totalAmount: 0,
@@ -28,7 +36,7 @@ const AddPaymentForm: React.FC = () => {
     adminNotes: "",
   });
 
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const createMutation = useMutation({
     mutationFn: createPayment,
@@ -59,7 +67,7 @@ const AddPaymentForm: React.FC = () => {
   };
 
   const validateForm = (): boolean => {
-    const newErrors: {[key: string]: string} = {};
+    const newErrors: { [key: string]: string } = {};
 
     if (!formData.customerName.trim()) {
       newErrors.customerName = "Customer name is required";
@@ -120,71 +128,96 @@ const AddPaymentForm: React.FC = () => {
   };
 
   const formatCurrency = (value: string): string => {
-    const numbers = value.replace(/\D/g, '');
-    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const numbers = value.replace(/\D/g, "");
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const handleAmountChange = (field: 'totalAmount' | 'paidAmount', value: string) => {
-    const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const handleAmountChange = (
+    field: "totalAmount" | "paidAmount",
+    value: string,
+  ) => {
+    const numericValue = parseInt(value.replace(/,/g, "")) || 0;
     setFormData({ ...formData, [field]: numericValue });
   };
 
   return (
     <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-sm border  max-w-4xl mx-auto">
       <h2 className="text-xl font-semibold mb-6">Add New Payment</h2>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Customer & Package Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="customerName" className="">Customer Name</Label>
+            <Label htmlFor="customerName" className="">
+              Customer Name
+            </Label>
             <Input
               id="customerName"
               value={formData.customerName}
-              onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, customerName: e.target.value })
+              }
               className=""
               placeholder="Enter customer name"
             />
-            {errors.customerName && <p className="text-red-500 text-sm mt-1">{errors.customerName}</p>}
+            {errors.customerName && (
+              <p className="text-red-500 text-sm mt-1">{errors.customerName}</p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="packageName" className="">Package Name</Label>
+            <Label htmlFor="packageName" className="">
+              Package Name
+            </Label>
             <Input
               id="packageName"
               value={formData.packageName}
-              onChange={(e) => setFormData({ ...formData, packageName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, packageName: e.target.value })
+              }
               className=""
               placeholder="Enter package name"
             />
-            {errors.packageName && <p className="text-red-500 text-sm mt-1">{errors.packageName}</p>}
+            {errors.packageName && (
+              <p className="text-red-500 text-sm mt-1">{errors.packageName}</p>
+            )}
           </div>
         </div>
 
         {/* Payment Amounts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="totalAmount" className="">Total Amount (₹)</Label>
+            <Label htmlFor="totalAmount" className="">
+              Total Amount (₹)
+            </Label>
             <Input
               id="totalAmount"
               value={formatCurrency(formData.totalAmount.toString())}
-              onChange={(e) => handleAmountChange('totalAmount', e.target.value)}
+              onChange={(e) =>
+                handleAmountChange("totalAmount", e.target.value)
+              }
               className=""
               placeholder="50,000"
             />
-            {errors.totalAmount && <p className="text-red-500 text-sm mt-1">{errors.totalAmount}</p>}
+            {errors.totalAmount && (
+              <p className="text-red-500 text-sm mt-1">{errors.totalAmount}</p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="paidAmount" className="">Paid Amount (₹)</Label>
+            <Label htmlFor="paidAmount" className="">
+              Paid Amount (₹)
+            </Label>
             <Input
               id="paidAmount"
               value={formatCurrency(formData.paidAmount.toString())}
-              onChange={(e) => handleAmountChange('paidAmount', e.target.value)}
+              onChange={(e) => handleAmountChange("paidAmount", e.target.value)}
               className=""
               placeholder="20,000"
             />
-            {errors.paidAmount && <p className="text-red-500 text-sm mt-1">{errors.paidAmount}</p>}
+            {errors.paidAmount && (
+              <p className="text-red-500 text-sm mt-1">{errors.paidAmount}</p>
+            )}
           </div>
         </div>
 
@@ -192,8 +225,13 @@ const AddPaymentForm: React.FC = () => {
         {formData.totalAmount > 0 && (
           <div className="p-3 rounded-lg border">
             <span className="text-sm">Balance Amount: </span>
-            <span className={`font-medium ${(formData.totalAmount - formData.paidAmount) > 0 ? 'text-red-600' : 'text-green-600'}`}>
-              ₹{formatCurrency((formData.totalAmount - formData.paidAmount).toString())}
+            <span
+              className={`font-medium ${formData.totalAmount - formData.paidAmount > 0 ? "text-red-600" : "text-green-600"}`}
+            >
+              ₹
+              {formatCurrency(
+                (formData.totalAmount - formData.paidAmount).toString(),
+              )}
             </span>
           </div>
         )}
@@ -201,10 +239,12 @@ const AddPaymentForm: React.FC = () => {
         {/* Payment Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="paymentMethod" className="">Payment Method</Label>
+            <Label htmlFor="paymentMethod" className="">
+              Payment Method
+            </Label>
             <Select
               value={formData.paymentMethod}
-              onValueChange={(value: 'googlepay' | 'banktransfer' | 'cash') => 
+              onValueChange={(value: "googlepay" | "banktransfer" | "cash") =>
                 setFormData({ ...formData, paymentMethod: value })
               }
             >
@@ -220,62 +260,80 @@ const AddPaymentForm: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="paymentDate" className="">Payment Date</Label>
+            <Label htmlFor="paymentDate" className="">
+              Payment Date
+            </Label>
             <Input
               id="paymentDate"
               type="date"
               value={formData.paymentDate}
-              onChange={(e) => setFormData({ ...formData, paymentDate: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, paymentDate: e.target.value })
+              }
               className=""
             />
-            {errors.paymentDate && <p className="text-red-500 text-sm mt-1">{errors.paymentDate}</p>}
+            {errors.paymentDate && (
+              <p className="text-red-500 text-sm mt-1">{errors.paymentDate}</p>
+            )}
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="referenceId" className="">Reference ID</Label>
+            <Label htmlFor="referenceId" className="">
+              Reference ID
+            </Label>
             <Input
               id="referenceId"
               value={formData.referenceId}
-              onChange={(e) => setFormData({ ...formData, referenceId: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, referenceId: e.target.value })
+              }
               className=""
               placeholder="GP123456789"
             />
-            {errors.referenceId && <p className="text-red-500 text-sm mt-1">{errors.referenceId}</p>}
+            {errors.referenceId && (
+              <p className="text-red-500 text-sm mt-1">{errors.referenceId}</p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="paymentProof" className="">Payment Proof URL</Label>
+            <Label htmlFor="paymentProof" className="">
+              Payment Proof URL
+            </Label>
             <Input
               id="paymentProof"
               value={formData.paymentProof}
-              onChange={(e) => setFormData({ ...formData, paymentProof: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, paymentProof: e.target.value })
+              }
               className=""
               placeholder="https://drive.google.com/file/d/..."
             />
-            {errors.paymentProof && <p className="text-red-500 text-sm mt-1">{errors.paymentProof}</p>}
+            {errors.paymentProof && (
+              <p className="text-red-500 text-sm mt-1">{errors.paymentProof}</p>
+            )}
           </div>
         </div>
 
         {/* Admin Notes */}
         <div className="space-y-2">
-          <Label htmlFor="adminNotes" className="">Admin Notes</Label>
+          <Label htmlFor="adminNotes" className="">
+            Admin Notes
+          </Label>
           <Textarea
             id="adminNotes"
             value={formData.adminNotes}
-            onChange={(e) => setFormData({ ...formData, adminNotes: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, adminNotes: e.target.value })
+            }
             className=""
             placeholder="Enter any additional notes..."
           />
         </div>
 
         <div className="flex justify-end gap-3 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleCancel}
-            >
+          <Button type="button" variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
           <Button

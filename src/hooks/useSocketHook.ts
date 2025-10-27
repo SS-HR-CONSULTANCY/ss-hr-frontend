@@ -5,8 +5,9 @@ import type { Message } from "@/types/entities/message";
 import { addNewMessage } from "@/store/slices/chatSlice";
 
 export const useMessage = () => {
-
-  const { selectedUser, chatSocket } = useSelector((store: RootState) => store.chat);
+  const { selectedUser, chatSocket } = useSelector(
+    (store: RootState) => store.chat,
+  );
   const dispatch = useDispatch();
 
   const subscribeToMessages = () => {

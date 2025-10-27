@@ -1,23 +1,38 @@
-import type { 
-  CreateAdminResponse, 
+import type {
+  CreateAdminResponse,
   // UpdateAdminResponse,
-  AdminFetchAllAdminsResponse, 
+  AdminFetchAllAdminsResponse,
 } from "@/types/apiTypes/adminApiTypes";
 import { axiosInstance } from "@/lib/axios";
-import type { ApiBaseResponse, ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";
-import { buildQueryParams, parseNewCommonResponse } from "../helpers/apiHelpers";
+import type {
+  ApiBaseResponse,
+  ApiPaginatedResponse,
+  FetchFunctionParams,
+} from "@/types/commonTypes";
+import {
+  buildQueryParams,
+  parseNewCommonResponse,
+} from "../helpers/apiHelpers";
 
 // Create Admin
-export const createAdmin = async (payload: FormData): Promise<CreateAdminResponse> => {
-  const response = await axiosInstance.post('/admin/settings/admins', payload);
+export const createAdmin = async (
+  payload: FormData,
+): Promise<CreateAdminResponse> => {
+  const response = await axiosInstance.post("/admin/settings/admins", payload);
   return response.data.data;
 };
 
 // Fetch Admins
-export const fetchAdmins = async (params?: FetchFunctionParams): Promise<ApiPaginatedResponse<AdminFetchAllAdminsResponse>> => {
+export const fetchAdmins = async (
+  params?: FetchFunctionParams,
+): Promise<ApiPaginatedResponse<AdminFetchAllAdminsResponse>> => {
   const query = buildQueryParams(params);
-  const response = await axiosInstance.get(`/admin/settings/admins${query ? `?${query}` : ''}`);
-  return parseNewCommonResponse<AdminFetchAllAdminsResponse>(response.data.data);
+  const response = await axiosInstance.get(
+    `/admin/settings/admins${query ? `?${query}` : ""}`,
+  );
+  return parseNewCommonResponse<AdminFetchAllAdminsResponse>(
+    response.data.data,
+  );
 };
 
 // Update Admin
@@ -27,7 +42,9 @@ export const fetchAdmins = async (params?: FetchFunctionParams): Promise<ApiPagi
 // };
 
 // Delete Admin
-export const deleteAdmin = async (adminId: string): Promise<ApiBaseResponse> => {
+export const deleteAdmin = async (
+  adminId: string,
+): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.delete(`/admin/settings/${adminId}`);
   return response.data;
 };
