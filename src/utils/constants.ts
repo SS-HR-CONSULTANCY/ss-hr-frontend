@@ -644,7 +644,7 @@ export const mdData: mdDataProps[] = [
 ]
 
 export const achievements: string[] = [
-  "Successfully placed 10,000+ candidates globally",
+  "Successfully placed 4,000+ candidates globally",
   "Partnered with 200+ leading companies worldwide",
   "Awarded for excellence in overseas recruitment",
   "Launched tech-driven travel & visa solutions",
