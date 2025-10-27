@@ -651,5 +651,4 @@ export const achievements: string[] = [
   "Expanding into multiple industries including IT & tourism",
   "3000+ job recruitments successfully completed",
   "Offering multiple sector services worldwide",
-  "Adopting tech-driven workflows for efficiency",
 ];
