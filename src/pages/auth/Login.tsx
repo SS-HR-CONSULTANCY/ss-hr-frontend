@@ -72,7 +72,7 @@ const Login: React.FC = () => {
   const handleGoogleLogin = () => {
     try {
       const apiUrl = import.meta.env.VITE_ENVIRONMENT === "development"
-        ? import.meta.env.VITE_APP_API_BASE_URL
+        ? import.meta.env.VITE_BACKEND_DEVELOPMENT_URL
         : import.meta.env.VITE_BACKEND_PRODUCTION_URL;
       window.location.href = `${apiUrl}/auth/google`;
     } catch (error) {
