@@ -80,7 +80,7 @@ const Reviews: React.FC = () => {
                         preserveAspectRatio="none"
                     >
                         <path d="M1200 120L0 16.48 0 0 1200 0 1200 120z" className="fill-[#01487e]"></path>
-                        <path d="M1250 120L0 13.48 0 0 1200 0 1200 120z" className="fill-white dark:fill-black"></path>
+                        <path d="M1250 120L0 12.48 0 0 1200 0 1200 120z" className="fill-white dark:fill-black"></path>
                     </svg>
                 </div>
             </AuroraBackground>

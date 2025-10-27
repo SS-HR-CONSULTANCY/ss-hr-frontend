@@ -56,10 +56,22 @@ const Footer = ({
           </FooterColumn>
         </FooterContent>
         <FooterContent className="w-full flex justify-center overflow-hidden md:py-10">
-          <h1 className="font-extrabold text-center leading-none text-[clamp(2rem,12vw,12rem)] text-transparent stroke-text">
-            <span className="stroke-text">S</span>
-            <span className="stroke-text">S</span>
-            <span className="stroke-text">GROUPS</span>
+          <h1
+            className="
+      font-extrabold 
+      text-center 
+      leading-none 
+      text-transparent 
+      stroke-text
+      text-9xl
+      whitespace-nowrap
+    "
+            style={{
+              wordSpacing: '0.1em',
+              transformOrigin: 'center',
+            }}
+          >
+            <span className="stroke-text">SHAHALAMGROUPS</span>
           </h1>
         </FooterContent>
         <FooterBottom className="border-t">
