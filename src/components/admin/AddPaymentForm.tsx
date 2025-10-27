@@ -38,8 +38,8 @@ const AddPaymentForm: React.FC = () => {
       dispatch(toggleAddPaymentForm());
       resetForm();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to create payment");
+    onError: () => {
+      toast.error("Failed to create payment");
     },
   });
 

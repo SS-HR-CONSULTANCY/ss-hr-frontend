@@ -1,17 +1,16 @@
-// components/admin/EditTestimonialForm.tsx
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import * as Switch from "@radix-ui/react-switch";
+import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "radix-ui";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeEditTestimonialForm } from "@/store/slices/testimonialSlice";
-import { getTestimonialById, updateTestimonial } from "@/utils/apis/adminTestimonialApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { UpdateTestimonialFormData } from "@/types/entities/testimonial";
+import { getTestimonialById, updateTestimonial } from "@/utils/apis/adminTestimonialApi";
 
 const EditTestimonialForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,8 +40,8 @@ const EditTestimonialForm: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["testimonials"] });
       dispatch(closeEditTestimonialForm());
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update testimonial");
+    onError: () => {
+      toast.error("Failed to update testimonial");
     },
   });
 
@@ -59,11 +58,11 @@ const EditTestimonialForm: React.FC = () => {
   }, [testimonialData]);
 
   const isValidUrl = (string: string): boolean => {
-    if (!string) return true; // Empty is valid for optional field
+    if (!string) return true;
     try {
       new URL(string);
       return true;
-    } catch (_) {
+    } catch {
       return false;
     }
   };
@@ -79,7 +78,7 @@ const EditTestimonialForm: React.FC = () => {
       newErrors.testimonial = "Testimonial must be at least 20 characters";
     }
 
-    if (formData.clientPhoto && !isValidUrl(formData.clientPhoto)) {
+    if (formData.clientPhoto && !isValidUrl(formData.clientPhoto as string)) {
       newErrors.clientPhoto = "Please enter a valid photo URL";
     }
 
@@ -147,12 +146,12 @@ const EditTestimonialForm: React.FC = () => {
           <Label htmlFor="clientPhoto" className="text-black">Client Photo URL</Label>
           <Input
             id="clientPhoto"
-            value={formData.clientPhoto}
+            value={formData.clientPhoto as string}
             onChange={(e) => setFormData({ ...formData, clientPhoto: e.target.value })}
             className="bg-white text-black border-gray-300"
             placeholder="Enter photo URL"
           />
-          {errors.clientPhoto && <p className="text-red-500 text-sm mt-1">{errors.clientPhoto}</p>}
+          {errors.clientPhoto && <p className="text-red-500 text-sm mt-1">{errors.clientPhoto.toString()}</p>}
         </div>
 
         <div>

@@ -1,16 +1,14 @@
-import { Eye, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Eye, Edit, Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AppDispatch } from "@/store/store";
-import { openEditPaymentForm, openViewPaymentDetails } from "@/store/slices/paymentSlice";
-import { deletePayment } from "@/utils/apis/adminPaymentApi";
 import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi";
 
-export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
+export const PaymentTableColumns = (
+  handleDeletePayment: (paymentId: string) => void,
+  handleEditPayment: (paymentId: string) => void,
+  handleViewPayment: (paymentId: string) => void,
+): ColumnDef<AdminfetchAllPaymentsResponse>[] => [
   {
     accessorKey: "customerName",
     header: ({ column }) => (
@@ -102,72 +100,14 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const paymentData = row.original;
-      const dispatch = useDispatch<AppDispatch>();
-      const queryClient = useQueryClient();
-
-      const deleteMutation = useMutation({
-        mutationFn: () => deletePayment(paymentData._id),
-        onSuccess: () => {
-          toast.success("Payment deleted successfully!");
-          queryClient.invalidateQueries({ queryKey: ["payments"] });
-        },
-        onError: (error: any) => {
-          toast.error(error.response?.data?.message || "Failed to delete payment");
-        },
-      });
-
-      const handleView = () => {
-        dispatch(openViewPaymentDetails(paymentData._id));
-      };
-
-      const handleEdit = () => {
-        dispatch(openEditPaymentForm(paymentData._id));
-      };
-
-      const handleDelete = () => {
-        // Custom delete confirmation with react-toastify
-        const confirmToast = toast(
-          ({ closeToast }) => (
-            <div>
-              <p className="mb-3">Are you sure you want to delete this payment?</p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    deleteMutation.mutate();
-                    closeToast();
-                  }}
-                  className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={closeToast}
-                  className="px-3 py-1 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          ),
-          {
-            position: "top-center",
-            autoClose: false,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: false,
-            closeButton: false,
-          }
-        );
-      };
+      const paymentData = row.original;      
 
       return (
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleView}
+            onClick={() => handleViewPayment(paymentData._id)}
             className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50 cursor-pointer"
             title="View Details"
           >
@@ -177,7 +117,7 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleEdit}
+            onClick={() => handleEditPayment(paymentData._id)}
             className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50 cursor-pointer"
             title="Edit Payment"
           >
@@ -187,10 +127,9 @@ export const PaymentTableColumns: ColumnDef<AdminfetchAllPaymentsResponse>[] = [
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleDelete}
+            onClick={() => handleDeletePayment(paymentData._id)}
             className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer"
             title="Delete Payment"
-            disabled={deleteMutation.isPending}
           >
             <Trash2 className="h-4 w-4" />
           </Button>

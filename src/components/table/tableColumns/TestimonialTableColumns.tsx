@@ -1,18 +1,17 @@
 import dayjs from "dayjs";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Eye, Edit, Trash2 } from "lucide-react";
-import type { AppDispatch } from "@/store/store";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import noProfile from '../../../assets/defaultImgaes/noProfile.png';
-import { deleteTestimonial } from "@/utils/apis/adminTestimonialApi";
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
-import { openEditTestimonialForm, openViewTestimonialDetails } from "@/store/slices/testimonialSlice";
 
-export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsResponse>[] = [
+export const TestimonialTableColumns = (  
+  handleDeleteTestimonial: (testimonialId: string) => void,
+  handleEditTestimonial: (testimonialId: string) => void,
+  handleViewTestimonial: (testimonialId: string) => void,
+  isDeleting: boolean,
+): ColumnDef<AdminfetchAllTestimonialsResponse>[] => [
   {
     accessorKey: "clientPhoto",
     header: ({ column }) => (
@@ -93,70 +92,13 @@ export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsRespons
     id: "actions",
     cell: ({ row }) => {
       const testimonial = row.original;
-      const dispatch = useDispatch<AppDispatch>();
-      const queryClient = useQueryClient();
-
-      const deleteMutation = useMutation({
-        mutationFn: () => deleteTestimonial(testimonial._id),
-        onSuccess: () => {
-          toast.success("Testimonial deleted successfully!");
-          queryClient.invalidateQueries({ queryKey: ["testimonials"] });
-        },
-        onError: (error: any) => {
-          toast.error(error.response?.data?.message || "Failed to delete testimonial");
-        },
-      });
-
-      const handleView = () => {
-        dispatch(openViewTestimonialDetails(testimonial._id));
-      };
-
-      const handleEdit = () => {
-        dispatch(openEditTestimonialForm(testimonial._id));
-      };
-
-      const handleDelete = () => {
-        const confirmToast = toast(
-          ({ closeToast }) => (
-            <div>
-              <p className="mb-3">Are you sure you want to delete this testimonial?</p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    deleteMutation.mutate();
-                    closeToast();
-                  }}
-                  className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={closeToast}
-                  className="px-3 py-1 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          ),
-          {
-            position: "top-center",
-            autoClose: false,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: false,
-            closeButton: false,
-          }
-        );
-      };
 
       return (
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleView}
+            onClick={() => handleViewTestimonial(testimonial._id)}
             className="h-8 w-8 p-0 text-blue-500 hover:text-blue-500 hover:bg-blue-500/20 cursor-pointer"
             title="View Details"
           >
@@ -166,7 +108,7 @@ export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsRespons
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleEdit}
+            onClick={() => handleEditTestimonial(testimonial._id)}
             className="h-8 w-8 p-0 text-green-500 hover:text-green-500 hover:bg-green-500/20 cursor-pointer"
             title="Edit Testimonial"
           >
@@ -176,10 +118,10 @@ export const TestimonialTableColumns: ColumnDef<AdminfetchAllTestimonialsRespons
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleDelete}
+            onClick={() => handleDeleteTestimonial(testimonial._id)}
             className="h-8 w-8 p-0 text-red-500 hover:text-red-500 hover:bg-red-500/20 cursor-pointer"
             title="Delete Testimonial"
-            disabled={deleteMutation.isPending}
+            disabled={isDeleting}
           >
             <Trash2 className="h-4 w-4" />
           </Button>

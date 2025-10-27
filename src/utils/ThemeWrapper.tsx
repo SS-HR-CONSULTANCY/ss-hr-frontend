@@ -14,7 +14,7 @@ const dispatch = useDispatch<AppDispatch>();
     if (savedTheme && savedTheme !== theme) {
       dispatch(setTheme(savedTheme));
     }
-  }, []);
+  }, [dispatch, theme]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");

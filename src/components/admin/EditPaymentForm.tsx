@@ -47,8 +47,8 @@ const EditPaymentForm: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["payments"] });
       dispatch(closeEditPaymentForm());
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to update payment");
+    onError: () => {
+      toast.error("Failed to update payment");
     },
   });
 
