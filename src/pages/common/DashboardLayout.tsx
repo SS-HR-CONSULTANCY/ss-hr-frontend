@@ -32,7 +32,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <MobileWarning />
         </div>
       )}
-      <div className="h-screen bg-gradient-to-r from-white to-white dark:from-slate-800 dark:to-zinc-800 text-balck dark:text-white flex">
+      {/* from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black */}
+      {/* from-white to-white dark:from-slate-800 dark:to-zinc-800 */}
+      <div className="h-screen bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-zinc-800 text-balck dark:text-white flex">
         <Sidebar routes={routes} />
         <div
           className={`flex-1 flex flex-col ${sidebarOpen ? "w-[85%]" : "w-[95%]"}`}
@@ -41,7 +43,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             <DashboardHeader user={user} />
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 md:p-6">
+          <div className="flex-1 overflow-y-auto p-2 md:p-4">
             <Outlet />
           </div>
         </div>
