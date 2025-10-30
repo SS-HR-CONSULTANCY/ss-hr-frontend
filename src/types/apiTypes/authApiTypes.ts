@@ -34,7 +34,7 @@ export interface updateProfileImageResponse extends ApiBaseResponse {
   };
 }
 
-export type updateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo">;
+export type updateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo" | "email" | "gender" | "dob" | "nationality" | "linkedInUrl" | "portfolioUrl">;
 export interface updateUserInfoResponse
   extends ApiBaseResponse,
     updateUserInfo {}

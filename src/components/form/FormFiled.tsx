@@ -23,6 +23,7 @@ interface FormFieldProps<T extends FieldValues> {
   onFileSelect?: (url: string) => void;
   rows?: number; // ✅ for textarea
   defaultValue?: string | number | boolean;
+  readOnly?: boolean;
 }
 
 const FormField = <T extends FieldValues>({
@@ -39,6 +40,7 @@ const FormField = <T extends FieldValues>({
   onFileSelect,
   rows = 3,
   defaultValue,
+  readOnly
 }: FormFieldProps<T>) => {
   const [show, setShow] = useState(false);
 
@@ -78,7 +80,7 @@ const FormField = <T extends FieldValues>({
         <select
           id={id}
           {...register(id, registerOptions)}
-          className={`w-full border rounded p-2 border border-black ${error ? "border-destructive" : ""}`}
+          className={`w-full border rounded p-2 border-black ${error ? "border-destructive" : ""}`}
         >
           {children}
         </select>
@@ -98,9 +100,10 @@ const FormField = <T extends FieldValues>({
           id={id}
           defaultValue={defaultValue as string}
           rows={rows}
+          readOnly={readOnly}
           placeholder={placeholder}
           {...register(id, registerOptions)}
-          className={`w-full border rounded p-2 text-sm border border-black ${error ? "border-destructive" : ""}`}
+          className={`w-full border rounded p-2 text-sm border-black ${error ? "border-destructive" : ""}`}
         />
         {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
@@ -124,10 +127,11 @@ const FormField = <T extends FieldValues>({
         <Input
           id={id}
           type={inputType}
+          readOnly={readOnly}
           autoComplete={autoComplete}
           defaultValue={defaultValue as string | number}
           placeholder={placeholder}
-          className={`${error ? "border-destructive" : ""} text-sm border border-black`}
+          className={`${error ? "border-destructive" : ""} text-sm`}
           {...register(id, registerOptions)}
         />
         {showTogglePassword && (

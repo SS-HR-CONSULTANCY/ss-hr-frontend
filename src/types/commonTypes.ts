@@ -43,3 +43,10 @@ export interface statsMapIntrface<T> {
   price?: boolean;
   plans?: string[];
 }
+
+
+export type ProfileDetail<T> = {
+    label: string;
+    key: keyof T;
+    type: string;
+};

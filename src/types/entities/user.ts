@@ -12,6 +12,11 @@ export interface User {
   phone: string;
   phoneTwo: string;
   googleId: string;
+  gender: string;
+  nationality: string;
+  linkedInUrl: string;
+  portfolioUrl: string;
+  dob: string;
   createdAt: string;
   updatedAt: string;
 }
