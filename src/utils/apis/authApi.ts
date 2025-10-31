@@ -10,8 +10,6 @@ import type {
   SigninResponse,
   SignupResponse,
   UpdatePasswordRequest,
-  updateUserInfo,
-  updateUserInfoResponse,
   VerifyOtpRequest,
 } from "@/types/apiTypes/authApiTypes";
 
@@ -129,14 +127,6 @@ export const checkUserStatus = createAsyncThunk(
     await axiosInstance.get("/auth/checkUserStatus", { withCredentials: true });
   },
 );
-
-export const updateProfileInfo = createAsyncThunk<
-  updateUserInfoResponse,
-  updateUserInfo
->("/auth/UpdateProfileImage", async (data: updateUserInfo) => {
-  const response = await axiosInstance.post("/auth/updateuserInfo", data);
-  return response.data;
-});
 
 export const googleSignin = createAsyncThunk<SigninResponse, void>(
   "auth/googleSignin",

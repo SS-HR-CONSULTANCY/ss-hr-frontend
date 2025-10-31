@@ -1,7 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
-import type { updateProfileImageResponse } from "@/types/apiTypes/authApiTypes";
+import type { updateAddressResponse, updateProfileImageResponse, updateUserInfo, updateUserInfoResponse, userAddress, UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
 import type {
   ApiPaginatedResponse,
   FetchFunctionParams,
@@ -14,7 +13,7 @@ import {
 export const updateProfileImage = createAsyncThunk<
   updateProfileImageResponse,
   FormData
->("/auth/UpdateProfileImage", async (formData: FormData) => {
+>("/user/UpdateProfileImage", async (formData: FormData) => {
   const response = await axiosInstance.patch("/user/prfileImage", formData);
   return response.data;
 });
@@ -28,3 +27,22 @@ export const userFetchAllJobs = async (
   );
   return parseNewCommonResponse<UserfetchAllJobsResponse>(response.data);
 };
+
+
+export const updateProfileInfo = createAsyncThunk<
+  updateUserInfoResponse,
+  updateUserInfo
+>("/user/UpdateProfileImage", async (data: updateUserInfo) => {
+  const response = await axiosInstance.patch("/user/profile", data);
+  return response.data;
+});
+
+
+export const updateUserAddress = createAsyncThunk<
+  updateAddressResponse,
+  userAddress
+>("/user/UpdateProfileImage", async (data: userAddress) => {
+  const response = await axiosInstance.patch("/user/Address", data);
+  return response.data;
+});
+

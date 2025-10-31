@@ -5,7 +5,7 @@ import visaService from "../assets/svgs/serviceSvg/visa.svg";
 import cvWriting from "../assets/svgs/serviceSvg/cvWriting.svg";
 import ticketService from "../assets/svgs/serviceSvg/ticket.svg";
 import jobRecruitment from "../assets/svgs/serviceSvg/hiring.svg";
-import type { ProfileDetail, Route, statsMapIntrface } from "@/types/commonTypes";
+import type { userDetail, Route, statsMapIntrface } from "@/types/commonTypes";
 import webDevBanner from "../assets/serviceBanners/webDevBanner.jpg";
 import type { mdDataProps } from "@/types/componentTypes/aboutTypes";
 import labourSupply from "../assets/svgs/serviceSvg/labourSupply.svg";
@@ -46,7 +46,7 @@ import type {
   AdminFetchRevenueReportStatsDataResponse,
   AdminFetchUserReportStatsDataResponse,
 } from "@/types/apiTypes/adminApiTypes";
-import type { updateUserInfo } from "@/types/apiTypes/authApiTypes";
+import type { updateUserInfo, userAddress } from "@/types/apiTypes/userApiTypes";
 
 export const companyName = "ShahaalamGroups";
 
@@ -774,14 +774,27 @@ export const achievements: string[] = [
 
 
 // User profile data array
-export const profileDetailsArray: ProfileDetail<updateUserInfo>[] = [
+export const profileDetailsArray: userDetail<updateUserInfo>[] = [
     { label: "Full Name", key: "fullName", type: "string" },
     { label: "Email", key: "email", type: "string" },
-    { label: "Phone 1", key: "phone", type: "number" },
-    { label: "Phone 2", key: "phoneTwo", type: "number" },
+    { label: "Phone 1", key: "phone", type: "string" },
+    { label: "Phone 2", key: "phoneTwo", type: "string" },
     { label: "Gender", key: "gender", type: "string" },
     { label: "Nationality", key: "nationality", type: "string" },
     { label: "Date of Birth", key: "dob", type: "string" },
     { label: "LinkedIn", key: "linkedInUrl", type: "string" },
     { label: "Portfolio", key: "portfolioUrl", type: "string" },
+];
+
+// User address data array
+export const addressArray: userDetail<userAddress>[] = [
+  { label: "Address Line 1", key: "addressLine1", type: "string" },
+  { label: "Address Line 2", key: "addressLine2", type: "string" },
+  { label: "City", key: "city", type: "string" },
+  { label: "District", key: "district", type: "string" },
+  { label: "State / Emirate", key: "state", type: "string" },
+  { label: "Country", key: "country", type: "string" },
+  { label: "Postal Code", key: "postalCode", type: "string" },
+  { label: "PO Box", key: "poBox", type: "string" },
+  { label: "Landmark", key: "landmark", type: "string" },
 ];

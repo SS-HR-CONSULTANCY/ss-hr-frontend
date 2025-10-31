@@ -1,7 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { UserSliceState } from "../../types/slice/userSliceTypes";
+import type { Address } from "@/types/entities/address";
 
 const initialState: UserSliceState = {
+  userAddress: null, 
   selectedUserId: null,
   isAddUserModalOpen: false,
   isEditUserModalOpen: false,
@@ -34,6 +36,9 @@ const userSlice = createSlice({
       state.isUserDetailsModalOpen = false;
       state.selectedUserId = null;
     },
+    setAddress: (state, action: PayloadAction<Address>) => {
+      state.userAddress = action.payload;
+    }
   },
 });
 

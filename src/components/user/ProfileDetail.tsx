@@ -5,10 +5,10 @@ import { useDispatch } from "react-redux";
 import FormField from "../form/FormFiled";
 import { Button } from "@/components/ui/button";
 import { profileDetailsArray } from "@/utils/constants";
-import { updateProfileInfo } from "@/utils/apis/authApi";
+import { updateProfileInfo } from "@/utils/apis/userApi";
 import type { AppDispatch, RootState } from "@/store/store";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { updateUserInfo, updateUserInfoResponse } from "@/types/apiTypes/authApiTypes";
+import type { updateUserInfo, updateUserInfoResponse } from "@/types/apiTypes/userApiTypes";
 
 const ProfileDetail: React.FC = () => {
 
@@ -28,6 +28,12 @@ const ProfileDetail: React.FC = () => {
             fullName: user?.fullName || "",
             phone: user?.phone || "",
             phoneTwo: user?.phoneTwo || "",
+            email: user?.email || "",
+            gender: user?.gender || "",
+            nationality: user?.nationality || "",
+            linkedInUrl: user?.linkedInUrl || "",
+            portfolioUrl: user?.portfolioUrl || "",
+            dob: user?.dob || "",
         },
     });
 
@@ -39,21 +45,21 @@ const ProfileDetail: React.FC = () => {
                 .unwrap()
                 .then((res) => {
                     if (res.success) {
-                        toast.success(res.message || "User info updated successfully!");
+                        toast.success(res.message || "User Profile data updated successfully!");
                     } else {
-                        toast.error(res.message || "User info updating failed!");
+                        toast.error(res.message || "User Profile data updating failed!");
                     }
                 })
                 .catch((error) => {
-                    toast.error(error.message || "User info updating error");
+                    toast.error(error.message || "User Profile data updating error");
                 });
         } catch {
-            toast.error("Failed to update user info");
+            toast.error("Failed to update profile data");
         }
     };
 
     return (
-        <div className="p-2 md:p-6 border rounded-md">
+        <div className="p-2 md:p-6">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg md:text-2xl font-semibold my-2">
                     Profile Details
@@ -97,9 +103,7 @@ const ProfileDetail: React.FC = () => {
                     </div>
                 )}
             </form>
-
         </div>
-
     )
 }
 

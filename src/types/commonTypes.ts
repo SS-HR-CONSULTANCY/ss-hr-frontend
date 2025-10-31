@@ -45,7 +45,7 @@ export interface statsMapIntrface<T> {
 }
 
 
-export type ProfileDetail<T> = {
+export type userDetail<T> = {
     label: string;
     key: keyof T;
     type: string;

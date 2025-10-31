@@ -1,5 +1,5 @@
-import type { ApiBaseResponse } from "../commonTypes";
 import type { User } from "../entities/user";
+import type { ApiBaseResponse } from "../commonTypes";
 
 export interface SignupResponse extends ApiBaseResponse {
   user: User;
@@ -27,14 +27,3 @@ export type UpdatePasswordRequest = Pick<User, "role" | "verificationToken"> & {
   password: string;
   confirmPassword: string;
 };
-
-export interface updateProfileImageResponse extends ApiBaseResponse {
-  data: {
-    profileImage: User["profileImage"];
-  };
-}
-
-export type updateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo" | "email" | "gender" | "dob" | "nationality" | "linkedInUrl" | "portfolioUrl">;
-export interface updateUserInfoResponse
-  extends ApiBaseResponse,
-    updateUserInfo {}

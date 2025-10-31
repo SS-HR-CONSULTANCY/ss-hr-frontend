@@ -6,7 +6,8 @@ import { updateProfileImage } from "@/utils/apis/userApi";
 import ProfileDetail from "@/components/user/ProfileDetail";
 import type { AppDispatch, RootState } from "@/store/store";
 import noProfileImage from "../../assets/defaultImgaes/noProfile.png";
-import type { updateProfileImageResponse } from "@/types/apiTypes/authApiTypes";
+import type { updateProfileImageResponse } from "@/types/apiTypes/userApiTypes";
+import UserAddress from "@/components/user/UserAddress";
 
 const UserProfile: React.FC = () => {
 
@@ -74,17 +75,15 @@ const UserProfile: React.FC = () => {
 
       <ProfileDetail />
 
-      {/* <h3 className="text-lg md:text-xl font-semibold">Personal Information</h3>
+      <UserAddress />
 
-      <h3 className="text-lg md:text-xl font-semibold">Address Details</h3>
-
-      <h3 className="text-lg md:text-xl font-semibold">Education Information</h3>
+      {/* <h3 className="text-lg md:text-xl font-semibold">Education Information</h3>
 
       <h3 className="text-lg md:text-xl font-semibold">Experience</h3>
 
       <h3 className="text-lg md:text-xl font-semibold">Projects</h3>
 
-      <h3 className="text-lg md:text-xl font-semibold">Achievements</h3> */}
+      <h3 className="text-lg md:text-xl font-semibold">Achievements</h3>  */}
 
     </div>
   );
