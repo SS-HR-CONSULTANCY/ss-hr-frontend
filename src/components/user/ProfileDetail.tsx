@@ -59,7 +59,7 @@ const ProfileDetail: React.FC = () => {
     };
 
     return (
-        <div className="p-2 md:p-6">
+        <div className="p-4 md:p-6 rounded-md border mt-4">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg md:text-2xl font-semibold my-2">
                     Profile Details

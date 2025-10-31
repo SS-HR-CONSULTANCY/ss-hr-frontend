@@ -28,4 +28,4 @@ export interface User {
 
 export type Role = "user" | "admin" | "superAdmin" | "systemAdmin";
 
-export type UserCareerData = Pick<User,"currentSalary">
+export type UserCareerData = Pick<User,"currentSalary" | "expectedSalary" | "immediateJoiner" | "noticePeriod" | "resumeUrl">

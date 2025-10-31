@@ -59,7 +59,7 @@ const UserAddress: React.FC = () => {
     };
 
     return (
-        <div className="p-2 md:p-6">
+        <div className="p-4 md:p-6 rounded-md border mt-4">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg md:text-2xl font-semibold my-2">
                     Address
@@ -77,7 +77,7 @@ const UserAddress: React.FC = () => {
 
             {(!userAddress && !isEditing) ? (
                 <div className="rounded-md w-full p-4 flex flex-col justify-center items-center border shadow-md space-y-2">
-                    <p>No address found</p>
+                    <p>No data found</p>
                     <Button
                         variant={"outline"}
                         onClick={() => setIsEditing((prev) => !prev)}

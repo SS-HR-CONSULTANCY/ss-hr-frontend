@@ -8,6 +8,7 @@ import type { AppDispatch, RootState } from "@/store/store";
 import noProfileImage from "../../assets/defaultImgaes/noProfile.png";
 import type { updateProfileImageResponse } from "@/types/apiTypes/userApiTypes";
 import UserAddress from "@/components/user/UserAddress";
+import CareerPreferences from "@/components/user/CareerPreferences";
 
 const UserProfile: React.FC = () => {
 
@@ -76,6 +77,8 @@ const UserProfile: React.FC = () => {
       <ProfileDetail />
 
       <UserAddress />
+
+      <CareerPreferences />
 
       {/* <h3 className="text-lg md:text-xl font-semibold">Education Information</h3>
 
