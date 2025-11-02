@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 interface FormFieldProps<T extends FieldValues> {
   id: Path<T>;
@@ -21,9 +22,10 @@ interface FormFieldProps<T extends FieldValues> {
   showTogglePassword?: boolean;
   children?: React.ReactNode;
   onFileSelect?: (url: string) => void;
-  rows?: number; // ✅ for textarea
+  rows?: number;
   defaultValue?: string | number | boolean;
   readOnly?: boolean;
+  required?: boolean;
 }
 
 const FormField = <T extends FieldValues>({
@@ -40,7 +42,8 @@ const FormField = <T extends FieldValues>({
   onFileSelect,
   rows = 3,
   defaultValue,
-  readOnly
+  readOnly,
+  required
 }: FormFieldProps<T>) => {
   const [show, setShow] = useState(false);
 
@@ -49,7 +52,7 @@ const FormField = <T extends FieldValues>({
     return (
       <div className="flex flex-col space-y-2">
         <Label className="text-xs md:text-sm" htmlFor={id}>
-          {label}
+          {label} {required && (<span className="mx-1 text-red-500">*</span>)}
         </Label>
         <Input
           id={id}
@@ -76,11 +79,16 @@ const FormField = <T extends FieldValues>({
   if (type === "select") {
     return (
       <div className="space-y-2">
-        <Label htmlFor={id}>{label}</Label>
+        <Label className="text-xs md:text-sm" htmlFor={id}>{label}{required && (<span className="mx-1 text-red-500">*</span>)}</Label>
         <select
           id={id}
           {...register(id, registerOptions)}
-          className={`w-full border rounded p-2 border-black ${error ? "border-destructive" : ""}`}
+           className={cn(
+                  "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+                  "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+                  "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                  
+                )}
         >
           {children}
         </select>
@@ -94,7 +102,7 @@ const FormField = <T extends FieldValues>({
     return (
       <div className="space-y-2">
         <Label className="text-xs md:text-sm" htmlFor={id}>
-          {label}
+          {label}{required && (<span className="mx-1 text-red-500">*</span>)}
         </Label>
         <textarea
           id={id}
@@ -121,7 +129,7 @@ const FormField = <T extends FieldValues>({
   return (
     <div className="space-y-2">
       <Label className="text-xs md:text-sm" htmlFor={id}>
-        {label}
+        {label}{required && (<span className="mx-1 text-red-500">*</span>)}
       </Label>
       <div className="relative">
         <Input

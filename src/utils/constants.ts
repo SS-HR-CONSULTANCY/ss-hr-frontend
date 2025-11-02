@@ -46,7 +46,7 @@ import type {
   AdminFetchRevenueReportStatsDataResponse,
   AdminFetchUserReportStatsDataResponse,
 } from "@/types/apiTypes/adminApiTypes";
-import type { updateUserInfo, userAddress } from "@/types/apiTypes/userApiTypes";
+import type { UpdateUserInfo, UserAddress } from "@/types/apiTypes/userApiTypes";
 
 export const companyName = "ShahaalamGroups";
 
@@ -774,7 +774,7 @@ export const achievements: string[] = [
 
 
 // User profile data array
-export const profileDetailsArray: userDetail<updateUserInfo>[] = [
+export const profileDetailsArray: userDetail<UpdateUserInfo>[] = [
     { label: "Full Name", key: "fullName", type: "string" },
     { label: "Email", key: "email", type: "string" },
     { label: "Phone 1", key: "phone", type: "string" },
@@ -787,7 +787,7 @@ export const profileDetailsArray: userDetail<updateUserInfo>[] = [
 ];
 
 // User address data array
-export const addressArray: userDetail<userAddress>[] = [
+export const addressArray: userDetail<UserAddress>[] = [
   { label: "Address Line 1", key: "addressLine1", type: "string" },
   { label: "Address Line 2", key: "addressLine2", type: "string" },
   { label: "City", key: "city", type: "string" },

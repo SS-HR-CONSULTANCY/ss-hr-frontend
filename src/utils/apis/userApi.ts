@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { updateAddressResponse, updateProfileImageResponse, updateUserInfo, updateUserInfoResponse, userAddress, UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
+import type { 
+  CareerPreferences, UpdateAddressResponse, UpdateCareerPreferencesResponse, UpdateProfileImageResponse, UpdateUserInfo, UpdateUserInfoResponse, UserAddress, UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
 import type {
   ApiPaginatedResponse,
   FetchFunctionParams,
@@ -11,7 +12,7 @@ import {
 } from "@/utils/helpers/apiHelpers";
 
 export const updateProfileImage = createAsyncThunk<
-  updateProfileImageResponse,
+  UpdateProfileImageResponse,
   FormData
 >("/user/UpdateProfileImage", async (formData: FormData) => {
   const response = await axiosInstance.patch("/user/prfileImage", formData);
@@ -30,19 +31,28 @@ export const userFetchAllJobs = async (
 
 
 export const updateProfileInfo = createAsyncThunk<
-  updateUserInfoResponse,
-  updateUserInfo
->("/user/UpdateProfileImage", async (data: updateUserInfo) => {
+  UpdateUserInfoResponse,
+  UpdateUserInfo
+>("/user/UpdateProfileInfo", async (data: UpdateUserInfo) => {
   const response = await axiosInstance.patch("/user/profile", data);
   return response.data;
 });
 
 
 export const updateUserAddress = createAsyncThunk<
-  updateAddressResponse,
-  userAddress
->("/user/UpdateProfileImage", async (data: userAddress) => {
+  UpdateAddressResponse,
+  UserAddress
+>("/user/UpdateProfileImage", async (data: UserAddress) => {
   const response = await axiosInstance.patch("/user/Address", data);
+  return response.data;
+});
+
+
+export const updateUserCareerPreferences = createAsyncThunk<
+  UpdateCareerPreferencesResponse,
+  CareerPreferences
+>("/user/UpdateCareerPreferences", async (data: CareerPreferences) => {
+  const response = await axiosInstance.patch("/user/career", data);
   return response.data;
 });
 

@@ -1,22 +1,19 @@
 import { toast } from "react-toastify";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import FormField from "../form/FormFiled";
+import { useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import type { AppDispatch, RootState } from "@/store/store";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
-import FormField from "../form/FormFiled";
+import { updateUserCareerPreferences } from "@/utils/apis/userApi";
+import type { CareerPreferences } from "@/types/apiTypes/userApiTypes";
 
-type CareerPreferences = {
-    currentSalary: string;
-    expectedSalary: string;
-    immediateJoiner: boolean;
-    noticePeriod?: string;
-    resume: string;
-};
+const CareerPreferencesSection: React.FC = () => {
 
-const CareerPreferences: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
 
     const { userCareerPreference } = useSelector(
         (state: RootState) => state.user,
@@ -34,30 +31,36 @@ const CareerPreferences: React.FC = () => {
 
     const [isEditing, setIsEditing] = useState(false);
 
-    const onSubmit: SubmitHandler<CareerPreferences> = (data) => {
-        toast.success("Career details submitted successfully!");
-        reset();
+    const onSubmit: SubmitHandler<CareerPreferences> = async (data) => {
+         try {
+                    await dispatch(updateUserCareerPreferences(data))
+                        .unwrap()
+                        .then((res) => {
+                            if (res.success) {
+                                toast.success(res.message || "Data updated successfully!");
+                                reset();
+                            } else {
+                                toast.error(res.message || "Data updating failed!");
+                            }
+                        })
+                        .catch((error) => {
+                            toast.error(error.message || "Data updating error");
+                        });
+                } catch {
+                    toast.error("Failed to update data");
+                }
     };
 
     return (
-        <div className="p-4 md:p-6 rounded-md border mt-4">
+        <div className="p-4 md:p-6 rounded-md border mt-4 shadow-md">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg md:text-2xl font-semibold my-2">
                     Career Preferences
                 </h3>
-                {(userCareerPreference || isEditing) && (
-                    <Button
-                        variant={isEditing ? "destructive" : "outline"}
-                        onClick={() => setIsEditing((prev) => !prev)}
-                        className="text-xs md:text-sm px-3 py-1 cursor-pointer"
-                    >
-                        {isEditing ? "Cancel" : "Edit"}
-                    </Button>
-                )}
             </div>
 
             {(!userCareerPreference && !isEditing) ? (
-                <div className="rounded-md w-full p-4 flex flex-col justify-center items-center border shadow-md space-y-2">
+                <div className="rounded-md w-full p-4 flex flex-col justify-center items-center border space-y-2">
                     <p>No data found</p>
                     <Button
                         variant={"outline"}
@@ -134,10 +137,10 @@ const CareerPreferences: React.FC = () => {
                             id="resume"
                             type="file"
                             accept=".pdf,.doc,.docx"
-                            {...register("resume", { required: "Please upload your resume" })}
+                            {...register("resumeUrl", { required: "Please upload your resume" })}
                         />
-                        {errors.resume && (
-                            <p className="text-sm text-red-500">{errors.resume.message}</p>
+                        {errors.resumeUrl && (
+                            <p className="text-sm text-red-500">{errors.resumeUrl.message}</p>
                         )}
                     </div>
 
@@ -145,16 +148,15 @@ const CareerPreferences: React.FC = () => {
                         <Button type="submit" variant="outline">
                             Save Preferences
                         </Button>
-                        <Button
-                            type="button"
-                            variant="destructive"
-                            onClick={() => {
-                                reset()
-                                setIsEditing((prev) => !prev)
-                            }}
-                        >
-                            Cancel
-                        </Button>
+                        {(userCareerPreference || isEditing) && (
+                            <Button
+                                variant={isEditing ? "destructive" : "outline"}
+                                onClick={() => setIsEditing((prev) => !prev)}
+                                className="text-xs md:text-sm px-3 py-1 cursor-pointer"
+                            >
+                                {isEditing ? "Cancel" : "Edit"}
+                            </Button>
+                        )}
                     </div>
                 </form>
             )}
@@ -162,4 +164,4 @@ const CareerPreferences: React.FC = () => {
     );
 };
 
-export default CareerPreferences;
+export default CareerPreferencesSection;

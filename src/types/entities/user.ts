@@ -1,3 +1,6 @@
+export type Gender = "male" | "female" | "other";
+export type Role = "user" | "admin" | "superAdmin" | "systemAdmin";
+
 export interface User {
   _id: string;
   serialNumber: string;
@@ -12,10 +15,10 @@ export interface User {
   phone: string;
   phoneTwo: string;
   googleId: string;
-  gender: string;
+  gender: Gender;
   nationality: string;
-  linkedInUrl: string;
-  portfolioUrl: string;
+  linkedInUrl?: string;
+  portfolioUrl?: string;
   dob: string;
   currentSalary: string;
   expectedSalary: string;
@@ -26,6 +29,5 @@ export interface User {
   updatedAt: string;
 }
 
-export type Role = "user" | "admin" | "superAdmin" | "systemAdmin";
 
 export type UserCareerData = Pick<User,"currentSalary" | "expectedSalary" | "immediateJoiner" | "noticePeriod" | "resumeUrl">

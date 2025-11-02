@@ -1,6 +1,6 @@
+import type { Address } from "@/types/entities/address";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { UserSliceState } from "../../types/slice/userSliceTypes";
-import type { Address } from "@/types/entities/address";
 
 const initialState: UserSliceState = {
   userAddress: null, 

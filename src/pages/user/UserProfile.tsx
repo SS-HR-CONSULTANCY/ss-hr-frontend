@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { updateProfileImage } from "@/utils/apis/userApi";
-import ProfileDetail from "@/components/user/ProfileDetail";
 import type { AppDispatch, RootState } from "@/store/store";
 import noProfileImage from "../../assets/defaultImgaes/noProfile.png";
-import type { updateProfileImageResponse } from "@/types/apiTypes/userApiTypes";
-import UserAddress from "@/components/user/UserAddress";
-import CareerPreferences from "@/components/user/CareerPreferences";
+import UserAddressSection from "@/components/user/UserAddressSection";
+import ProfileDetailsSection from "@/components/user/ProfileDetailsSection";
+import type { UpdateProfileImageResponse } from "@/types/apiTypes/userApiTypes";
+import CareerPreferencesSection from "@/components/user/CareerPreferencesSection";
 
 const UserProfile: React.FC = () => {
 
@@ -17,6 +17,8 @@ const UserProfile: React.FC = () => {
   const { user, profileImageUpdating } = useSelector(
     (state: RootState) => state.auth,
   );
+
+  console.log("profileImageUpdating : ",profileImageUpdating)
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file: File | undefined = e.target.files?.[0];
@@ -30,7 +32,7 @@ const UserProfile: React.FC = () => {
 
     await dispatch(updateProfileImage(formData))
       .unwrap()
-      .then((res: updateProfileImageResponse) => {
+      .then((res: UpdateProfileImageResponse) => {
         toast.success(res.message);
       })
       .catch(() => {
@@ -74,19 +76,11 @@ const UserProfile: React.FC = () => {
         </p>
       </div>
 
-      <ProfileDetail />
+      <ProfileDetailsSection />
 
-      <UserAddress />
+      <UserAddressSection />
 
-      <CareerPreferences />
-
-      {/* <h3 className="text-lg md:text-xl font-semibold">Education Information</h3>
-
-      <h3 className="text-lg md:text-xl font-semibold">Experience</h3>
-
-      <h3 className="text-lg md:text-xl font-semibold">Projects</h3>
-
-      <h3 className="text-lg md:text-xl font-semibold">Achievements</h3>  */}
+      <CareerPreferencesSection />
 
     </div>
   );

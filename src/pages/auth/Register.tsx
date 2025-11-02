@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import FormField from "@/components/form/FormFiled";
 import CustomLink from "@/components/form/CustomLink";
 import FormHeader from "@/components/form/FormHeader";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { clearError } from "../../store/slices/authSlice";
 import { HomeIcon, LoaderCircle, User } from "lucide-react";
 import { registerSchema } from "../../utils/validationSchema";
@@ -30,7 +30,7 @@ const Register: React.FC = () => {
     formState: { errors },
     watch,
   } = useForm<RegisterRequest>({
-    resolver: yupResolver(registerSchema),
+    resolver: zodResolver(registerSchema),
   });
 
   const watchedValues = watch();

@@ -6,6 +6,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@import "react-phone-number-input/style.css";
+
 html,
 body {
   height: 100%;

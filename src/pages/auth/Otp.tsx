@@ -1,3 +1,8 @@
+import {
+  clearError,
+  stopTimer,
+  updateTimer,
+} from "../../store/slices/authSlice";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { LoaderCircle } from "lucide-react";
@@ -6,19 +11,14 @@ import { Button } from "@/components/ui/button";
 import type { Role } from "@/types/entities/user";
 import React, { useEffect, useState } from "react";
 import FormField from "@/components/form/FormFiled";
-import { yupResolver } from "@hookform/resolvers/yup";
 import FormHeader from "@/components/form/FormHeader";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { otpSchema } from "../../utils/validationSchema";
 import { resendOtp, verifyOtp } from "@/utils/apis/authApi";
 import { formatTime } from "@/utils/helpers/timerFormatterForOtp";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import type { VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
-import {
-  clearError,
-  stopTimer,
-  updateTimer,
-} from "../../store/slices/authSlice";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const Otp: React.FC = () => {
@@ -34,7 +34,7 @@ const Otp: React.FC = () => {
     formState: { errors },
     watch,
   } = useForm<VerifyOtpRequest>({
-    resolver: yupResolver(otpSchema),
+    resolver: zodResolver(otpSchema),
     defaultValues: {
       otp: "",
       verificationToken: user?.verificationToken,

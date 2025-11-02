@@ -1,6 +1,3 @@
-import type { User } from "@/types/entities/user";
-import { updateProfileImage } from "@/utils/apis/userApi";
-import type { AuthState } from "@/types/slice/authSliceTypes";
 import {
   createSlice,
   type PayloadAction,
@@ -14,7 +11,10 @@ import {
   updatePassword,
   verifyOtp,
 } from "@/utils/apis/authApi";
-import type { updateProfileImageResponse } from "@/types/apiTypes/authApiTypes";
+import type { User } from "@/types/entities/user";
+import type { AuthState } from "@/types/slice/authSliceTypes";
+import { updateProfileImage, updateProfileInfo } from "@/utils/apis/userApi";
+import type { UpdateProfileImageResponse, UpdateUserInfoResponse } from "@/types/apiTypes/userApiTypes";
 
 const initialState: AuthState = {
   user: null,
@@ -190,7 +190,7 @@ const authSlice = createSlice({
       })
       .addCase(
         updateProfileImage.fulfilled,
-        (state, action: PayloadAction<updateProfileImageResponse>) => {
+        (state, action: PayloadAction<UpdateProfileImageResponse>) => {
           state.profileImageUpdating = false;
           if (state.user) {
             state.user.profileImage = action.payload.data.profileImage;
@@ -200,7 +200,20 @@ const authSlice = createSlice({
       .addCase(updateProfileImage.rejected, (state) => {
         state.profileImageUpdating = true;
       });
-  },
+
+    builder
+      .addCase(updateProfileInfo.pending, () => {
+
+      })
+      .addCase(updateProfileInfo.fulfilled, (state, action: PayloadAction<UpdateUserInfoResponse>) => {
+        if (state.user) {
+          state.user = { ...state.user, ...action.payload.data };
+        }
+      })
+      .addCase(updateProfileInfo.rejected, () => {
+
+      })
+  }
 });
 
 export const {

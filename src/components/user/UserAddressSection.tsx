@@ -8,9 +8,9 @@ import { addressArray } from "@/utils/constants";
 import { updateUserAddress } from "@/utils/apis/userApi";
 import type { AppDispatch, RootState } from "@/store/store";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { updateAddressResponse, userAddress } from "@/types/apiTypes/userApiTypes";
+import type { UpdateAddressResponse, UserAddress } from "@/types/apiTypes/userApiTypes";
 
-const UserAddress: React.FC = () => {
+const UserAddressSection: React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { userAddress } = useSelector(
@@ -23,7 +23,7 @@ const UserAddress: React.FC = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<userAddress>({
+    } = useForm<UserAddress>({
         defaultValues: {
             addressLine1: userAddress?.addressLine1 || "",
             addressLine2: userAddress?.addressLine2 || "",
@@ -37,7 +37,7 @@ const UserAddress: React.FC = () => {
         },
     });
 
-    const onSubmit: SubmitHandler<updateAddressResponse> = async (
+    const onSubmit: SubmitHandler<UpdateAddressResponse> = async (
         data,
     ) => {
         try {
@@ -59,7 +59,7 @@ const UserAddress: React.FC = () => {
     };
 
     return (
-        <div className="p-4 md:p-6 rounded-md border mt-4">
+        <div className="p-4 md:p-6 rounded-md border mt-4 shadow-md">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg md:text-2xl font-semibold my-2">
                     Address
@@ -76,7 +76,7 @@ const UserAddress: React.FC = () => {
             </div>
 
             {(!userAddress && !isEditing) ? (
-                <div className="rounded-md w-full p-4 flex flex-col justify-center items-center border shadow-md space-y-2">
+                <div className="rounded-md w-full p-4 flex flex-col justify-center items-center border space-y-2">
                     <p>No data found</p>
                     <Button
                         variant={"outline"}
@@ -89,7 +89,7 @@ const UserAddress: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {addressArray.map((item) => (
                             <div key={item.key}>
-                                <FormField<userAddress>
+                                <FormField<UserAddress>
                                     id={item.key}
                                     label={item.label}
                                     placeholder={isEditing ? `Enter ${item.label.toLowerCase()}` : "Not provided"}
@@ -120,4 +120,4 @@ const UserAddress: React.FC = () => {
     )
 }
 
-export default UserAddress
+export default UserAddressSection;

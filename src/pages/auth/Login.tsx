@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "../../hooks/redux";
 import FormField from "@/components/form/FormFiled";
 import CustomLink from "@/components/form/CustomLink";
-import { yupResolver } from "@hookform/resolvers/yup";
 import FormHeader from "@/components/form/FormHeader";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../utils/validationSchema";
 import { HomeIcon, LoaderCircle, UserPlus } from "lucide-react";
 import RememberMeWithFP from "@/components/form/RememberMeWithFP";
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
     formState: { errors },
     watch,
   } = useForm<SigninRequest>({
-    resolver: yupResolver(loginSchema),
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
