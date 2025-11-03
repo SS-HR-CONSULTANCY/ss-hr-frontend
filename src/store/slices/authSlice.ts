@@ -54,14 +54,7 @@ const authSlice = createSlice({
     stopTimer: (state: AuthState) => {
       state.otpTimerIsRunning = false;
     },
-    clearAuthStore: (state: AuthState) => {
-      state.error = null;
-      state.isAuthenticated = false;
-      state.isLoading = false;
-      state.otpRemainingTime = 0;
-      state.otpTimerIsRunning = false;
-      state.user = null;
-    },
+    resetAuthStore:() =>  initialState,
     setProfileImage: (state, action: PayloadAction<string>) => {
       if (state.user) {
         state.user.profileImage = action.payload;
@@ -222,7 +215,7 @@ export const {
   startTimer,
   updateTimer,
   stopTimer,
-  clearAuthStore,
+  resetAuthStore,
   setProfileImage,
   setOtpForUpdatePassword,
 } = authSlice.actions;

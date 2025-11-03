@@ -1,9 +1,15 @@
+import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signout } from "@/utils/apis/authApi";
 import type { AppDispatch } from "@/store/store";
-import { toast } from "react-toastify";
-import { clearAuthStore } from "@/store/slices/authSlice";
+import { resetJobSlice } from "@/store/slices/jobSlice";
+import { resetAuthStore } from "@/store/slices/authSlice";
+import { resetChatSlice } from "@/store/slices/chatSlice";
+import { resetUserSlice } from "@/store/slices/userSlice";
+import { resetPackageSlice } from "@/store/slices/packageSlice";
+import { resetPaymentSlice } from "@/store/slices/paymentSlice";
+import { resetTestimonialSlice } from "@/store/slices/testimonialSlice";
 
 const useAuthHook = ({ route }: { route: string }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,7 +20,13 @@ const useAuthHook = ({ route }: { route: string }) => {
       const res = await dispatch(signout()).unwrap();
       if (res.success) {
         toast.success(res.message || "Logout successfully");
-        dispatch(clearAuthStore());
+        dispatch(resetAuthStore());
+        dispatch(resetChatSlice());
+        dispatch(resetJobSlice());
+        dispatch(resetPackageSlice());
+        dispatch(resetPaymentSlice());
+        dispatch(resetTestimonialSlice());
+        dispatch(resetUserSlice());
         navigate(route);
       } else {
         toast.error(res.message || "Logout failed");

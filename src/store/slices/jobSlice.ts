@@ -73,6 +73,7 @@ const jobSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
+    resetJobSlice: () => initialState,
   },
 });
 
@@ -87,6 +88,7 @@ export const {
   closeViewDetailsModal,
   setLoading,
   setError,
+  resetJobSlice,
 } = jobSlice.actions;
 
 export default jobSlice.reducer;

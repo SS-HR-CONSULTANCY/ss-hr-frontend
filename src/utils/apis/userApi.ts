@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { 
-  CareerPreferences, UpdateAddressResponse, UpdateCareerPreferencesResponse, UpdateProfileImageResponse, UpdateUserInfo, UpdateUserInfoResponse, UserAddress, UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
+  CareerPreferences, UpdateAddressResponse, UpdateCareerPreferencesResponse, UpdateProfileImageResponse, UpdateUserInfo, UpdateUserInfoResponse, UseAddressRequest, UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
 import type {
   ApiPaginatedResponse,
   FetchFunctionParams,
@@ -39,13 +39,19 @@ export const updateProfileInfo = createAsyncThunk<
 });
 
 
-export const updateUserAddress = createAsyncThunk<
+export const createAddress = createAsyncThunk<
   UpdateAddressResponse,
-  UserAddress
->("/user/UpdateProfileImage", async (data: UserAddress) => {
-  const response = await axiosInstance.patch("/user/Address", data);
+  UseAddressRequest
+>("/user/addAddress", async (payload: UseAddressRequest) => {
+  let response;
+  if(payload.update) {
+    response = await axiosInstance.patch(`/user/address/${payload.id}`, payload.data);
+  } else {
+    response = await axiosInstance.post("/user/address", payload.data);
+  }
   return response.data;
 });
+
 
 
 export const updateUserCareerPreferences = createAsyncThunk<

@@ -45,6 +45,7 @@ const adminSlice = createSlice({
     setSelectedAdminId: (state, action: PayloadAction<User>) => {
       state.selectedAdmin = action.payload;
     },
+    resetAdminState: () => initialState,
   },
 });
 
@@ -56,5 +57,6 @@ export const {
   toggleAddPackageForm,
   toggleAddReviewForm,
   setSelectedAdminId,
+  resetAdminState,
 } = adminSlice.actions;
 export default adminSlice.reducer;

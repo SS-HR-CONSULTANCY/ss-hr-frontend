@@ -1,6 +1,8 @@
 import type { Address } from "@/types/entities/address";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type ActionReducerMapBuilder, type PayloadAction } from "@reduxjs/toolkit";
 import type { UserSliceState } from "../../types/slice/userSliceTypes";
+import { createAddress } from "@/utils/apis/userApi";
+import type { UpdateAddressResponse } from "@/types/apiTypes/userApiTypes";
 
 const initialState: UserSliceState = {
   userAddress: null, 
@@ -14,32 +16,45 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    openAddUserModal: (state) => {
+    openAddUserModal: (state: UserSliceState) => {
       state.isAddUserModalOpen = true;
     },
-    closeAddUserModal: (state) => {
+    closeAddUserModal: (state: UserSliceState) => {
       state.isAddUserModalOpen = false;
     },
-    openEditUserModal: (state, action: PayloadAction<string>) => {
+    openEditUserModal: (state: UserSliceState, action: PayloadAction<string>) => {
       state.isEditUserModalOpen = true;
       state.selectedUserId = action.payload;
     },
-    closeEditUserModal: (state) => {
+    closeEditUserModal: (state: UserSliceState) => {
       state.isEditUserModalOpen = false;
       state.selectedUserId = null;
     },
-    openUserDetailsModal: (state, action: PayloadAction<string>) => {
+    openUserDetailsModal: (state: UserSliceState, action: PayloadAction<string>) => {
       state.isUserDetailsModalOpen = true;
       state.selectedUserId = action.payload;
     },
-    closeUserDetailsModal: (state) => {
+    closeUserDetailsModal: (state: UserSliceState) => {
       state.isUserDetailsModalOpen = false;
       state.selectedUserId = null;
     },
-    setAddress: (state, action: PayloadAction<Address>) => {
+    setAddress: (state: UserSliceState, action: PayloadAction<Address>) => {
       state.userAddress = action.payload;
-    }
+    },
+    resetUserSlice: () => initialState,
   },
+  extraReducers: (builder: ActionReducerMapBuilder<UserSliceState>) => {
+    builder.addCase(
+      createAddress.fulfilled,
+      (state, action: PayloadAction<UpdateAddressResponse>) => {
+        state.userAddress = {
+          ...(state.userAddress ?? ({} as Address)),
+          ...action.payload.data,
+        } as Address;
+        console.log("Address : ",state.userAddress);
+      }
+    )
+  }
 });
 
 export const {
@@ -49,6 +64,7 @@ export const {
   closeEditUserModal,
   openUserDetailsModal,
   closeUserDetailsModal,
+  resetUserSlice
 } = userSlice.actions;
 
 export default userSlice.reducer;

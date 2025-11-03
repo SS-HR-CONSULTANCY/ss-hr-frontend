@@ -32,12 +32,7 @@ const paymentSlice = createSlice({
       state.isViewPaymentDetailsOpen = false;
       state.selectedPaymentId = null;
     },
-    closeAllPaymentModals: (state) => {
-      state.isAddPaymentFormOpen = false;
-      state.isEditPaymentFormOpen = false;
-      state.isViewPaymentDetailsOpen = false;
-      state.selectedPaymentId = null;
-    },
+    resetPaymentSlice: () => initialState,
   },
 });
 
@@ -47,7 +42,7 @@ export const {
   closeEditPaymentForm,
   openViewPaymentDetails,
   closeViewPaymentDetails,
-  closeAllPaymentModals,
+  resetPaymentSlice,
 } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

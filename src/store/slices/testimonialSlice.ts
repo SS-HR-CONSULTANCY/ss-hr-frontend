@@ -32,12 +32,7 @@ const testimonialSlice = createSlice({
       state.isViewTestimonialDetailsOpen = false;
       state.selectedTestimonialId = null;
     },
-    closeAllTestimonialModals: (state) => {
-      state.isAddTestimonialFormOpen = false;
-      state.isEditTestimonialFormOpen = false;
-      state.isViewTestimonialDetailsOpen = false;
-      state.selectedTestimonialId = null;
-    },
+    resetTestimonialSlice: () => initialState,
   },
 });
 
@@ -47,7 +42,7 @@ export const {
   closeEditTestimonialForm,
   openViewTestimonialDetails,
   closeViewTestimonialDetails,
-  closeAllTestimonialModals,
+  resetTestimonialSlice,
 } = testimonialSlice.actions;
 
 export default testimonialSlice.reducer;

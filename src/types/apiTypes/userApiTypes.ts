@@ -20,10 +20,15 @@ export interface UpdateUserInfoResponse extends ApiBaseResponse {
 }
 
 
-export type UserAddress = Pick<Address, "addressLine1" | "addressLine2" | "city" | "country" | "district" | "landmark" | "poBox" | "postalCode" | "state">;
-export interface UpdateAddressResponse
-  extends ApiBaseResponse,
-  UserAddress { }
+export type UserAddress = Pick<Address, "_id" | "addressLine1" | "addressLine2" | "city" | "country" | "district" | "landmark" | "postalCode" | "state" | "primary">;
+export interface UseAddressRequest {
+  data: UserAddress,
+  update: boolean;
+  id: string | null | undefined;
+}
+export interface UpdateAddressResponse extends ApiBaseResponse {
+  data: UserAddress;
+}
 
   
 export type CareerPreferences = Pick<User, "currentSalary" | "expectedSalary" | "immediateJoiner" | "noticePeriod" | "resumeUrl">;

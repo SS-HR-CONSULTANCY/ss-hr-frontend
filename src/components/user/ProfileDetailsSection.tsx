@@ -10,14 +10,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateProfileInfo } from "@/utils/apis/userApi";
 import type { AppDispatch, RootState } from "@/store/store";
 import { updateUserInfoSchema } from "@/utils/validationSchema";
-import type { UpdateUserInfo }  from "@/types/apiTypes/userApiTypes";
+import type { UpdateUserInfo } from "@/types/apiTypes/userApiTypes";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
+import { CountryDropdown } from "../ui/country-dropdown";
 
 const ProfileDetailsSection: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useSelector((state: RootState) => state.auth);
-
-    console.log("user : ",user);
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -88,17 +87,17 @@ const ProfileDetailsSection: React.FC = () => {
                         required={isEditing}
                     />
 
-                        <FormField<UpdateUserInfo>
-                            id="email"
-                            label="Email"
-                            placeholder={"Not provided"}
-                            type="text"
-                            register={register}
-                            error={errors.email?.message}
-                            defaultValue={user?.email}
-                            readOnly={true}
-                            required={false}
-                        />
+                    <FormField<UpdateUserInfo>
+                        id="email"
+                        label="Email"
+                        placeholder={"Not provided"}
+                        type="text"
+                        register={register}
+                        error={errors.email?.message}
+                        defaultValue={user?.email}
+                        readOnly={true}
+                        required={false}
+                    />
 
                     <Controller
                         name="phone"
@@ -159,16 +158,26 @@ const ProfileDetailsSection: React.FC = () => {
                         </>
                     </FormField>
 
-                    <FormField<UpdateUserInfo>
-                        id="nationality"
-                        label="Nationality"
-                        placeholder={isEditing ? "Enter nationality" : "Not provided"}
-                        type="text"
-                        register={register}
-                        error={errors.nationality?.message}
-                        defaultValue={user?.nationality}
-                        readOnly={!isEditing}
-                        required={isEditing}
+                    <Controller
+                        name="nationality"
+                        control={control}
+                        rules={{ required: "Nationality is required" }}
+                        render={({ field }) => (
+                            <div className="flex flex-col space-y-2">
+                                <label className="text-sm font-medium">Nationality{isEditing && (<span className="mx-2 text-red-500">*</span>)}</label>
+                                <CountryDropdown
+                                    // placeholder="Select Nationality"
+                                    defaultValue={field.value}
+                                    disabled={!isEditing}
+                                    onChange={(nationality) => field.onChange(nationality.alpha3)}
+                                />
+                                {errors.nationality && (
+                                    <span className="text-xs text-red-500">
+                                        {errors.nationality.message}
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     />
 
                     <Controller
@@ -219,18 +228,16 @@ const ProfileDetailsSection: React.FC = () => {
                         >
                             Save Changes
                         </Button>
-                        {isEditing && (
-                            <Button
-                                variant={"destructive"}
-                                onClick={() => {
-                                    setIsEditing((prev) => !prev);
-                                    reset();
-                                }}
-                                className="text-xs md:text-sm px-3 py-1 cursor-pointer"
-                            >
-                                {"Cancel"}
-                            </Button>
-                        )}
+                        <Button
+                            variant={"destructive"}
+                            onClick={() => {
+                                setIsEditing((prev) => !prev);
+                                reset();
+                            }}
+                            className="text-xs md:text-sm px-3 py-1 cursor-pointer"
+                        >
+                            {"Cancel"}
+                        </Button>
                     </div>
                 )}
             </form>
