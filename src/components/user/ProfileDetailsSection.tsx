@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfileInfo } from "@/utils/apis/userApi";
 import type { AppDispatch, RootState } from "@/store/store";
-import { updateUserInfoSchema } from "@/utils/validationSchema";
+import { userProfileSchema } from "@/utils/validationSchema";
 import type { UpdateUserInfo } from "@/types/apiTypes/userApiTypes";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
 import { CountryDropdown } from "../ui/country-dropdown";
@@ -27,7 +27,7 @@ const ProfileDetailsSection: React.FC = () => {
         control,
         formState: { errors },
     } = useForm<UpdateUserInfo>({
-        resolver: zodResolver(updateUserInfoSchema),
+        resolver: zodResolver(userProfileSchema),
         defaultValues: {
             fullName: user?.fullName || "",
             email: user?.email || "",

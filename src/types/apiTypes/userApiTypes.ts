@@ -2,6 +2,7 @@ import type { Job } from "../entities/job";
 import type { User } from "../entities/user";
 import type { Address } from "../entities/address";
 import type { ApiBaseResponse } from "../commonTypes";
+import type { CareerData } from "../entities/careerData";
 
 export type UserfetchAllJobsResponse = Pick<
   Job,
@@ -30,8 +31,37 @@ export interface UpdateAddressResponse extends ApiBaseResponse {
   data: UserAddress;
 }
 
-  
-export type CareerPreferences = Pick<User, "currentSalary" | "expectedSalary" | "immediateJoiner" | "noticePeriod" | "resumeUrl">;
-export interface UpdateCareerPreferencesResponse
-  extends ApiBaseResponse,
-  CareerPreferences { }
+export type CreateUserCareerDataRequest = Pick<
+  CareerData,
+  | "currentSalary"
+  | "expectedSalary"
+  | "immediateJoiner"
+  | "noticePeriod"
+  | "experience"
+  | "currentDesignation"
+  | "currentCompany"
+  | "industry"
+  | "currentJobType"
+  | "preferredJobTypes"
+  | "preferredWorkModes"
+  | "resumeUrl"
+>;
+export type UpdateUserCareerDataRequest = Partial<Pick<
+  CareerData,
+  "_id"
+  | "currentSalary"
+  | "expectedSalary"
+  | "immediateJoiner"
+  | "noticePeriod"
+  | "experience"
+  | "currentDesignation"
+  | "currentCompany"
+  | "industry"
+  | "currentJobType"
+  | "preferredJobTypes"
+  | "preferredWorkModes"
+  | "resumeUrl"
+>>;
+export interface CreateOrUpdateCareerDataResponse extends ApiBaseResponse {
+  data: CareerData,
+}

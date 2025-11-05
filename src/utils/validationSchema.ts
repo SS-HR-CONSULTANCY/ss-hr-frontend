@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { Gender, Role } from "@/types/entities/user";
 
+// signup zod schema
 export const registerSchema = z
   .object({
     fullName: z
@@ -43,6 +44,7 @@ export const otpSchema = z.object({
 });
 
 
+// login zod schema
 export const loginSchema = z.object({
   email: z
     .string()
@@ -59,8 +61,9 @@ export const loginSchema = z.object({
   ),
 });
 
-//**  */ Add job  Form Schema */
-export const CreateJobZodSchema = z.object({
+
+// admin create job zod schema
+export const createJobSchema = z.object({
   companyName: z
     .string()
     .min(2, "Company name must be at least 2 characters")
@@ -103,10 +106,9 @@ export const CreateJobZodSchema = z.object({
 });
 
 
-//** User Profile details zod schema */
+// user profile zod schema
 const e164Regex = /^\+[1-9]\d{1,14}$/;
-
-export const updateUserInfoSchema = z.object({
+export const userProfileSchema = z.object({
   fullName: z
     .string()
     .min(2, "Full name must be at least 2 characters")
@@ -149,9 +151,7 @@ portfolioUrl: z
 });
 
 
-
-
- //* User Address zod schema */
+// address zod schema
 const postalOrPoBoxRegex = /^[0-9]{3,10}$/;
 const cityRegex = /^[A-Za-z\s]{2,50}$/;
 const countryRegex = /^[A-Za-z\s]{2,60}$/;
@@ -210,3 +210,71 @@ export const addressSchema = z
   });
 
 export type AddressForm = z.infer<typeof addressSchema>;
+
+
+// career Data zod schema
+export const jobTypeEnum = z.enum(["full-time", "part-time", "contract", "internship"]);
+export const workModeEnum = z.enum(["onsite", "remote", "hybrid"]);
+
+export const careerDataSchema = z
+  .object({
+    currentSalary: z
+      .number()
+      .min(0, "Current salary must be greater than or equal to 0")
+      .max(100000000, "Current salary seems too high")
+      .optional(),
+
+    expectedSalary: z
+      .number()
+      .min(0, "Expected salary must be greater than or equal to 0")
+      .max(100000000, "Expected salary seems too high")
+      .optional(),
+
+    immediateJoiner: z.boolean(),
+    noticePeriod: z
+      .number()
+      .min(1, "Notice period must be at least 1 day")
+      .max(180, "Notice period cannot exceed 6 months")
+      .optional(),
+
+      experience: z
+      .string()
+      .optional(),
+
+    currentDesignation: z
+      .string()
+      .trim()
+      .min(2, "Designation must be at least 2 characters")
+      .max(100, "Designation too long")
+      .optional(),
+
+    currentCompany: z
+      .string()
+      .trim()
+      .min(2, "Company name must be at least 2 characters")
+      .max(100, "Company name too long")
+      .optional(),
+
+    industry: z
+      .string()
+      .trim()
+      .min(2, "Industry name must be at least 2 characters")
+      .max(100, "Industry name too long")
+      .optional(),
+
+    currentJobType: jobTypeEnum.optional(),
+    preferredJobTypes: z.array(jobTypeEnum).optional(),
+    preferredWorkModes: z.array(workModeEnum).optional(),
+
+    resumeUrl: z.string().url("Please provide a valid resume URL").optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.immediateJoiner && (data.noticePeriod === undefined || data.noticePeriod === null)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["noticePeriod"],
+        message: "Notice period is required if you are not an immediate joiner",
+      });
+    }
+  });
+export type CareerData = z.infer<typeof careerDataSchema>;

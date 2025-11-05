@@ -20,14 +20,6 @@ export interface User {
   linkedInUrl?: string;
   portfolioUrl?: string;
   dob: string;
-  currentSalary: string;
-  expectedSalary: string;
-  immediateJoiner: boolean;
-  noticePeriod: string;
-  resumeUrl: string;
   createdAt: string;
   updatedAt: string;
 }
-
-
-export type UserCareerData = Pick<User,"currentSalary" | "expectedSalary" | "immediateJoiner" | "noticePeriod" | "resumeUrl">

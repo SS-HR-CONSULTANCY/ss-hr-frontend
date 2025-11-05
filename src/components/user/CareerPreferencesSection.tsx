@@ -1,167 +1,261 @@
-import { toast } from "react-toastify";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import FormField from "../form/FormFiled";
-import { useDispatch } from "react-redux";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import type { AppDispatch, RootState } from "@/store/store";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { updateUserCareerPreferences } from "@/utils/apis/userApi";
-import type { CareerPreferences } from "@/types/apiTypes/userApiTypes";
+
+import { createCareerData } from "@/utils/apis/userApi";
+import type { AppDispatch, RootState } from "@/store/store";
+import { careerDataSchema, type CareerData } from "@/utils/validationSchema";
+import FormField from "../form/FormFiled";
+import { MultiSelectButtonGroup } from "../form/MultiSelectButtonGroup";
+
+const jobTypeOptions = [
+  { label: "Full Time", value: "full-time" },
+  { label: "Part Time", value: "part-time" },
+  { label: "Contract", value: "contract" },
+  { label: "Internship", value: "internship" },
+];
+
+const workModeOptions = [
+  { label: "Onsite", value: "onsite" },
+  { label: "Remote", value: "remote" },
+  { label: "Hybrid", value: "hybrid" },
+];
 
 const CareerPreferencesSection: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { userCareerData } = useSelector((state: RootState) => state.user);
 
-    const dispatch = useDispatch<AppDispatch>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<CareerData>({
+    resolver: zodResolver(careerDataSchema),
+    defaultValues: userCareerData || {},
+  });
 
-    const { userCareerPreference } = useSelector(
-        (state: RootState) => state.user,
-    );
+  const selectedJobTypes = watch("preferredJobTypes") || [];
+  const selectedWorkModes = watch("preferredWorkModes") || [];
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        reset,
-        formState: { errors },
-    } = useForm<CareerPreferences>();
+  const isImmediateJoiner = watch("immediateJoiner");
+  const [isEditing, setIsEditing] = useState(false);
 
-    const isImmediateJoiner = watch("immediateJoiner");
+  const onSubmit: SubmitHandler<CareerData> = async (data) => {
+    try {
+      await dispatch(createCareerData(data))
+        .unwrap()
+        .then((res) => {
+          if (res.success) {
+            toast.success(res.message || "Career data updated successfully!");
+            setIsEditing(false);
+            reset();
+          } else {
+            toast.error(res.message || "Failed to update career data!");
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message || "Error updating career data");
+        });
+    } catch {
+      toast.error("Unexpected error while updating career data");
+    }
+  };
 
-    const [isEditing, setIsEditing] = useState(false);
+  return (
+    <div className="p-4 md:p-6 rounded-md border mt-4 shadow-md">
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg md:text-2xl font-semibold my-2">
+          Career Preferences
+        </h3>
+      </div>
 
-    const onSubmit: SubmitHandler<CareerPreferences> = async (data) => {
-         try {
-                    await dispatch(updateUserCareerPreferences(data))
-                        .unwrap()
-                        .then((res) => {
-                            if (res.success) {
-                                toast.success(res.message || "Data updated successfully!");
-                                reset();
-                            } else {
-                                toast.error(res.message || "Data updating failed!");
-                            }
-                        })
-                        .catch((error) => {
-                            toast.error(error.message || "Data updating error");
-                        });
-                } catch {
-                    toast.error("Failed to update data");
-                }
-    };
-
-    return (
-        <div className="p-4 md:p-6 rounded-md border mt-4 shadow-md">
-            <div className="flex justify-between items-center">
-                <h3 className="text-lg md:text-2xl font-semibold my-2">
-                    Career Preferences
-                </h3>
-            </div>
-
-            {(!userCareerPreference && !isEditing) ? (
-                <div className="rounded-md w-full p-4 flex flex-col justify-center items-center border space-y-2">
-                    <p>No data found</p>
-                    <Button
-                        variant={"outline"}
-                        onClick={() => setIsEditing((prev) => !prev)}
-                        className="text-xs md:text-sm px-3 py-1 cursor-pointer"
-                    >Add Career Preferences</Button>
-                </div>
-            ) : (
-
-                <form onSubmit={handleSubmit(onSubmit)}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                >
-
-                    <FormField<CareerPreferences>
-                        id="currentSalary"
-                        label="Current Salary"
-                        placeholder={isEditing ? `Enter current salary` : "Not provided"}
-                        type="text"
-                        register={register}
-                        error={errors["currentSalary"]?.message}
-                        defaultValue={userCareerPreference?.["currentSalary"]}
-                        readOnly={!isEditing}
-                    />
-
-                    <FormField<CareerPreferences>
-                        id="expectedSalary"
-                        label="Expected Salary"
-                        placeholder={isEditing ? `Enter expected salary` : "Not provided"}
-                        type="text"
-                        register={register}
-                        error={errors["expectedSalary"]?.message}
-                        defaultValue={userCareerPreference?.["expectedSalary"]}
-                        readOnly={!isEditing}
-                    />
-
-                    <FormField<CareerPreferences>
-                        id="immediateJoiner"
-                        label="Immediate Joiner"
-                        placeholder={isEditing ? `Select` : "Not provided"}
-                        type="select"
-                        register={register}
-                        error={errors["immediateJoiner"]?.message}
-                        defaultValue={userCareerPreference?.["immediateJoiner"]}
-                        readOnly={!isEditing}
-                        children={
-                            <>
-                                <option value="">Select</option>
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
-                            </>
-                        }
-                    />
-
-                    {!isImmediateJoiner && (
-                        <div className="space-y-1">
-                            <Label htmlFor="noticePeriod">Notice Period</Label>
-                            <Input
-                                id="noticePeriod"
-                                type="text"
-                                placeholder="e.g. 1 Month"
-                                {...register("noticePeriod", {
-                                    required: !isImmediateJoiner ? "Notice period is required" : false,
-                                })}
-                            />
-                            {errors.noticePeriod && (
-                                <p className="text-sm text-red-500">{errors.noticePeriod.message}</p>
-                            )}
-                        </div>
-                    )}
-
-                    <div className="space-y-1 md:col-span-2">
-                        <Label htmlFor="resume">Upload Resume / CV</Label>
-                        <Input
-                            id="resume"
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            {...register("resumeUrl", { required: "Please upload your resume" })}
-                        />
-                        {errors.resumeUrl && (
-                            <p className="text-sm text-red-500">{errors.resumeUrl.message}</p>
-                        )}
-                    </div>
-
-                    <div className="md:col-span-2 flex justify-end gap-3 mt-4">
-                        <Button type="submit" variant="outline">
-                            Save Preferences
-                        </Button>
-                        {(userCareerPreference || isEditing) && (
-                            <Button
-                                variant={isEditing ? "destructive" : "outline"}
-                                onClick={() => setIsEditing((prev) => !prev)}
-                                className="text-xs md:text-sm px-3 py-1 cursor-pointer"
-                            >
-                                {isEditing ? "Cancel" : "Edit"}
-                            </Button>
-                        )}
-                    </div>
-                </form>
-            )}
+      {(!userCareerData && !isEditing) ? (
+        <div className="rounded-md w-full p-4 flex flex-col justify-center items-center border space-y-2">
+          <p>No data found</p>
+          <Button
+            variant="outline"
+            onClick={() => setIsEditing(true)}
+            className="text-xs md:text-sm px-3 py-1 cursor-pointer"
+          >
+            Add your career data
+          </Button>
         </div>
-    );
+      ) : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
+          {/* Salary fields */}
+          <FormField<CareerData>
+            id="currentSalary"
+            label="Current Salary"
+            placeholder="Enter current salary"
+            type="number"
+            register={register}
+            error={errors.currentSalary?.message}
+            defaultValue={userCareerData?.currentSalary}
+            readOnly={!isEditing}
+          />
+
+          <FormField<CareerData>
+            id="expectedSalary"
+            label="Expected Salary"
+            placeholder="Enter expected salary"
+            type="number"
+            register={register}
+            error={errors.expectedSalary?.message}
+            defaultValue={userCareerData?.expectedSalary}
+            readOnly={!isEditing}
+          />
+
+          {/* Immediate joiner toggle */}
+          <FormField<CareerData>
+            id="immediateJoiner"
+            label="Immediate Joiner"
+            type="select"
+            register={register}
+            error={errors.immediateJoiner?.message}
+            defaultValue={String(userCareerData?.immediateJoiner ?? "")}
+            readOnly={!isEditing}
+          >
+            <>
+              <option value="">Select</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </>
+          </FormField>
+
+          {/* Notice Period (only if not immediate joiner) */}
+          {!isImmediateJoiner && (
+            <FormField<CareerData>
+              id="noticePeriod"
+              label="Notice Period (in days)"
+              placeholder="Enter notice period"
+              type="number"
+              register={register}
+              error={errors.noticePeriod?.message}
+              defaultValue={userCareerData?.noticePeriod}
+              readOnly={!isEditing}
+            />
+          )}
+
+          {/* Other career fields */}
+          <FormField<CareerData>
+            id="experience"
+            label="Total Experience"
+            placeholder="e.g. 3 years"
+            type="text"
+            register={register}
+            error={errors.experience?.message}
+            defaultValue={userCareerData?.experience}
+            readOnly={!isEditing}
+          />
+
+          <FormField<CareerData>
+            id="currentDesignation"
+            label="Current Designation"
+            placeholder="Enter your role"
+            type="text"
+            register={register}
+            error={errors.currentDesignation?.message}
+            defaultValue={userCareerData?.currentDesignation}
+            readOnly={!isEditing}
+          />
+
+          <FormField<CareerData>
+            id="currentCompany"
+            label="Current Company"
+            placeholder="Enter company name"
+            type="text"
+            register={register}
+            error={errors.currentCompany?.message}
+            defaultValue={userCareerData?.currentCompany}
+            readOnly={!isEditing}
+          />
+
+          <FormField<CareerData>
+            id="industry"
+            label="Industry"
+            placeholder="Enter industry name"
+            type="text"
+            register={register}
+            error={errors.industry?.message}
+            defaultValue={userCareerData?.industry}
+            readOnly={!isEditing}
+          />
+
+          {/* Job Type Select */}
+          <FormField<CareerData>
+            id="currentJobType"
+            label="Current Job Type"
+            type="select"
+            register={register}
+            error={errors.currentJobType?.message}
+            defaultValue={userCareerData?.currentJobType}
+            readOnly={!isEditing}
+          >
+            <>
+              <option value="">Select Job Type</option>
+              {jobTypeOptions.map((job) => (
+                <option key={job.value} value={job.value}>
+                  {job.label}
+                </option>
+              ))}
+            </>
+          </FormField>
+
+
+        {/* Preferred Job Types */}
+<MultiSelectButtonGroup<CareerData>
+  id="preferredJobTypes"
+  label="Preferred Job Types"
+  options={jobTypeOptions}
+  selectedValues={selectedJobTypes}
+  setValue={setValue}
+  disabled={!isEditing}
+  error={errors.preferredJobTypes?.message}
+/>
+
+{/* Preferred Work Modes */}
+<MultiSelectButtonGroup<CareerData>
+  id="preferredWorkModes"
+  label="Preferred Work Modes"
+  options={workModeOptions}
+  selectedValues={selectedWorkModes}
+  setValue={setValue}
+  disabled={!isEditing}
+  error={errors.preferredWorkModes?.message}
+/>
+
+
+          <FormField<CareerData>
+            id="resumeUrl"
+            label="Resume URL"
+            placeholder="Enter your resume link"
+            type="text"
+            register={register}
+            error={errors.resumeUrl?.message}
+            defaultValue={userCareerData?.resumeUrl}
+            readOnly={!isEditing}
+          />
+
+          {isEditing && (
+            <div className="col-span-2 flex justify-end mt-4">
+              <Button type="submit" className="px-4 py-2">
+                Save
+              </Button>
+            </div>
+          )}
+        </form>
+      )}
+    </div>
+  );
 };
 
 export default CareerPreferencesSection;

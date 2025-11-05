@@ -23,7 +23,7 @@ interface FormFieldProps<T extends FieldValues> {
   children?: React.ReactNode;
   onFileSelect?: (url: string) => void;
   rows?: number;
-  defaultValue?: string | number | boolean;
+  defaultValue?: string | number | boolean | string[];
   readOnly?: boolean;
   required?: boolean;
 }
@@ -43,7 +43,7 @@ const FormField = <T extends FieldValues>({
   rows = 3,
   defaultValue,
   readOnly,
-  required
+  required = false,
 }: FormFieldProps<T>) => {
   const [show, setShow] = useState(false);
 

@@ -1,7 +1,15 @@
 import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { 
-  CareerPreferences, UpdateAddressResponse, UpdateCareerPreferencesResponse, UpdateProfileImageResponse, UpdateUserInfo, UpdateUserInfoResponse, UseAddressRequest, UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
+import { 
+  type CreateOrUpdateCareerDataResponse,
+  type CreateUserCareerDataRequest,
+  type UpdateAddressResponse,
+  type UpdateProfileImageResponse,
+  type UpdateUserInfo,
+  type UpdateUserInfoResponse,
+  type UseAddressRequest,
+  type UserfetchAllJobsResponse
+} from "@/types/apiTypes/userApiTypes";
 import type {
   ApiPaginatedResponse,
   FetchFunctionParams,
@@ -54,11 +62,11 @@ export const createAddress = createAsyncThunk<
 
 
 
-export const updateUserCareerPreferences = createAsyncThunk<
-  UpdateCareerPreferencesResponse,
-  CareerPreferences
->("/user/UpdateCareerPreferences", async (data: CareerPreferences) => {
-  const response = await axiosInstance.patch("/user/career", data);
+export const createCareerData = createAsyncThunk<
+CreateOrUpdateCareerDataResponse,
+CreateUserCareerDataRequest
+>("/user/career-data", async (data: CreateUserCareerDataRequest) => {
+  const response = await axiosInstance.post("/user/career", data);
   return response.data;
 });
 

@@ -11,7 +11,7 @@ import { createJob } from "@/utils/apis/adminJobApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { closeAddJobForm } from "@/store/slices/jobSlice";
-import { CreateJobZodSchema } from "@/utils/validationSchema";
+import { createJobSchema } from "@/utils/validationSchema";
 import type { AdminCreateNewJob } from "@/types/apiTypes/adminApiTypes";
 
 const AddJobForm: React.FC = () => {
@@ -25,7 +25,7 @@ const AddJobForm: React.FC = () => {
     formState: { errors },
     watch,
   } = useForm<AdminCreateNewJob>({
-    resolver: zodResolver(CreateJobZodSchema),
+    resolver: zodResolver(createJobSchema),
     defaultValues: {
       companyName: "",
       designation: "",

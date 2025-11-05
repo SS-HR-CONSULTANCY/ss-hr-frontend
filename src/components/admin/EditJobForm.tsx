@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import { closeEditJobForm } from "@/store/slices/jobSlice";
 import type { AppDispatch, RootState } from "@/store/store";
-import { CreateJobZodSchema } from "@/utils/validationSchema";
+import { createJobSchema } from "@/utils/validationSchema";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminGetJobById, adminUpdateJob } from "@/utils/apis/adminJobApi";
 import type { AdminUpdateJobRequest } from "@/types/apiTypes/adminApiTypes";
@@ -35,7 +35,7 @@ const EditJobForm: React.FC = () => {
     watch,
     reset,
   } = useForm<AdminUpdateJobRequest>({
-    resolver: zodResolver(CreateJobZodSchema),
+    resolver: zodResolver(createJobSchema),
     defaultValues: {
       companyName: "",
       designation: "",

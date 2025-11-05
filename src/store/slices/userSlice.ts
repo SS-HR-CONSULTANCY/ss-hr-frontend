@@ -6,6 +6,7 @@ import type { UpdateAddressResponse } from "@/types/apiTypes/userApiTypes";
 
 const initialState: UserSliceState = {
   userAddress: null, 
+  userCareerData: null,
   selectedUserId: null,
   isAddUserModalOpen: false,
   isEditUserModalOpen: false,
