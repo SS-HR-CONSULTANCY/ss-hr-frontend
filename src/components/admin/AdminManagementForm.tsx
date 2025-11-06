@@ -8,6 +8,7 @@ import { createAdmin } from "@/utils/apis/adminSettingsApi";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import noProfile from "../../assets/defaultImgaes/noProfile.png";
 import type { CreateAdminRequest } from "@/types/apiTypes/adminApiTypes";
+import { roleOptions } from "@/utils/constants";
 
 interface AdminManagementFormProps {
   role: Role;
@@ -116,14 +117,9 @@ const AdminManagementForm: React.FC<AdminManagementFormProps> = ({
               type="select"
               register={register}
               error={errors.role?.message}
-            >
-              <option value="admin" className="text-black">
-                Admin
-              </option>
-              <option value="superAdmin" className="text-black">
-                Super Admin
-              </option>
-            </FormField>
+              defaultSelectOptions="Select Role"
+              options={roleOptions}
+            />
           </div>
           <div className="flex justify-end gap-3 pt-4">
             <Button

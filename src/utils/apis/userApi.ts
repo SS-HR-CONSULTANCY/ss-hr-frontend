@@ -2,7 +2,6 @@ import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { 
   type CreateOrUpdateCareerDataResponse,
-  type CreateUserCareerDataRequest,
   type UpdateAddressResponse,
   type UpdateProfileImageResponse,
   type UpdateUserInfo,
@@ -64,9 +63,12 @@ export const createAddress = createAsyncThunk<
 
 export const createCareerData = createAsyncThunk<
 CreateOrUpdateCareerDataResponse,
-CreateUserCareerDataRequest
->("/user/career-data", async (data: CreateUserCareerDataRequest) => {
-  const response = await axiosInstance.post("/user/career", data);
+FormData  
+>("/user/career-data", async (formData) => {
+  const response = await axiosInstance.post("/user/career", formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  console.log("response : ",response);
   return response.data;
 });
 

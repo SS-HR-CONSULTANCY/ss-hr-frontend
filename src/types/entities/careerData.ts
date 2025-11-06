@@ -1,5 +1,5 @@
 export type WorkMode = "onsite" | "remote" | "hybrid";
-export type JobType = "full-time" | "part-time" | "contract" | "internship";
+export type JobType = "full-time" | "part-time" | "contract" | "internship" | "freelance";
 
 export interface CareerData {
   _id: string;
@@ -20,7 +20,7 @@ export interface CareerData {
   preferredJobTypes: JobType[];            
   preferredWorkModes: WorkMode[];                     
 
-  resumeUrl: string;
+  resume: FileList | string;
 
   createdAt: string;
   updatedAt: string;

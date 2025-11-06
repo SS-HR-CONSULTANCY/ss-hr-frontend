@@ -11,6 +11,7 @@ interface MultiSelectButtonGroupProps<T extends FieldValues> {
   setValue: UseFormSetValue<T>;
   disabled?: boolean;
   error?: string;
+  isEditing: boolean;
 }
 
 export const MultiSelectButtonGroup = <T extends FieldValues>({
@@ -21,19 +22,18 @@ export const MultiSelectButtonGroup = <T extends FieldValues>({
   setValue,
   disabled,
   error,
+  isEditing
 }: MultiSelectButtonGroupProps<T>) => {
   const toggleSelect = (value: string) => {
     const newValues = selectedValues.includes(value)
       ? selectedValues.filter((v) => v !== value)
       : [...selectedValues, value];
-
-    // ✅ Type-safe: explicitly assert that this field is an array of strings
     setValue(id, newValues as T[typeof id], { shouldValidate: true });
   };
 
   return (
     <div className="space-y-2">
-      <Label className="text-xs md:text-sm">{label} <span className="mx-2 font-semibold text-red-500">Multiple Selection</span></Label>
+      <Label className="text-xs md:text-sm">{label} {isEditing && (<span className="mx-2 font-semibold text-blue-900 dark:text-blue-500">Multiple Selection</span>)}</Label>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
           const selected = selectedValues.includes(option.value);
@@ -44,8 +44,8 @@ export const MultiSelectButtonGroup = <T extends FieldValues>({
               onClick={() => !disabled && toggleSelect(option.value)}
               className={cn(
                 "cursor-pointer select-none transition-all px-3 py-1 text-sm",
-                disabled && "opacity-50 pointer-events-none",
-                selected ? "bg-primary text-white" : "hover:bg-accent"
+                disabled && "pointer-events-none",
+                selected ? "" : "hover:bg-accent"
               )}
             >
               {option.label}

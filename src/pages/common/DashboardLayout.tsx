@@ -32,8 +32,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <MobileWarning />
         </div>
       )}
-      {/* from-slate-50 to-sky-50 dark:from-slate-800 dark:to-black */}
-      {/* from-white to-white dark:from-slate-800 dark:to-zinc-800 */}
       <div className="h-screen bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-zinc-800 text-balck dark:text-white flex">
         <Sidebar routes={routes} />
         <div

@@ -130,22 +130,22 @@ export const userProfileSchema = z.object({
   nationality: z.string().min(2, "Enter a valid nationality").max(60),
 
   linkedInUrl: z
-  .string()
-  .trim()
-  .optional()
-  .refine(
-    (val) => !val || /^https?:\/\/.+\..+/.test(val),
-    { message: "Enter a valid LinkedIn URL (https://...)" }
-  ),
+    .string()
+    .trim()
+    .optional()
+    .refine(
+      (val) => !val || /^https?:\/\/.+\..+/.test(val),
+      { message: "Enter a valid LinkedIn URL (https://...)" }
+    ),
 
-portfolioUrl: z
-  .string()
-  .trim()
-  .optional()
-  .refine(
-    (val) => !val || /^https?:\/\/.+\..+/.test(val),
-    { message: "Enter a valid portfolio URL (https://...)" }
-  ),
+  portfolioUrl: z
+    .string()
+    .trim()
+    .optional()
+    .refine(
+      (val) => !val || /^https?:\/\/.+\..+/.test(val),
+      { message: "Enter a valid portfolio URL (https://...)" }
+    ),
 
   dob: z.string(),
 });
@@ -213,31 +213,31 @@ export type AddressForm = z.infer<typeof addressSchema>;
 
 
 // career Data zod schema
-export const jobTypeEnum = z.enum(["full-time", "part-time", "contract", "internship"]);
+export const jobTypeEnum = z.enum(["full-time", "part-time", "contract", "internship", "freelance"]);
 export const workModeEnum = z.enum(["onsite", "remote", "hybrid"]);
 
 export const careerDataSchema = z
   .object({
     currentSalary: z
-      .number()
+      .coerce.number()
       .min(0, "Current salary must be greater than or equal to 0")
       .max(100000000, "Current salary seems too high")
       .optional(),
 
     expectedSalary: z
-      .number()
+      .coerce.number()
       .min(0, "Expected salary must be greater than or equal to 0")
       .max(100000000, "Expected salary seems too high")
       .optional(),
 
-    immediateJoiner: z.boolean(),
+    immediateJoiner: z.coerce.boolean(),
     noticePeriod: z
-      .number()
-      .min(1, "Notice period must be at least 1 day")
-      .max(180, "Notice period cannot exceed 6 months")
-      .optional(),
+      .coerce.number()
+      .optional()
+      .or(z.nan()) // allow empty if hidden
+      .refine((val) => val == null || val >= 0, "Notice period must be positive"),
 
-      experience: z
+    experience: z
       .string()
       .optional(),
 
@@ -266,7 +266,17 @@ export const careerDataSchema = z
     preferredJobTypes: z.array(jobTypeEnum).optional(),
     preferredWorkModes: z.array(workModeEnum).optional(),
 
-    resumeUrl: z.string().url("Please provide a valid resume URL").optional(),
+    resume: z
+      .instanceof(FileList)
+      .refine((files) => files.length > 0, "Please upload your resume")
+      .refine(
+        (files) => /\.(pdf|doc|docx)$/i.test(files[0]?.name ?? ""),
+        "Only PDF, DOC, or DOCX files are allowed"
+      )
+      .refine(
+        (files) => (files[0]?.size ?? 0) <= 5 * 1024 * 1024,
+        "File size must be less than 5 MB"
+      ),
   })
   .superRefine((data, ctx) => {
     if (!data.immediateJoiner && (data.noticePeriod === undefined || data.noticePeriod === null)) {

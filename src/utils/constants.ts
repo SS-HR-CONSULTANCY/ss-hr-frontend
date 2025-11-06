@@ -773,3 +773,35 @@ export const achievements: string[] = [
 
 // PO BOX accepted countries
 export const poBoxCountries = ["AE", "OM", "QA", "BH", "SA", "KW", "JO", "LB", "YE"];
+
+// Career data constants
+export const jobTypeOptions = [
+  { label: "Full Time", value: "full-time" },
+  { label: "Part Time", value: "part-time" },
+  { label: "Contract", value: "contract" },
+  { label: "Internship", value: "internship" },
+  { label: "Freelance", value: "freelance" },
+];
+
+export const workModeOptions = [
+  { label: "Onsite", value: "onsite" },
+  { label: "Remote", value: "remote" },
+  { label: "Hybrid", value: "hybrid" },
+];
+
+export const booleanOptions = [
+  {label:"Yes", value:"true"},
+  {label:"No", value:"false"}
+];
+
+export const roleOptions = [
+  {label:"Admin", value:"admin"},
+  {label:"Super Admin", value:"superAdmin"},
+  {label:"System Admin", value:"systemAdmin"}
+];
+
+export const genderOptions = [
+  {label:"Male", value:"male"},
+  {label:"Female", value:"female"},
+  {label:"Other", value:"other"}
+];

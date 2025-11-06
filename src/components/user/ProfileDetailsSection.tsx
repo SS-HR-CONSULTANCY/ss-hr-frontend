@@ -5,14 +5,15 @@ import FormField from "../form/FormFiled";
 import { DateField } from "../ui/date-picker";
 import { PhoneInput } from "../ui/phone-input";
 import { Button } from "@/components/ui/button";
+import { genderOptions } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfileInfo } from "@/utils/apis/userApi";
+import { CountryDropdown } from "../ui/country-dropdown";
 import type { AppDispatch, RootState } from "@/store/store";
 import { userProfileSchema } from "@/utils/validationSchema";
 import type { UpdateUserInfo } from "@/types/apiTypes/userApiTypes";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { CountryDropdown } from "../ui/country-dropdown";
 
 const ProfileDetailsSection: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -149,14 +150,9 @@ const ProfileDetailsSection: React.FC = () => {
                         defaultValue={user?.gender}
                         readOnly={!isEditing}
                         required={isEditing}
-                    >
-                        <>
-                            <option value="">Select</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </>
-                    </FormField>
+                        defaultSelectOptions="Select Gender"
+                        options={genderOptions}
+                    />
 
                     <Controller
                         name="nationality"
@@ -166,7 +162,6 @@ const ProfileDetailsSection: React.FC = () => {
                             <div className="flex flex-col space-y-2">
                                 <label className="text-sm font-medium">Nationality{isEditing && (<span className="mx-2 text-red-500">*</span>)}</label>
                                 <CountryDropdown
-                                    // placeholder="Select Nationality"
                                     defaultValue={field.value}
                                     disabled={!isEditing}
                                     onChange={(nationality) => field.onChange(nationality.alpha3)}
@@ -217,6 +212,7 @@ const ProfileDetailsSection: React.FC = () => {
                         readOnly={!isEditing}
                         required={false}
                     />
+
                 </div>
 
                 {isEditing && (
@@ -240,6 +236,7 @@ const ProfileDetailsSection: React.FC = () => {
                         </Button>
                     </div>
                 )}
+
             </form>
         </div>
     );

@@ -4,11 +4,18 @@ import {
   type UseFormRegister,
   type RegisterOptions,
 } from "react-hook-form";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface FormFieldProps<T extends FieldValues> {
   id: Path<T>;
@@ -20,12 +27,17 @@ interface FormFieldProps<T extends FieldValues> {
   register: UseFormRegister<T>;
   registerOptions?: RegisterOptions<T, Path<T>>;
   showTogglePassword?: boolean;
-  children?: React.ReactNode;
+  options?: {
+    label: string;
+    value: string;
+  }[];
+  defaultSelectOptions?: string;
   onFileSelect?: (url: string) => void;
   rows?: number;
-  defaultValue?: string | number | boolean | string[];
+  defaultValue?: string | number | boolean | string[] | FileList;
   readOnly?: boolean;
   required?: boolean;
+  accept?: string;
 }
 
 const FormField = <T extends FieldValues>({
@@ -38,12 +50,14 @@ const FormField = <T extends FieldValues>({
   register,
   registerOptions,
   showTogglePassword = false,
-  children,
+  options,
+  defaultSelectOptions,
   onFileSelect,
   rows = 3,
   defaultValue,
   readOnly,
   required = false,
+  accept = "image/png, image/jpeg"
 }: FormFieldProps<T>) => {
   const [show, setShow] = useState(false);
 
@@ -57,7 +71,7 @@ const FormField = <T extends FieldValues>({
         <Input
           id={id}
           type="file"
-          accept="image/*"
+          accept={accept}
           {...register(id, registerOptions)}
           onChange={(e) => {
             const file: File | undefined = (e.target as HTMLInputElement)
@@ -80,18 +94,33 @@ const FormField = <T extends FieldValues>({
     return (
       <div className="space-y-2">
         <Label className="text-xs md:text-sm" htmlFor={id}>{label}{required && (<span className="mx-1 text-red-500">*</span>)}</Label>
-        <select
-          id={id}
-          {...register(id, registerOptions)}
-           className={cn(
-                  "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-                  "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-                  "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-                  
-                )}
+        {/* <Select
+          onValueChange={(value) =>
+            register(id, registerOptions).onChange({ target: { value } })
+          }
+          disabled={readOnly}
         >
-          {children}
-        </select>
+          <SelectTrigger
+            id={id}
+            className={cn(
+              "w-full text-sm md:text-base",
+              "border-input bg-transparent rounded-md h-9 px-3 py-1",
+              "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring",
+              "disabled:opacity-50 disabled:cursor-not-allowed"
+            )}
+          >
+            <SelectValue placeholder={`${defaultSelectOptions}`} />
+          </SelectTrigger>
+
+          <SelectContent>
+            {options?.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select> */}
+        <select id={id} {...register(id, registerOptions)} className={cn( "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive", )} > <option value="">Select {defaultSelectOptions}</option> {options?.map((opt) => ( <option key={opt.value} value={opt.value}> {opt.label} </option> ))} </select>
         {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
     );

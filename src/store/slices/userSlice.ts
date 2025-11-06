@@ -1,8 +1,9 @@
 import type { Address } from "@/types/entities/address";
 import { createSlice, type ActionReducerMapBuilder, type PayloadAction } from "@reduxjs/toolkit";
 import type { UserSliceState } from "../../types/slice/userSliceTypes";
-import { createAddress } from "@/utils/apis/userApi";
-import type { UpdateAddressResponse } from "@/types/apiTypes/userApiTypes";
+import { createAddress, createCareerData } from "@/utils/apis/userApi";
+import type { CreateOrUpdateCareerDataResponse, UpdateAddressResponse } from "@/types/apiTypes/userApiTypes";
+import type { CareerData } from "@/utils/validationSchema";
 
 const initialState: UserSliceState = {
   userAddress: null, 
@@ -52,9 +53,19 @@ const userSlice = createSlice({
           ...(state.userAddress ?? ({} as Address)),
           ...action.payload.data,
         } as Address;
-        console.log("Address : ",state.userAddress);
       }
-    )
+    );
+
+    builder.addCase(
+      createCareerData.fulfilled,
+      (state, action: PayloadAction<CreateOrUpdateCareerDataResponse>) => {
+        state.userCareerData = {
+          ...(state.userCareerData ?? ({} as CareerData)),
+          ...action.payload.data,
+        } as CareerData;
+      }
+    );
+
   }
 });
 

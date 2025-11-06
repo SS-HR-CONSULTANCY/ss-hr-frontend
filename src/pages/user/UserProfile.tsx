@@ -18,7 +18,7 @@ const UserProfile: React.FC = () => {
     (state: RootState) => state.auth,
   );
 
-  console.log("profileImageUpdating : ",profileImageUpdating)
+  console.log("profileImageUpdating : ", profileImageUpdating)
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file: File | undefined = e.target.files?.[0];

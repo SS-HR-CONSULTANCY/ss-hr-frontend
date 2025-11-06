@@ -17,6 +17,7 @@ import RememberMeWithFP from "@/components/form/RememberMeWithFP";
 import type { SigninRequest } from "@/types/apiTypes/authApiTypes";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+import { roleOptions } from "@/utils/constants";
 
 const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
@@ -106,17 +107,9 @@ const AdminLogin: React.FC = () => {
                 type="select"
                 register={register}
                 error={errors.role?.message}
-              >
-                <option value="admin" className="text-black">
-                  Admin
-                </option>
-                <option value="superAdmin" className="text-black">
-                  Super Admin
-                </option>
-                <option value="systemAdmin" className="text-black">
-                  System Admin
-                </option>
-              </FormField>
+                defaultSelectOptions="Select Role"
+                options={roleOptions}
+              />
 
               <RememberMeWithFP />
 
