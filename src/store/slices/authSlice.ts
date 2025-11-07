@@ -195,17 +195,13 @@ const authSlice = createSlice({
       });
 
     builder
-      .addCase(updateProfileInfo.pending, () => {
-
-      })
+      .addCase(updateProfileInfo.pending, () => {})
       .addCase(updateProfileInfo.fulfilled, (state, action: PayloadAction<UpdateUserInfoResponse>) => {
         if (state.user) {
           state.user = { ...state.user, ...action.payload.data };
         }
       })
-      .addCase(updateProfileInfo.rejected, () => {
-
-      })
+      .addCase(updateProfileInfo.rejected, () => {})
   }
 });
 

@@ -1,12 +1,14 @@
+import { signin } from "@/utils/apis/authApi";
 import type { Address } from "@/types/entities/address";
-import { createSlice, type ActionReducerMapBuilder, type PayloadAction } from "@reduxjs/toolkit";
-import type { UserSliceState } from "../../types/slice/userSliceTypes";
+import type { CareerData } from "@/types/entities/careerData";
+import type { SigninResponse } from "@/types/apiTypes/authApiTypes";
 import { createAddress, createCareerData } from "@/utils/apis/userApi";
+import type { UserSliceState } from "../../types/slice/userSliceTypes";
+import { createSlice, type ActionReducerMapBuilder, type PayloadAction } from "@reduxjs/toolkit";
 import type { CreateOrUpdateCareerDataResponse, UpdateAddressResponse } from "@/types/apiTypes/userApiTypes";
-import type { CareerData } from "@/utils/validationSchema";
 
 const initialState: UserSliceState = {
-  userAddress: null, 
+  userAddress: null,
   userCareerData: null,
   selectedUserId: null,
   isAddUserModalOpen: false,
@@ -53,19 +55,26 @@ const userSlice = createSlice({
           ...(state.userAddress ?? ({} as Address)),
           ...action.payload.data,
         } as Address;
-      }
-    );
+      });
 
     builder.addCase(
       createCareerData.fulfilled,
       (state, action: PayloadAction<CreateOrUpdateCareerDataResponse>) => {
-        state.userCareerData = {
-          ...(state.userCareerData ?? ({} as CareerData)),
-          ...action.payload.data,
-        } as CareerData;
-      }
-    );
+        state.userCareerData = { ...action.payload.data }
+      });
 
+    builder.addCase(
+      signin.fulfilled,
+      (state, action: PayloadAction<SigninResponse>) => {
+        state.userAddress = {
+          ...(state.userAddress ?? ({} as Address)),
+          ...action.payload.address,
+        } as Address;
+        state.userCareerData = {
+          ...(state.userAddress ?? ({} as CareerData)),
+          ...action.payload.careerData,
+        } as CareerData;
+      });
   }
 });
 
