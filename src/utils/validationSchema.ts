@@ -267,16 +267,16 @@ export const careerDataSchema = z
     preferredWorkModes: z.array(workModeEnum).optional(),
 
     resume: z
-      .instanceof(FileList)
-      .refine((files) => files.length > 0, "Please upload your resume")
-      .refine(
-        (files) => /\.(pdf|doc|docx)$/i.test(files[0]?.name ?? ""),
-        "Only PDF, DOC, or DOCX files are allowed"
-      )
-      .refine(
-        (files) => (files[0]?.size ?? 0) <= 5 * 1024 * 1024,
-        "File size must be less than 5 MB"
-      ),
+     .instanceof(FileList)
+    .refine((files) => files.length === 1, "Please upload a file")
+    .refine(
+      (files) => /\.(pdf|doc|docx)$/i.test(files[0]?.name ?? ""),
+      "Only PDF, DOC, or DOCX files are allowed"
+    )
+    .refine(
+      (files) => (files[0]?.size ?? 0) <= 5 * 1024 * 1024,
+      "File size must be less than 5 MB"
+    ),
   })
   .superRefine((data, ctx) => {
     if (!data.immediateJoiner && (data.noticePeriod === undefined || data.noticePeriod === null)) {

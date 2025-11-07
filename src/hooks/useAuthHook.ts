@@ -2,18 +2,20 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signout } from "@/utils/apis/authApi";
-import type { AppDispatch } from "@/store/store";
 import { resetJobSlice } from "@/store/slices/jobSlice";
 import { resetAuthStore } from "@/store/slices/authSlice";
 import { resetChatSlice } from "@/store/slices/chatSlice";
 import { resetUserSlice } from "@/store/slices/userSlice";
 import { resetPackageSlice } from "@/store/slices/packageSlice";
 import { resetPaymentSlice } from "@/store/slices/paymentSlice";
+import { persistAppStore, type AppDispatch, type RootState } from "@/store/store";
 import { resetTestimonialSlice } from "@/store/slices/testimonialSlice";
+import { useSelector } from "react-redux";
 
 const useAuthHook = ({ route }: { route: string }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { userAddress, userCareerData, selectedUserId, isAddUserModalOpen } = useSelector((state: RootState) => state.user);
 
   const handleLogout = async () => {
     try {
@@ -27,7 +29,12 @@ const useAuthHook = ({ route }: { route: string }) => {
         dispatch(resetPaymentSlice());
         dispatch(resetTestimonialSlice());
         dispatch(resetUserSlice());
+        persistAppStore.purge();
         navigate(route);
+        console.log("userAddress : ",userAddress);
+        console.log("userCareerData : ",userCareerData);
+        console.log("selectedUserId : ",selectedUserId);
+        console.log("isAddUserModalOpen : ",isAddUserModalOpen);
       } else {
         toast.error(res.message || "Logout failed");
       }

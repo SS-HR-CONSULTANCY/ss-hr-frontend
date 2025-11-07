@@ -7,11 +7,10 @@ import FormField from "../form/FormFiled";
 import { Check, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createAddress } from "@/utils/apis/userApi";
-// import { poBoxCountries } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Address } from "@/types/entities/address";
 import { CountryDropdown } from "../ui/country-dropdown";
 import type { AppDispatch, RootState } from "@/store/store";
-import type { UserAddress } from "@/types/apiTypes/userApiTypes";
 import { addressSchema, type AddressForm } from "@/utils/validationSchema";
 import { Controller, useForm, type SubmitHandler, type FieldErrors, type Path } from "react-hook-form";
 
@@ -22,7 +21,6 @@ const UserAddressSection: React.FC = () => {
         (state: RootState) => state.user,
     );
 
-    // const [showPoBox, setShowPoBox] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
     const {
@@ -57,11 +55,11 @@ const UserAddressSection: React.FC = () => {
     const onSubmit: SubmitHandler<AddressForm> = async (
         data,
     ) => {
-        console.log("data : ",data);
-        console.log("userAddress : ",userAddress);
+        console.log("data : ", data);
+        console.log("userAddress : ", userAddress);
         const update: boolean = userAddress ? true : false;
         try {
-            await dispatch(createAddress({ id: update ? userAddress?._id : null, data: data as UserAddress, update}))
+            await dispatch(createAddress({ id: update ? userAddress?._id : null, data: data as Address, update }))
                 .unwrap()
                 .then((res) => {
                     if (res.success) {
@@ -205,29 +203,17 @@ const UserAddressSection: React.FC = () => {
                             required={isEditing}
                         />
 
-                            <FormField<AddressForm>
-                                id="postalCode"
-                                label="Postal Code / po Box"
-                                placeholder={isEditing ? `Enter Postal Code` : "Not provided"}
-                                type="text"
-                                register={register}
-                                error={errors["postalCode"]?.message}
-                                defaultValue={userAddress?.postalCode}
-                                readOnly={!isEditing}
-                                required={(isEditing)}
-                            />
-
-                            {/* <FormField<AddressForm>
-                                id="poBox"
-                                label="Po Box"
-                                placeholder={isEditing ? `Enter Po Box` : "Not provided"}
-                                type="text"
-                                register={register}
-                                error={errors["poBox"]?.message}
-                                defaultValue={userAddress?.poBox}
-                                readOnly={!isEditing}
-                                required={false}
-                            /> */}
+                        <FormField<AddressForm>
+                            id="postalCode"
+                            label="Postal Code / po Box"
+                            placeholder={isEditing ? `Enter Postal Code` : "Not provided"}
+                            type="text"
+                            register={register}
+                            error={errors["postalCode"]?.message}
+                            defaultValue={userAddress?.postalCode}
+                            readOnly={!isEditing}
+                            required={(isEditing)}
+                        />
 
                         <Controller
                             name="primary"
@@ -270,7 +256,7 @@ const UserAddressSection: React.FC = () => {
                             </Button>
                         </div>
                     )}
-                    
+
                 </form>
             )}
         </div>

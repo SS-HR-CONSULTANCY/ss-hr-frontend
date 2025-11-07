@@ -21,14 +21,13 @@ export interface UpdateUserInfoResponse extends ApiBaseResponse {
 }
 
 
-export type UserAddress = Pick<Address, "_id" | "addressLine1" | "addressLine2" | "city" | "country" | "district" | "landmark" | "postalCode" | "state" | "primary">;
 export interface UseAddressRequest {
-  data: UserAddress,
+  data: Address,
   update: boolean;
   id: string | null | undefined;
 }
 export interface UpdateAddressResponse extends ApiBaseResponse {
-  data: UserAddress;
+  data: Address;
 }
 
 export type CreateUserCareerDataRequest = Pick<

@@ -1,6 +1,5 @@
 import { signin } from "@/utils/apis/authApi";
 import type { Address } from "@/types/entities/address";
-import type { CareerData } from "@/types/entities/careerData";
 import type { SigninResponse } from "@/types/apiTypes/authApiTypes";
 import { createAddress, createCareerData } from "@/utils/apis/userApi";
 import type { UserSliceState } from "../../types/slice/userSliceTypes";
@@ -66,14 +65,8 @@ const userSlice = createSlice({
     builder.addCase(
       signin.fulfilled,
       (state, action: PayloadAction<SigninResponse>) => {
-        state.userAddress = {
-          ...(state.userAddress ?? ({} as Address)),
-          ...action.payload.address,
-        } as Address;
-        state.userCareerData = {
-          ...(state.userAddress ?? ({} as CareerData)),
-          ...action.payload.careerData,
-        } as CareerData;
+        state.userAddress = action.payload.address || null;
+        state.userCareerData = action.payload.careerData || null;
       });
   }
 });

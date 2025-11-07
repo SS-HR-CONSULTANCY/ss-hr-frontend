@@ -1,14 +1,15 @@
 import { Edit } from "lucide-react";
 import { toast } from "react-toastify";
-import React, { useState } from "react";
 import FormField from "../form/FormFiled";
 import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import { createCareerData } from "@/utils/apis/userApi";
 import type { AppDispatch, RootState } from "@/store/store";
 import { getCleanFileName } from "@/utils/helpers/filenameReducer";
 import { MultiSelectButtonGroup } from "../form/MultiSelectButtonGroup";
+import { getResumeUrl, getUploadUrl, uploadToS3 } from "@/utils/apis/s3Api";
 import { useForm, type SubmitHandler, type Resolver } from "react-hook-form";
 import { careerDataSchema, type CareerData } from "@/utils/validationSchema";
 import { booleanOptions, jobTypeOptions, workModeOptions } from "@/utils/constants";
@@ -17,7 +18,9 @@ const CareerPreferencesSection: React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const [isEditing, setIsEditing] = useState(false);
+    const [resumeUrl, setResumeUrl] = useState<string | null>(null);
     const { userCareerData } = useSelector((state: RootState) => state.user);
+    const { user } = useSelector((state: RootState) => state.auth);
 
     const {
         register,
@@ -45,24 +48,36 @@ const CareerPreferencesSection: React.FC = () => {
         },
     });
 
+    useEffect(() => {
+        const fetchResumeUrl = async () => {
+            if (userCareerData?.resume) {
+                const url = await getResumeUrl(userCareerData.resume as string);
+                setResumeUrl(url);
+            }
+        };
+        fetchResumeUrl();
+    }, [userCareerData]);
+
     const selectedJobTypes = watch("preferredJobTypes") || [];
     const selectedWorkModes = watch("preferredWorkModes") || [];
     const isImmediateJoiner = watch("immediateJoiner") === true;
 
     const onSubmit: SubmitHandler<CareerData> = async (data) => {
         try {
-            console.log("data : ", data);
+            const file: File = data.resume[0];
+            let resumeKey: string = "";
 
-            const formData = new FormData();
-            Object.entries(data).forEach(([key, value]) => {
-                if (key === "resume" && value instanceof FileList) {
-                    formData.append("resume", value[0]);
-                } else {
-                    formData.append(key, Array.isArray(value) ? JSON.stringify(value) : String(value));
-                }
-            });
+            if (file && user) {
+                const { uploadUrl, key } = await getUploadUrl(file, user._id, "resumes");
+                await uploadToS3(file, uploadUrl);
+                resumeKey = key;
+            }
 
-            await dispatch(createCareerData(formData as FormData))
+            const payload = {
+                ...data,
+                resume: resumeKey,
+            }
+            await dispatch(createCareerData(payload))
                 .unwrap()
                 .then((res) => {
                     if (res.success) {
@@ -86,7 +101,7 @@ const CareerPreferencesSection: React.FC = () => {
                 <h3 className="text-lg md:text-2xl font-semibold my-2">
                     Additional Information
                 </h3>
-                {!isEditing && (
+                {userCareerData && (
                     <Button
                         variant={"outline"}
                         onClick={() => setIsEditing((prev) => !prev)}
@@ -241,24 +256,28 @@ const CareerPreferencesSection: React.FC = () => {
                         />
 
 
-                        {userCareerData?.resume && !isEditing ? (
+                        {userCareerData?.resume && !isEditing && resumeUrl ? (
                             <div className="flex flex-col space-y-2">
                                 <label className="font-medium text-sm">Resume</label>
                                 <div className="flex items-center justify-between p-3 border rounded-md">
                                     <div className="truncate max-w-[70%]">
                                         <span className="text-sm font-medium">
-                                            {getCleanFileName(userCareerData.resume as string)}
+                                            {getCleanFileName(resumeUrl as string)}
                                         </span>
                                     </div>
                                     <div className="flex space-x-2">
-                                        <a
-                                            href={userCareerData.resume as string}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-600 hover:underline text-sm"
-                                        >
-                                            View
-                                        </a>
+                                        {resumeUrl ? (
+                                            <a
+                                                href={resumeUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 hover:underline text-sm"
+                                            >
+                                                View
+                                            </a>
+                                        ) : (
+                                            <span className="text-gray-400 text-sm">Loading...</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>

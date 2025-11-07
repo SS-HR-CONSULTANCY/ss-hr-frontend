@@ -1,6 +1,6 @@
 import type { User } from "../entities/user";
+import type { Address } from "../entities/address";
 import type { ApiBaseResponse } from "../commonTypes";
-import type { UserAddress } from "./userApiTypes";
 import type { CareerData } from "../entities/careerData";
 
 export interface SignupResponse extends ApiBaseResponse {
@@ -15,7 +15,7 @@ export type SigninRequest = Pick<User, "email" | "role"> & {
 
 export interface SigninResponse extends ApiBaseResponse {
   user: User;
-  address: UserAddress;
+  address: Address;
   careerData: CareerData;
 }
 

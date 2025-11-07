@@ -1,7 +1,8 @@
 import { axiosInstance } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { 
+import {
   type CreateOrUpdateCareerDataResponse,
+  type CreateUserCareerDataRequest,
   type UpdateAddressResponse,
   type UpdateProfileImageResponse,
   type UpdateUserInfo,
@@ -51,7 +52,7 @@ export const createAddress = createAsyncThunk<
   UseAddressRequest
 >("/user/addAddress", async (payload: UseAddressRequest) => {
   let response;
-  if(payload.update) {
+  if (payload.update) {
     response = await axiosInstance.patch(`/user/address/${payload.id}`, payload.data);
   } else {
     response = await axiosInstance.post("/user/address", payload.data);
@@ -60,15 +61,21 @@ export const createAddress = createAsyncThunk<
 });
 
 
-
 export const createCareerData = createAsyncThunk<
-CreateOrUpdateCareerDataResponse,
-FormData  
+  CreateOrUpdateCareerDataResponse,
+  CreateUserCareerDataRequest
+>("/user/career-data", async (data) => {
+  const response = await axiosInstance.post("user/career", data);
+  return response.data;
+});
+
+export const updateCareerData = createAsyncThunk<
+  CreateOrUpdateCareerDataResponse,
+  FormData
 >("/user/career-data", async (formData) => {
-  const response = await axiosInstance.post("/user/career", formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+  const response = await axiosInstance.post("user/career", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
   });
-  console.log("response : ",response);
   return response.data;
 });
 
