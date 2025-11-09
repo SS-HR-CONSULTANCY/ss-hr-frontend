@@ -26,6 +26,7 @@ const UserAddressSection: React.FC = () => {
     const {
         register,
         handleSubmit,
+        reset,
         control,
         formState: { errors },
         setFocus,
@@ -65,6 +66,7 @@ const UserAddressSection: React.FC = () => {
                     if (res.success) {
                         toast.success(res.message || `Address ${update ? "updated" : "created"} successfully!`);
                         setIsEditing((prev) => !prev);
+                        reset();
                     } else {
                         toast.error(res.message || `Address ${update ? "updating" : "creating"} failed!`);
                     }

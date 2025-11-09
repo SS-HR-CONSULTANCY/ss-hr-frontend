@@ -5,6 +5,7 @@ import {
   type CreateUserCareerDataRequest,
   type UpdateAddressResponse,
   type UpdateProfileImageResponse,
+  type UpdateUserCareerDataRequest,
   type UpdateUserInfo,
   type UpdateUserInfoResponse,
   type UseAddressRequest,
@@ -71,11 +72,9 @@ export const createCareerData = createAsyncThunk<
 
 export const updateCareerData = createAsyncThunk<
   CreateOrUpdateCareerDataResponse,
-  FormData
->("/user/career-data", async (formData) => {
-  const response = await axiosInstance.post("user/career", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  UpdateUserCareerDataRequest
+>("/user/career-data", async (data) => {
+  const response = await axiosInstance.patch(`user/career/${data._id}`, data);
   return response.data;
 });
 

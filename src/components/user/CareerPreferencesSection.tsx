@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
-import { createCareerData } from "@/utils/apis/userApi";
 import type { AppDispatch, RootState } from "@/store/store";
 import { getCleanFileName } from "@/utils/helpers/filenameReducer";
 import { MultiSelectButtonGroup } from "../form/MultiSelectButtonGroup";
-import { getResumeUrl, getUploadUrl, uploadToS3 } from "@/utils/apis/s3Api";
+import { createCareerData, updateCareerData } from "@/utils/apis/userApi";
 import { useForm, type SubmitHandler, type Resolver } from "react-hook-form";
 import { careerDataSchema, type CareerData } from "@/utils/validationSchema";
 import { booleanOptions, jobTypeOptions, workModeOptions } from "@/utils/constants";
+import { deleteFileFromS3, getSignedUrl, getUploadUrl, uploadToS3 } from "@/utils/apis/s3Api";
+import type { UpdateUserCareerDataRequest } from "@/types/apiTypes/userApiTypes";
 
 const CareerPreferencesSection: React.FC = () => {
 
@@ -44,15 +45,14 @@ const CareerPreferencesSection: React.FC = () => {
             preferredJobTypes: userCareerData?.preferredJobTypes,
             preferredWorkModes: userCareerData?.preferredWorkModes,
             resume: userCareerData?.resume as FileList,
-
         },
     });
 
     useEffect(() => {
         const fetchResumeUrl = async () => {
             if (userCareerData?.resume) {
-                const url = await getResumeUrl(userCareerData.resume as string);
-                setResumeUrl(url);
+                const signedUrl = await getSignedUrl(userCareerData.resume as string);
+                setResumeUrl(signedUrl);
             }
         };
         fetchResumeUrl();
@@ -64,10 +64,20 @@ const CareerPreferencesSection: React.FC = () => {
 
     const onSubmit: SubmitHandler<CareerData> = async (data) => {
         try {
-            const file: File = data.resume[0];
-            let resumeKey: string = "";
+            if (!user) {
+                toast.error("User not found. Please log in again.");
+                return;
+            }
 
-            if (file && user) {
+            const isUpdate = !!userCareerData;
+            const file: File | undefined = data.resume?.[0];
+            let resumeKey: string = userCareerData?.resume as string || "";
+
+            if (file) {
+                if (isUpdate && userCareerData.resume) {
+                    await deleteFileFromS3(userCareerData.resume as string);
+                }
+
                 const { uploadUrl, key } = await getUploadUrl(file, user._id, "resumes");
                 await uploadToS3(file, uploadUrl);
                 resumeKey = key;
@@ -76,22 +86,33 @@ const CareerPreferencesSection: React.FC = () => {
             const payload = {
                 ...data,
                 resume: resumeKey,
+            };
+
+            const action = isUpdate ? updateCareerData : createCareerData;
+            if(isUpdate) {
+                (payload as UpdateUserCareerDataRequest)._id = userCareerData?._id
             }
-            await dispatch(createCareerData(payload))
-                .unwrap()
-                .then((res) => {
-                    if (res.success) {
-                        toast.success(res.message || "Career data updated successfully!");
-                        setIsEditing(false);
-                    } else {
-                        toast.error(res.message || "Failed to update career data!");
-                    }
-                })
-                .catch((error) => {
-                    toast.error(error.message || "Error updating career data");
-                });
+
+            const res = await dispatch(action(payload)).unwrap();
+
+            if (res.success) {
+                toast.success(
+                    res.message ||
+                    (isUpdate
+                        ? "Career data updated successfully!"
+                        : "Career data saved successfully!")
+                );
+                setIsEditing(false);
+            } else {
+                toast.error(
+                    res.message ||
+                    (isUpdate
+                        ? "Failed to update career data!"
+                        : "Failed to save career data!")
+                );
+            }
         } catch {
-            toast.error("Unexpected error while updating career data");
+            toast.error("Unexpected error while saving career data");
         }
     };
 
@@ -219,6 +240,7 @@ const CareerPreferencesSection: React.FC = () => {
                             error={errors.industry?.message}
                             defaultValue={userCareerData?.industry}
                             readOnly={!isEditing}
+                            info="Allowed file types: .pdf, .doc, .docx"
                         />
 
                         <FormField<CareerData>
@@ -284,14 +306,15 @@ const CareerPreferencesSection: React.FC = () => {
                         ) : (
                             <FormField<CareerData>
                                 id="resume"
-                                label="Resume URL"
+                                label="Resume"
                                 placeholder="Enter your resume link"
                                 type="file"
                                 accept=".pdf,.doc,.docx"
                                 register={register}
                                 error={errors.resume?.message}
                                 readOnly={!isEditing}
-                                required={isEditing}
+                                required={(!userCareerData && isEditing)}
+                                info="Allowed file types: .pdf, .doc, .docx"
                             />
                         )}
                     </div>

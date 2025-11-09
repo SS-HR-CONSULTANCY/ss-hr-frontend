@@ -81,6 +81,7 @@ interface DateFieldProps {
   onChange: (date: Date | undefined) => void;
   disabled?: boolean;
   required?: boolean;
+  error?: string;
 }
 
 export function DateField({
@@ -89,6 +90,7 @@ export function DateField({
   onChange,
   disabled,
   required,
+  error,
 }: DateFieldProps) {
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState(value?.getMonth() ?? new Date().getMonth());
@@ -113,11 +115,14 @@ export function DateField({
             variant="outline"
             disabled={disabled}
             className={cn(
-              "justify-start text-left font-normal",
+              "justify-start text-left font-normal mt-1",
               "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none",
               "file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
               "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+            error
+                ? "border-red-400 focus-visible:ring-red-400"
+                : "border-input focus-visible:ring-ring/50"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -176,6 +181,9 @@ export function DateField({
           />
         </PopoverContent>
       </Popover>
+        {error && (
+        <p className="text-xs text-red-400 mt-1">{error}</p>
+      )}
     </div>
   );
 }

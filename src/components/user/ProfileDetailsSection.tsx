@@ -11,9 +11,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateProfileInfo } from "@/utils/apis/userApi";
 import { CountryDropdown } from "../ui/country-dropdown";
 import type { AppDispatch, RootState } from "@/store/store";
-import { userProfileSchema } from "@/utils/validationSchema";
+import { userProfileSchema, type ProfileDataForm } from "@/utils/validationSchema";
 import type { UpdateUserInfo } from "@/types/apiTypes/userApiTypes";
-import { useForm, Controller, type SubmitHandler } from "react-hook-form";
+import { useForm, Controller, type SubmitHandler, type FieldErrors, type Path } from "react-hook-form";
 
 const ProfileDetailsSection: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -25,9 +25,11 @@ const ProfileDetailsSection: React.FC = () => {
         register,
         reset,
         handleSubmit,
+        formState: { isSubmitting },
         control,
+        setFocus,
         formState: { errors },
-    } = useForm<UpdateUserInfo>({
+    } = useForm<ProfileDataForm>({
         resolver: zodResolver(userProfileSchema),
         defaultValues: {
             fullName: user?.fullName || "",
@@ -36,11 +38,20 @@ const ProfileDetailsSection: React.FC = () => {
             phoneTwo: user?.phoneTwo || "",
             gender: user?.gender,
             nationality: user?.nationality || "",
-            linkedInUrl: user?.linkedInUrl || "",
+            linkedInUsername: user?.linkedInUsername || "",
             portfolioUrl: user?.portfolioUrl || "",
             dob: user?.dob || "",
+            professionalStatus: user?.professionalStatus || "",
         },
     });
+
+     const onError = (errors: FieldErrors<ProfileDataForm>) => {
+            const firstErrorField = Object.keys(errors)[0] as Path<ProfileDataForm> | undefined;
+            if (firstErrorField) {
+                setFocus(firstErrorField);
+            }
+            toast.error("Please fix the highlighted fields.");
+        };
 
     const onSubmit: SubmitHandler<UpdateUserInfo> = async (data) => {
         try {
@@ -48,6 +59,7 @@ const ProfileDetailsSection: React.FC = () => {
             if (res.success) {
                 toast.success(res.message || "User profile updated successfully!");
                 setIsEditing(false);
+                reset();
             } else {
                 toast.error(res.message || "Failed to update profile!");
             }
@@ -73,7 +85,7 @@ const ProfileDetailsSection: React.FC = () => {
                 )}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <FormField<UpdateUserInfo>
@@ -115,6 +127,7 @@ const ProfileDetailsSection: React.FC = () => {
                                     value={field.value}
                                     onChange={(val) => field.onChange(val || "")}
                                     disabled={!isEditing}
+                                    error={errors.phone?.message}
                                 />
                             </div>
                         )}
@@ -135,6 +148,7 @@ const ProfileDetailsSection: React.FC = () => {
                                     value={field.value}
                                     onChange={(val) => field.onChange(val || "")}
                                     disabled={!isEditing}
+                                    error={errors.phoneTwo?.message}
                                 />
                             </div>
                         )}
@@ -185,18 +199,31 @@ const ProfileDetailsSection: React.FC = () => {
                                 onChange={(date) => field.onChange(date?.toISOString() || "")}
                                 disabled={!isEditing}
                                 required={isEditing}
+                                error={errors.dob?.message}
                             />
                         )}
                     />
 
                     <FormField<UpdateUserInfo>
-                        id="linkedInUrl"
-                        label="LinkedIn"
-                        placeholder={isEditing ? "Enter LinkedIn URL" : "Not provided"}
+                        id="professionalStatus"
+                        label="Professional Status"
+                        placeholder={isEditing ? "Enter Professional Status" : "Not provided"}
                         type="text"
                         register={register}
-                        error={errors.linkedInUrl?.message}
-                        defaultValue={user?.linkedInUrl}
+                        error={errors.professionalStatus?.message}
+                        defaultValue={user?.professionalStatus}
+                        readOnly={!isEditing}
+                        required={isEditing}
+                    />
+
+                    <FormField<UpdateUserInfo>
+                        id="linkedInUsername"
+                        label="LinkedIn Username"
+                        placeholder={isEditing ? "Enter LinkedIn Username" : "Not provided"}
+                        type="text"
+                        register={register}
+                        error={errors.linkedInUsername?.message}
+                        defaultValue={user?.linkedInUsername}
                         readOnly={!isEditing}
                         required={false}
                     />
@@ -204,7 +231,7 @@ const ProfileDetailsSection: React.FC = () => {
                     <FormField<UpdateUserInfo>
                         id="portfolioUrl"
                         label="Portfolio"
-                        placeholder={isEditing ? "Enter portfolio URL" : "Not provided"}
+                        placeholder={isEditing ? "Enter portfolio Username" : "Not provided"}
                         type="text"
                         register={register}
                         error={errors.portfolioUrl?.message}
@@ -222,7 +249,7 @@ const ProfileDetailsSection: React.FC = () => {
                             variant="outline"
                             className="text-xs md:text-sm px-3 py-1 cursor-pointer"
                         >
-                            Save Changes
+                            {isSubmitting ? "Updating" : "Save Changes"}
                         </Button>
                         <Button
                             variant={"destructive"}

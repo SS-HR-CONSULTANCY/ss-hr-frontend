@@ -9,6 +9,7 @@ import UserAddressSection from "@/components/user/UserAddressSection";
 import ProfileDetailsSection from "@/components/user/ProfileDetailsSection";
 import type { UpdateProfileImageResponse } from "@/types/apiTypes/userApiTypes";
 import CareerPreferencesSection from "@/components/user/CareerPreferencesSection";
+// import ResumeSection from "@/components/user/ResumeSection";
 
 const UserProfile: React.FC = () => {
 
@@ -41,7 +42,7 @@ const UserProfile: React.FC = () => {
   return (
     <div className="border-2 rounded-md border-blue-950 dark:border-gray-300 p-2 md:p-4">
 
-      <div className="flex items-center justify-center w-full p-4 space-x-4">
+      <div className="flex items-center justify-between w-full p-4">
         <div className="relative">
           <img
             src={
@@ -69,9 +70,13 @@ const UserProfile: React.FC = () => {
           />
           <p>{profileImageUpdating && "Profile image updating..."}</p>
         </div>
-        <p className="mt-4 font-bold text-2xl md:text-4xl text-gray-700 dark:text-white">
-          {user?.fullName || "User"}
-        </p>
+        <div className="items-center text-gray-700 dark:text-white">
+          <h2 className="mt-4 font-bold text-2xl md:text-4xl">
+            {user?.fullName || "User"}
+          </h2>
+          <h6 className="font-semibold text-lg">Professional Status</h6>
+        </div>
+        {/* <ResumeSection /> */}
       </div>
 
       <ProfileDetailsSection />

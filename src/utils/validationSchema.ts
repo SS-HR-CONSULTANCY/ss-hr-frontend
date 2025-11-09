@@ -119,9 +119,9 @@ export const userProfileSchema = z.object({
     .email("Please enter a valid email address")
     .nonempty("Email is required"),
 
-  phone: z.string().regex(e164Regex, "Enter a valid phone number (e.g. +971501234567)"),
+  phone: z.string().regex(e164Regex, "Enter a valid phone number"),
 
-  phoneTwo: z.string().regex(e164Regex, "Enter a valid phone number (e.g. +971501234567)"),
+  phoneTwo: z.string().regex(e164Regex, "Enter a valid phone number"),
 
   gender: z.custom<Gender>((val) => val === "male" || val === "female" || val === "other", {
     message: "Invalid gender",
@@ -129,13 +129,16 @@ export const userProfileSchema = z.object({
 
   nationality: z.string().min(2, "Enter a valid nationality").max(60),
 
-  linkedInUrl: z
+  linkedInUsername: z
     .string()
     .trim()
     .optional()
     .refine(
-      (val) => !val || /^https?:\/\/.+\..+/.test(val),
-      { message: "Enter a valid LinkedIn URL (https://...)" }
+      (val) => !val || /^[a-zA-Z0-9-]{5,30}$/.test(val),
+      {
+        message:
+          "Enter a valid LinkedIn username (5–30 letters, numbers, or hyphens).",
+      }
     ),
 
   portfolioUrl: z
@@ -143,12 +146,45 @@ export const userProfileSchema = z.object({
     .trim()
     .optional()
     .refine(
-      (val) => !val || /^https?:\/\/.+\..+/.test(val),
-      { message: "Enter a valid portfolio URL (https://...)" }
+      (val) => !val || /^https?:\/\/[^\s]+\.[^\s]+$/.test(val),
+      {
+        message: "Enter a valid portfolio URL (must start with http:// or https://).",
+      }
     ),
+  dob: z
+  .string()
+  .refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date format.",
+  })
+  .refine((val) => {
+    const dob = new Date(val);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const hasNotHadBirthdayThisYear =
+      today < new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
 
-  dob: z.string(),
+    if (hasNotHadBirthdayThisYear) age--;
+
+    return age >= 18;
+  }, {
+    message: "You must be at least 18 years old",
+  })
+  .refine((val) => new Date(val) <= new Date(), {
+    message: "DOB cannot be in the future",
+  }),
+  professionalStatus: z
+    .string()
+    .trim()
+    .min(2, "Status must be at least 2 characters long")
+    .max(50, "Status must be under 50 characters")
+    .refine(
+      (val) => /^[A-Za-z ]+$/.test(val),
+      { message: "Status can contain only letters and spaces" }
+    ),
 });
+
+export type ProfileDataForm = z.infer<typeof userProfileSchema>;
+
 
 
 // address zod schema
@@ -267,16 +303,16 @@ export const careerDataSchema = z
     preferredWorkModes: z.array(workModeEnum).optional(),
 
     resume: z
-     .instanceof(FileList)
-    .refine((files) => files.length === 1, "Please upload a file")
-    .refine(
-      (files) => /\.(pdf|doc|docx)$/i.test(files[0]?.name ?? ""),
-      "Only PDF, DOC, or DOCX files are allowed"
-    )
-    .refine(
-      (files) => (files[0]?.size ?? 0) <= 5 * 1024 * 1024,
-      "File size must be less than 5 MB"
-    ),
+      .instanceof(FileList)
+      .refine((files) => files.length === 1, "Please upload a file")
+      .refine(
+        (files) => /\.(pdf|doc|docx)$/i.test(files[0]?.name ?? ""),
+        "Only PDF, DOC, or DOCX files are allowed"
+      )
+      .refine(
+        (files) => (files[0]?.size ?? 0) <= 5 * 1024 * 1024,
+        "File size must be less than 5 MB"
+      ),
   })
   .superRefine((data, ctx) => {
     if (!data.immediateJoiner && (data.noticePeriod === undefined || data.noticePeriod === null)) {

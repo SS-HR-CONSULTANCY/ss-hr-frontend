@@ -17,9 +17,10 @@ export interface User {
   googleId: string;
   gender: Gender;
   nationality: string;
-  linkedInUrl?: string;
+  linkedInUsername?: string;
   portfolioUrl?: string;
   dob: string;
+  professionalStatus: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -27,43 +27,53 @@ type PhoneInputProps = Omit<
 > &
   Omit<RPNInput.Props<typeof RPNInput.default>, "onChange"> & {
     onChange?: (value: RPNInput.Value) => void;
-  };
+    error?: string;
+  }
 
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
   React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-    ({ className, onChange, value, ...props }, ref) => {
+    ({ className, onChange, value, error, ...props }, ref) => {
       return (
-        <RPNInput.default
-          ref={ref}
-          className={cn("flex", className)}
-          flagComponent={FlagComponent}
-          countrySelectComponent={CountrySelect}
-          inputComponent={InputComponent}
-          smartCaret={false}
-          value={value || undefined}
-          /**
-           * Handles the onChange event.
-           *
-           * react-phone-number-input might trigger the onChange event as undefined
-           * when a valid phone number is not entered. To prevent this,
-           * the value is coerced to an empty string.
-           *
-           * @param {E164Number | undefined} value - The entered value
-           */
-          onChange={(value) => onChange?.(value || ("" as RPNInput.Value))}
-          {...props}
-        />
+        <div className="flex flex-col gap-1">
+          <RPNInput.default
+            ref={ref}
+            className={cn("flex", className)}
+            flagComponent={FlagComponent}
+            countrySelectComponent={CountrySelect}
+            inputComponent={InputComponent}
+            smartCaret={false}
+            value={value || undefined}
+            /**
+             * Handles the onChange event.
+             *
+             * react-phone-number-input might trigger the onChange event as undefined
+             * when a valid phone number is not entered. To prevent this,
+             * the value is coerced to an empty string.
+             *
+             * @param {E164Number | undefined} value - The entered value
+             */
+            onChange={(value) => onChange?.(value || ("" as RPNInput.Value))}
+            {...props}
+          />
+          {error && (
+            <span className="text-xs text-red-400 mt-1">{error}</span>
+          )}
+        </div>
       );
     },
   );
 PhoneInput.displayName = "PhoneInput";
 
+type InputComponentProps = React.ComponentProps<"input"> & {
+  error?: string;
+};
+
 const InputComponent = React.forwardRef<
   HTMLInputElement,
-  React.ComponentProps<"input">
->(({ className, ...props }, ref) => (
+  InputComponentProps
+>(({ className,error, ...props }, ref) => (
   <Input
-    className={cn("rounded-e-lg rounded-s-none", className)}
+    className={cn(`rounded-e-md rounded-s-none ${error && 'border border-red-400'}`, className)}
     {...props}
     ref={ref}
   />
