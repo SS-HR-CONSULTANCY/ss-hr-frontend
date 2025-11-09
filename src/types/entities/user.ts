@@ -21,6 +21,7 @@ export interface User {
   portfolioUrl?: string;
   dob: string;
   professionalStatus: string;
+  resume?: File | string;
   createdAt: string;
   updatedAt: string;
 }

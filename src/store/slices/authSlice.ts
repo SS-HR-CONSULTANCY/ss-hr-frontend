@@ -34,11 +34,13 @@ const authSlice = createSlice({
     setAuthUser: (state: AuthState, action: PayloadAction<User | null>) => {
       state.user = action.payload;
     },
+    updateResumeKey: (state, action: PayloadAction<string>) => {
+      if(state.user) {
+        state.user.resume = action.payload;
+      }
+    },
     clearError: (state: AuthState) => {
       state.error = null;
-    },
-    setUser: (state: AuthState, action: PayloadAction<User>) => {
-      state.user = action.payload;
     },
     startTimer: (state: AuthState, action: PayloadAction<number>) => {
       state.otpRemainingTime = action.payload;
@@ -54,7 +56,7 @@ const authSlice = createSlice({
     stopTimer: (state: AuthState) => {
       state.otpTimerIsRunning = false;
     },
-    resetAuthStore:() =>  initialState,
+    resetAuthStore: () => initialState,
     setProfileImage: (state, action: PayloadAction<string>) => {
       if (state.user) {
         state.user.profileImage = action.payload;
@@ -195,13 +197,14 @@ const authSlice = createSlice({
       });
 
     builder
-      .addCase(updateProfileInfo.pending, () => {})
+      .addCase(updateProfileInfo.pending, () => { })
       .addCase(updateProfileInfo.fulfilled, (state, action: PayloadAction<UpdateUserInfoResponse>) => {
         if (state.user) {
           state.user = { ...state.user, ...action.payload.data };
         }
       })
-      .addCase(updateProfileInfo.rejected, () => {})
+      .addCase(updateProfileInfo.rejected, () => { });
+
   }
 });
 
@@ -214,5 +217,6 @@ export const {
   resetAuthStore,
   setProfileImage,
   setOtpForUpdatePassword,
+  updateResumeKey
 } = authSlice.actions;
 export default authSlice.reducer;

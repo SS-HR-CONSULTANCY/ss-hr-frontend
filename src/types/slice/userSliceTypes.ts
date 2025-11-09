@@ -8,4 +8,5 @@ export interface UserSliceState {
   isEditUserModalOpen: boolean;
   isUserDetailsModalOpen: boolean;
   selectedUserId: string | null;
+  resumeSignedUrl: string | null;
 }

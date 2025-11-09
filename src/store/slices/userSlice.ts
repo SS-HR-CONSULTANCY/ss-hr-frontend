@@ -13,6 +13,7 @@ const initialState: UserSliceState = {
   isAddUserModalOpen: false,
   isEditUserModalOpen: false,
   isUserDetailsModalOpen: false,
+  resumeSignedUrl: null,
 };
 
 const userSlice = createSlice({
@@ -43,6 +44,9 @@ const userSlice = createSlice({
     },
     setAddress: (state: UserSliceState, action: PayloadAction<Address>) => {
       state.userAddress = action.payload;
+    },
+    setResumeSignedUrl: (state, action: PayloadAction<string>) => {
+      state.resumeSignedUrl = action.payload; 
     },
     resetUserSlice: () => initialState,
   },
@@ -78,7 +82,8 @@ export const {
   closeEditUserModal,
   openUserDetailsModal,
   closeUserDetailsModal,
-  resetUserSlice
+  resetUserSlice,
+  setResumeSignedUrl
 } = userSlice.actions;
 
 export default userSlice.reducer;

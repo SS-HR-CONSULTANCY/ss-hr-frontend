@@ -1,27 +1,23 @@
 import { Edit } from "lucide-react";
 import { toast } from "react-toastify";
+import React, { useState } from "react";
 import FormField from "../form/FormFiled";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
-import { getCleanFileName } from "@/utils/helpers/filenameReducer";
 import { MultiSelectButtonGroup } from "../form/MultiSelectButtonGroup";
 import { createCareerData, updateCareerData } from "@/utils/apis/userApi";
 import { useForm, type SubmitHandler, type Resolver } from "react-hook-form";
 import { careerDataSchema, type CareerData } from "@/utils/validationSchema";
-import { booleanOptions, jobTypeOptions, workModeOptions } from "@/utils/constants";
-import { deleteFileFromS3, getSignedUrl, getUploadUrl, uploadToS3 } from "@/utils/apis/s3Api";
 import type { UpdateUserCareerDataRequest } from "@/types/apiTypes/userApiTypes";
+import { booleanOptions, jobTypeOptions, workModeOptions } from "@/utils/constants";
 
 const CareerPreferencesSection: React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const [isEditing, setIsEditing] = useState(false);
-    const [resumeUrl, setResumeUrl] = useState<string | null>(null);
     const { userCareerData } = useSelector((state: RootState) => state.user);
-    const { user } = useSelector((state: RootState) => state.auth);
 
     const {
         register,
@@ -44,19 +40,8 @@ const CareerPreferencesSection: React.FC = () => {
             currentJobType: userCareerData?.currentJobType,
             preferredJobTypes: userCareerData?.preferredJobTypes,
             preferredWorkModes: userCareerData?.preferredWorkModes,
-            resume: userCareerData?.resume as FileList,
         },
     });
-
-    useEffect(() => {
-        const fetchResumeUrl = async () => {
-            if (userCareerData?.resume) {
-                const signedUrl = await getSignedUrl(userCareerData.resume as string);
-                setResumeUrl(signedUrl);
-            }
-        };
-        fetchResumeUrl();
-    }, [userCareerData]);
 
     const selectedJobTypes = watch("preferredJobTypes") || [];
     const selectedWorkModes = watch("preferredWorkModes") || [];
@@ -64,36 +49,13 @@ const CareerPreferencesSection: React.FC = () => {
 
     const onSubmit: SubmitHandler<CareerData> = async (data) => {
         try {
-            if (!user) {
-                toast.error("User not found. Please log in again.");
-                return;
-            }
-
             const isUpdate = !!userCareerData;
-            const file: File | undefined = data.resume?.[0];
-            let resumeKey: string = userCareerData?.resume as string || "";
-
-            if (file) {
-                if (isUpdate && userCareerData.resume) {
-                    await deleteFileFromS3(userCareerData.resume as string);
-                }
-
-                const { uploadUrl, key } = await getUploadUrl(file, user._id, "resumes");
-                await uploadToS3(file, uploadUrl);
-                resumeKey = key;
-            }
-
-            const payload = {
-                ...data,
-                resume: resumeKey,
-            };
-
             const action = isUpdate ? updateCareerData : createCareerData;
             if(isUpdate) {
-                (payload as UpdateUserCareerDataRequest)._id = userCareerData?._id
+                (data as UpdateUserCareerDataRequest)._id = userCareerData?._id
             }
 
-            const res = await dispatch(action(payload)).unwrap();
+            const res = await dispatch(action(data)).unwrap();
 
             if (res.success) {
                 toast.success(
@@ -276,47 +238,6 @@ const CareerPreferencesSection: React.FC = () => {
                             error={errors.preferredWorkModes?.message}
                             isEditing
                         />
-
-
-                        {userCareerData?.resume && !isEditing && resumeUrl ? (
-                            <div className="flex flex-col space-y-2">
-                                <label className="font-medium text-sm">Resume</label>
-                                <div className="flex items-center justify-between p-3 border rounded-md">
-                                    <div className="truncate max-w-[70%]">
-                                        <span className="text-sm font-medium">
-                                            {getCleanFileName(resumeUrl as string)}
-                                        </span>
-                                    </div>
-                                    <div className="flex space-x-2">
-                                        {resumeUrl ? (
-                                            <a
-                                                href={resumeUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-blue-600 hover:underline text-sm"
-                                            >
-                                                View
-                                            </a>
-                                        ) : (
-                                            <span className="text-gray-400 text-sm">Loading...</span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <FormField<CareerData>
-                                id="resume"
-                                label="Resume"
-                                placeholder="Enter your resume link"
-                                type="file"
-                                accept=".pdf,.doc,.docx"
-                                register={register}
-                                error={errors.resume?.message}
-                                readOnly={!isEditing}
-                                required={(!userCareerData && isEditing)}
-                                info="Allowed file types: .pdf, .doc, .docx"
-                            />
-                        )}
                     </div>
 
                     {isEditing && (

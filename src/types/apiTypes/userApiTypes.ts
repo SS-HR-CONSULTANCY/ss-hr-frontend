@@ -43,7 +43,6 @@ export type CreateUserCareerDataRequest = Pick<
   | "currentJobType"
   | "preferredJobTypes"
   | "preferredWorkModes"
-  | "resume"
 >;
 export type UpdateUserCareerDataRequest = Partial<Pick<
   CareerData,
@@ -59,8 +58,9 @@ export type UpdateUserCareerDataRequest = Partial<Pick<
   | "currentJobType"
   | "preferredJobTypes"
   | "preferredWorkModes"
-  | "resume"
 >>;
 export interface CreateOrUpdateCareerDataResponse extends ApiBaseResponse {
   data: CareerData,
 }
+
+export type UpdateResumeRequest = Pick<User, "resume">; 

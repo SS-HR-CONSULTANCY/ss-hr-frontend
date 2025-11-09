@@ -301,18 +301,6 @@ export const careerDataSchema = z
     currentJobType: jobTypeEnum.optional(),
     preferredJobTypes: z.array(jobTypeEnum).optional(),
     preferredWorkModes: z.array(workModeEnum).optional(),
-
-    resume: z
-      .instanceof(FileList)
-      .refine((files) => files.length === 1, "Please upload a file")
-      .refine(
-        (files) => /\.(pdf|doc|docx)$/i.test(files[0]?.name ?? ""),
-        "Only PDF, DOC, or DOCX files are allowed"
-      )
-      .refine(
-        (files) => (files[0]?.size ?? 0) <= 5 * 1024 * 1024,
-        "File size must be less than 5 MB"
-      ),
   })
   .superRefine((data, ctx) => {
     if (!data.immediateJoiner && (data.noticePeriod === undefined || data.noticePeriod === null)) {
@@ -324,3 +312,19 @@ export const careerDataSchema = z
     }
   });
 export type CareerData = z.infer<typeof careerDataSchema>;
+
+
+export const resumeZodSchema = z.object({
+   resume: z
+    .instanceof(File)
+    .refine((file) => !!file, "Please upload a file")
+    .refine(
+      (file) => /\.(pdf|doc|docx)$/i.test(file?.name ?? ""),
+      "Only PDF, DOC, or DOCX files are allowed"
+    )
+    .refine(
+      (file) => (file?.size ?? 0) <= 5 * 1024 * 1024,
+      "File size must be less than 5 MB"
+    ),
+})
+export type ResumeDataForm = z.infer<typeof resumeZodSchema>;

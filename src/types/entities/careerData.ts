@@ -20,7 +20,7 @@ export interface CareerData {
   preferredJobTypes?: JobType[];            
   preferredWorkModes?: WorkMode[];                     
 
-  resume: FileList | string;
+  resume: File | string;
 
   createdAt: string;
   updatedAt: string;

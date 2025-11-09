@@ -5,6 +5,7 @@ import {
   type CreateUserCareerDataRequest,
   type UpdateAddressResponse,
   type UpdateProfileImageResponse,
+  type UpdateResumeRequest,
   type UpdateUserCareerDataRequest,
   type UpdateUserInfo,
   type UpdateUserInfoResponse,
@@ -12,6 +13,7 @@ import {
   type UserfetchAllJobsResponse
 } from "@/types/apiTypes/userApiTypes";
 import type {
+  ApiBaseResponse,
   ApiPaginatedResponse,
   FetchFunctionParams,
 } from "@/types/commonTypes";
@@ -78,3 +80,12 @@ export const updateCareerData = createAsyncThunk<
   return response.data;
 });
 
+export const updateResume = createAsyncThunk<
+ApiBaseResponse,
+  UpdateResumeRequest
+>("/user/resume-data", async (data) => {
+  console.log("data : ",data);
+  const response = await axiosInstance.patch(`/user/resume`, {key: data.resume});
+  console.log("response : ",response);
+  return response.data;
+});
