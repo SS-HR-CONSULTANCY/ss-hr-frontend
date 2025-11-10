@@ -4,13 +4,13 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import CommonTable from "@/components/common/CommonTable";
+import { useAdminPackages } from "@/hooks/useAdminPackages";
 import type { AppDispatch, RootState } from "@/store/store";
 import { getAllPackages } from "@/utils/apis/adminPackageApi";
 import AddPackageForm from "@/components/admin/AddPackageForm";
 import PackageDetails from "@/components/admin/PackageDetails";
 import EditPackageForm from "@/components/admin/EditPackageForm";
 import TablePageHeader from "@/components/common/TablePageHeader";
-import { useAdminPackages } from "@/utils/hooks/useAdminPackages";
 import { toggleAddPackageForm } from "@/store/slices/packageSlice";
 import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/adminApiTypes";
 import { PackageTableColumns } from "@/components/table/tableColumns/PackageTableColumns";
@@ -21,8 +21,7 @@ interface AdminPackagesProps {
 
 const AdminPackages: React.FC<AdminPackagesProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { handleDeletePackage, handleEditPackage, handleViewPackage } =
-    useAdminPackages();
+  const { handleDeletePackage, handleEditPackage, handleViewPackage } = useAdminPackages();
   const column = PackageTableColumns(
     handleDeletePackage,
     handleEditPackage,

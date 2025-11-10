@@ -9,7 +9,7 @@ import { getAllTestimonials } from "@/utils/apis/adminTestimonialApi";
 import AddTestimonialForm from "@/components/admin/AddTestimonialForm";
 import TestimonialDetails from "@/components/admin/TestimonialDetails";
 import EditTestimonialForm from "@/components/admin/EditTestimonialForm";
-import { useAdminTestimonials } from "@/utils/hooks/useAdminTestimonials";
+import { useAdminTestimonials } from "@/hooks/useAdminTestimonials";
 import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 import { TestimonialTableColumns } from "@/components/table/tableColumns/TestimonialTableColumns";

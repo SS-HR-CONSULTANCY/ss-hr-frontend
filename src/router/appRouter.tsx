@@ -1,12 +1,12 @@
+import {
+  services,
+  userApplicationRoutes,
+  adminApplicationRoutes,
+} from "@/utils/constants";
 import { lazy } from "react";
 import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
-import {
-  adminApplicationRoutes,
-  services,
-  userApplicationRoutes,
-} from "@/utils/constants";
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
@@ -27,12 +27,11 @@ const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
 const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
 const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
+const UserApplications = lazy(() => import("@/pages/user/UserApplications"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
-const ServiceDetailedContent = lazy(
-  () => import("@/components/sections/ServiceDetailedContent"),
-);
+const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
 
 const appRouter = createBrowserRouter([
   {
@@ -143,7 +142,7 @@ const appRouter = createBrowserRouter([
         path: "applications",
         element: (
           <ProtectedRoute requiredRole={["user"]}>
-            <AdminApplications />
+            <UserApplications />
           </ProtectedRoute>
         ),
       },

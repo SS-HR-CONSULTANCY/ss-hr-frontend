@@ -1,17 +1,3 @@
-import { axiosInstance } from "@/lib/axios";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  type CreateOrUpdateCareerDataResponse,
-  type CreateUserCareerDataRequest,
-  type UpdateAddressResponse,
-  type UpdateProfileImageResponse,
-  type UpdateResumeRequest,
-  type UpdateUserCareerDataRequest,
-  type UpdateUserInfo,
-  type UpdateUserInfoResponse,
-  type UseAddressRequest,
-  type UserfetchAllJobsResponse
-} from "@/types/apiTypes/userApiTypes";
 import type {
   ApiBaseResponse,
   ApiPaginatedResponse,
@@ -21,6 +7,26 @@ import {
   buildQueryParams,
   parseNewCommonResponse,
 } from "@/utils/helpers/apiHelpers";
+import {
+  type UpdateUserInfo,
+  type UseAddressRequest,
+  type UpdateResumeRequest,
+  type UserApplyJobResponse,
+  type UpdateAddressResponse,
+  type UpdateUserInfoResponse,
+  type UserfetchAllJobsResponse,
+  type UpdateProfileImageResponse,
+  type CreateUserCareerDataRequest,
+  type UpdateUserCareerDataRequest,
+  type UserUpdateApplicationResponse,
+  type CreateOrUpdateCareerDataResponse,
+  type UserFetchAllApplicationsResponse,
+  type UserUpdateApplicationStatusRequest
+} from "@/types/apiTypes/userApiTypes";
+import { axiosInstance } from "@/lib/axios";
+import type { Job } from "@/types/entities/job";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
 
 export const updateProfileImage = createAsyncThunk<
   UpdateProfileImageResponse,
@@ -29,6 +35,7 @@ export const updateProfileImage = createAsyncThunk<
   const response = await axiosInstance.patch("/user/prfileImage", formData);
   return response.data;
 });
+
 
 export const userFetchAllJobs = async (
   params?: FetchFunctionParams,
@@ -72,6 +79,7 @@ export const createCareerData = createAsyncThunk<
   return response.data;
 });
 
+
 export const updateCareerData = createAsyncThunk<
   CreateOrUpdateCareerDataResponse,
   UpdateUserCareerDataRequest
@@ -80,12 +88,34 @@ export const updateCareerData = createAsyncThunk<
   return response.data;
 });
 
+
 export const updateResume = createAsyncThunk<
-ApiBaseResponse,
+  ApiBaseResponse,
   UpdateResumeRequest
 >("/user/resume-data", async (data) => {
-  console.log("data : ",data);
-  const response = await axiosInstance.patch(`/user/resume`, {key: data.resume});
-  console.log("response : ",response);
+  const response = await axiosInstance.patch(`/user/resume`, { key: data.resume });
   return response.data;
 });
+
+
+export const userApplyJob = async (_id: Job["_id"]):Promise<UserApplyJobResponse> => {
+  const response = await axiosInstance.post(`/user/apply-job/${_id}`,);
+  return response.data;
+};
+
+
+export const userFetchAllApplications = async (
+  params?: FetchFunctionParams,
+): Promise<ApiPaginatedResponse<UserFetchAllApplicationsResponse>> => {
+  const query = buildQueryParams(params);
+  const response = await axiosInstance.get(
+    `/user/applications${query ? `?${query}` : ""}`,
+  );
+  return parseNewCommonResponse<UserFetchAllApplicationsResponse>(response.data);
+};
+
+
+export const userUpdateJobApplication = async (data: UserUpdateApplicationStatusRequest):Promise<UserUpdateApplicationResponse> => {
+  const response = await axiosInstance.patch(`/user/cancel-job/${data._id}`,{status: data.status});
+  return response.data;
+};

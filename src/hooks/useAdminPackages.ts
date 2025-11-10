@@ -1,49 +1,48 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import {
+  openEditPackageForm,
+  openViewPackageDetails,
+} from "@/store/slices/packageSlice";
+import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
-import { deletePayment } from "@/utils/apis/adminPaymentApi";
+import { deletePackage } from "@/utils/apis/adminPackageApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfirmToast } from "@/components/table/tableColumns/ConfirmToast";
-import {
-  openEditPaymentForm,
-  openViewPaymentDetails,
-} from "@/store/slices/paymentSlice";
 
-export function useAdminPayments(paymentId?: string) {
+export const useAdminPackages = () => {
+
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
-    mutationFn: () => deletePayment(paymentId!),
+    mutationFn: (packageId: string) => deletePackage(packageId),
     onSuccess: () => {
-      toast.success("Payment deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["payments"] });
+      toast.success("Package deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["packages"] });
     },
     onError: () => {
-      toast.error("Failed to delete payment");
+      toast.error("Failed to delete package");
     },
   });
 
-  const handleViewPayment = () => {
-    if (!paymentId) return;
-    dispatch(openViewPaymentDetails(paymentId));
+  const handleViewPackage = (packageId: string) => {
+    dispatch(openViewPackageDetails(packageId));
   };
 
-  const handleEditPayment = () => {
-    if (!paymentId) return;
-    dispatch(openEditPaymentForm(paymentId));
+  const handleEditPackage = (packageId: string) => {
+    dispatch(openEditPackageForm(packageId));
   };
 
-  const handleDeletePayment = () => {
+  const handleDeletePackage = (packageId: string) => {
     toast(
       ({ closeToast }) =>
         React.createElement(ConfirmToast, {
-          message: "Are you sure you want to delete this payment?",
+          message: "Are you sure you want to delete this package?",
           confirmText: "Delete",
           cancelText: "Cancel",
           onConfirm: () => {
-            deleteMutation.mutate();
+            deleteMutation.mutate(packageId);
             closeToast();
           },
           onCancel: closeToast,
@@ -61,9 +60,8 @@ export function useAdminPayments(paymentId?: string) {
   };
 
   return {
-    handleViewPayment,
-    handleEditPayment,
-    handleDeletePayment,
-    isDeleting: deleteMutation.isPending,
+    handleViewPackage,
+    handleEditPackage,
+    handleDeletePackage,
   };
 }

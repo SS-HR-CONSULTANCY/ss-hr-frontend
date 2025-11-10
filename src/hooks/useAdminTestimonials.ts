@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTestimonial } from "@/utils/apis/adminTestimonialApi";
 import { ConfirmToast } from "@/components/table/tableColumns/ConfirmToast";
 
-export function useAdminTestimonials(testimonialId?: string) {
+export const useAdminTestimonials = (testimonialId?: string) => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 

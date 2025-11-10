@@ -3,24 +3,24 @@ import type { User } from "../entities/user";
 import type { Address } from "../entities/address";
 import type { ApiBaseResponse } from "../commonTypes";
 import type { CareerData } from "../entities/careerData";
+import type { Application } from "../entities/application";
 
-export type UserfetchAllJobsResponse = Pick<
-  Job,
-  "_id" | "designation" | "vacancy" | "createdAt"
->;
-
+// User Update Profile image
 export interface UpdateProfileImageResponse extends ApiBaseResponse {
   data: {
     profileImage: User["profileImage"];
   };
 }
 
+
+// User Profile Info
 export type UpdateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo" | "email" | "gender" | "dob" | "nationality" | "linkedInUsername" | "portfolioUrl" | "professionalStatus">;
 export interface UpdateUserInfoResponse extends ApiBaseResponse {
   data: UpdateUserInfo
 }
 
 
+// User Address
 export interface UseAddressRequest {
   data: Address,
   update: boolean;
@@ -30,6 +30,8 @@ export interface UpdateAddressResponse extends ApiBaseResponse {
   data: Address;
 }
 
+
+// User Career Data
 export type CreateUserCareerDataRequest = Pick<
   CareerData,
   | "currentSalary"
@@ -63,4 +65,29 @@ export interface CreateOrUpdateCareerDataResponse extends ApiBaseResponse {
   data: CareerData,
 }
 
+
+// User update resume
 export type UpdateResumeRequest = Pick<User, "resume">; 
+
+
+// User fetch all jobs 
+export type UserfetchAllJobsResponse = Pick<Job,"_id" | "designation" | "vacancy" | "createdAt"> & {
+  applied: boolean;
+};
+
+
+// User Apply job
+export interface UserApplyJobResponse extends ApiBaseResponse {
+  data: Pick<Application, "jobId" | "status">
+};
+
+
+// User application Update
+export type UserUpdateApplicationStatusRequest = Pick<Application, "_id" | "status">;
+export interface UserUpdateApplicationResponse extends ApiBaseResponse {
+  data: Pick<Application, "jobId" | "status">
+};
+
+
+// User fetch applications
+export type UserFetchAllApplicationsResponse = Pick<Job,"_id" | "designation" > & Pick<Application, "updatedAt" | "status" | "_id">
