@@ -1,40 +1,6 @@
 import { z } from "zod";
 import type { Gender, Role } from "@/types/entities/user";
 
-// signup zod schema
-export const registerSchema = z
-  .object({
-    fullName: z
-      .string()
-      .min(2, "Full name must be at least 2 characters")
-      .max(100, "Full name must be less than 100 characters")
-      .nonempty("Full name is required"),
-
-    email: z
-      .string()
-      .email("Please enter a valid email address")
-      .nonempty("Email is required"),
-
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
-      )
-      .nonempty("Password is required"),
-
-    confirmPassword: z.string().nonempty("Please confirm your password"),
-
-    role: z.custom<Role>((val) =>
-      ["user", "admin", "superAdmin"].includes(val as string)
-    ),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
-
 export const otpSchema = z.object({
   otp: z.string().nonempty("Otp is required"),
   verificationToken: z.string().nonempty("Token required"),

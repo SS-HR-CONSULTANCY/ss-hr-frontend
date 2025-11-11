@@ -7,6 +7,8 @@ import { lazy } from "react";
 import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
+import EmailVerify from "@/pages/auth/EmailVerify";
+import UpdatePassword from "@/pages/auth/UpdatePassword";
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
@@ -16,7 +18,6 @@ const Register = lazy(() => import("@/pages/auth/Register"));
 const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
 const ChatPage = lazy(() => import("@/pages/common/ChatPage"));
 const Error404 = lazy(() => import("@/pages/common/Error404"));
-const AdminLogin = lazy(() => import("@/pages/auth/AdminLogin"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
 const ContactPage = lazy(() => import("@/pages/user/ContactPage"));
 const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
@@ -102,9 +103,12 @@ const appRouter = createBrowserRouter([
     ],
   },
   { path: "register", element: <Register /> },
-  { path: "login", element: <Login /> },
-  { path: "verifyOtp", element: <Otp /> },
-  { path: "admin/login", element: <AdminLogin /> },
+  { path: "verify-otp", element: <Otp /> },
+  { path: "verify-email", element: <EmailVerify /> },
+  { path: "update-password", element: <UpdatePassword /> },
+  { path: "ss-hr-admin/login", element: <Login role="admin" /> },
+  { path: "ss-hr-system-admin/login", element: <Login role="systemAdmin" /> },
+  { path: "login", element: <Login role="user" /> },
   {
     path: "/user",
     element: (
@@ -158,7 +162,7 @@ const appRouter = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "/ss-hr-admin",
     element: (
       <DashboardLayout
         showMobileScreenWarning={true}

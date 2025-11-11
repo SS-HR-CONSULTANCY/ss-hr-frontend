@@ -1,62 +1,69 @@
+import React from "react";
 import { toast } from "react-toastify";
-import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { signup } from "@/utils/apis/authApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import FormField from "@/components/form/FormFiled";
+import { useAppDispatch } from "../../hooks/redux";
 import CustomLink from "@/components/form/CustomLink";
 import FormHeader from "@/components/form/FormHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { updatePassword } from "@/utils/apis/authApi";
 import { HomeIcon, LoaderCircle, User } from "lucide-react";
 import PasswordStrength from "@/components/form/PasswordStrength";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import type { RegisterRequest } from "@/types/slice/authSliceTypes";
-import { registerSchema, type RegisterForm } from "@/utils/authZod";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { getPasswordStrength } from "@/utils/helpers/passwordStrength";
+import { updatePasswordSchema, type UpdatePasswordForm } from "@/utils/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
-const Register: React.FC = () => {
+const UpdatePassword: React.FC = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector(
-    (state) => state.auth,
-  );
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-    watch,
-  } = useForm<RegisterForm>({
-    resolver: zodResolver(registerSchema),
-    mode: "onChange", 
+    watch
+  } = useForm<UpdatePasswordForm>({
+    resolver: zodResolver(updatePasswordSchema),
+    mode: "onChange",
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const password = watch("password");
   const passwordStrength = getPasswordStrength(password || "");
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/", { replace: true });
+  const onSubmit = async (data: UpdatePasswordForm) => {
+    const { password } = data;
+    if(!user || !user.email || !user?.verificationToken || !user.role) {
+      toast.error("Please try again.");
+      return;
     }
-  }, [isAuthenticated, navigate]);
-
-  const onSubmit = async (data: RegisterForm) => {
-    await dispatch(signup(data))
+    await dispatch(updatePassword({ 
+      password, 
+      email: user.email, 
+      verificationToken: user.verificationToken, 
+      role: user.role
+    }))
       .unwrap()
       .then((res) => {
         if (res?.success) {
-          toast.success(res?.message || "Otp has been send to your email");
-          navigate("/verify-otp");
+          toast.success(res?.message || "Logged In Successfully");
+          navigate('/login');
         } else {
-          toast.error(res?.message || "Otp sending failed, please try again");
+          toast.error(res?.message || "Login failed");
         }
       })
       .catch((error) => {
-        toast.error(error.message || "An error occurred during signup.");
+        toast.error(error.message || "An error occurred during login.");
       });
   };
 
@@ -65,32 +72,13 @@ const Register: React.FC = () => {
       <BackgroundBeamsWithCollision>
         <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
           <FormHeader
-            title="Sign In"
-            description="Enter your credentials to access your account"
+            title="Update Password"
+            description="Enter new password"
           />
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <FormField<RegisterRequest>
-                id="fullName"
-                label="Full Name"
-                type="text"
-                autoComplete="name"
-                placeholder="Enter your full name"
-                error={errors.fullName?.message}
-                register={register}
-              />
 
-              <FormField<RegisterRequest>
-                id="email"
-                label="Email Address"
-                type="email"
-                autoComplete="email"
-                placeholder="Enter your email"
-                error={errors.email?.message}
-                register={register}
-              />
-
-              <FormField<RegisterRequest>
+              <FormField<UpdatePasswordForm>
                 id="password"
                 label="Password"
                 type="password"
@@ -108,7 +96,7 @@ const Register: React.FC = () => {
                 />
               )}
 
-              <FormField<RegisterRequest>
+              <FormField<UpdatePasswordForm>
                 id="confirmPassword"
                 label="Confirm Password"
                 type="password"
@@ -119,8 +107,6 @@ const Register: React.FC = () => {
                 showTogglePassword
               />
 
-              <input type="hidden" value="user" {...register("role")} />
-
               <Button
                 type="submit"
                 className="w-full cursor-pointer"
@@ -128,10 +114,10 @@ const Register: React.FC = () => {
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <LoaderCircle className="animate-spin" />
-                    Creating account...
+                    Updating...
                   </span>
                 ) : (
-                  "Create Account"
+                  "Confirm"
                 )}
               </Button>
             </form>
@@ -148,7 +134,7 @@ const Register: React.FC = () => {
         </Card>
       </BackgroundBeamsWithCollision>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default UpdatePassword

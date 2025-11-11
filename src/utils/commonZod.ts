@@ -1,10 +1,12 @@
 import z from "zod";
+import { roleValues } from "./constants";
 import { booleanField, enumField, jsonArrayParser, numberField, stringArrayField, stringField } from "./zodUtilities";
 import { REGEX_PROFESSIONAL_STATUS, REGEX_PLACE, REGEX_COUNTRY, REGEX_FEATURE, REGEX_FULL_NAME, REGEX_LONG_TEXT, REGEX_NATIONALITY, REGEX_PASSWORD, REGEX_PHONE, REGEX_POSTAL, REGEX_S3_FILEKEY, REGEX_TEXT_DOT_AMP, REGEX_URL, REGEX_USERNAME, REGEX_CLIENT_NAME, REGEX_TESTIMONIAL, REGEX_ENTITY_ID, REGEX_DESCRIPTION, REGEX_INDUSTRY, REGEX_BENEFITS, REGEX_SKILLS, REGEX_EXPERIENCE, REGEX_COMPANY_NAME, REGEX_ADDRESSLINE, REGEX_LANDMARK } from "./regex";
 
 //*** Zod Schema Fields & Reusable Validators */
-export const fullName = stringField("fullName", 4, 30, REGEX_FULL_NAME);
+export const fullName = stringField("fullname", 4, 30, REGEX_FULL_NAME);
 export const password = stringField("password", 8, 50, REGEX_PASSWORD);
+export const confirmPassword = stringField("confirmPassword", 8, 50, REGEX_PASSWORD);
 export const email = z.string().email("Invalid email format");
 export const phone = stringField("phone", 7, 20, REGEX_PHONE);
 export const phoneTwo = stringField("phoneTwo", 7, 20, REGEX_PHONE);
@@ -14,9 +16,9 @@ export const linkedInUsername = stringField("linkedInUsername", 5, 40, REGEX_USE
 export const portfolioUrl = stringField("portfolioUrl", 9, 200, REGEX_URL);
 export const professionalStatus = stringField("professionalStatus",2,100,REGEX_PROFESSIONAL_STATUS,"Professional status can only contain letters, numbers, spaces, dots, hyphens, and ampersands");
 
-export const role = enumField("role", [
-  "user" , "admin" , "superAdmin" , "systemAdmin"
-]);
+export const role = z.enum(roleValues);
+export type Role = z.infer<typeof role>;
+
 export const limitedRole = enumField("role", [
   "user" , "admin" , "superAdmin"
 ]);

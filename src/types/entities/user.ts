@@ -1,5 +1,9 @@
+import type { Role } from "@/utils/commonZod";
+
 export type Gender = "male" | "female" | "other";
-export type Role = "user" | "admin" | "superAdmin" | "systemAdmin";
+// export type Role = "user" | "admin" | "superAdmin" | "systemAdmin";
+
+
 
 export interface User {
   _id: string;

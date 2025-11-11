@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { signin } from "@/utils/apis/authApi";
+import type { Role } from "@/utils/commonZod";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
@@ -11,53 +12,53 @@ import FormField from "@/components/form/FormFiled";
 import CustomLink from "@/components/form/CustomLink";
 import FormHeader from "@/components/form/FormHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../utils/validationSchema";
+import { loginSchema, type LoginForm } from "@/utils/authZod";
 import { HomeIcon, LoaderCircle, UserPlus } from "lucide-react";
 import RememberMeWithFP from "@/components/form/RememberMeWithFP";
-import type { SigninRequest } from "@/types/apiTypes/authApiTypes";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
-const Login: React.FC = () => {
+interface LoginProps {
+  role: Role;
+}
+
+const Login: React.FC<LoginProps> = ({
+  role
+}) => {
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isLoading, isAuthenticated, user } = useSelector(
+  const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth,
   );
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<SigninRequest>({
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
+    mode: "onChange",
     defaultValues: {
       email: "",
       password: "",
-      role: "user",
+      role: role,
     },
   });
-
-  const watchedValues = watch();
 
   useEffect(() => {
     if (isAuthenticated && user) {
       if (user.role === "user") {
         navigate("/", { replace: true });
-      } else if (
-        user.role === "admin" ||
-        user.role === "superAdmin" ||
-        user.role === "systemAdmin"
-      ) {
-        navigate("/admin", { replace: true });
+      } else if (user.role === "admin" || user.role === "systemAdmin") {
+        navigate("/ss-hr-admin", { replace: true });
       } else {
         navigate("/", { replace: true });
       }
     }
   }, [isAuthenticated, user, navigate]);
 
-  const onSubmit = async (data: SigninRequest) => {
+  const onSubmit = async (data: LoginForm) => {
     await dispatch(signin(data))
       .unwrap()
       .then((res) => {
@@ -95,9 +96,9 @@ const Login: React.FC = () => {
           />
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <FormField<SigninRequest>
+              <FormField<LoginForm>
                 id="email"
-                label="Email Address"
+                label="Email"
                 type="email"
                 autoComplete="email"
                 placeholder="Enter your email"
@@ -105,7 +106,7 @@ const Login: React.FC = () => {
                 register={register}
               />
 
-              <FormField<SigninRequest>
+              <FormField<LoginForm>
                 id="password"
                 label="Password"
                 type="password"
@@ -121,11 +122,8 @@ const Login: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={
-                  isLoading || !watchedValues.email || !watchedValues.password
-                }
-              >
-                {isLoading ? (
+                disabled={isSubmitting || !isValid}>
+                {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <LoaderCircle className="animate-spin" />
                     Signing in...
@@ -142,7 +140,7 @@ const Login: React.FC = () => {
                 variant="outline"
                 className="w-full mt-2 border-slate-500 hover:bg-slate-600 hover:text-white cursor-pointer"
                 onClick={handleGoogleLogin}
-                disabled={isLoading}
+                disabled={isSubmitting}
               >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                   <path

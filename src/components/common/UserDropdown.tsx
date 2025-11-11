@@ -1,14 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import useAuthHook from "@/hooks/useAuthHook";
+import { useAppSelector } from "../../hooks/redux";
 import React, { useState, useRef, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { signout } from "@/utils/apis/authApi";
 
 const UserDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+  const { handleLogout } = useAuthHook();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -25,16 +24,6 @@ const UserDropdown: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      await dispatch(signout()).unwrap();
-      setIsOpen(false);
-      navigate("/", { replace: true });
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
 
   const getInitials = (name: string) => {
     return name

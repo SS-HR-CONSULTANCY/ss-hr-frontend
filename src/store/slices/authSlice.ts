@@ -9,10 +9,12 @@ import {
   signout,
   signup,
   updatePassword,
+  verifyEmail,
   verifyOtp,
 } from "@/utils/apis/authApi";
 import type { User } from "@/types/entities/user";
 import type { AuthState } from "@/types/slice/authSliceTypes";
+import type { VerifyEmailResponse } from "@/types/apiTypes/authApiTypes";
 import { updateProfileImage, updateProfileInfo } from "@/utils/apis/userApi";
 import type { UpdateProfileImageResponse, UpdateUserInfoResponse } from "@/types/apiTypes/userApiTypes";
 
@@ -24,7 +26,7 @@ const initialState: AuthState = {
   otpRemainingTime: 0,
   otpTimerIsRunning: false,
   profileImageUpdating: false,
-  otpForUpdatePassword: false,
+  isUpdatingPassword: false,
 };
 
 const authSlice = createSlice({
@@ -61,9 +63,6 @@ const authSlice = createSlice({
       if (state.user) {
         state.user.profileImage = action.payload;
       }
-    },
-    setOtpForUpdatePassword: (state, action) => {
-      state.otpForUpdatePassword = action.payload;
     },
   },
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
@@ -160,23 +159,11 @@ const authSlice = createSlice({
       });
 
     builder
-      .addCase(updatePassword.pending, (state: AuthState) => {
-        state.isLoading = true;
-        state.isAuthenticated = false;
-        state.user = null;
-        state.error = null;
-      })
       .addCase(updatePassword.fulfilled, (state: AuthState) => {
-        state.isLoading = false;
-        state.isAuthenticated = false;
+        state.otpRemainingTime = 0;
+        state.otpTimerIsRunning = false;
+        state.isUpdatingPassword = false;
         state.user = null;
-        state.error = null;
-      })
-      .addCase(updatePassword.rejected, (state: AuthState, action) => {
-        state.isLoading = false;
-        state.isAuthenticated = false;
-        state.user = null;
-        state.error = action.payload as string;
       });
 
     builder
@@ -197,13 +184,24 @@ const authSlice = createSlice({
       });
 
     builder
-      .addCase(updateProfileInfo.pending, () => { })
       .addCase(updateProfileInfo.fulfilled, (state, action: PayloadAction<UpdateUserInfoResponse>) => {
         if (state.user) {
           state.user = { ...state.user, ...action.payload.data };
         }
-      })
-      .addCase(updateProfileInfo.rejected, () => { });
+      });
+
+    builder
+      .addCase(verifyEmail.fulfilled, (state, action: PayloadAction<VerifyEmailResponse>) => {
+        state.otpRemainingTime = 60;
+        state.otpTimerIsRunning = true;
+        state.isUpdatingPassword = true;
+        state.user = {
+          ...state.user, 
+          email: action.payload.data.email,
+          verificationToken: action.payload.data.verificationToken,
+          role: action.payload.data.role
+        };
+      });
 
   }
 });
@@ -216,7 +214,6 @@ export const {
   stopTimer,
   resetAuthStore,
   setProfileImage,
-  setOtpForUpdatePassword,
   updateResumeKey
 } = authSlice.actions;
 export default authSlice.reducer;

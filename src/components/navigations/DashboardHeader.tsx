@@ -12,14 +12,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
-  const { handleLogout } = useAuthHook({
-    route:
-      user?.role === "admin"
-        ? "/admin/login"
-        : user?.role === "user"
-          ? "/login"
-          : "/superAdmin/login",
-  });
+  const { handleLogout } = useAuthHook();
 
   return (
     <header className="p-3 border shadow-md">

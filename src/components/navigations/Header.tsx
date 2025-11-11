@@ -1,5 +1,11 @@
 import React from "react";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
   NavbarLeft,
   NavbarRight,
   Navbar as NavbarComponent,
@@ -10,22 +16,16 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import useAuthHook from "@/hooks/useAuthHook";
 import { useAppSelector } from "@/hooks/redux";
-import { Menu, Moon, Sun, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { toggleTheme } from "@/store/slices/appSlice";
+import { Menu, Moon, Sun, UserCircle } from "lucide-react";
 import type { AppDispatch, RootState } from "@/store/store";
 import noprofileImage from "../../assets/defaultImgaes/noProfile.png";
 import logoTransparent from "../../assets/logos/logo-transparent.png";
 import type { NavbarProps } from "@/types/componentTypes/headerTypes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { siteUrlConfig, navLinks, companyName, links } from "@/utils/constants";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 
 const Header: React.FC = ({
   name = companyName,
@@ -34,20 +34,12 @@ const Header: React.FC = ({
   customNavigation,
   className,
 }: NavbarProps) => {
+
   const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const route: string =
-    user?.role === "admin" ||
-    user?.role === "superAdmin" ||
-    user?.role === "systemAdmin"
-      ? "/admin/login"
-      : user?.role === "user"
-        ? "/login"
-        : "/";
-
-  const { handleLogout } = useAuthHook({ route });
+  const { handleLogout } = useAuthHook();
 
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>

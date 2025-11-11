@@ -46,8 +46,17 @@ import type {
   AdminFetchRevenueReportStatsDataResponse,
   AdminFetchUserReportStatsDataResponse,
 } from "@/types/apiTypes/adminApiTypes";
+import type { Role } from "./commonZod";
 
 export const companyName = "ShahaalamGroups";
+
+export const roleValues = ["user", "admin", "systemAdmin"] as const;
+
+export const roleLoginRoutes: Record<Role, string> = {
+  admin: "/ss-hr-admin/login",
+  systemAdmin: "/ss-hr-system-admin/login",
+  user: "/login",
+};
 
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {

@@ -1,48 +1,42 @@
-import {
-  clearError,
-  stopTimer,
-  updateTimer,
-} from "../../store/slices/authSlice";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { LoaderCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import type { Role } from "@/types/entities/user";
 import React, { useEffect, useState } from "react";
 import FormField from "@/components/form/FormFiled";
 import FormHeader from "@/components/form/FormHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { otpSchema } from "../../utils/validationSchema";
+import { otpSchema, type OtpForm } from "@/utils/authZod";
 import { resendOtp, verifyOtp } from "@/utils/apis/authApi";
 import { formatTime } from "@/utils/helpers/timerFormatterForOtp";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { stopTimer, updateTimer } from "../../store/slices/authSlice";
 import type { VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const Otp: React.FC = () => {
+  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, user, otpTimerIsRunning, otpRemainingTime } =
+  const { user, otpTimerIsRunning, otpRemainingTime, isUpdatingPassword } =
     useAppSelector((state) => state.auth);
   const [resentLoading, setResendLoading] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<VerifyOtpRequest>({
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<OtpForm>({
     resolver: zodResolver(otpSchema),
+    mode: "onChange", 
     defaultValues: {
       otp: "",
       verificationToken: user?.verificationToken,
-      role: user?.role as Role,
+      role: user?.role,
     },
   });
-
-  const watchedValues = watch();
 
   useEffect(() => {
     if (otpTimerIsRunning) {
@@ -53,19 +47,17 @@ const Otp: React.FC = () => {
     }
   }, [otpTimerIsRunning, dispatch]);
 
-  useEffect(() => {
-    if (error) {
-      dispatch(clearError());
-    }
-  }, [dispatch, error]);
-
   const onSubmit = async (data: VerifyOtpRequest) => {
     await dispatch(verifyOtp(data))
       .unwrap()
       .then((res) => {
         if (res.success) {
           toast.success(res.message || "Otp verified");
-          navigate("/login");
+          if(isUpdatingPassword) {
+            navigate("/update-password");
+          } else {
+            navigate("/login");
+          }
           dispatch(stopTimer());
         } else {
           toast.error(res.message || "Invalid otp");
@@ -127,15 +119,9 @@ const Otp: React.FC = () => {
 
               <Button
                 type="submit"
-                className="w-full"
-                disabled={
-                  isLoading ||
-                  !watchedValues.otp ||
-                  !watchedValues.role ||
-                  !watchedValues.verificationToken
-                }
-              >
-                {isLoading && !resentLoading ? (
+                className="w-full cursor-pointer"
+                disabled={isSubmitting || !isValid}>
+                {isSubmitting && !resentLoading ? (
                   <span className="flex items-center gap-2">
                     <LoaderCircle className="animate-spin" />
                     Verifying...

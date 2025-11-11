@@ -25,17 +25,9 @@ import type { SidebarProps } from "@/types/componentTypes/sidebarTypes";
 import { toggleAdminSidebar, toggleTheme } from "@/store/slices/appSlice";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
+  
+  const { handleLogout } = useAuthHook();
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((store: RootState) => store.auth);
-  const route: string =
-    user?.role === "admin" ||
-    user?.role === "superAdmin" ||
-    user?.role === "systemAdmin"
-      ? "/admin/login"
-      : user?.role === "user"
-        ? "/login"
-        : "/";
-  const { handleLogout } = useAuthHook({ route });
   const { theme, sidebarOpen } = useSelector((state: RootState) => state.app);
 
   const iconMap: Record<string, React.ReactNode> = {
