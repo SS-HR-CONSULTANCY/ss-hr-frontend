@@ -21,7 +21,8 @@ import {
   type UserUpdateApplicationResponse,
   type CreateOrUpdateCareerDataResponse,
   type UserFetchAllApplicationsResponse,
-  type UserUpdateApplicationStatusRequest
+  type UserUpdateApplicationStatusRequest,
+  type UpdateProfileImageRequest
 } from "@/types/apiTypes/userApiTypes";
 import { axiosInstance } from "@/lib/axios";
 import type { Job } from "@/types/entities/job";
@@ -30,9 +31,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const updateProfileImage = createAsyncThunk<
   UpdateProfileImageResponse,
-  FormData
->("/user/UpdateProfileImage", async (formData: FormData) => {
-  const response = await axiosInstance.patch("/user/prfileImage", formData);
+  UpdateProfileImageRequest
+>("/user/UpdateProfileImage", async (data) => {
+  const response = await axiosInstance.patch("/user/prfileImage", data);
   return response.data;
 });
 
@@ -93,7 +94,7 @@ export const updateResume = createAsyncThunk<
   ApiBaseResponse,
   UpdateResumeRequest
 >("/user/resume-data", async (data) => {
-  const response = await axiosInstance.patch(`/user/resume`, { key: data.resume });
+  const response = await axiosInstance.patch(`/user/resume`, data);
   return response.data;
 });
 

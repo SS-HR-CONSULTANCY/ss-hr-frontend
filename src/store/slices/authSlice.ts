@@ -13,10 +13,10 @@ import {
   verifyOtp,
 } from "@/utils/apis/authApi";
 import type { User } from "@/types/entities/user";
+import { updateProfileInfo } from "@/utils/apis/userApi";
 import type { AuthState } from "@/types/slice/authSliceTypes";
 import type { VerifyEmailResponse } from "@/types/apiTypes/authApiTypes";
-import { updateProfileImage, updateProfileInfo } from "@/utils/apis/userApi";
-import type { UpdateProfileImageResponse, UpdateUserInfoResponse } from "@/types/apiTypes/userApiTypes";
+import type { UpdateUserInfoResponse } from "@/types/apiTypes/userApiTypes";
 
 const initialState: AuthState = {
   user: null,
@@ -36,11 +36,6 @@ const authSlice = createSlice({
     setAuthUser: (state: AuthState, action: PayloadAction<User | null>) => {
       state.user = action.payload;
     },
-    updateResumeKey: (state, action: PayloadAction<string>) => {
-      if(state.user) {
-        state.user.resume = action.payload;
-      }
-    },
     clearError: (state: AuthState) => {
       state.error = null;
     },
@@ -58,12 +53,13 @@ const authSlice = createSlice({
     stopTimer: (state: AuthState) => {
       state.otpTimerIsRunning = false;
     },
-    resetAuthStore: () => initialState,
-    setProfileImage: (state, action: PayloadAction<string>) => {
-      if (state.user) {
-        state.user.profileImage = action.payload;
-      }
+    setProfileSignedUrl: (state, action: PayloadAction<string>) => {
+      state.user = {...state.user, profileImage: action.payload}
     },
+    setResumeSignedUrl: (state, action: PayloadAction<string>) => {
+        state.user = {...state.user, resume: action.payload};
+    },
+    resetAuthStore: () => initialState,
   },
   extraReducers: (builder: ActionReducerMapBuilder<AuthState>) => {
     builder
@@ -111,6 +107,7 @@ const authSlice = createSlice({
       .addCase(signin.fulfilled, (state: AuthState, action) => {
         state.isLoading = false;
         state.isAuthenticated = true;
+        console.log("action.payload.user : ",action.payload.user);
         state.user = action.payload.user;
         state.error = null;
       })
@@ -167,27 +164,8 @@ const authSlice = createSlice({
       });
 
     builder
-      .addCase(updateProfileImage.pending, (state) => {
-        state.profileImageUpdating = true;
-      })
-      .addCase(
-        updateProfileImage.fulfilled,
-        (state, action: PayloadAction<UpdateProfileImageResponse>) => {
-          state.profileImageUpdating = false;
-          if (state.user) {
-            state.user.profileImage = action.payload.data.profileImage;
-          }
-        },
-      )
-      .addCase(updateProfileImage.rejected, (state) => {
-        state.profileImageUpdating = true;
-      });
-
-    builder
       .addCase(updateProfileInfo.fulfilled, (state, action: PayloadAction<UpdateUserInfoResponse>) => {
-        if (state.user) {
           state.user = { ...state.user, ...action.payload.data };
-        }
       });
 
     builder
@@ -213,7 +191,7 @@ export const {
   updateTimer,
   stopTimer,
   resetAuthStore,
-  setProfileImage,
-  updateResumeKey
+  setProfileSignedUrl,
+  setResumeSignedUrl
 } = authSlice.actions;
 export default authSlice.reducer;

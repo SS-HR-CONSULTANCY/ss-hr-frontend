@@ -6,6 +6,7 @@ import type { CareerData } from "../entities/careerData";
 import type { Application } from "../entities/application";
 
 // User Update Profile image
+export type UpdateProfileImageRequest = Pick<User, "profileImage">
 export interface UpdateProfileImageResponse extends ApiBaseResponse {
   data: {
     profileImage: User["profileImage"];

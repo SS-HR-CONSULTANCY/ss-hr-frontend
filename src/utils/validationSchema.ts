@@ -1,5 +1,6 @@
 import { z } from "zod";
-import type { Gender, Role } from "@/types/entities/user";
+import type { Gender } from "@/types/entities/user";
+import type { Role } from "./commonZod";
 
 export const otpSchema = z.object({
   otp: z.string().nonempty("Otp is required"),
@@ -290,7 +291,22 @@ export const resumeZodSchema = z.object({
     )
     .refine(
       (file) => (file?.size ?? 0) <= 5 * 1024 * 1024,
-      "File size must be less than 5 MB"
+      "File size must be less than 1 MB"
     ),
-})
+});
 export type ResumeDataForm = z.infer<typeof resumeZodSchema>;
+
+export const profileImageZodSchema = z.object({
+  profileImage: z
+    .instanceof(File)
+    .refine((file) => !!file, "Please upload a profile image")
+    .refine(
+      (file) => /\.(png|jpg|jpeg)$/i.test(file?.name ?? ""),
+      "Only PNG, JPG, or JPEG files are allowed"
+    )
+    .refine(
+      (file) => (file?.size ?? 0) <= 5 * 1024 * 1024,
+      "File size must be less than 1 MB"
+    ),
+});
+export type ProfileImageForm = z.infer<typeof profileImageZodSchema>;

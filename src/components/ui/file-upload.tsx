@@ -29,10 +29,12 @@ export const FileUpload = ({
   onChange,
   error,
   fileSelected,
+  accept,
 }: {
   onChange: (file: File | null) => void;
   error?: string;
   fileSelected: boolean;
+  accept?: string;
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -66,6 +68,7 @@ export const FileUpload = ({
           ref={fileInputRef}
           id="file-upload-handle"
           type="file"
+          accept={accept}
           onChange={e => handleFileChange(e.target.files?.[0] ?? null)}
           className="hidden"
         />

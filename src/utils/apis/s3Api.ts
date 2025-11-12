@@ -15,16 +15,16 @@ export const getUploadUrl = async (file: File, userId: string, folder: string) =
 };
 
 
-export const getSignedUrl = async (key: string): Promise<string> => {
+export const getSignedUrl = async (s3FileKey: string): Promise<string> => {
     const response = await axiosInstance.get("/s3/file/presigned-get-url", {
-        params: { key },
+        params: { s3FileKey },
     });
     return response.data.data;
 };
 
-export const deleteFileFromS3 = async (key: string): Promise<ApiBaseResponse> => {
+export const deleteUserFileFromS3 = async (folder: string): Promise<ApiBaseResponse> => {
     const response = await axiosInstance.delete("/s3/file", {
-        data: { key },
+        data: { folder },
     });
     return response.data;
 }
