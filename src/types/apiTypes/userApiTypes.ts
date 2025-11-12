@@ -33,7 +33,7 @@ export interface UpdateAddressResponse extends ApiBaseResponse {
 
 
 // User Career Data
-export type CreateUserCareerDataRequest = Pick<
+export type CreateUserCareerDataRequest = Partial<Pick<
   CareerData,
   | "currentSalary"
   | "expectedSalary"
@@ -46,7 +46,7 @@ export type CreateUserCareerDataRequest = Pick<
   | "currentJobType"
   | "preferredJobTypes"
   | "preferredWorkModes"
->;
+>>;
 export type UpdateUserCareerDataRequest = Partial<Pick<
   CareerData,
   "_id"

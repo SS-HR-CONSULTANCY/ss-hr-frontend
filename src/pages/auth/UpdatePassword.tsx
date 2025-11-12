@@ -15,7 +15,7 @@ import { HomeIcon, LoaderCircle, User } from "lucide-react";
 import PasswordStrength from "@/components/form/PasswordStrength";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { getPasswordStrength } from "@/utils/helpers/passwordStrength";
-import { updatePasswordSchema, type UpdatePasswordForm } from "@/utils/authZod";
+import { updatePasswordSchema, type UpdatePasswordForm } from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const UpdatePassword: React.FC = () => {

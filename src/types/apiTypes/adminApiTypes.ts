@@ -4,7 +4,7 @@ import type { Review } from "../entities/review";
 import type { Package } from "../entities/package";
 import type { Payment } from "../entities/payment";
 import type { Application } from "../entities/application";
-import type { AdminRoleTypes, LimitedRoleType } from "@/utils/commonZod";
+import type { AdminRoleTypes, LimitedRoleType } from "@/utils/zod/commonZod";
 
 // **** job
 export type AdminCreateNewJob = Pick<

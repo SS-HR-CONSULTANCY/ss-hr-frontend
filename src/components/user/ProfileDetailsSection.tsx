@@ -14,7 +14,7 @@ import type { AppDispatch, RootState } from "@/store/store";
 import { cleanEmptyFields } from "@/utils/helpers/formDataCleaner";
 import { handleFormError } from "@/utils/helpers/formErrorCatcher";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
-import { userProfileDataSchema, type ProfileDataForm } from "@/utils/userZod";
+import { userProfileDataSchema, type ProfileDataForm } from "@/utils/zod/userZod";
 
 const ProfileDetailsSection: React.FC = () => {
 

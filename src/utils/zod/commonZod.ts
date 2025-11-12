@@ -1,6 +1,6 @@
 import z from "zod";
-import { booleanField, enumField, jsonArrayParser, numberField, stringArrayField, stringField } from "./zodUtilities";
-import { adminRoleValues, genderValues, jobValues, limitedroleValues, paymentMethodValues, paymentStatusValues, roleValues, workModeValues } from "./constants";
+import { booleanField, enumField, numberField, stringArrayField, stringField } from "./zodUtilities";
+import { adminRoleValues, genderValues, jobValues, limitedroleValues, paymentMethodValues, paymentStatusValues, roleValues, workModeValues } from "../constants";
 import { REGEX_PROFESSIONAL_STATUS, REGEX_PLACE, REGEX_COUNTRY, REGEX_FEATURE, REGEX_FULL_NAME, REGEX_LONG_TEXT, REGEX_NATIONALITY, REGEX_PASSWORD, REGEX_PHONE, REGEX_POSTAL, REGEX_S3_FILEKEY, REGEX_TEXT_DOT_AMP, REGEX_URL, REGEX_USERNAME, REGEX_CLIENT_NAME, REGEX_TESTIMONIAL, REGEX_ENTITY_ID, REGEX_DESCRIPTION, REGEX_INDUSTRY, REGEX_BENEFITS, REGEX_SKILLS, REGEX_EXPERIENCE, REGEX_COMPANY_NAME, REGEX_ADDRESSLINE, REGEX_LANDMARK } from "./regex";
 
 //*** Zod Schema Fields & Reusable Validators */
@@ -58,8 +58,7 @@ export const experience = stringField("experience", 1, 100, REGEX_EXPERIENCE);
 export const currentDesignation = stringField("currentDesignation", 2, 100,REGEX_TEXT_DOT_AMP);
 export const currentCompany = stringField("currentCompany", 2, 100, REGEX_COMPANY_NAME);
 export const currentJobType = jobType;
-export const preferredJobTypes = jsonArrayParser(jobType);
-export const preferredWorkModes = jsonArrayParser(workMode);
+
 export const noticePeriod = z
   .coerce.number()
   .or(z.nan())

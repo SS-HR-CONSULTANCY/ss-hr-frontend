@@ -1,4 +1,4 @@
-import type { GenderType, RoleType } from "@/utils/commonZod";
+import type { GenderType, RoleType } from "@/utils/zod/commonZod";
 
 export interface User {
   _id: string;

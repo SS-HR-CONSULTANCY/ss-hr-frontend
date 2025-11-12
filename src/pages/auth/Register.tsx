@@ -12,9 +12,9 @@ import { HomeIcon, LoaderCircle, User } from "lucide-react";
 import PasswordStrength from "@/components/form/PasswordStrength";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import type { RegisterRequest } from "@/types/slice/authSliceTypes";
-import { registerSchema, type RegisterForm } from "@/utils/authZod";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { getPasswordStrength } from "@/utils/helpers/passwordStrength";
+import { registerSchema, type RegisterForm } from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const Register: React.FC = () => {

@@ -81,7 +81,7 @@ export const numberField = (
   min?: number,
   max?: number
 ) => {
-  let schema = z.number().int();
+  let schema = z.coerce.number().int();
 
   if (min !== undefined) {
     schema = schema.min(min, `${fieldName} must be at least ${min}`);

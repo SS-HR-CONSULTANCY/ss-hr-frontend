@@ -1,108 +1,20 @@
 import { z } from "zod";
+import { addressLine1,   addressLine2, city, state, district, country, postalCode, landmark, primary, } from "./zod/commonZod";
 
 // admin create job zod schema
 export const createJobSchema = z.object({
-  companyName: z
-    .string()
-    .min(2, "Company name must be at least 2 characters")
-    .max(100, "Company name must be at most 100 characters")
-    .trim(),
-
-  designation: z
-    .string()
-    .min(2, "Designation must be at least 2 characters")
-    .max(100, "Designation must be at most 100 characters")
-    .trim(),
-
-  industry: z
-    .string()
-    .min(2, "Industry must be at least 2 characters")
-    .max(100, "Industry must be at most 100 characters")
-    .trim(),
-
-  jobDescription: z
-    .string()
-    .min(10, "Job description must be at least 10 characters"),
-
-  benifits: z.string().min(2, "Benefits must be at least 2 characters"),
-
-  salary: z
-    .number()
-    .int()
-    .min(1, "Salary must be at least 1")
-    .max(100, "Salary cannot exceed 1000"),
-
-  skills: z.string().min(2, "Skills must be at least 2 characters"),
-
-  nationality: z.string().min(2, "Nationality must be at least 2 characters"),
-
-  vacancy: z
-    .number()
-    .int()
-    .min(1, "Vacancy must be at least 1")
-    .max(1000, "Vacancy cannot exceed 1000"),
-});
-
-
-// address zod schema
-const postalOrPoBoxRegex = /^[0-9]{3,10}$/;
-const cityRegex = /^[A-Za-z\s]{2,50}$/;
-const countryRegex = /^[A-Za-z\s]{2,60}$/;
-
-export const addressSchema = z
-  .object({
-    addressLine1: z
-      .string()
-      .trim()
-      .min(3, "Address Line 1 must be at least 3 characters")
-      .max(100, "Address Line 1 cannot exceed 100 characters"),
-
-    addressLine2: z
-      .string()
-      .trim()
-      .max(100, "Address Line 2 cannot exceed 100 characters"),
-
-    city: z
-      .string()
-      .trim()
-      .regex(cityRegex, "Enter a valid city name (letters and spaces only)")
-      .min(2, "City name must be at least 2 characters")
-      .max(50, "City name cannot exceed 50 characters"),
-
-    state: z
-      .string()
-      .trim()
-      .min(2, "State name must be at least 2 characters")
-      .max(50, "State name cannot exceed 50 characters"),
-
-    district: z
-      .string()
-      .trim()
-      .min(2, "District name must be at least 2 characters")
-      .max(50, "District name cannot exceed 50 characters"),
-
-    country: z
-      .string()
-      .trim()
-      .regex(countryRegex, "Enter a valid country name (letters and spaces only)")
-      .min(2, "Country must be at least 2 characters")
-      .max(60, "Country cannot exceed 60 characters"),
-
-    postalCode: z
-      .string()
-      .trim()
-      .regex(postalOrPoBoxRegex, "Enter a valid postal code (4–10 digits)"),
-
-    landmark: z
-      .string()
-      .trim()
-      .min(4, "Landmark must be at least 4 characters")
-      .max(100, "Landmark cannot exceed 100 characters"),
-
-    primary: z.boolean(),
+  addressLine1,
+  addressLine2,
+  city,
+  state,
+  district,
+  country,
+  postalCode,
+  landmark,
+  primary,
   });
 
-export type AddressForm = z.infer<typeof addressSchema>;
+export type AddressForm = z.infer<typeof createJobSchema>;
 
 
 // career Data zod schema

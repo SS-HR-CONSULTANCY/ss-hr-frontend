@@ -11,8 +11,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { Address } from "@/types/entities/address";
 import { CountryDropdown } from "../ui/country-dropdown";
 import type { AppDispatch, RootState } from "@/store/store";
-import { addressSchema, type AddressForm } from "@/utils/validationSchema";
-import { Controller, useForm, type SubmitHandler, type FieldErrors, type Path } from "react-hook-form";
+import { handleFormError } from "@/utils/helpers/formErrorCatcher";
+import { cleanEmptyFields } from "@/utils/helpers/formDataCleaner";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import { createJobSchema, type AddressForm } from "@/utils/zod/addressZod";
 
 const UserAddressSection: React.FC = () => {
 
@@ -26,12 +28,11 @@ const UserAddressSection: React.FC = () => {
     const {
         register,
         handleSubmit,
-        reset,
         control,
         formState: { errors },
         setFocus,
     } = useForm<AddressForm>({
-        resolver: zodResolver(addressSchema),
+        resolver: zodResolver(createJobSchema),
         defaultValues: {
             addressLine1: userAddress?.addressLine1 || "",
             addressLine2: userAddress?.addressLine2 || "",
@@ -45,28 +46,18 @@ const UserAddressSection: React.FC = () => {
         },
     });
 
-    const onError = (errors: FieldErrors<AddressForm>) => {
-        const firstErrorField = Object.keys(errors)[0] as Path<AddressForm> | undefined;
-        if (firstErrorField) {
-            setFocus(firstErrorField);
-        }
-        toast.error("Please fix the highlighted fields.");
-    };
-
     const onSubmit: SubmitHandler<AddressForm> = async (
         data,
     ) => {
-        console.log("data : ", data);
-        console.log("userAddress : ", userAddress);
+        const cleanedData = cleanEmptyFields(data);
         const update: boolean = userAddress ? true : false;
         try {
-            await dispatch(createAddress({ id: update ? userAddress?._id : null, data: data as Address, update }))
+            await dispatch(createAddress({ id: update ? userAddress?._id : null, data: cleanedData as Address, update }))
                 .unwrap()
                 .then((res) => {
                     if (res.success) {
                         toast.success(res.message || `Address ${update ? "updated" : "created"} successfully!`);
                         setIsEditing((prev) => !prev);
-                        reset();
                     } else {
                         toast.error(res.message || `Address ${update ? "updating" : "creating"} failed!`);
                     }
@@ -106,7 +97,7 @@ const UserAddressSection: React.FC = () => {
                     >Add Address</Button>
                 </div>
             ) : (
-                <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <form onSubmit={handleSubmit(onSubmit, handleFormError(setFocus))}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <FormField<AddressForm>

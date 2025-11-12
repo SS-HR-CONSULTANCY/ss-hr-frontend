@@ -9,9 +9,11 @@ import type { AppDispatch, RootState } from "@/store/store";
 import { MultiSelectButtonGroup } from "../form/MultiSelectButtonGroup";
 import { createCareerData, updateCareerData } from "@/utils/apis/userApi";
 import { useForm, type SubmitHandler, type Resolver } from "react-hook-form";
-import { careerDataSchema, type CareerData } from "@/utils/validationSchema";
+// import { careerDataSchema, type CareerData } from "@/utils/validationSchema";
 import type { UpdateUserCareerDataRequest } from "@/types/apiTypes/userApiTypes";
 import { booleanOptions, jobTypeOptions, workModeOptions } from "@/utils/constants";
+import { careerDataSchema, type CareerDataForm } from "@/utils/zod/userZod";
+import { cleanEmptyFields } from "@/utils/helpers/formDataCleaner";
 
 const CareerPreferencesSection: React.FC = () => {
 
@@ -26,14 +28,14 @@ const CareerPreferencesSection: React.FC = () => {
         watch,
         setValue,
         formState: { errors },
-    } = useForm<CareerData>({
-        resolver: zodResolver(careerDataSchema) as unknown as Resolver<CareerData>,
+    } = useForm<CareerDataForm>({
+        resolver: zodResolver(careerDataSchema) as unknown as Resolver<CareerDataForm>,
         defaultValues: {
-            currentSalary: userCareerData?.currentSalary || 0,
-            expectedSalary: userCareerData?.expectedSalary || 0,
-            immediateJoiner: userCareerData?.immediateJoiner ?? false,
-            noticePeriod: userCareerData?.noticePeriod || 0,
-            experience: userCareerData?.experience || "0 months",
+            currentSalary: userCareerData?.currentSalary,
+            expectedSalary: userCareerData?.expectedSalary,
+            immediateJoiner: userCareerData?.immediateJoiner ?? true,
+            noticePeriod: userCareerData?.noticePeriod,
+            experience: userCareerData?.experience || "",
             currentDesignation: userCareerData?.currentDesignation || "",
             currentCompany: userCareerData?.currentCompany || "",
             industry: userCareerData?.industry || "",
@@ -47,15 +49,16 @@ const CareerPreferencesSection: React.FC = () => {
     const selectedWorkModes = watch("preferredWorkModes") || [];
     const isImmediateJoiner = watch("immediateJoiner") === true;
 
-    const onSubmit: SubmitHandler<CareerData> = async (data) => {
+    const onSubmit: SubmitHandler<CareerDataForm> = async (data) => {
         try {
             const isUpdate = !!userCareerData;
             const action = isUpdate ? updateCareerData : createCareerData;
-            if(isUpdate) {
+            if (isUpdate) {
                 (data as UpdateUserCareerDataRequest)._id = userCareerData?._id
             }
 
-            const res = await dispatch(action(data)).unwrap();
+            const cleanedData = cleanEmptyFields(data);
+            const res = await dispatch(action(cleanedData as CareerDataForm)).unwrap();
 
             if (res.success) {
                 toast.success(
@@ -109,7 +112,7 @@ const CareerPreferencesSection: React.FC = () => {
             ) : (
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField<CareerData>
+                        <FormField<CareerDataForm>
                             id="currentSalary"
                             label="Current Salary"
                             placeholder="Enter current salary"
@@ -118,9 +121,10 @@ const CareerPreferencesSection: React.FC = () => {
                             error={errors.currentSalary?.message}
                             defaultValue={userCareerData?.currentSalary}
                             readOnly={!isEditing}
+                            required={isEditing}
                         />
 
-                        <FormField<CareerData>
+                        <FormField<CareerDataForm>
                             id="expectedSalary"
                             label="Expected Salary"
                             placeholder="Enter expected salary"
@@ -129,9 +133,10 @@ const CareerPreferencesSection: React.FC = () => {
                             error={errors.expectedSalary?.message}
                             defaultValue={userCareerData?.expectedSalary}
                             readOnly={!isEditing}
+                            required={isEditing}
                         />
 
-                        <FormField<CareerData>
+                        <FormField<CareerDataForm>
                             id="immediateJoiner"
                             label="Immediate Joiner"
                             type="select"
@@ -142,12 +147,13 @@ const CareerPreferencesSection: React.FC = () => {
                             error={errors.immediateJoiner?.message}
                             defaultValue={String(userCareerData?.immediateJoiner ?? "")}
                             readOnly={!isEditing}
-                            defaultSelectOptions="Select Joining Type"
+                            defaultSelectOptions="Joining Type"
                             options={booleanOptions}
+                            required={isEditing}
                         />
 
                         {!isImmediateJoiner && (
-                            <FormField<CareerData>
+                            <FormField<CareerDataForm>
                                 id="noticePeriod"
                                 label="Notice Period (in days)"
                                 placeholder="Enter notice period"
@@ -160,7 +166,7 @@ const CareerPreferencesSection: React.FC = () => {
                             />
                         )}
 
-                        <FormField<CareerData>
+                        <FormField<CareerDataForm>
                             id="experience"
                             label="Total Experience"
                             placeholder="e.g. 3 years"
@@ -169,9 +175,23 @@ const CareerPreferencesSection: React.FC = () => {
                             error={errors.experience?.message}
                             defaultValue={userCareerData?.experience}
                             readOnly={!isEditing}
+                            required={isEditing}
                         />
 
-                        <FormField<CareerData>
+                        <FormField<CareerDataForm>
+                            id="currentJobType"
+                            label="Current Job Type"
+                            type="select"
+                            register={register}
+                            error={errors.currentJobType?.message}
+                            defaultValue={userCareerData?.currentJobType}
+                            readOnly={!isEditing}
+                            defaultSelectOptions="Job Type"
+                            options={jobTypeOptions}
+                            required={isEditing}
+                        />
+
+                        <FormField<CareerDataForm>
                             id="currentDesignation"
                             label="Current Designation"
                             placeholder="Enter your role"
@@ -182,7 +202,7 @@ const CareerPreferencesSection: React.FC = () => {
                             readOnly={!isEditing}
                         />
 
-                        <FormField<CareerData>
+                        <FormField<CareerDataForm>
                             id="currentCompany"
                             label="Current Company"
                             placeholder="Enter company name"
@@ -193,7 +213,7 @@ const CareerPreferencesSection: React.FC = () => {
                             readOnly={!isEditing}
                         />
 
-                        <FormField<CareerData>
+                        <FormField<CareerDataForm>
                             id="industry"
                             label="Industry"
                             placeholder="Enter industry name"
@@ -205,19 +225,7 @@ const CareerPreferencesSection: React.FC = () => {
                             info="Allowed file types: .pdf, .doc, .docx"
                         />
 
-                        <FormField<CareerData>
-                            id="currentJobType"
-                            label="Current Job Type"
-                            type="select"
-                            register={register}
-                            error={errors.currentJobType?.message}
-                            defaultValue={userCareerData?.currentJobType}
-                            readOnly={!isEditing}
-                            defaultSelectOptions="Select Job Type"
-                            options={jobTypeOptions}
-                        />
-
-                        <MultiSelectButtonGroup<CareerData>
+                        <MultiSelectButtonGroup<CareerDataForm>
                             id="preferredJobTypes"
                             label="Preferred Job Types"
                             options={jobTypeOptions}
@@ -228,7 +236,7 @@ const CareerPreferencesSection: React.FC = () => {
                             isEditing
                         />
 
-                        <MultiSelectButtonGroup<CareerData>
+                        <MultiSelectButtonGroup<CareerDataForm>
                             id="preferredWorkModes"
                             label="Preferred Work Modes"
                             options={workModeOptions}

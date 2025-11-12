@@ -1,4 +1,4 @@
-import type { Role } from "@/utils/commonZod";
+import type { Role } from "@/utils/zod/commonZod";
 import type { User } from "../entities/user";
 
 export interface LoginRequest {

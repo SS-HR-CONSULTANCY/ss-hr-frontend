@@ -16,7 +16,7 @@ import type { AppDispatch, RootState } from '@/store/store';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { setResumeSignedUrl } from '@/store/slices/authSlice';
 import { getCleanFileName } from '@/utils/helpers/filenameReducer';
-import { resumeZodSchema, type ResumeDataForm } from '@/utils/userZod';
+import { resumeZodSchema, type ResumeDataForm } from '@/utils/zod/userZod';
 
 const ResumeSection: React.FC = () => {
     

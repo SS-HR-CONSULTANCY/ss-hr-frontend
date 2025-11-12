@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { signin } from "@/utils/apis/authApi";
-import type { Role } from "@/utils/commonZod";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
@@ -12,14 +11,15 @@ import FormField from "@/components/form/FormFiled";
 import CustomLink from "@/components/form/CustomLink";
 import FormHeader from "@/components/form/FormHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginForm } from "@/utils/authZod";
+import type { RoleType } from "@/utils/zod/commonZod";
 import { HomeIcon, LoaderCircle, UserPlus } from "lucide-react";
 import RememberMeWithFP from "@/components/form/RememberMeWithFP";
+import { loginSchema, type LoginForm } from "@/utils/zod/authZod";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 interface LoginProps {
-  role: Role;
+  role: RoleType;
 }
 
 const Login: React.FC<LoginProps> = ({

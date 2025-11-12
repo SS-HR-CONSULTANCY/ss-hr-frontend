@@ -46,7 +46,7 @@ import type {
   AdminFetchRevenueReportStatsDataResponse,
   AdminFetchUserReportStatsDataResponse,
 } from "@/types/apiTypes/adminApiTypes";
-import type { RoleType } from "./commonZod";
+import type { RoleType } from "./zod/commonZod";
 
 export const companyName = "ShahaalamGroups";
 

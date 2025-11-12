@@ -1,5 +1,4 @@
-export type WorkMode = "onsite" | "remote" | "hybrid";
-export type JobType = "full-time" | "part-time" | "contract" | "internship" | "freelance";
+import type { JobtypeType, WorkModeType } from "@/utils/zod/commonZod";
 
 export interface CareerData {
   _id: string;
@@ -16,9 +15,9 @@ export interface CareerData {
   currentCompany?: string;
   industry?: string;
 
-  currentJobType?: JobType;                
-  preferredJobTypes?: JobType[];            
-  preferredWorkModes?: WorkMode[];                     
+  currentJobType?: JobtypeType;                
+  preferredJobTypes?: JobtypeType[];            
+  preferredWorkModes?: WorkModeType[];                     
 
   resume: File | string;
 

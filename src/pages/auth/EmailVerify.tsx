@@ -11,7 +11,7 @@ import FormHeader from "@/components/form/FormHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HomeIcon, LoaderCircle, UserPlus } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { emailVerifySchema, type EmailVerifyForm } from "@/utils/authZod";
+import { emailVerifySchema, type EmailVerifyForm } from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const EmailVerify: React.FC = () => {

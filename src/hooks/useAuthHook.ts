@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import type { Role } from "@/utils/commonZod";
+import type { Role } from "@/utils/zod/commonZod";
 import { useNavigate } from "react-router-dom";
 import { signout } from "@/utils/apis/authApi";
 import { roleLoginRoutes } from "@/utils/constants";

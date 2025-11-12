@@ -10,7 +10,7 @@ import type { AppDispatch, RootState } from "@/store/store";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { setProfileSignedUrl } from "@/store/slices/authSlice";
 import noProfileImage from "../../assets/defaultImgaes/noProfile.png";
-import { profileImageZodSchema, type ProfileImageForm } from "@/utils/userZod";
+import { profileImageZodSchema, type ProfileImageForm } from "@/utils/zod/userZod";
 import { deleteUserFileFromS3, getSignedUrl, getUploadUrl, uploadToS3 } from "@/utils/apis/s3Api";
 
 const ProfileImageWithName: React.FC = () => {
