@@ -81,6 +81,7 @@ const FormField = <T extends FieldValues>({
           id={id}
           type="file"
           accept={accept}
+          required={required}
           {...register(id, registerOptions)}
           onChange={(e) => {
             const file: File | undefined = (e.target as HTMLInputElement)
@@ -106,6 +107,7 @@ const FormField = <T extends FieldValues>({
         <select
           id={id}
           {...register(id, registerOptions)}
+           required={required}
           className={cn("file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]", "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",)} > <option value="" className="dark:text-black">Select {defaultSelectOptions}</option> {options?.map((opt) => (<option key={opt.value} value={opt.value} className="dark:text-black"> {opt.label} </option>))} </select>
         {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
@@ -121,6 +123,7 @@ const FormField = <T extends FieldValues>({
         </Label>
         <textarea
           id={id}
+          required={required}
           defaultValue={defaultValue as string}
           rows={rows}
           readOnly={readOnly}
@@ -149,6 +152,7 @@ const FormField = <T extends FieldValues>({
       <div className="relative">
         <Input
           id={id}
+          required={required}
           type={inputType}
           readOnly={readOnly}
           autoComplete={autoComplete}

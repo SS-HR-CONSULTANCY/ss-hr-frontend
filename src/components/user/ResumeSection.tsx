@@ -7,8 +7,8 @@ import {
 import { Edit } from 'lucide-react';
 import { Button } from '../ui/button';
 import { toast } from 'react-toastify';
-import React, { useRef, useState } from 'react';
 import { FileUpload } from '../ui/file-upload';
+import React, { useRef, useState } from 'react';
 import { updateResume } from '@/utils/apis/userApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,9 +16,10 @@ import type { AppDispatch, RootState } from '@/store/store';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { setResumeSignedUrl } from '@/store/slices/authSlice';
 import { getCleanFileName } from '@/utils/helpers/filenameReducer';
-import { resumeZodSchema, type ResumeDataForm } from '@/utils/validationSchema';
+import { resumeZodSchema, type ResumeDataForm } from '@/utils/userZod';
 
 const ResumeSection: React.FC = () => {
+    
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useSelector((state: RootState) => state.auth);
     const [fileSelected, setFileSelected] = useState<boolean>(false);

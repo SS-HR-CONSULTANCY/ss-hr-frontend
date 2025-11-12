@@ -15,7 +15,7 @@ export interface UpdateProfileImageResponse extends ApiBaseResponse {
 
 
 // User Profile Info
-export type UpdateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo" | "email" | "gender" | "dob" | "nationality" | "linkedInUsername" | "portfolioUrl" | "professionalStatus">;
+export type UpdateUserInfo = Pick<User, "fullName" | "phone" | "phoneTwo" | "email" | "gender" | "dob" | "nationality" | "professionalStatus"> & Partial<Pick<User, "linkedInUsername" | "portfolioUrl">>;
 export interface UpdateUserInfoResponse extends ApiBaseResponse {
   data: UpdateUserInfo
 }

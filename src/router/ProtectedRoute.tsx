@@ -24,11 +24,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     if (location.pathname.startsWith("/ss-hr-admin") || location.pathname.startsWith("ss-hr-system-admin")) {
       return <Navigate to="/ss-hr-admin/login" state={{ from: location }} replace />;
     }
-    console.log("Here the control");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // if role restriction is present
   if (requiredRole && user?.role && !requiredRole.includes(user?.role)) {
     return (
       <div className="flex items-center justify-center h-full">

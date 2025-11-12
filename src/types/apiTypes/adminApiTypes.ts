@@ -4,6 +4,7 @@ import type { Review } from "../entities/review";
 import type { Package } from "../entities/package";
 import type { Payment } from "../entities/payment";
 import type { Application } from "../entities/application";
+import type { AdminRoleTypes, LimitedRoleType } from "@/utils/commonZod";
 
 // **** job
 export type AdminCreateNewJob = Pick<
@@ -193,11 +194,10 @@ export interface AdminFetchReportTableDataResponse {
 
 // Create new admin api request
 export interface CreateAdminRequest
-  extends Pick<User, "fullName" | "email" | "phone"> {
+  extends Pick<User, "fullName" | "email" | "phone" | "profileImage"> {
   password: string;
-  profileImage: FileList;
-  role: "admin" | "superAdmin";
-  createrRole: "superAdmin" | "systemAdmin";
+  role: LimitedRoleType;
+  createrRole: AdminRoleTypes;
 }
 // Create new admin api response
 export type CreateAdminResponse = Pick<
@@ -211,7 +211,8 @@ export type CreateAdminResponse = Pick<
   | "isBlocked"
   | "createdAt"
 >;
-// Fetch all admins (subadmin and superAdmin)
+
+// Fetch all admins
 export type AdminFetchAllAdminsResponse = Pick<
   User,
   | "_id"

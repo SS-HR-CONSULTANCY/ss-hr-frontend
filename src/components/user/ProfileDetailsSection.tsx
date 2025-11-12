@@ -11,26 +11,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateProfileInfo } from "@/utils/apis/userApi";
 import { CountryDropdown } from "../ui/country-dropdown";
 import type { AppDispatch, RootState } from "@/store/store";
-import { userProfileSchema, type ProfileDataForm } from "@/utils/validationSchema";
-import type { UpdateUserInfo } from "@/types/apiTypes/userApiTypes";
-import { useForm, Controller, type SubmitHandler, type FieldErrors, type Path } from "react-hook-form";
+import { cleanEmptyFields } from "@/utils/helpers/formDataCleaner";
+import { handleFormError } from "@/utils/helpers/formErrorCatcher";
+import { useForm, Controller, type SubmitHandler } from "react-hook-form";
+import { userProfileDataSchema, type ProfileDataForm } from "@/utils/userZod";
 
 const ProfileDetailsSection: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { user } = useSelector((state: RootState) => state.auth);
 
+    const dispatch = useDispatch<AppDispatch>();
     const [isEditing, setIsEditing] = useState(false);
+    const { user } = useSelector((state: RootState) => state.auth);
 
     const {
         register,
         reset,
         handleSubmit,
-        formState: { isSubmitting },
+        formState: { errors, isSubmitting },
         control,
         setFocus,
-        formState: { errors },
     } = useForm<ProfileDataForm>({
-        resolver: zodResolver(userProfileSchema),
+        resolver: zodResolver(userProfileDataSchema),
+        mode: "onChange",
         defaultValues: {
             fullName: user?.fullName || "",
             email: user?.email || "",
@@ -45,24 +46,19 @@ const ProfileDetailsSection: React.FC = () => {
         },
     });
 
-     const onError = (errors: FieldErrors<ProfileDataForm>) => {
-            const firstErrorField = Object.keys(errors)[0] as Path<ProfileDataForm> | undefined;
-            if (firstErrorField) {
-                setFocus(firstErrorField);
-            }
-            toast.error("Please fix the highlighted fields.");
-        };
-
-    const onSubmit: SubmitHandler<UpdateUserInfo> = async (data) => {
+    const onSubmit: SubmitHandler<ProfileDataForm> = async (data) => {
         try {
-            const res = await dispatch(updateProfileInfo(data)).unwrap();
-            if (res.success) {
-                toast.success(res.message || "User profile updated successfully!");
-                setIsEditing(false);
-                reset();
-            } else {
-                toast.error(res.message || "Failed to update profile!");
-            }
+            const cleanedData = cleanEmptyFields(data);
+            await dispatch(updateProfileInfo(cleanedData as ProfileDataForm))
+                .unwrap()
+                .then((res) => {
+                    if (res.success) {
+                        toast.success(res.message || "User profile updated successfully!");
+                        setIsEditing(false);
+                    } else {
+                        toast.error(res.message || "Failed to update profile!");
+                    }
+                });
         } catch {
             toast.error("Error updating profile data!");
         }
@@ -85,10 +81,10 @@ const ProfileDetailsSection: React.FC = () => {
                 )}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit, onError)}>
+            <form onSubmit={handleSubmit(onSubmit, handleFormError(setFocus))}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                    <FormField<UpdateUserInfo>
+                    <FormField<ProfileDataForm>
                         id="fullName"
                         label="Full Name"
                         placeholder={isEditing ? "Enter full name" : "Not provided"}
@@ -100,7 +96,7 @@ const ProfileDetailsSection: React.FC = () => {
                         required={isEditing}
                     />
 
-                    <FormField<UpdateUserInfo>
+                    <FormField<ProfileDataForm>
                         id="email"
                         label="Email"
                         placeholder={"Not provided"}
@@ -154,7 +150,7 @@ const ProfileDetailsSection: React.FC = () => {
                         )}
                     />
 
-                    <FormField<UpdateUserInfo>
+                    <FormField<ProfileDataForm>
                         id="gender"
                         label="Gender"
                         placeholder={isEditing ? "Enter gender" : "Not provided"}
@@ -204,7 +200,7 @@ const ProfileDetailsSection: React.FC = () => {
                         )}
                     />
 
-                    <FormField<UpdateUserInfo>
+                    <FormField<ProfileDataForm>
                         id="professionalStatus"
                         label="Professional Status"
                         placeholder={isEditing ? "Enter Professional Status" : "Not provided"}
@@ -216,7 +212,7 @@ const ProfileDetailsSection: React.FC = () => {
                         required={isEditing}
                     />
 
-                    <FormField<UpdateUserInfo>
+                    <FormField<ProfileDataForm>
                         id="linkedInUsername"
                         label="LinkedIn Username"
                         placeholder={isEditing ? "Enter LinkedIn Username" : "Not provided"}
@@ -228,10 +224,10 @@ const ProfileDetailsSection: React.FC = () => {
                         required={false}
                     />
 
-                    <FormField<UpdateUserInfo>
+                    <FormField<ProfileDataForm>
                         id="portfolioUrl"
                         label="Portfolio"
-                        placeholder={isEditing ? "Enter portfolio Username" : "Not provided"}
+                        placeholder={isEditing ? "Enter portfolio url" : "Not provided"}
                         type="text"
                         register={register}
                         error={errors.portfolioUrl?.message}
@@ -247,6 +243,7 @@ const ProfileDetailsSection: React.FC = () => {
                         <Button
                             type="submit"
                             variant="outline"
+                            disabled={isSubmitting}
                             className="text-xs md:text-sm px-3 py-1 cursor-pointer"
                         >
                             {isSubmitting ? "Updating" : "Save Changes"}

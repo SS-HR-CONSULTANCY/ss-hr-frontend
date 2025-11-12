@@ -46,13 +46,27 @@ import type {
   AdminFetchRevenueReportStatsDataResponse,
   AdminFetchUserReportStatsDataResponse,
 } from "@/types/apiTypes/adminApiTypes";
-import type { Role } from "./commonZod";
+import type { RoleType } from "./commonZod";
 
 export const companyName = "ShahaalamGroups";
 
 export const roleValues = ["user", "admin", "systemAdmin"] as const;
 
-export const roleLoginRoutes: Record<Role, string> = {
+export const adminRoleValues = ["admin", "systemAdmin"] as const;
+
+export const limitedroleValues = ["user" , "admin"] as const;
+
+export const genderValues = ["male" , "female" , "other"] as const;
+
+export const jobValues = ["full-time" , "part-time" , "contract" , "internship" , "freelance"] as const;
+
+export const workModeValues = ["onsite" , "remote" , "hybrid"] as const;
+
+export const paymentMethodValues = ["googlepay", "banktransfer", "cash"] as const;
+
+export const paymentStatusValues = ["fullyPaid", "partiallyPaid", "pending"] as const;
+
+export const roleLoginRoutes: Record<RoleType, string> = {
   admin: "/ss-hr-admin/login",
   systemAdmin: "/ss-hr-system-admin/login",
   user: "/login",
@@ -560,45 +574,58 @@ export const userApplicationRoutes: Route[] = [
   { path: "applications", name: "Applications", roles: ["user"] },
   { path: "chat", name: "Chat", roles: ["user"] },
 ];
+
 export const adminApplicationRoutes: Route[] = [
   {
     path: "overview",
     name: "Overview",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "users",
     name: "Users",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "jobs",
     name: "Jobs",
-    roles: ["admin", "superAdmin", "admin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "packages",
     name: "Packages",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "applications",
     name: "Applications",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
-  { path: "chat", name: "Chat", roles: ["superAdmin", "admin"] },
+  { 
+    path: "chat", 
+    name: "Chat", 
+    roles: ["admin", "systemAdmin"] 
+  },
   {
     path: "payments",
     name: "Payments",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "testimonials",
     name: "Testimonials",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
-  { path: "reports", name: "Reports", roles: ["superAdmin", "systemAdmin"] },
-  { path: "settings", name: "Settings", roles: ["superAdmin"] },
+  { 
+    path: "reports", 
+    name: "Reports", 
+    roles: ["admin", "systemAdmin"] 
+  },
+  { 
+    path: "settings", 
+    name: "Settings", 
+    roles: ["superAdmin"] 
+  },
 ];
 
 // Chat component shimmer constants

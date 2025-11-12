@@ -1,3 +1,4 @@
+import { Edit } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "react-toastify";
 import React, { useState } from "react";
@@ -9,9 +10,8 @@ import type { AppDispatch, RootState } from "@/store/store";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { setProfileSignedUrl } from "@/store/slices/authSlice";
 import noProfileImage from "../../assets/defaultImgaes/noProfile.png";
-import { profileImageZodSchema, type ProfileImageForm } from "@/utils/validationSchema";
+import { profileImageZodSchema, type ProfileImageForm } from "@/utils/userZod";
 import { deleteUserFileFromS3, getSignedUrl, getUploadUrl, uploadToS3 } from "@/utils/apis/s3Api";
-import { Edit } from "lucide-react";
 
 const ProfileImageWithName: React.FC = () => {
 

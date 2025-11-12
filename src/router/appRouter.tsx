@@ -6,8 +6,8 @@ import {
 import { lazy } from "react";
 import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
-import { createBrowserRouter } from "react-router-dom";
 import EmailVerify from "@/pages/auth/EmailVerify";
+import { createBrowserRouter } from "react-router-dom";
 import UpdatePassword from "@/pages/auth/UpdatePassword";
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
@@ -173,7 +173,7 @@ const appRouter = createBrowserRouter([
       {
         index: true,
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminOverview />
           </ProtectedRoute>
         ),
@@ -181,7 +181,7 @@ const appRouter = createBrowserRouter([
       {
         path: "overview",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminOverview />
           </ProtectedRoute>
         ),
@@ -189,7 +189,7 @@ const appRouter = createBrowserRouter([
       {
         path: "users",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminUsers />
           </ProtectedRoute>
         ),
@@ -197,7 +197,7 @@ const appRouter = createBrowserRouter([
       {
         path: "jobs",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminJobsPage />
           </ProtectedRoute>
         ),
@@ -205,7 +205,7 @@ const appRouter = createBrowserRouter([
       {
         path: "packages",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminPackages showButton />
           </ProtectedRoute>
         ),
@@ -213,7 +213,7 @@ const appRouter = createBrowserRouter([
       {
         path: "applications",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminApplications />
           </ProtectedRoute>
         ),
@@ -221,7 +221,7 @@ const appRouter = createBrowserRouter([
       {
         path: "payments",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminPayments />
           </ProtectedRoute>
         ),
@@ -229,7 +229,7 @@ const appRouter = createBrowserRouter([
       {
         path: "chat",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <ChatPage />
           </ProtectedRoute>
         ),
@@ -237,7 +237,7 @@ const appRouter = createBrowserRouter([
       {
         path: "testimonials",
         element: (
-          <ProtectedRoute requiredRole={["admin", "superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminTestimonials />
           </ProtectedRoute>
         ),
@@ -245,7 +245,7 @@ const appRouter = createBrowserRouter([
       {
         path: "reports",
         element: (
-          <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminReports />
           </ProtectedRoute>
         ),
@@ -253,7 +253,7 @@ const appRouter = createBrowserRouter([
       {
         path: "settings",
         element: (
-          <ProtectedRoute requiredRole={["superAdmin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminSettings />
           </ProtectedRoute>
         ),

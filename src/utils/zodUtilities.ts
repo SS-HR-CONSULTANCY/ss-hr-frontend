@@ -2,9 +2,9 @@ import { z } from "zod";
 
 // ObjectId field zod validation
 export const objectIdField = (fieldName = "ID") => z
-    .string()
-    .min(1, { message: `${fieldName} is required` })
-    .regex(/^[0-9a-fA-F]{24}$/, { message: `Invalid ${fieldName} format` });
+  .string()
+  .min(1, { message: `${fieldName} is required` })
+  .regex(/^[0-9a-fA-F]{24}$/, { message: `Invalid ${fieldName} format` });
 
 // Boolean field zod validation
 export const booleanField = (fieldName = "Boolean") =>
@@ -18,9 +18,9 @@ export const stringField = (
   min?: number,
   max?: number,
   regex?: RegExp,
-  regexMessage = `Invalid ${fieldName} format`
+  regexMessage = `Invalid ${fieldName} format`,
 ) => {
-  let schema = z.string().min(1, { message: `${fieldName} is required` });
+  let schema = z.string().trim();
 
   if (min !== undefined) {
     schema = schema.min(min, `${fieldName} must be at least ${min} characters`);
@@ -35,6 +35,32 @@ export const stringField = (
   }
 
   return schema;
+};
+
+// Optional String field
+export const optionalStringField = (
+  fieldName: string,
+  min: number,
+  max: number,
+  regex: RegExp,
+  message: string
+) => {
+  return z
+    .string()
+    .trim()
+    .optional()
+    .refine(
+      (val) => !val || regex.test(val),
+      {
+        message: `${fieldName}: ${message}`,
+      }
+    )
+    .refine(
+      (val) => !val || (val.length >= min && val.length <= max),
+      {
+        message: `${fieldName} must be between ${min} and ${max} characters.`,
+      }
+    );
 };
 
 // Date common field
@@ -128,3 +154,4 @@ export const jsonArrayParser = <T>(schema: z.ZodType<T>) =>
     }),
     z.array(schema),
   ]);
+

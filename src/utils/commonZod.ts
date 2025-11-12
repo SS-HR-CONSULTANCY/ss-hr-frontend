@@ -1,29 +1,45 @@
 import z from "zod";
-import { roleValues } from "./constants";
 import { booleanField, enumField, jsonArrayParser, numberField, stringArrayField, stringField } from "./zodUtilities";
+import { adminRoleValues, genderValues, jobValues, limitedroleValues, paymentMethodValues, paymentStatusValues, roleValues, workModeValues } from "./constants";
 import { REGEX_PROFESSIONAL_STATUS, REGEX_PLACE, REGEX_COUNTRY, REGEX_FEATURE, REGEX_FULL_NAME, REGEX_LONG_TEXT, REGEX_NATIONALITY, REGEX_PASSWORD, REGEX_PHONE, REGEX_POSTAL, REGEX_S3_FILEKEY, REGEX_TEXT_DOT_AMP, REGEX_URL, REGEX_USERNAME, REGEX_CLIENT_NAME, REGEX_TESTIMONIAL, REGEX_ENTITY_ID, REGEX_DESCRIPTION, REGEX_INDUSTRY, REGEX_BENEFITS, REGEX_SKILLS, REGEX_EXPERIENCE, REGEX_COMPANY_NAME, REGEX_ADDRESSLINE, REGEX_LANDMARK } from "./regex";
 
 //*** Zod Schema Fields & Reusable Validators */
+export const gender = enumField("gender",genderValues);
+export type GenderType = z.infer<typeof gender>;
+
+export const role = enumField("role",roleValues);
+export type RoleType = z.infer<typeof role>;
+
+export const limitedRole = enumField("role", limitedroleValues);
+export type LimitedRoleType = z.infer<typeof limitedRole>;
+
+export const adminRoles = enumField("role", adminRoleValues);
+export type AdminRoleTypes = z.infer<typeof adminRoles>;
+
+export const jobType = enumField("jobType",jobValues);
+export type JobtypeType = z.infer<typeof jobType>;
+
+export const workMode = enumField("workMode",workModeValues);
+export type WorkModeType = z.infer<typeof workMode>;
+
+export const paymentMethod = enumField("paymentMethod", paymentMethodValues);
+export type PaymentMethodType = z.infer<typeof paymentMethod>;
+
+export const paymentStatus = enumField("paymentStatus", paymentStatusValues);
+export type PaymentStatusType = z.infer<typeof paymentStatus>;
+
 export const fullName = stringField("fullname", 4, 30, REGEX_FULL_NAME);
 export const password = stringField("password", 8, 50, REGEX_PASSWORD);
 export const confirmPassword = stringField("confirmPassword", 8, 50, REGEX_PASSWORD);
+export const otp = z.string().length(6, "OTP must be exactly 6 digits");
+export const verificationToken = z.string();
 export const email = z.string().email("Invalid email format");
 export const phone = stringField("phone", 7, 20, REGEX_PHONE);
 export const phoneTwo = stringField("phoneTwo", 7, 20, REGEX_PHONE);
-export const gender = enumField("gender",[ "male" , "female" , "other"]);
 export const nationality = stringField("nationality", 2, 60, REGEX_NATIONALITY);
 export const linkedInUsername = stringField("linkedInUsername", 5, 40, REGEX_USERNAME);
 export const portfolioUrl = stringField("portfolioUrl", 9, 200, REGEX_URL);
 export const professionalStatus = stringField("professionalStatus",2,100,REGEX_PROFESSIONAL_STATUS,"Professional status can only contain letters, numbers, spaces, dots, hyphens, and ampersands");
-
-export const role = z.enum(roleValues);
-export type Role = z.infer<typeof role>;
-
-export const limitedRole = enumField("role", [
-  "user" , "admin" , "superAdmin"
-]);
-export const otp = z.string().length(6, "OTP must be exactly 6 digits");
-export const verificationToken = z.string();
 
 export const addressLine1 = stringField("addressLine1", 3, 100,REGEX_ADDRESSLINE);
 export const addressLine2 = stringField("addressLine2", 1, 100,REGEX_ADDRESSLINE);
@@ -35,8 +51,6 @@ export const postalCode = stringField("postalCode", 3, 10, REGEX_POSTAL);
 export const landmark = stringField("landmark", 4, 100,REGEX_LANDMARK);
 export const primary = booleanField("primary");
 
-export const jobType = enumField("jobType",["full-time" , "part-time" , "contract" , "internship" , "freelance"]);
-export const workMode = enumField("workMode",["onsite" , "remote" , "hybrid"]);
 export const currentSalary = numberField("currentSalary", 0, 100000000);
 export const expectedSalary = numberField("expectedSalary", 0, 100000000);
 export const immediateJoiner = booleanField("immediateJoiner");
@@ -81,12 +95,7 @@ export const customerSerialNumber = stringField("customerId", 1, 100, REGEX_ENTI
 export const totalAmount = numberField("totalAmount", 0, 100000000);
 export const paidAmount = numberField("paidAmount", 0, 100000000);
 export const balanceAmount = numberField("balanceAmount", 0, 100000000);
-export const paymentMethod = enumField("paymentMethod", [
-  "googlepay" , "banktransfer" , "cash"
-]);
-export const paymentStatus = enumField("paymentStatus", [
-  "fullyPaid" , "partiallyPaid" , "pending"
-]);
+
 export const paymentDate = stringField("paymentDate", 1, 40, /^.{1,40}$/);
 export const adminNotes = stringField("adminNotes", 0, 500, /^.{0,500}$/s);
 
