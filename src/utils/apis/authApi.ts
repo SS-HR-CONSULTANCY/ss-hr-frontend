@@ -147,24 +147,3 @@ export const checkUserStatus = createAsyncThunk(
     await axiosInstance.get("/auth/checkUserStatus", { withCredentials: true });
   },
 );
-
-export const googleSignin = createAsyncThunk<SigninResponse, void>(
-  "auth/googleSignin",
-  async (_, thunkAPI) => {
-    try {
-      window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
-      return {
-        success: true,
-        message: "Redirecting to Google...",
-      } as SigninResponse;
-    } catch (err) {
-      const error = err as AxiosError<ApiBaseResponse>;
-      return thunkAPI.rejectWithValue(
-        error.response?.data || {
-          success: false,
-          message: "Something went wrong",
-        },
-      );
-    }
-  },
-);
