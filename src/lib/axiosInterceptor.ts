@@ -12,7 +12,7 @@ export const setupAxiosInterceptors = () => {
       console.log("Error Checking : ", error);
       if (error.response?.status === 400) {
         console.log("first");
-        return Promise.reject(error);
+        return error.response;
       }
       if (error.response?.status === 401) {
         console.log("two");

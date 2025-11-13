@@ -2,26 +2,23 @@ import React from "react";
 import { UserPlus } from "lucide-react";
 import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
+import { useAdminUsers } from "@/hooks/useAdminUsers";
 import { useDispatch, useSelector } from "react-redux";
-import { useQueryClient } from "@tanstack/react-query";
-import UserDetails from "@/components/admin/adminUser/UserDetails";
-import AddUserForm from "@/components/admin/adminUser/AddUserForm";
 import CommonTable from "@/components/common/CommonTable";
-import EditUserForm from "@/components/admin/adminUser/EditUserForm";
 import { openAddUserModal } from "@/store/slices/userSlice";
 import { adminFetchAllUsers } from "@/utils/apis/adminUserApi";
-import { AdminUserHelper } from "@/utils/helpers/adminUserHelper";
+import UserDetails from "@/components/admin/adminUser/UserDetails";
+import AddUserForm from "@/components/admin/adminUser/AddUserForm";
+import EditUserForm from "@/components/admin/adminUser/EditUserForm";
 import type { AdminfetchAllUsersResponse } from "@/types/apiTypes/adminApiTypes";
 import { AdminUserTableColumns } from "@/components/table/tableColumns/AdminUserTableColumn";
 
 const AdminUsers: React.FC = () => {
 
-  const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { handleDelete, handleEdit, handleViewDetails } = AdminUserHelper(
-    dispatch,
-    queryClient,
-  );
+
+  const { handleDelete, handleEdit, handleViewDetails} = useAdminUsers();
+
   const { isAddUserModalOpen, isEditUserModalOpen, isUserDetailsModalOpen } =
     useSelector((state: RootState) => state.user);
 

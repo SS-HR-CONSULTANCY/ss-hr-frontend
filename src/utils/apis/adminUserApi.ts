@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
 import type { User } from "@/types/entities/user";
-import type { AdminfetchAllUsersResponse } from "@/types/apiTypes/adminApiTypes";
+import type { AdminfetchAllUsersResponse, AdminFetchUserDetailsResponse } from "@/types/apiTypes/adminApiTypes";
 import {
   buildQueryParams,
   parseNewCommonResponse,
@@ -69,4 +69,13 @@ export const adminDeleteUser = async (userId: string) => {
 
 export const adminFetchUserStats = async () => {
   return await axiosInstance.get("/admin/users/stats");
+};
+
+
+export const adminGetUserDetailsId = async (
+  userId: string,
+): Promise<AdminFetchUserDetailsResponse> => {
+  const response = await axiosInstance.get(`/admin/users/details/${userId}`);
+  console.log("response : ",response);
+  return response.data.data;
 };

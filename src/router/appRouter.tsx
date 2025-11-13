@@ -8,7 +8,7 @@ import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
 import EmailVerify from "@/pages/auth/EmailVerify";
 import { createBrowserRouter } from "react-router-dom";
-import UpdatePassword from "@/pages/auth/UpdatePassword";
+
 
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
@@ -26,12 +26,15 @@ const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
 const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
 const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
+const UpdatePassword = lazy(() => import("@/pages/auth/UpdatePassword"));
 // const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
 const UserApplications = lazy(() => import("@/pages/user/UserApplications"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
+const AdminUserDetails = lazy(() => import("@/pages/admin/AdminUserDetails"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
+const ApplicationDetails = lazy(() => import("@/pages/common/ApplicationDetails"));
 const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
 
 const appRouter = createBrowserRouter([
@@ -195,6 +198,14 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
+        path: "users/:id",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+            <AdminUserDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "jobs",
         element: (
           <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
@@ -215,6 +226,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminApplications />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "applications/:id",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+            <ApplicationDetails />
           </ProtectedRoute>
         ),
       },

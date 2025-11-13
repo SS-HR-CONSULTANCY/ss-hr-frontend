@@ -16,7 +16,10 @@ export const useUserApplication = () => {
         if (res.success) {
             toast.success(res.message);
             queryClient.setQueryData(['applications'], (oldApplications: UserFetchAllApplicationsResponse[] | undefined) => {
-                if (!oldApplications) return [];
+                if (!oldApplications || oldApplications.length === 0) {
+                    queryClient.invalidateQueries({ queryKey: ['applications'] });
+                    return oldApplications ?? [];
+                }
                 return oldApplications.map(application =>
                     application._id === res.data.jobId ? { ...application, status: res.data.status } : application
                 );
@@ -24,8 +27,8 @@ export const useUserApplication = () => {
         }
     };
 
-     const handleViewJobDetails = async (_id: Job["_id"]) => {
-         navigate(`${baseURL}/user/jobs/${_id}`);
+    const handleViewJobDetails = async (_id: Job["_id"]) => {
+        navigate(`${baseURL}/user/jobs/${_id}`);
     }
 
     return {

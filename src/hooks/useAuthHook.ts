@@ -1,10 +1,10 @@
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import type { Role } from "@/utils/zod/commonZod";
 import { useNavigate } from "react-router-dom";
 import { signout } from "@/utils/apis/authApi";
 import { roleLoginRoutes } from "@/utils/constants";
+import type { RoleType } from "@/utils/zod/commonZod";
 import { resetJobSlice } from "@/store/slices/jobSlice";
 import { resetAuthStore } from "@/store/slices/authSlice";
 import { resetChatSlice } from "@/store/slices/chatSlice";
@@ -19,7 +19,7 @@ const useAuthHook = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
-  const logoutRedirect = roleLoginRoutes[user?.role as Role] ?? "/login"; 
+  const logoutRedirect = roleLoginRoutes[user?.role as RoleType] ?? "/login"; 
 
   const handleLogout = async () => {
     try {

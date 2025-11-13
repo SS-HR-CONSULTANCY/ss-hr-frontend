@@ -101,6 +101,7 @@ export const updateResume = createAsyncThunk<
 
 export const userApplyJob = async (_id: Job["_id"]):Promise<UserApplyJobResponse> => {
   const response = await axiosInstance.post(`/user/apply-job/${_id}`,);
+  console.log("response : ",response);
   return response.data;
 };
 

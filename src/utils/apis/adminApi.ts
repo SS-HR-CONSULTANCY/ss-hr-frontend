@@ -1,4 +1,3 @@
-import { axiosInstance } from "@/lib/axios";
 import {
   buildQueryParams,
   parseNewCommonResponse,
@@ -8,29 +7,17 @@ import {
   type FetchFunctionParams,
 } from "@/types/commonTypes";
 import type {
-  AdminfetchAllApplicationsResponse,
-  AdminFetchApplicationsReportStatsDataResponse,
-  AdminFetchOverviewGraphsDataResponse,
-  AdminFetchOverviewStatsDataResponse,
-  AdminFetchReportApplicationsGraphsDataResponse,
-  AdminFetchReportPaymentsGraphsDataResponse,
   AdminFetchReportTableDataResponse,
-  AdminFetchReportUserswGraphsDataResponse,
-  AdminFetchRevenueReportStatsDataResponse,
+  AdminFetchOverviewStatsDataResponse,
+  AdminFetchOverviewGraphsDataResponse,
   AdminFetchUserReportStatsDataResponse,
+  AdminFetchRevenueReportStatsDataResponse,
+  AdminFetchReportUserswGraphsDataResponse,
+  AdminFetchReportPaymentsGraphsDataResponse,
+  AdminFetchApplicationsReportStatsDataResponse,
+  AdminFetchReportApplicationsGraphsDataResponse,
 } from "@/types/apiTypes/adminApiTypes";
-
-export const adminFetchAllPApplications = async (
-  params?: FetchFunctionParams,
-): Promise<ApiPaginatedResponse<AdminfetchAllApplicationsResponse>> => {
-  const query = buildQueryParams(params);
-  const response = await axiosInstance.get(
-    `/admin/applications${query ? `?${query}` : ""}`,
-  );
-  return parseNewCommonResponse<AdminfetchAllApplicationsResponse>(
-    response.data,
-  );
-};
+import { axiosInstance } from "@/lib/axios";
 
 // overview
 export const adminFetchOverviewStatsData =

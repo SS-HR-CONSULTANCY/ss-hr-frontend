@@ -5,6 +5,9 @@ import type { Package } from "../entities/package";
 import type { Payment } from "../entities/payment";
 import type { Application } from "../entities/application";
 import type { AdminRoleTypes, LimitedRoleType } from "@/utils/zod/commonZod";
+import type { ApiBaseResponse } from "../commonTypes";
+import type { Address } from "../entities/address";
+import type { CareerData } from "../entities/careerData";
 
 // **** job
 export type AdminCreateNewJob = Pick<
@@ -62,32 +65,30 @@ export type AdminfetchAllPackagesResponse = Pick<
   | "createdAt"
 >;
 
-export type AdminfetchAllPaymentsResponse = Pick<
-  Payment,
-  | "_id"
-  | "transactionId"
-  | "totalAmount"
-  | "discountAmount"
-  | "paymentStatus"
-  | "createdAt"
-  | "username"
->;
+export type AdminfetchAllPaymentsResponse = Pick<Payment, "_id" | "customerName" | "packageName" | "totalAmount" | "paidAmount" | "balanceAmount" | "paymentStatus">;
 
 export type AdminfetchAllReviewsResponse = Pick<
   Review,
   "_id" | "text" | "username" | "createdAt" | "job"
 >;
 
-export type AdminfetchAllApplicationsResponse = Pick<
-  Application,
-  | "_id"
-  | "username"
-  | "company"
-  | "designation"
-  | "jobId"
-  | "createdAt"
-  | "cvLink"
->;
+
+
+export type adminFetchApplicationsJobFields = Pick<Job, "_id" | "designation" | "companyName">;
+
+export type AdminfetchAllApplicationsResponse = {
+  _id: Application["_id"];
+  updatedAt: Application["updatedAt"];
+  status: Application["status"];
+} & adminFetchApplicationsJobFields;
+
+export type adminfetchApplicationJobDetailFields = Pick<Job, "designation" | "companyName" | "vacancy" | "createdAt" | "benifits" | "industry" | "jobDescription" | "nationality" | "salary" | "skills">;
+export type adminFetchApplicationUserDetails = Pick<User, "fullName" | "email" | "dob" | "gender" | "linkedInUsername" | "nationality" | "phone" | "serialNumber" | "portfolioUrl" | "profileImage" | "phoneTwo" | "professionalStatus" | "resume">;
+export type AdminFetchApplicationDetailsResponse = ApiBaseResponse & Pick<Application, "createdAt" | "status" | "updatedAt"> & {
+  jobId: adminfetchApplicationJobDetailFields;
+  userId: adminFetchApplicationUserDetails;
+};
+
 
 // ✅ Admin users Response Type
 export interface AdminFetchOverviewStatsDataResponse
@@ -246,4 +247,14 @@ export interface AdminfetchAllTestimonialsResponse {
   testimonial: string;
   isVisible: boolean;
   createdAt: string;
+}
+
+
+export type AdminfetchUserDetailFields = Pick<User, "createdAt" | "dob" | "email" | "fullName" | "gender" | "isBlocked" | "isVerified" | "linkedInUsername" | "nationality" | "phone" | "phoneTwo" | "portfolioUrl" | "professionalStatus" | "profileImage" | "resume" | "serialNumber" | "updatedAt">;
+export type AdminFetchUserAddressDetails = Pick<Address, "addressLine1" | "addressLine2" | "city" | "country" | "createdAt" | "district" | "landmark" | "postalCode" | "primary" | "state" | "updatedAt">;
+export type AdminFetchUserCareerDataDetailsResponse = Pick<CareerData, "createdAt" | "currentCompany" | "currentJobType" | "expectedSalary" | "currentDesignation" | "currentSalary" | "experience" | "immediateJoiner" | "industry" | "noticePeriod" | "preferredJobTypes" | "preferredWorkModes" | "updatedAt">;
+export interface AdminFetchUserDetailsResponse extends ApiBaseResponse{
+  userData: AdminfetchUserDetailFields,
+  address: AdminFetchUserAddressDetails | null,
+  careerData: AdminFetchUserCareerDataDetailsResponse | null,
 }
