@@ -3,15 +3,10 @@ export type PaymentStatus = "fullyPaid" | "partiallyPaid" | "pending";
 
 export interface Payment {
   _id: string;
-  customerId: string;
-  username: string;
-  packageId: string;
-  transactionId: string;
   customerName: string;
   packageName: string;
   totalAmount: number;
   paidAmount: number;
-  discountAmount: number;
   balanceAmount: number;
   paymentMethod: PaymentMethod;
   paymentDate: string;
@@ -19,7 +14,6 @@ export interface Payment {
   referenceId: string;
   paymentProof: string;
   adminNotes: string;
-  status: PaymentMethod;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,9 +25,11 @@ export interface CreatePaymentFormData {
   packageName: string;
   totalAmount: number;
   paidAmount: number;
+  balanceAmount: number;
   paymentMethod: PaymentMethod;
-  paymentDate: string;
+  paymentStatus: PaymentStatus;
   referenceId: string;
+  paymentDate: string;
   paymentProof: string;
   adminNotes: string;
 }
@@ -45,7 +41,9 @@ export interface UpdatePaymentFormData {
   packageName?: string;
   totalAmount?: number;
   paidAmount?: number;
+  balanceAmount: number;
   paymentMethod?: PaymentMethod;
+  paymentStatus: PaymentStatus;
   paymentDate?: string;
   referenceId?: string;
   paymentProof?: string;

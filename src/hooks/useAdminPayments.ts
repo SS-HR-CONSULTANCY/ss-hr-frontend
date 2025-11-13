@@ -10,12 +10,12 @@ import { deletePayment } from "@/utils/apis/adminPaymentApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfirmToast } from "@/components/table/tableColumns/ConfirmToast";
 
-export const useAdminPayments = (paymentId?: string) => {
+export const useAdminPayments = () => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
-    mutationFn: () => deletePayment(paymentId!),
+    mutationFn: (paymentId: string) => deletePayment(paymentId),
     onSuccess: () => {
       toast.success("Payment deleted successfully!");
       queryClient.invalidateQueries({ queryKey: ["payments"] });
@@ -25,17 +25,19 @@ export const useAdminPayments = (paymentId?: string) => {
     },
   });
 
-  const handleViewPayment = () => {
+  const handleViewPayment = (paymentId: string) => {
+    console.log("viewing payment : ",paymentId)
     if (!paymentId) return;
     dispatch(openViewPaymentDetails(paymentId));
   };
 
-  const handleEditPayment = () => {
+  const handleEditPayment = (paymentId: string) => {
+    console.log("eidt payment")
     if (!paymentId) return;
     dispatch(openEditPaymentForm(paymentId));
   };
 
-  const handleDeletePayment = () => {
+  const handleDeletePayment = (paymentId: string) => {
     toast(
       ({ closeToast }) =>
         React.createElement(ConfirmToast, {
@@ -43,7 +45,7 @@ export const useAdminPayments = (paymentId?: string) => {
           confirmText: "Delete",
           cancelText: "Cancel",
           onConfirm: () => {
-            deleteMutation.mutate();
+            deleteMutation.mutate(paymentId);
             closeToast();
           },
           onCancel: closeToast,

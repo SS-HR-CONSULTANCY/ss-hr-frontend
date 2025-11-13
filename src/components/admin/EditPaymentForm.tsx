@@ -1,11 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,11 +5,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "react-toastify";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import FormLoading from "../form/FormLoading";
+import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeEditPaymentForm } from "@/store/slices/paymentSlice";
-import { getPaymentById, updatePayment } from "@/utils/apis/adminPaymentApi";
 import type { UpdatePaymentFormData } from "@/types/entities/payment";
-import FormLoading from "../form/FormLoading";
+import { getPaymentById, updatePayment } from "@/utils/apis/adminPaymentApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { paymentMethodValues, paymentStatusValues } from "@/utils/constants";
 
 const EditPaymentForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,12 +32,13 @@ const EditPaymentForm: React.FC = () => {
     packageId: "",
     customerName: "",
     packageName: "",
-    totalAmount: undefined,
-    paidAmount: undefined,
-    paymentMethod: "googlepay",
+    totalAmount: 0,
+    paidAmount: 0,
+    balanceAmount: 0,
+    paymentMethod: paymentMethodValues[0],
     paymentDate: "",
-    referenceId: "",
     paymentProof: "",
+    paymentStatus: paymentStatusValues[0],
     adminNotes: "",
   });
 
@@ -71,9 +73,11 @@ const EditPaymentForm: React.FC = () => {
         packageName: payment.packageName,
         totalAmount: payment.totalAmount,
         paidAmount: payment.paidAmount,
+        balanceAmount: payment.balanceAmount,
         paymentMethod: payment.paymentMethod,
-        paymentDate: payment.paymentDate?.split("T")[0] || payment.paymentDate, // Format date for input
+        paymentStatus: payment.paymentStatus,
         referenceId: payment.referenceId,
+        paymentDate: payment.paymentDate?.split("T")[0] || payment.paymentDate,
         paymentProof: payment.paymentProof,
         adminNotes: payment.adminNotes,
       });
@@ -128,7 +132,7 @@ const EditPaymentForm: React.FC = () => {
   };
 
   const handleAmountChange = (
-    field: "totalAmount" | "paidAmount",
+    field: "totalAmount" | "paidAmount" | "balanceAmount",
     value: string,
   ) => {
     const numericValue = parseInt(value.replace(/,/g, "")) || 0;
@@ -144,219 +148,226 @@ const EditPaymentForm: React.FC = () => {
   const balanceAmount = totalAmount - paidAmount;
 
   return (
-    <div className="p-6 rounded-lg shadow-sm border max-w-4xl mx-auto">
-      <h2 className="text-xl font-semibold mb-6">Edit Payment</h2>
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-gray-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 rounded-lg shadow-sm border max-w-4xl mx-auto">
+          <h2 className="text-xl font-semibold mb-6">Edit Payment</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Customer & Package Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="customerName" className="">
-              Customer Name
-            </Label>
-            <Input
-              id="customerName"
-              value={formData.customerName || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, customerName: e.target.value })
-              }
-              className=""
-              placeholder="Enter customer name"
-            />
-            {errors.customerName && (
-              <p className="text-red-500 text-sm mt-1">{errors.customerName}</p>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Customer & Package Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="customerName" className="">
+                  Customer Name
+                </Label>
+                <Input
+                  id="customerName"
+                  value={formData.customerName || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, customerName: e.target.value })
+                  }
+                  className=""
+                  placeholder="Enter customer name"
+                />
+                {errors.customerName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.customerName}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="packageName" className="">
+                  Package Name
+                </Label>
+                <Input
+                  id="packageName"
+                  value={formData.packageName || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, packageName: e.target.value })
+                  }
+                  className=""
+                  placeholder="Enter package name"
+                />
+              </div>
+            </div>
+
+            {/* Payment Amounts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="totalAmount" className="">
+                  Total Amount (₹)
+                </Label>
+                <Input
+                  id="totalAmount"
+                  value={formatCurrency((formData.totalAmount || 0).toString())}
+                  onChange={(e) =>
+                    handleAmountChange("totalAmount", e.target.value)
+                  }
+                  className=""
+                  placeholder="50,000"
+                />
+                {errors.totalAmount && (
+                  <p className="text-red-500 text-sm mt-1">{errors.totalAmount}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="paidAmount" className="">
+                  Paid Amount (₹)
+                </Label>
+                <Input
+                  id="paidAmount"
+                  value={formatCurrency((formData.paidAmount || 0).toString())}
+                  onChange={(e) => handleAmountChange("paidAmount", e.target.value)}
+                  className=""
+                  placeholder="20,000"
+                />
+                {errors.paidAmount && (
+                  <p className="text-red-500 text-sm mt-1">{errors.paidAmount}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Balance Display */}
+            {totalAmount > 0 && (
+              <div className="p-3 rounded-lg border">
+                <span className="text-sm">Balance Amount: </span>
+                <span
+                  className={`font-medium ${balanceAmount > 0 ? "text-red-600" : "text-green-600"}`}
+                >
+                  ₹{formatCurrency(balanceAmount.toString())}
+                </span>
+              </div>
             )}
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="packageName" className="">
-              Package Name
-            </Label>
-            <Input
-              id="packageName"
-              value={formData.packageName || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, packageName: e.target.value })
-              }
-              className=""
-              placeholder="Enter package name"
-            />
-          </div>
-        </div>
+            {/* Payment Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="paymentStatus" className="">
+                  Payment Status
+                </Label>
+                <Select
+                  value={formData.paymentStatus || "pending"}
+                  onValueChange={(value: "pending" | "partiallyPaid" | "fullyPaid") =>
+                    setFormData({ ...formData, paymentStatus: value })
+                  }
+                >
+                  <SelectTrigger className="">
+                    <SelectValue placeholder="Select payment status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="partiallyPaid">Partially Paid</SelectItem>
+                    <SelectItem value="fullyPaid">Fully Paid</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-        {/* Payment Amounts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="totalAmount" className="">
-              Total Amount (₹)
-            </Label>
-            <Input
-              id="totalAmount"
-              value={formatCurrency((formData.totalAmount || 0).toString())}
-              onChange={(e) =>
-                handleAmountChange("totalAmount", e.target.value)
-              }
-              className=""
-              placeholder="50,000"
-            />
-            {errors.totalAmount && (
-              <p className="text-red-500 text-sm mt-1">{errors.totalAmount}</p>
-            )}
-          </div>
+              <div className="space-y-2">
+                <Label htmlFor="paymentMethod" className="">
+                  Payment Method
+                </Label>
+                <Select
+                  value={formData.paymentMethod || "googlepay"}
+                  onValueChange={(value: "googlepay" | "banktransfer" | "cash") =>
+                    setFormData({ ...formData, paymentMethod: value })
+                  }
+                >
+                  <SelectTrigger className="">
+                    <SelectValue placeholder="Select payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="googlepay">Google Pay</SelectItem>
+                    <SelectItem value="banktransfer">Bank Transfer</SelectItem>
+                    <SelectItem value="cash">Cash</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="paidAmount" className="">
-              Paid Amount (₹)
-            </Label>
-            <Input
-              id="paidAmount"
-              value={formatCurrency((formData.paidAmount || 0).toString())}
-              onChange={(e) => handleAmountChange("paidAmount", e.target.value)}
-              className=""
-              placeholder="20,000"
-            />
-            {errors.paidAmount && (
-              <p className="text-red-500 text-sm mt-1">{errors.paidAmount}</p>
-            )}
-          </div>
-        </div>
+              <div className="space-y-2">
+                <Label htmlFor="paymentDate" className="">
+                  Payment Date
+                </Label>
+                <Input
+                  id="paymentDate"
+                  type="date"
+                  value={formData.paymentDate || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, paymentDate: e.target.value })
+                  }
+                  className=""
+                />
+                {errors.paymentDate && (
+                  <p className="text-red-500 text-sm mt-1">{errors.paymentDate}</p>
+                )}
+              </div>
+            </div>
 
-        {/* Balance Display */}
-        {totalAmount > 0 && (
-          <div className="p-3 rounded-lg border">
-            <span className="text-sm">Balance Amount: </span>
-            <span
-              className={`font-medium ${balanceAmount > 0 ? "text-red-600" : "text-green-600"}`}
-            >
-              ₹{formatCurrency(balanceAmount.toString())}
-            </span>
-            <span className="ml-4 text-sm">
-              Status:
-              <span
-                className={`ml-1 font-medium ${
-                  paidAmount === 0
-                    ? "text-yellow-600"
-                    : balanceAmount > 0
-                      ? "text-blue-600"
-                      : "text-green-600"
-                }`}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="referenceId" className="">
+                  Reference ID
+                </Label>
+                <Input
+                  id="referenceId"
+                  value={formData.referenceId || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, referenceId: e.target.value })
+                  }
+                  className=""
+                  placeholder="GP123456789"
+                />
+                {errors.referenceId && (
+                  <p className="text-red-500 text-sm mt-1">{errors.referenceId}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="paymentProof" className="">
+                  Payment Proof URL
+                </Label>
+                <Input
+                  id="paymentProof"
+                  value={formData.paymentProof || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, paymentProof: e.target.value })
+                  }
+                  className=""
+                  placeholder="https://drive.google.com/file/d/..."
+                />
+              </div>
+            </div>
+
+            {/* Admin Notes */}
+            <div className="space-y-2">
+              <Label htmlFor="adminNotes" className="">
+                Admin Notes
+              </Label>
+              <Textarea
+                id="adminNotes"
+                value={formData.adminNotes || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, adminNotes: e.target.value })
+                }
+                className=""
+                placeholder="Enter any additional notes..."
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" variant="outline" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="outline"
+                disabled={updateMutation.isPending}
               >
-                {paidAmount === 0
-                  ? "Pending"
-                  : balanceAmount > 0
-                    ? "Partially Paid"
-                    : "Fully Paid"}
-              </span>
-            </span>
-          </div>
-        )}
-
-        {/* Payment Details */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="paymentMethod" className="">
-              Payment Method
-            </Label>
-            <Select
-              value={formData.paymentMethod || "googlepay"}
-              onValueChange={(value: "googlepay" | "banktransfer" | "cash") =>
-                setFormData({ ...formData, paymentMethod: value })
-              }
-            >
-              <SelectTrigger className="">
-                <SelectValue placeholder="Select payment method" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="googlepay">Google Pay</SelectItem>
-                <SelectItem value="banktransfer">Bank Transfer</SelectItem>
-                <SelectItem value="cash">Cash</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="paymentDate" className="">
-              Payment Date
-            </Label>
-            <Input
-              id="paymentDate"
-              type="date"
-              value={formData.paymentDate || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, paymentDate: e.target.value })
-              }
-              className=""
-            />
-            {errors.paymentDate && (
-              <p className="text-red-500 text-sm mt-1">{errors.paymentDate}</p>
-            )}
-          </div>
+                {updateMutation.isPending ? "Updating..." : "Update Payment"}
+              </Button>
+            </div>
+          </form>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="referenceId" className="">
-              Reference ID
-            </Label>
-            <Input
-              id="referenceId"
-              value={formData.referenceId || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, referenceId: e.target.value })
-              }
-              className=""
-              placeholder="GP123456789"
-            />
-            {errors.referenceId && (
-              <p className="text-red-500 text-sm mt-1">{errors.referenceId}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="paymentProof" className="">
-              Payment Proof URL
-            </Label>
-            <Input
-              id="paymentProof"
-              value={formData.paymentProof || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, paymentProof: e.target.value })
-              }
-              className=""
-              placeholder="https://drive.google.com/file/d/..."
-            />
-          </div>
-        </div>
-
-        {/* Admin Notes */}
-        <div className="space-y-2">
-          <Label htmlFor="adminNotes" className="">
-            Admin Notes
-          </Label>
-          <Textarea
-            id="adminNotes"
-            value={formData.adminNotes || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, adminNotes: e.target.value })
-            }
-            className=""
-            placeholder="Enter any additional notes..."
-          />
-        </div>
-
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="outline" onClick={handleCancel}>
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="outline"
-            disabled={updateMutation.isPending}
-          >
-            {updateMutation.isPending ? "Updating..." : "Update Payment"}
-          </Button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };

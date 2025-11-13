@@ -9,24 +9,24 @@ import {
 } from "@/types/commonTypes";
 import type {
   CreatePaymentFormData,
+  PaymentMethod,
+  PaymentStatus,
   UpdatePaymentFormData,
 } from "@/types/entities/payment";
 
 export type AdminfetchAllPaymentsResponse = {
   _id: string;
-  customerId: string;
-  packageId: string;
   customerName: string;
-  packageName: string;
-  totalAmount: number;
-  paidAmount: number;
-  balanceAmount: number;
-  paymentMethod: "googlepay" | "banktransfer" | "cash";
-  paymentDate: string;
-  referenceId: string;
-  paymentProof: string;
-  adminNotes: string;
-  status: "pending" | "partiallypaid" | "fullypaid";
+   packageName: string;
+   totalAmount: number;
+   paidAmount: number;
+   balanceAmount: number;
+   paymentMethod: PaymentMethod;
+   paymentDate: string;
+   paymentStatus: PaymentStatus;
+   referenceId: string;
+   paymentProof: string;
+   adminNotes: string;
   createdAt: string;
   updatedAt: string;
 };

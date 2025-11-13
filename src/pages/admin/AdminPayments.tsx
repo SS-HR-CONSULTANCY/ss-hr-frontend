@@ -17,12 +17,16 @@ import { PaymentTableColumns } from "@/components/table/tableColumns/PaymentTabl
 const AdminPayments: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { handleDeletePayment, handleEditPayment, handleViewPayment } =
-    useAdminPayments();
-  const column = PaymentTableColumns(
-    handleViewPayment,
+  const {
     handleDeletePayment,
     handleEditPayment,
+    handleViewPayment
+  } = useAdminPayments();
+  
+  const column = PaymentTableColumns(
+    handleDeletePayment,
+    handleEditPayment,
+    handleViewPayment,
   );
 
   const {
@@ -58,13 +62,9 @@ const AdminPayments: React.FC = () => {
         pageSize={10}
       />
 
-      <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-gray-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          {isAddPaymentFormOpen && <AddPaymentForm />}
-          {isEditPaymentFormOpen && <EditPaymentForm />}
-          {isViewPaymentDetailsOpen && <PaymentDetails />}
-        </div>
-      </div>
+      {isAddPaymentFormOpen && <AddPaymentForm />}
+      {isEditPaymentFormOpen && <EditPaymentForm />}
+      {isViewPaymentDetailsOpen && <PaymentDetails />}
     </>
   );
 };
