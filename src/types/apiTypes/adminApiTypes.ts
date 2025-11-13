@@ -25,7 +25,7 @@ export type AdminCreateNewJob = Pick<
 
 export type AdminfetchAllJobsResponse = Pick<
   Job,
-  "_id" | "companyName" | "designation" | "vacancy" | "salary" | "createdAt"
+  "_id" | "companyName" | "designation" | "vacancy" | "salary" | "createdAt" | "jobUniqueId"
 >;
 
 export type AdminUpdateJobRequest = Pick<
@@ -74,20 +74,24 @@ export type AdminfetchAllReviewsResponse = Pick<
 
 
 
-export type adminFetchApplicationsJobFields = Pick<Job, "_id" | "designation" | "companyName">;
+export type adminFetchApplicationsJobFields = Pick<Job, "_id" | "designation" | "companyName" | "jobUniqueId">;
 
 export type AdminfetchAllApplicationsResponse = {
   _id: Application["_id"];
   updatedAt: Application["updatedAt"];
   status: Application["status"];
+  applicationUniqueId: Application["applicationUniqueId"];
 } & adminFetchApplicationsJobFields;
 
-export type adminfetchApplicationJobDetailFields = Pick<Job, "designation" | "companyName" | "vacancy" | "createdAt" | "benifits" | "industry" | "jobDescription" | "nationality" | "salary" | "skills">;
+export type adminfetchApplicationJobDetailFields = Pick<Job, "designation" | "companyName" | "vacancy" | "createdAt" | "benifits" | "industry" | "jobDescription" | "nationality" | "salary" | "skills" | "jobUniqueId">;
 export type adminFetchApplicationUserDetails = Pick<User, "fullName" | "email" | "dob" | "gender" | "linkedInUsername" | "nationality" | "phone" | "serialNumber" | "portfolioUrl" | "profileImage" | "phoneTwo" | "professionalStatus" | "resume">;
-export type AdminFetchApplicationDetailsResponse = ApiBaseResponse & Pick<Application, "createdAt" | "status" | "updatedAt"> & {
+export type AdminFetchApplicationDetailsResponse = ApiBaseResponse & Pick<Application, "createdAt" | "status" | "updatedAt" | "applicationUniqueId"> & {
   jobId: adminfetchApplicationJobDetailFields;
   userId: adminFetchApplicationUserDetails;
 };
+
+export type AdminUpdateApplicationStatusRequest = Pick<Application, "_id" | "status" >;
+export type AdminUpdateApplicationStatusResponse = ApiBaseResponse & Pick<Application, "status" >;
 
 
 // ✅ Admin users Response Type

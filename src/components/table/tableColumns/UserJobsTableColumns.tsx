@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Eye, Send } from "lucide-react";
+import { Eye, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
@@ -10,9 +10,21 @@ export const UserJobsTableColumns = (
   handleViewJobDetails: (joibId: string) => void,
 ): ColumnDef<UserfetchAllJobsResponse>[] => [
     {
+      accessorKey: "jobUniqueId",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Job ID" />
+      ),
+    },
+    {
       accessorKey: "designation",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Designation" />
+      ),
+    },
+    {
+      accessorKey: "salary",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Salary (LPA)" />
       ),
     },
     {
@@ -75,7 +87,7 @@ export const UserJobsTableColumns = (
                 onClick={() => handleApplyJob(job._id)}
                 title="Apply"
               >
-                <Send className="h-4 w-4" />
+                <RefreshCw className="h-4 w-4" />
               </Button>
             )}
           </div>

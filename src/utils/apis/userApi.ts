@@ -22,7 +22,8 @@ import {
   type CreateOrUpdateCareerDataResponse,
   type UserFetchAllApplicationsResponse,
   type UserUpdateApplicationStatusRequest,
-  type UpdateProfileImageRequest
+  type UpdateProfileImageRequest,
+  type UserFetchJobDetailsResponse
 } from "@/types/apiTypes/userApiTypes";
 import { axiosInstance } from "@/lib/axios";
 import type { Job } from "@/types/entities/job";
@@ -120,4 +121,9 @@ export const userFetchAllApplications = async (
 export const userUpdateJobApplication = async (data: UserUpdateApplicationStatusRequest):Promise<UserUpdateApplicationResponse> => {
   const response = await axiosInstance.patch(`/user/cancel-job/${data._id}`,{status: data.status});
   return response.data;
+};
+
+export const userGetJobById = async (jobId: string): Promise<UserFetchJobDetailsResponse> => {
+  const response = await axiosInstance.get(`/user/jobs/${jobId}`);
+  return response.data.data;
 };

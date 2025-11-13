@@ -9,7 +9,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import EmailVerify from "@/pages/auth/EmailVerify";
 import { createBrowserRouter } from "react-router-dom";
 
-
 const Otp = lazy(() => import("@/pages/auth/Otp"));
 const Home = lazy(() => import("@/pages/user/Home"));
 const Login = lazy(() => import("@/pages/auth/Login"));
@@ -29,6 +28,7 @@ const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
 const UpdatePassword = lazy(() => import("@/pages/auth/UpdatePassword"));
 // const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
+const JobDetailsPage = lazy(() => import("@/pages/common/JobDetailsPage"));
 const UserApplications = lazy(() => import("@/pages/user/UserApplications"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminUserDetails = lazy(() => import("@/pages/admin/AdminUserDetails"));
@@ -146,6 +146,14 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
+        path: "jobs/:id",
+        element: (
+          <ProtectedRoute requiredRole={["user"]}>
+            <JobDetailsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "applications",
         element: (
           <ProtectedRoute requiredRole={["user"]}>
@@ -210,6 +218,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminJobsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "jobs/:id",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+            <JobDetailsPage isAdmin />
           </ProtectedRoute>
         ),
       },

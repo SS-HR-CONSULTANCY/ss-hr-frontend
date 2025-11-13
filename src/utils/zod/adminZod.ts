@@ -1,5 +1,5 @@
 import z from "zod";
-import { benifits, companyName, designation, email, fullName, industry, jobDescription, nationality, password, phone, phoneTwo, skills } from "./commonZod";
+import { applicationStatusSchema, benifits, companyName, designation, email, fullName, industry, jobDescription, nationality, password, phone, phoneTwo, skills } from "./commonZod";
 
 // admin create new user
 export const adminCreateNewUser = z.object({
@@ -25,3 +25,10 @@ export const createJobSchema = z.object({
 });
 
 export type CreateJobForm = z.infer<typeof createJobSchema>;
+
+// admin create job zod schema
+export const updateApplicationStatus = z.object({
+    status: applicationStatusSchema
+});
+
+export type UpdateApplicationStatusForm = z.infer<typeof updateApplicationStatus>;

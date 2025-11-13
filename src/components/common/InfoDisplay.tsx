@@ -67,7 +67,7 @@ const InfoDisplay: React.FC<InfoDisplayProps> = ({
 
   return (
     <div className={`flex ${!isLast ? "border-b" : ""}`}>
-      <div className="p-4 font-medium text-[var(--infoDataLabel)] w-4/12">
+      <div className="p-4 font-semibold w-4/12">
         {label}
       </div>
       <div className="p-4 w-8/12">{displayValue}</div>

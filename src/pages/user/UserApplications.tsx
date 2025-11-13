@@ -9,12 +9,12 @@ const UserApplications: React.FC = () => {
 
     const {
         handleUpdateJobApplication,
-        handleViewJobDetails
+        // handleViewJobDetails
     } = useUserApplication();
 
     const columns = UserApplicationsTableColumns(
         handleUpdateJobApplication,
-        handleViewJobDetails
+        // handleViewJobDetails
     );
 
     return (

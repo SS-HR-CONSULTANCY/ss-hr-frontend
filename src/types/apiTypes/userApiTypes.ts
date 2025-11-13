@@ -72,7 +72,7 @@ export type UpdateResumeRequest = Pick<User, "resume">;
 
 
 // User fetch all jobs 
-export type UserfetchAllJobsResponse = Pick<Job,"_id" | "designation" | "vacancy" | "createdAt"> & {
+export type UserfetchAllJobsResponse = Pick<Job,"_id" | "designation" | "vacancy" | "createdAt" | "jobUniqueId"> & {
   applied: boolean;
 };
 
@@ -81,6 +81,9 @@ export type UserfetchAllJobsResponse = Pick<Job,"_id" | "designation" | "vacancy
 export interface UserApplyJobResponse extends ApiBaseResponse {
   data: Pick<Application, "jobId" | "status">
 };
+
+export type UserFetchJobDetailsResponse = Omit<Job, "updatedAt" | "compnayName">;
+
 
 
 // User application Update
@@ -91,4 +94,5 @@ export interface UserUpdateApplicationResponse extends ApiBaseResponse {
 
 
 // User fetch applications
-export type UserFetchAllApplicationsResponse = Pick<Job,"_id" | "designation" > & Pick<Application, "updatedAt" | "status" | "_id">
+export type UserFetchAllApplicationsResponse = Pick<Job,"_id" | "designation" | "jobUniqueId"> & Pick<Application, "updatedAt" | "status" | "_id">
+

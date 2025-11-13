@@ -11,6 +11,18 @@ export const AdminApplicationsTableColumns = (
     ColumnDef<AdminfetchAllApplicationsResponse>[] =>
     [
         {
+            accessorKey: "applicationUniqueId",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Application ID" />
+            ),
+        },
+        {
+            accessorKey: "jobUniqueId",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Job ID" />
+            ),
+        },
+        {
             accessorKey: "companyName",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Company" />
@@ -28,7 +40,25 @@ export const AdminApplicationsTableColumns = (
                 <DataTableColumnHeader column={column} title="Status" />
             ),
             cell: ({ row }) => {
-                return <span className="font-semibol text-green-600 dark:text-green-400">{row.original.status ? "Applied" : "Cancelled"}</span>;
+                const status = row.original.status;
+                const statusStyles: Record<
+                    string,
+                    { label: string; color: string }
+                > = {
+                    applied: { label: "Applied", color: "text-blue-600 dark:text-blue-400" },
+                    reviewing: { label: "Reviewing", color: "text-yellow-600 dark:text-yellow-400" },
+                    rejected: { label: "Rejected", color: "text-red-600 dark:text-red-400" },
+                    placed: { label: "Placed", color: "text-green-600 dark:text-green-400" },
+                    cancelledByUser: { label: "Cancelled", color: "text-gray-600 dark:text-gray-400" },
+                };
+
+                const style = status ? statusStyles[status] ?? { label: status, color: "" } : { label: "—", color: "" };
+
+                return (
+                    <span className={`font-semibold capitalize ${style.color}`}>
+                        {style.label}
+                    </span>
+                );
             },
         },
         {

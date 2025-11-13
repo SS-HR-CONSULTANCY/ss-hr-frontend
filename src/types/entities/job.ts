@@ -9,6 +9,7 @@ export interface Job {
   skills: string;
   jobDescription: string;
   nationality: string;
+  jobUniqueId: string;
   createdAt: string;
   updatedAt: string;
 }

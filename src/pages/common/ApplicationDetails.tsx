@@ -1,12 +1,19 @@
 import React from "react";
 import Loading from "./Loading";
+import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { Briefcase, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import FormField from "@/components/form/FormFiled";
+import { zodResolver } from "@hookform/resolvers/zod";
 import InfoDisplay from "@/components/common/InfoDisplay";
+import { applicationStatusOptions } from "@/utils/constants";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import noProfile from "../../assets/defaultImgaes/noProfile.png";
 import DataFetchingError from "@/components/common/DataFetchingError";
-import { adminGetApplicationById } from "@/utils/apis/adminApplicationApi";
+import { updateApplicationStatus, type UpdateApplicationStatusForm } from "@/utils/zod/adminZod";
+import { adminGetApplicationById, adminUpdateApplicationStatus } from "@/utils/apis/adminApplicationApi";
 
 const ApplicationDetails: React.FC = () => {
     const { id } = useParams();
@@ -17,6 +24,18 @@ const ApplicationDetails: React.FC = () => {
         enabled: !!id,
         staleTime: 60 * 1000,
         refetchOnWindowFocus: false,
+    });
+
+    const {
+        register,
+        handleSubmit,
+        formState: { isSubmitting },
+        formState: { errors },
+    } = useForm<UpdateApplicationStatusForm>({
+        resolver: zodResolver(updateApplicationStatus),
+        defaultValues: {
+            status: ""
+        },
     });
 
     if (isLoading) return <Loading />;
@@ -37,20 +56,35 @@ const ApplicationDetails: React.FC = () => {
 
     const { jobId, userId, status } = data;
 
+    const onSubmit: SubmitHandler<UpdateApplicationStatusForm> = async (data) => {
+        if (!id) {
+            toast.error("Application Status Updating failed");
+            return;
+        }
+
+        const res = await adminUpdateApplicationStatus({
+            _id: id,
+            status: data.status
+        });
+
+        console.log("res : ",res);
+
+        if (res.success) {
+            toast.success("Application Status Updated");
+            data.status = status
+        } else {
+            toast.error("Application Status Updating failed");
+        }
+    }
+
     return (
-        <div className="p-8">
+        <div className="p-4">
 
             <div className="flex items-center justify-between border-b pb-4">
                 <div className="flex items-center gap-3">
                     <Briefcase className="h-6 w-6" />
-                    <h2 className="text-2xl font-semibold">Application Details</h2>
+                    <h2 className="text-2xl font-semibold">Application ID {jobId?.jobUniqueId}</h2>
                 </div>
-                <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${status ? "bg-opacity-10" : ""
-                        }`}
-                >
-                    {status ? "Active" : "Cancelled"}
-                </span>
             </div>
 
             <div className="w-full mt-2">
@@ -74,17 +108,40 @@ const ApplicationDetails: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                    <InfoDisplay label="Gender" value={userId?.gender} />
-                    <InfoDisplay label="Nationaility" value={userId?.nationality} />
+                    <InfoDisplay label="Application Status" value={status} />
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex items-end space-x-2 p-2 max-1/2">
+                        <FormField<UpdateApplicationStatusForm>
+                            id="status"
+                            label="Change Application Status"
+                            type="select"
+                            register={register}
+                            error={errors.status?.message}
+                            defaultValue={String(status ?? "")}
+                            defaultSelectOptions="Application Status"
+                            options={applicationStatusOptions}
+                        />
+                        <Button
+                            disabled={isSubmitting}
+                            type="submit"
+                            variant="outline"
+                            className="text-xs md:text-sm px-3 py-1 cursor-pointer"
+                        >
+                            {isSubmitting ? "Updating" : "Update"}
+                        </Button>
+                    </form>
+                    <InfoDisplay label="Serial Number" value={userId?.serialNumber} />
                     <InfoDisplay label="Professional Status" value={userId?.professionalStatus} />
+                    <InfoDisplay label="Nationaility" value={userId?.nationality} />
+                    <InfoDisplay label="Gender" value={userId?.gender} />
                     <InfoDisplay label="Date Of Birth" value={userId?.dob} isDate />
-                    <InfoDisplay label="Resume" value={userId?.resume as string} link />
-                    <InfoDisplay label="LinkedIn Username" value={userId?.linkedInUsername} />
-                    <InfoDisplay label="Nationality" value={userId?.nationality} />
                     <InfoDisplay label="Phone" value={userId?.phone} />
                     <InfoDisplay label="Phone Secondary" value={userId?.phoneTwo} />
-                    <InfoDisplay label="Serial Number" value={userId?.serialNumber} />
+                    <InfoDisplay label="Resume" value={userId?.resume as string} link />
+                    <InfoDisplay label="LinkedIn Username" value={userId?.linkedInUsername} />
                     <InfoDisplay label="Portfolio Url" value={userId?.portfolioUrl} link />
+                    <h3 className="text-lg font-semibold flex items-center gap-2 my-4">
+                        <Briefcase className="h-5 w-5" /> Job Info
+                    </h3>
                     <InfoDisplay label="Designation" value={jobId?.designation} />
                     <InfoDisplay label="Benifits" value={jobId?.benifits} />
                     <InfoDisplay label="Company" value={jobId?.companyName} />

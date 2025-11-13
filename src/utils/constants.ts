@@ -54,17 +54,19 @@ export const roleValues = ["user", "admin", "systemAdmin"] as const;
 
 export const adminRoleValues = ["admin", "systemAdmin"] as const;
 
-export const limitedroleValues = ["user" , "admin"] as const;
+export const limitedroleValues = ["user", "admin"] as const;
 
-export const genderValues = ["male" , "female" , "other"] as const;
+export const genderValues = ["male", "female", "other"] as const;
 
-export const jobValues = ["full-time" , "part-time" , "contract" , "internship" , "freelance"] as const;
+export const jobValues = ["full-time", "part-time", "contract", "internship", "freelance"] as const;
 
-export const workModeValues = ["onsite" , "remote" , "hybrid"] as const;
+export const workModeValues = ["onsite", "remote", "hybrid"] as const;
 
 export const paymentMethodValues = ["googlepay", "banktransfer", "cash"] as const;
 
 export const paymentStatusValues = ["fullyPaid", "partiallyPaid", "pending"] as const;
+
+export const applicationStatusValues = ["applied", "cancelledByUser", "revewing", "rejected", "placed"] as const;
 
 export const roleLoginRoutes: Record<RoleType, string> = {
   admin: "/ss-hr-admin/login",
@@ -601,10 +603,10 @@ export const adminApplicationRoutes: Route[] = [
     name: "Applications",
     roles: ["admin", "systemAdmin"],
   },
-  { 
-    path: "chat", 
-    name: "Chat", 
-    roles: ["admin", "systemAdmin"] 
+  {
+    path: "chat",
+    name: "Chat",
+    roles: ["admin", "systemAdmin"]
   },
   {
     path: "payments",
@@ -616,10 +618,10 @@ export const adminApplicationRoutes: Route[] = [
     name: "Testimonials",
     roles: ["admin", "systemAdmin"],
   },
-  { 
-    path: "reports", 
-    name: "Reports", 
-    roles: ["admin", "systemAdmin"] 
+  {
+    path: "reports",
+    name: "Reports",
+    roles: ["admin", "systemAdmin"]
   },
   // { 
   //   path: "settings", 
@@ -634,16 +636,16 @@ export const shimmerMessages: {
   height: string;
   width: string;
 }[] = [
-  { align: "end", height: "h-10", width: "w-64" },
-  { align: "start", height: "h-24", width: "w-60" },
-  { align: "end", height: "h-36", width: "w-72" },
-  { align: "start", height: "h-12", width: "w-44" },
-  { align: "end", height: "h-14", width: "w-56" },
-  { align: "start", height: "h-10", width: "w-60" },
-  { align: "end", height: "h-28", width: "w-64" },
-  { align: "start", height: "h-32", width: "w-72" },
-  { align: "end", height: "h-24", width: "w-56" },
-];
+    { align: "end", height: "h-10", width: "w-64" },
+    { align: "start", height: "h-24", width: "w-60" },
+    { align: "end", height: "h-36", width: "w-72" },
+    { align: "start", height: "h-12", width: "w-44" },
+    { align: "end", height: "h-14", width: "w-56" },
+    { align: "start", height: "h-10", width: "w-60" },
+    { align: "end", height: "h-28", width: "w-64" },
+    { align: "start", height: "h-32", width: "w-72" },
+    { align: "end", height: "h-24", width: "w-56" },
+  ];
 
 // Chart Date Data
 export const dateSelectList: dataSelectListItemInterface[] = [
@@ -680,112 +682,112 @@ export const reportPageTabs = [
 export const statsMapForAdminUserStats: Array<
   statsMapIntrface<AdminFetchUserReportStatsDataResponse>
 > = [
-  {
-    title: "Total Users",
-    key: "totalUsers",
-    icon: Users,
-  },
-  {
-    title: "New Users",
-    key: "newUsers",
-    icon: Users,
-  },
-  {
-    title: "Old Users",
-    key: "oldUsers",
-    icon: Users,
-  },
-  {
-    title: "Job Applications",
-    key: "jobApplications",
-    icon: Briefcase,
-  },
-  {
-    title: "Package Used Users",
-    key: "packageUsedUsers",
-    icon: Package,
-  },
-];
+    {
+      title: "Total Users",
+      key: "totalUsers",
+      icon: Users,
+    },
+    {
+      title: "New Users",
+      key: "newUsers",
+      icon: Users,
+    },
+    {
+      title: "Old Users",
+      key: "oldUsers",
+      icon: Users,
+    },
+    {
+      title: "Job Applications",
+      key: "jobApplications",
+      icon: Briefcase,
+    },
+    {
+      title: "Package Used Users",
+      key: "packageUsedUsers",
+      icon: Package,
+    },
+  ];
 
 // ✅ Admin Applications Stats Map
 export const statsMapForApplications: Array<
   statsMapIntrface<AdminFetchApplicationsReportStatsDataResponse>
 > = [
-  {
-    title: "Total Applications",
-    key: "totalApplications",
-    icon: Briefcase,
-  },
-  {
-    title: "Successful Placements",
-    key: "successfulPlacements",
-    icon: Briefcase,
-  },
-];
+    {
+      title: "Total Applications",
+      key: "totalApplications",
+      icon: Briefcase,
+    },
+    {
+      title: "Successful Placements",
+      key: "successfulPlacements",
+      icon: Briefcase,
+    },
+  ];
 
 // ✅ Admin Revenue Stats Map
 export const statsMapForRevenue: Array<
   statsMapIntrface<AdminFetchRevenueReportStatsDataResponse>
 > = [
-  {
-    title: "Total Revenue",
-    key: "totalRevenue",
-    icon: Landmark,
-    price: true,
-  },
-  {
-    title: "Package Revenue",
-    key: "packageRevenue",
-    icon: Landmark,
-    price: true,
-  },
-  {
-    title: "Hiring Revenue",
-    key: "hiringRevenue",
-    icon: Landmark,
-    price: true,
-  },
-];
+    {
+      title: "Total Revenue",
+      key: "totalRevenue",
+      icon: Landmark,
+      price: true,
+    },
+    {
+      title: "Package Revenue",
+      key: "packageRevenue",
+      icon: Landmark,
+      price: true,
+    },
+    {
+      title: "Hiring Revenue",
+      key: "hiringRevenue",
+      icon: Landmark,
+      price: true,
+    },
+  ];
 
 export const statsMapForAdminOverview: Array<
   statsMapIntrface<AdminFetchOverviewStatsDataResponse>
 > = [
-  {
-    title: "Total Users",
-    key: "totalUsers",
-    icon: Users,
-  },
-  {
-    title: "Total Packages",
-    key: "totalPackages",
-    icon: Package,
-  },
-  {
-    title: "Jobs Available",
-    key: "totalJobsAvailable",
-    icon: Briefcase,
-  },
-  {
-    title: "Companies",
-    key: "totalCompanies",
-    icon: Building2,
-  },
-  {
-    title: "Total Positions",
-    key: "totalPostions",
-    icon: ClipboardList,
-  },
-  {
-    title: "Applications",
-    key: "totalApplications",
-    icon: FileText,
-  },
-];
+    {
+      title: "Total Users",
+      key: "totalUsers",
+      icon: Users,
+    },
+    {
+      title: "Total Packages",
+      key: "totalPackages",
+      icon: Package,
+    },
+    {
+      title: "Jobs Available",
+      key: "totalJobsAvailable",
+      icon: Briefcase,
+    },
+    {
+      title: "Companies",
+      key: "totalCompanies",
+      icon: Building2,
+    },
+    {
+      title: "Total Positions",
+      key: "totalPostions",
+      icon: ClipboardList,
+    },
+    {
+      title: "Applications",
+      key: "totalApplications",
+      icon: FileText,
+    },
+  ];
 
 export const mdData: mdDataProps[] = [
   {
     profileImage: md1,
-    name: "Shine Son",
+    name: "Shah Alam",
     quote:
       "I want to make people happy when they travel and work around the world just like my dad.",
   },
@@ -826,18 +828,24 @@ export const workModeOptions = [
 ];
 
 export const booleanOptions = [
-  {label:"Yes", value:"true"},
-  {label:"No", value:"false"}
+  { label: "Yes", value: "true" },
+  { label: "No", value: "false" }
+];
+
+export const applicationStatusOptions = [
+  { label: "Reviewing", value: applicationStatusValues[2] },
+  { label: "Rejected", value: applicationStatusValues[3] },
+  { label: "Placed", value: applicationStatusValues[4] }
 ];
 
 export const roleOptions = [
-  {label:"Admin", value:"admin"},
-  {label:"Super Admin", value:"superAdmin"},
-  {label:"System Admin", value:"systemAdmin"}
+  { label: "Admin", value: "admin" },
+  { label: "Super Admin", value: "superAdmin" },
+  { label: "System Admin", value: "systemAdmin" }
 ];
 
 export const genderOptions = [
-  {label:"Male", value:"male"},
-  {label:"Female", value:"female"},
-  {label:"Other", value:"other"}
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
+  { label: "Other", value: "other" }
 ];
