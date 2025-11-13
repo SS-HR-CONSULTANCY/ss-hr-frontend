@@ -2,20 +2,18 @@ import { Button } from "../ui/button";
 import { toast } from "react-toastify";
 import React, { useState } from "react";
 import FormField from "../form/FormFiled";
-import type { Role } from "@/types/entities/user";
+import { roleOptions } from "@/utils/constants";
 import { useQueryClient } from "@tanstack/react-query";
 import { createAdmin } from "@/utils/apis/adminSettingsApi";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import noProfile from "../../assets/defaultImgaes/noProfile.png";
 import type { CreateAdminRequest } from "@/types/apiTypes/adminApiTypes";
-import { roleOptions } from "@/utils/constants";
 
 interface AdminManagementFormProps {
-  role: Role;
   setAddAdmin: (data: boolean) => void;
 }
+
 const AdminManagementForm: React.FC<AdminManagementFormProps> = ({
-  role,
   setAddAdmin,
 }) => {
   const queryClient = useQueryClient();
@@ -37,7 +35,6 @@ const AdminManagementForm: React.FC<AdminManagementFormProps> = ({
       formData.append("password", data.password);
       formData.append("phone", data.phone);
       formData.append("role", data.role);
-      formData.append("createrRole", role);
 
       if (data.profileImage && data.profileImage.length > 0) {
         formData.append("profileImage", data.profileImage[0]);

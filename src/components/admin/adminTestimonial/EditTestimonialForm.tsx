@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import FormLoading from "../form/FormLoading";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
   getTestimonialById,
   updateTestimonial,
 } from "@/utils/apis/adminTestimonialApi";
+import FormLoading from "@/components/form/FormLoading";
 
 const EditTestimonialForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,14 +25,14 @@ const EditTestimonialForm: React.FC = () => {
 
   const [formData, setFormData] = useState<UpdateTestimonialFormData>({
     clientName: "",
-    clientPhoto: null,
+    clientPhoto: "",
     designation: "",
     testimonial: "",
     isVisible: true,
   });
 
   const [errors, setErrors] = useState<Partial<UpdateTestimonialFormData>>({});
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  // const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const { data: testimonialData, isLoading } = useQuery({
     queryKey: ["testimonial", selectedTestimonialId],
@@ -40,13 +40,13 @@ const EditTestimonialForm: React.FC = () => {
     enabled: !!selectedTestimonialId,
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
 
-    setFormData({ ...formData, clientPhoto: file });
-    setPreviewImage(URL.createObjectURL(file));
-  };
+  //   setFormData({ ...formData, clientPhoto: file });
+  //   setPreviewImage(URL.createObjectURL(file));
+  // };
 
   useEffect(() => {
     if (testimonialData?.testimonial) {
@@ -80,19 +80,11 @@ const EditTestimonialForm: React.FC = () => {
 
     if (!validateForm()) return;
 
-    const data = new FormData();
-    data.append("clientName", formData.clientName ?? "");
-    data.append("designation", formData.designation ?? "");
-    data.append("testimonial", formData.testimonial ?? "");
-    data.append("isVisible", formData.isVisible ? "true" : "false");
-
-    if (formData.clientPhoto instanceof File) {
-      data.append("clientPhoto", formData.clientPhoto);
-    }
+    
 
     const res = await updateTestimonial({
       testimonialId: selectedTestimonialId!,
-      testimonialData: data,
+      testimonialData: formData,
     });
 
     if (res) {
@@ -152,9 +144,22 @@ const EditTestimonialForm: React.FC = () => {
               placeholder="Enter designation"
             />
           </div>
-        </div>
 
         <div className="space-y-2">
+          <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
+          <input
+            type="text"
+            id="clientPhoto"
+            value={formData.clientPhoto || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, clientPhoto: e.target.value })}
+            className="block w-full text-sm border p-2"
+          />
+        </div>
+                    
+        </div>
+
+        {/* <div className="space-y-2">
           <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
           <input
             type="file"
@@ -170,7 +175,7 @@ const EditTestimonialForm: React.FC = () => {
               className="mt-2 w-24 h-24 object-cover rounded-full border"
             />
           )}
-        </div>
+        </div> */}
 
         <div className="space-y-2">
           <Label htmlFor="testimonial" className="">

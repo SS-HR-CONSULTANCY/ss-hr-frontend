@@ -6,11 +6,11 @@ import CommonTable from "@/components/common/CommonTable";
 import type { AppDispatch, RootState } from "@/store/store";
 import { useAdminPayments } from "@/hooks/useAdminPayments";
 import { getAllPayments } from "@/utils/apis/adminPaymentApi";
-import AddPaymentForm from "@/components/admin/AddPaymentForm";
-import PaymentDetails from "@/components/admin/PaymentDetails";
-import EditPaymentForm from "@/components/admin/EditPaymentForm";
 import TablePageHeader from "@/components/common/TablePageHeader";
 import { toggleAddPaymentForm } from "@/store/slices/paymentSlice";
+import AddPaymentForm from "@/components/admin/adminPayment/AddPaymentForm";
+import PaymentDetails from "@/components/admin/adminPayment/PaymentDetails";
+import EditPaymentForm from "@/components/admin/adminPayment/EditPaymentForm";
 import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi";
 import { PaymentTableColumns } from "@/components/table/tableColumns/PaymentTableColumns";
 

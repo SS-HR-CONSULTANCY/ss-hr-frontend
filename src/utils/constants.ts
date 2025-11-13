@@ -621,11 +621,11 @@ export const adminApplicationRoutes: Route[] = [
     name: "Reports", 
     roles: ["admin", "systemAdmin"] 
   },
-  { 
-    path: "settings", 
-    name: "Settings", 
-    roles: ["superAdmin"] 
-  },
+  // { 
+  //   path: "settings", 
+  //   name: "Settings", 
+  //   roles: ["superAdmin"] 
+  // },
 ];
 
 // Chat component shimmer constants

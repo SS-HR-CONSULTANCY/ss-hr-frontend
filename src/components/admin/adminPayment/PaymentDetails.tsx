@@ -1,11 +1,11 @@
 import React from "react";
-import FormLoading from "../form/FormLoading";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
 import { getPaymentById } from "@/utils/apis/adminPaymentApi";
 import { closeViewPaymentDetails } from "@/store/slices/paymentSlice";
+import FormLoading from "@/components/form/FormLoading";
 
 const PaymentDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

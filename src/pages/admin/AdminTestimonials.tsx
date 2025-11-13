@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import CommonTable from "@/components/common/CommonTable";
 import type { AppDispatch, RootState } from "@/store/store";
 import TablePageHeader from "@/components/common/TablePageHeader";
-import { getAllTestimonials } from "@/utils/apis/adminTestimonialApi";
-import AddTestimonialForm from "@/components/admin/AddTestimonialForm";
-import TestimonialDetails from "@/components/admin/TestimonialDetails";
-import EditTestimonialForm from "@/components/admin/EditTestimonialForm";
 import { useAdminTestimonials } from "@/hooks/useAdminTestimonials";
+import { getAllTestimonials } from "@/utils/apis/adminTestimonialApi";
 import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
+import AddTestimonialForm from "@/components/admin/adminTestimonial/AddTestimonialForm";
+import TestimonialDetails from "@/components/admin/adminTestimonial/TestimonialDetails";
 import { TestimonialTableColumns } from "@/components/table/tableColumns/TestimonialTableColumns";
+import EditTestimonialForm from "@/components/admin/adminTestimonial/EditTestimonialForm";
 
 const AdminTestimonials: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

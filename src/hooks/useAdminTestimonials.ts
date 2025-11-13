@@ -10,12 +10,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTestimonial } from "@/utils/apis/adminTestimonialApi";
 import { ConfirmToast } from "@/components/table/tableColumns/ConfirmToast";
 
-export const useAdminTestimonials = (testimonialId?: string) => {
+export const useAdminTestimonials = () => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
-    mutationFn: () => deleteTestimonial(testimonialId!),
+    mutationFn: (testimonialId: string) => deleteTestimonial(testimonialId),
     onSuccess: () => {
       toast.success("Testimonial deleted successfully!");
       queryClient.invalidateQueries({ queryKey: ["testimonials"] });
@@ -25,23 +25,23 @@ export const useAdminTestimonials = (testimonialId?: string) => {
     },
   });
 
-  const handleViewTestimonial = () => {
+  const handleViewTestimonial = (testimonialId?: string) => {
     if (!testimonialId) return;
     dispatch(openViewTestimonialDetails(testimonialId));
   };
 
-  const handleEditTestimonial = () => {
+  const handleEditTestimonial = (testimonialId?: string) => {
     if (!testimonialId) return;
     dispatch(openEditTestimonialForm(testimonialId));
   };
 
-  const handleDeleteTestimonial = () => {
+  const handleDeleteTestimonial = (testimonialId: string) => {
     toast(
       ({ closeToast }) =>
         React.createElement(ConfirmToast, {
           message: "Are you sure you want to delete this testimonial?",
           onConfirm: () => {
-            deleteMutation.mutate();
+            deleteMutation.mutate(testimonialId);
             closeToast();
           },
           onCancel: closeToast,

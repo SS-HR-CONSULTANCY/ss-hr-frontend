@@ -1,12 +1,12 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import FormLoading from "../../form/FormLoading";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
-import { closeViewTestimonialDetails } from "@/store/slices/testimonialSlice";
-import { getTestimonialById } from "@/utils/apis/adminTestimonialApi";
 import noProfile from "@/assets/defaultImgaes/noProfile.png";
-import FormLoading from "../form/FormLoading";
+import { getTestimonialById } from "@/utils/apis/adminTestimonialApi";
+import { closeViewTestimonialDetails } from "@/store/slices/testimonialSlice";
 
 const TestimonialDetails: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

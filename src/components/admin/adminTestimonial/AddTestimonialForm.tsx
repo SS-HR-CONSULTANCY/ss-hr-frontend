@@ -12,27 +12,28 @@ import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { CreateTestimonialFormData } from "@/types/entities/testimonial";
 
 const AddTestimonialForm: React.FC = () => {
+
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState<CreateTestimonialFormData>({
     clientName: "",
-    clientPhoto: null,
+    clientPhoto: "",
     designation: "",
     testimonial: "",
   });
 
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  // const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<CreateTestimonialFormData>>({});
 
   const resetForm = () => {
     setFormData({
       clientName: "",
-      clientPhoto: null,
+      clientPhoto: "",
       designation: "",
       testimonial: "",
     });
-    setPreviewImage(null);
+    // setPreviewImage(null);
     setErrors({});
   };
 
@@ -59,13 +60,13 @@ const AddTestimonialForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
 
-    setFormData({ ...formData, clientPhoto: file });
-    setPreviewImage(URL.createObjectURL(file));
-  };
+  //   setFormData({ ...formData, clientPhoto: file });
+  //   setPreviewImage(URL.createObjectURL(file));
+  // };
 
   const handleCancel = () => {
     dispatch(toggleAddTestimonialForm());
@@ -76,15 +77,7 @@ const AddTestimonialForm: React.FC = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const submissionData = new FormData();
-    submissionData.append("clientName", formData.clientName);
-    submissionData.append("designation", formData.designation);
-    submissionData.append("testimonial", formData.testimonial);
-    if (formData.clientPhoto) {
-      submissionData.append("clientPhoto", formData.clientPhoto);
-    }
-
-    const res = await createTestimonial(submissionData);
+    const res = await createTestimonial(formData);
     if (res) {
       if (res.success) {
         toast.success(res.message);
@@ -133,12 +126,11 @@ const AddTestimonialForm: React.FC = () => {
           </div>
         </div>
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
           <input
             type="file"
             id="clientPhoto"
-            accept="image/*"
             onChange={handleFileChange}
             className="block w-full text-sm border p-2"
           />
@@ -149,6 +141,24 @@ const AddTestimonialForm: React.FC = () => {
               className="mt-2 w-24 h-24 object-cover rounded-full border"
             />
           )}
+        </div> */}
+
+        <div className="space-y-2">
+          <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
+          <input
+            type="text"
+            id="clientPhoto"
+            onChange={(e) =>
+              setFormData({ ...formData, clientPhoto: e.target.value })}
+            className="block w-full text-sm border p-2"
+          />
+          {/* {previewImage && (
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="mt-2 w-24 h-24 object-cover rounded-full border"
+            />
+          )} */}
         </div>
 
         <div className="space-y-2">

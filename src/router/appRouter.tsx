@@ -26,7 +26,7 @@ const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
 const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
 const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
-const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
+// const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
 const UserApplications = lazy(() => import("@/pages/user/UserApplications"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
@@ -250,14 +250,14 @@ const appRouter = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path: "settings",
-        element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
-            <AdminSettings />
-          </ProtectedRoute>
-        ),
-      },
+      // {
+      //   path: "settings",
+      //   element: (
+      //     <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+      //       <AdminSettings />
+      //     </ProtectedRoute>
+      //   ),
+      // },
       { path: "*", element: <Error404 /> },
     ],
   },
