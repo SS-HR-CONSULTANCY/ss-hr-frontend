@@ -28,6 +28,7 @@ export type PaymentMethodType = z.infer<typeof paymentMethod>;
 export const paymentStatus = enumField("paymentStatus", paymentStatusValues);
 export type PaymentStatusType = z.infer<typeof paymentStatus>;
 
+//** These are required schemas ( optional string field is in common zod file ) */
 export const fullName = stringField("fullname", 4, 30, REGEX_FULL_NAME);
 export const password = stringField("password", 8, 50, REGEX_PASSWORD);
 export const confirmPassword = stringField("confirmPassword", 8, 50, REGEX_PASSWORD);

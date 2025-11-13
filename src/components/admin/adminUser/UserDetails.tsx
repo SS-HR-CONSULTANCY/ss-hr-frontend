@@ -128,11 +128,6 @@ const UserDetails: React.FC = () => {
               </div>
 
               <div className="flex items-center justify-between p-3 border rounded-lg">
-                <span className="text-sm font-medium">Role</span>
-                <span className="text-sm font-medium">{user.role}</span>
-              </div>
-
-              <div className="flex items-center justify-between p-3 border rounded-lg">
                 <span className="text-sm font-medium">Status</span>
                 <span className="text-sm font-medium">
                   {user.isBlocked ? "Blocked" : "Active"}

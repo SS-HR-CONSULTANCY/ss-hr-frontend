@@ -25,14 +25,9 @@ export interface SingleUserResponse {
   user: User;
 }
 
-export interface CreateUserRequest {
-  fullName: string;
-  email: string;
+export type CreateUserRequest = Pick<User, "fullName" | "email" | "phone" | "phoneTwo"> & {
   password: string;
-  role: "user" | "admin";
-  phone?: string;
-  phoneTwo?: string;
-}
+} 
 
 export interface UpdateUserRequest {
   fullName?: string;

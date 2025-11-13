@@ -1,103 +1,79 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@/components/ui/button";
+import { toast } from "react-toastify";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  X,
-  User,
-  Mail,
-  Phone,
-  UserCheck,
-  Loader,
-  Shield,
-  ShieldOff,
-} from "lucide-react";
-import { toast } from "react-toastify";
-import type { AppDispatch, RootState } from "@/store/store";
-import { closeEditUserModal } from "@/store/slices/userSlice";
+import { Button } from "@/components/ui/button";
+import type { AppDispatch } from "@/store/store";
 import { useQueryClient } from "@tanstack/react-query";
-import { adminFetchUserById, adminUpdateUser } from "@/utils/apis/adminUserApi";
+import { closeAddUserModal } from "@/store/slices/userSlice";
+import { adminCreateUser } from "@/utils/apis/adminUserApi";
+import type { AdminCrateUserForm } from "@/utils/zod/adminZod";
+import { X, Mail, Lock, Phone, UserCheck, Loader, User } from "lucide-react";
+import { REGEX_FULL_NAME, REGEX_PASSWORD, REGEX_PHONE } from "@/utils/zod/regex";
 
-interface EditUserFormData {
-  fullName: string;
-  email: string;
-  phone: string;
-  phoneTwo: string;
-  isBlocked: boolean;
-  isVerified: boolean;
-}
+const AddUserForm: React.FC = () => {
 
-const EditUserForm: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
-  const { selectedUserId } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
-  const [loadingUser, setLoadingUser] = useState(true);
-  const [formData, setFormData] = useState<EditUserFormData>({
+  const [formData, setFormData] = useState<AdminCrateUserForm>({
     fullName: "",
     email: "",
+    password: "",
     phone: "",
     phoneTwo: "",
-    isBlocked: false,
-    isVerified: false,
   });
   const [errors, setErrors] = useState<
-    Partial<Record<keyof EditUserFormData, string>>
+    Partial<Record<keyof AdminCrateUserForm, string>>
   >({});
 
-  useEffect(() => {
-    if (selectedUserId) {
-      fetchUserData();
-    }
-  }, [selectedUserId]);
-
-  const fetchUserData = async () => {
-    if (!selectedUserId) return;
-
-    setLoadingUser(true);
-    try {
-      const response = await adminFetchUserById(selectedUserId);
-      if (response.data.success) {
-        const user = response.data.user;
-        setFormData({
-          fullName: user.fullName,
-          email: user.email,
-          phone: user.phone || "",
-          phoneTwo: user.phoneTwo || "",
-          isBlocked: user.isBlocked,
-          isVerified: user.isVerified,
-        });
-      }
-    } catch (error) {
-      console.error("Fetch user error:", error);
-      toast.error("Failed to load user data");
-    } finally {
-      setLoadingUser(false);
-    }
-  };
-
   const validateForm = (): boolean => {
-    const newErrors: Partial<Record<keyof EditUserFormData, string>> = {};
+    const newErrors: Partial<Record<keyof AdminCrateUserForm, string>> = {};
 
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full name is required";
-    }
+  if (!formData.fullName.trim()) {
+    newErrors.fullName = "Full name is required";
+  } else if (formData.fullName.length < 4 || formData.fullName.length > 30) {
+    newErrors.fullName = "Full name must be 4–30 characters";
+  } else if (!REGEX_FULL_NAME.test(formData.fullName)) {
+    newErrors.fullName = "Full name contains invalid characters";
+  }
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+  if (!formData.email.trim()) {
+    newErrors.email = "Email is required";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    newErrors.email = "Invalid email format";
+  }
+
+  if (!formData.password.trim()) {
+    newErrors.password = "Password is required";
+  } else if (formData.password.length < 8 || formData.password.length > 50) {
+    newErrors.password = "Password must be 8–50 characters";
+  } else if (!REGEX_PASSWORD.test(formData.password)) {
+    newErrors.password = "Password contains invalid characters";
+  }
+
+  if (!formData.phone.trim()) {
+    newErrors.phone = "Phone is required";
+  } else if (formData.phone.length < 7 || formData.phone.length > 20) {
+    newErrors.phone = "Phone must be 7–20 digits";
+  } else if (!REGEX_PHONE.test(formData.phone)) {
+    newErrors.phone = "Phone contains invalid characters";
+  }
+
+  if (formData.phoneTwo?.trim()) {
+    if (formData.phoneTwo.length < 7 || formData.phoneTwo.length > 20) {
+      newErrors.phoneTwo = "Phone Two must be 7–20 digits";
+    } else if (!REGEX_PHONE.test(formData.phoneTwo)) {
+      newErrors.phoneTwo = "Phone Two contains invalid characters";
     }
+  }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (
-    field: keyof EditUserFormData,
-    value: string | boolean,
-  ) => {
+  const handleInputChange = (field: keyof AdminCrateUserForm, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
     if (errors[field]) {
@@ -108,49 +84,49 @@ const EditUserForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm() || !selectedUserId) return;
+    if (!validateForm()) return;
 
     setLoading(true);
 
     try {
-      const response = await adminUpdateUser(selectedUserId, formData);
+      const response = await adminCreateUser(formData);
 
       if (response.data.success) {
-        toast.success(response.data.message || "User updated successfully!");
+        toast.success(response.data.message || "User created successfully!");
 
         queryClient.invalidateQueries({ queryKey: ["admin-users"] });
 
-        dispatch(closeEditUserModal());
+        dispatch(closeAddUserModal());
+
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          phone: "",
+          phoneTwo: "",
+        });
+        setErrors({});
       } else {
-        toast.error("Failed to update user");
+        toast.error("Failed to create user");
       }
     } catch {
-      toast.error("Failed to update user.");
+      toast.error("User adding failed");
     } finally {
       setLoading(false);
     }
   };
 
   const handleClose = () => {
-    dispatch(closeEditUserModal());
+    dispatch(closeAddUserModal());
+    setFormData({
+      fullName: "",
+      email: "",
+      password: "",
+      phone: "",
+      phoneTwo: "",
+    });
     setErrors({});
   };
-
-  if (!selectedUserId) {
-    return null;
-  }
-
-  if (loadingUser) {
-    return (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 border border-black">
-          <div className="flex items-center justify-center">
-            <Loader className="h-8 w-8 animate-spin text-black" />
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -162,7 +138,7 @@ const EditUserForm: React.FC = () => {
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-black">
                 <UserCheck className="h-5 w-5 text-black" />
               </div>
-              <h3 className="text-xl font-bold text-black">Edit User</h3>
+              <h3 className="text-xl font-bold text-black">Add New User</h3>
             </div>
             <Button
               variant="ghost"
@@ -229,6 +205,32 @@ const EditUserForm: React.FC = () => {
             )}
           </div>
 
+          {/* Password */}
+          <div className="space-y-2">
+            <Label
+              htmlFor="password"
+              className="flex items-center gap-2 text-sm font-medium text-black"
+            >
+              <Lock className="h-4 w-4 text-black" />
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={(e) => handleInputChange("password", e.target.value)}
+              placeholder="Enter password"
+              className={`transition-all duration-200 bg-white border-black text-black placeholder-black ${
+                errors.password
+                  ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                  : "focus:border-black focus:ring-black"
+              }`}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-xs">{errors.password}</p>
+            )}
+          </div>
+
           {/* Phone */}
           <div className="space-y-2">
             <Label
@@ -266,53 +268,6 @@ const EditUserForm: React.FC = () => {
               className="transition-all duration-200 bg-white border-black text-black placeholder-black focus:border-black focus:ring-black"
             />
           </div>
-
-          {/* Status Controls */}
-          <div className="space-y-3 pt-4 border-t border-gray-200">
-            <div className="flex items-center justify-between p-3 bg-white border border-black rounded-lg">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-black" />
-                <span className="text-black font-medium">Verified Status</span>
-              </div>
-              <Button
-                type="button"
-                onClick={() =>
-                  handleInputChange("isVerified", !formData.isVerified)
-                }
-                variant="outline"
-                size="sm"
-                className={`${
-                  formData.isVerified
-                    ? "bg-green-100 border-green-500 text-green-700 hover:bg-green-200"
-                    : "bg-red-100 border-red-500 text-red-700 hover:bg-red-200"
-                }`}
-              >
-                {formData.isVerified ? "Verified" : "Unverified"}
-              </Button>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-white border border-black rounded-lg">
-              <div className="flex items-center gap-2">
-                <ShieldOff className="h-4 w-4 text-black" />
-                <span className="text-black font-medium">Account Status</span>
-              </div>
-              <Button
-                type="button"
-                onClick={() =>
-                  handleInputChange("isBlocked", !formData.isBlocked)
-                }
-                variant="outline"
-                size="sm"
-                className={`${
-                  formData.isBlocked
-                    ? "bg-red-100 border-red-500 text-red-700 hover:bg-red-200"
-                    : "bg-green-100 border-green-500 text-green-700 hover:bg-green-200"
-                }`}
-              >
-                {formData.isBlocked ? "Blocked" : "Active"}
-              </Button>
-            </div>
-          </div>
         </form>
 
         {/* Footer */}
@@ -335,10 +290,10 @@ const EditUserForm: React.FC = () => {
             {loading ? (
               <div className="flex items-center gap-2">
                 <Loader className="h-4 w-4 animate-spin" />
-                Updating...
+                Creating...
               </div>
             ) : (
-              "Update User"
+              "Create User"
             )}
           </Button>
         </div>
@@ -347,4 +302,4 @@ const EditUserForm: React.FC = () => {
   );
 };
 
-export default EditUserForm;
+export default AddUserForm;
