@@ -1,21 +1,4 @@
 import { z } from "zod";
-import { addressLine1,   addressLine2, city, state, district, country, postalCode, landmark, primary, } from "./zod/commonZod";
-
-// admin create job zod schema
-export const createJobSchema = z.object({
-  addressLine1,
-  addressLine2,
-  city,
-  state,
-  district,
-  country,
-  postalCode,
-  landmark,
-  primary,
-  });
-
-export type AddressForm = z.infer<typeof createJobSchema>;
-
 
 // career Data zod schema
 export const jobTypeEnum = z.enum(["full-time", "part-time", "contract", "internship", "freelance"]);

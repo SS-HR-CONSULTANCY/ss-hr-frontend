@@ -1,16 +1,11 @@
 import dayjs from "dayjs";
-import { X, Briefcase, Edit, Trash2 } from "lucide-react";
-import { toast } from "react-toastify";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { X, Briefcase } from "lucide-react";
 import Loading from "@/pages/common/Loading";
 import { Button } from "@/components/ui/button";
-import type { AppDispatch } from "@/store/store";
-import { deleteJob } from "@/utils/apis/adminJobApi";
+import { useQuery } from "@tanstack/react-query";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { openEditJobForm } from "@/store/slices/jobSlice";
 import InfoDisplay from "../../components/common/InfoDisplay";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import DataFetchingError from "../../components/common/DataFetchingError";
 import type { FetchJobDetailsResponse } from "@/types/apiTypes/commonApiTypes";
 
@@ -20,16 +15,15 @@ interface JobDetailsPageProps {
   jobId: string;
   onClose: () => void;
   fetchJobById: (jobId: string) => Promise<FetchJobDetailsResponse>;
+  isAdmin?: boolean;
 }
 
 const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
   jobId,
   onClose,
   fetchJobById,
+  isAdmin
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const queryClient = useQueryClient();
-  const [deleting, setDeleting] = useState(false);
 
   const { data, isLoading, isError, error } = useQuery({
     queryFn: () => fetchJobById(jobId),
@@ -65,36 +59,6 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
     <DataFetchingError message="Data fetching error" />;
   }
 
-  const handleEdit = () => {
-    dispatch(openEditJobForm(jobId));
-    onClose();
-  };
-
-  const handleDelete = async () => {
-    if (
-      !confirm(
-        "Are you sure you want to delete this job? This action cannot be undone.",
-      )
-    ) {
-      return;
-    }
-    setDeleting(true);
-    try {
-      const response = await deleteJob(jobId);
-      if (response.success) {
-        toast.success(response.message || "Job deleted successfully!");
-        queryClient.invalidateQueries({ queryKey: ["admin-jobs"] });
-        onClose();
-      } else {
-        toast.error("Failed to delete job");
-      }
-    } catch {
-      toast.error("Job deleting failed");
-    } finally {
-      setDeleting(false);
-    }
-  };
-
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-700 rounded-2xl shadow-2xl max-w-4xl overflow-y-scroll h-screen border border-black max-h-[70%]">
@@ -114,7 +78,9 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
 
         {data && (
           <>
+          {isAdmin && (
             <InfoDisplay label="Company" value={data.companyName} />
+          )}
             <InfoDisplay label="Designation" value={data.designation} />
             <InfoDisplay label="Industry" value={data.industry} />
             <InfoDisplay label="Nationality" value={data.nationality} />
@@ -127,36 +93,6 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
           </>
         )}
 
-        <div className="px-6 py-4 border-t border-black flex flex-col sm:flex-row gap-3">
-          <Button
-            onClick={handleEdit}
-            variant={"outline"}
-            className="hover:bg-blue-500 hover:text-white cursor-pointer"
-            disabled={deleting}
-          >
-            <Edit className="h-4 w-4 mr-2" />
-            Edit Job
-          </Button>
-
-          <Button
-            onClick={handleDelete}
-            variant="outline"
-            className="hover:bg-red-500 hover:text-white cursor-pointer"
-            disabled={deleting}
-          >
-            {deleting ? (
-              <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-500 border-t-transparent mr-2" />
-                Deleting...
-              </>
-            ) : (
-              <>
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </>
-            )}
-          </Button>
-        </div>
       </div>
     </div>
   );

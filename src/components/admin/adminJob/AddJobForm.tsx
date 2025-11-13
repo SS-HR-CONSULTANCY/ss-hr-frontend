@@ -1,31 +1,30 @@
+import React from "react";
 import { toast } from "react-toastify";
-import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import FormField from "../form/FormFiled";
+import FormField from "../../form/FormFiled";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import AdminFormHeader from "./AdminFormHeader";
+import AdminFormHeader from "../AdminFormHeader";
 import type { AppDispatch } from "@/store/store";
 import { Briefcase, Loader } from "lucide-react";
 import { createJob } from "@/utils/apis/adminJobApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { closeAddJobForm } from "@/store/slices/jobSlice";
-import { createJobSchema } from "@/utils/validationSchema";
-import type { AdminCreateNewJob } from "@/types/apiTypes/adminApiTypes";
+import { createJobSchema, type CreateJobForm } from "@/utils/zod/adminZod";
 
 const AddJobForm: React.FC = () => {
+
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<AdminCreateNewJob>({
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<CreateJobForm>({
     resolver: zodResolver(createJobSchema),
+    mode: "onChange",
     defaultValues: {
       companyName: "",
       designation: "",
@@ -39,10 +38,7 @@ const AddJobForm: React.FC = () => {
     },
   });
 
-  const watchedValues = watch();
-
-  const onSubmit = async (data: AdminCreateNewJob) => {
-    setIsLoading(true);
+  const onSubmit = async (data: CreateJobForm) => {
     try {
       const response = await createJob(data);
       if (response.success) {
@@ -54,8 +50,6 @@ const AddJobForm: React.FC = () => {
       }
     } catch {
       toast.error("Job adding failed");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -75,7 +69,7 @@ const AddJobForm: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
           <div className="flex justify-around space-x-6">
             <div className="space-y-2 w-full">
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="companyName"
                 label="Company Name"
                 type="text"
@@ -84,7 +78,7 @@ const AddJobForm: React.FC = () => {
                 register={register}
               />
 
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="designation"
                 label="Position/Designation"
                 type="text"
@@ -93,7 +87,7 @@ const AddJobForm: React.FC = () => {
                 register={register}
               />
 
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="industry"
                 label="Industry"
                 type="text"
@@ -102,7 +96,7 @@ const AddJobForm: React.FC = () => {
                 register={register}
               />
 
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="nationality"
                 label="Preferred Nationality"
                 type="text"
@@ -111,7 +105,7 @@ const AddJobForm: React.FC = () => {
                 register={register}
               />
 
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="salary"
                 label="Average Salary (LPA)"
                 type="number"
@@ -121,7 +115,7 @@ const AddJobForm: React.FC = () => {
                 registerOptions={{ valueAsNumber: true }}
               />
 
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="vacancy"
                 label="Number of Openings"
                 type="number"
@@ -133,7 +127,7 @@ const AddJobForm: React.FC = () => {
             </div>
 
             <div className="space-y-2 w-full">
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="jobDescription"
                 label="Job Description"
                 type="textarea"
@@ -143,7 +137,7 @@ const AddJobForm: React.FC = () => {
                 rows={4}
               />
 
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="benifits"
                 label="Benefits (comma separated)"
                 type="textarea"
@@ -153,7 +147,7 @@ const AddJobForm: React.FC = () => {
                 rows={3}
               />
 
-              <FormField<AdminCreateNewJob>
+              <FormField<CreateJobForm>
                 id="skills"
                 label="Required Skills (comma separated)"
                 type="text"
@@ -169,22 +163,16 @@ const AddJobForm: React.FC = () => {
               type="button"
               onClick={handleClose}
               variant="outline"
-              disabled={isLoading}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              disabled={
-                isLoading ||
-                !watchedValues.salary ||
-                !watchedValues.companyName ||
-                !watchedValues.designation ||
-                !watchedValues.vacancy
-              }
+              disabled={isSubmitting || !isValid}
               variant="outline"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <div className="flex items-center gap-2">
                   <Loader className="h-4 w-4 animate-spin" />
                   Creating...

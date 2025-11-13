@@ -1,20 +1,20 @@
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import FormField from "../form/FormFiled";
+import FormField from "../../form/FormFiled";
 import { Button } from "@/components/ui/button";
-import AdminFormHeader from "./AdminFormHeader";
+import AdminFormHeader from "../AdminFormHeader";
 import React, { useEffect, useState } from "react";
 import { Briefcase, Loader } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import { closeEditJobForm } from "@/store/slices/jobSlice";
 import type { AppDispatch, RootState } from "@/store/store";
-import { createJobSchema } from "@/utils/validationSchema";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminGetJobById, adminUpdateJob } from "@/utils/apis/adminJobApi";
-import type { AdminUpdateJobRequest } from "@/types/apiTypes/adminApiTypes";
+import { createJobSchema, type CreateJobForm } from "@/utils/zod/adminZod";
 
 const EditJobForm: React.FC = () => {
+
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
@@ -31,10 +31,9 @@ const EditJobForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
+    formState: { errors, isSubmitting, isValid },
     reset,
-  } = useForm<AdminUpdateJobRequest>({
+  } = useForm<CreateJobForm>({
     resolver: zodResolver(createJobSchema),
     defaultValues: {
       companyName: "",
@@ -48,8 +47,6 @@ const EditJobForm: React.FC = () => {
       vacancy: 1,
     },
   });
-
-  const watchedValues = watch();
 
   useEffect(() => {
     if (data) {
@@ -67,7 +64,7 @@ const EditJobForm: React.FC = () => {
     }
   }, [data, reset]);
 
-  const onSubmit = async (data: AdminUpdateJobRequest) => {
+  const onSubmit = async (data: CreateJobForm) => {
     setLoading(true);
     if (!selectedJobId) {
       toast.error("Something wet wrong");
@@ -113,7 +110,7 @@ const EditJobForm: React.FC = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
               <div className="flex justify-around space-x-6">
                 <div className="space-y-2 w-full">
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="companyName"
                     label="Company Name"
                     type="text"
@@ -122,7 +119,7 @@ const EditJobForm: React.FC = () => {
                     register={register}
                   />
 
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="designation"
                     label="Position/Designation"
                     type="text"
@@ -131,7 +128,7 @@ const EditJobForm: React.FC = () => {
                     register={register}
                   />
 
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="industry"
                     label="Industry"
                     type="text"
@@ -140,7 +137,7 @@ const EditJobForm: React.FC = () => {
                     register={register}
                   />
 
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="nationality"
                     label="Preferred Nationality"
                     type="text"
@@ -149,7 +146,7 @@ const EditJobForm: React.FC = () => {
                     register={register}
                   />
 
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="salary"
                     label="Average Salary (LPA)"
                     type="number"
@@ -159,7 +156,7 @@ const EditJobForm: React.FC = () => {
                     registerOptions={{ valueAsNumber: true }}
                   />
 
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="vacancy"
                     label="Number of Openings"
                     type="number"
@@ -171,7 +168,7 @@ const EditJobForm: React.FC = () => {
                 </div>
 
                 <div className="space-y-2 w-full">
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="jobDescription"
                     label="Job Description"
                     type="textarea"
@@ -181,7 +178,7 @@ const EditJobForm: React.FC = () => {
                     rows={4}
                   />
 
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="benifits"
                     label="Benefits (comma separated)"
                     type="textarea"
@@ -191,7 +188,7 @@ const EditJobForm: React.FC = () => {
                     rows={4}
                   />
 
-                  <FormField<AdminUpdateJobRequest>
+                  <FormField<CreateJobForm>
                     id="skills"
                     label="Required Skills (comma separated)"
                     type="textarea"
@@ -209,38 +206,14 @@ const EditJobForm: React.FC = () => {
                   onClick={handleClose}
                   variant="outline"
                   className="hover:bg-red-500 cursor-pointer hover:text-white"
-                  disabled={
-                    loading ||
-                    !watchedValues.benifits ||
-                    !watchedValues.companyName ||
-                    !watchedValues.designation ||
-                    !watchedValues.industry ||
-                    !watchedValues.jobDescription ||
-                    !watchedValues.jobDescription ||
-                    !watchedValues.nationality ||
-                    !watchedValues.salary ||
-                    !watchedValues.skills ||
-                    !watchedValues.vacancy
-                  }
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   variant="outline"
-                  disabled={
-                    loading ||
-                    !watchedValues.benifits ||
-                    !watchedValues.companyName ||
-                    !watchedValues.designation ||
-                    !watchedValues.industry ||
-                    !watchedValues.jobDescription ||
-                    !watchedValues.jobDescription ||
-                    !watchedValues.nationality ||
-                    !watchedValues.salary ||
-                    !watchedValues.skills ||
-                    !watchedValues.vacancy
-                  }
+                  disabled={isSubmitting || !isValid}
                   className="hover:bg-blue-500 cursor-pointer hover:text-white"
                 >
                   {loading ? (
