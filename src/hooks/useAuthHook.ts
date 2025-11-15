@@ -16,12 +16,12 @@ import { persistAppStore, type AppDispatch, type RootState } from "@/store/store
 
 const useAuthHook = () => {
 
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.auth.user);
-  const logoutRedirect = roleLoginRoutes[user?.role as RoleType] ?? "/login"; 
 
   const handleLogout = async () => {
+    const role = user?.role as RoleType;
     try {
       const res = await dispatch(signout()).unwrap();
       if (res.success) {
@@ -34,7 +34,7 @@ const useAuthHook = () => {
         dispatch(resetAuthStore());
         dispatch(resetUserSlice());
         persistAppStore.purge();
-        navigate(logoutRedirect);
+        navigate(roleLoginRoutes[role] ?? "/login");
       } else {
         toast.error(res.message || "Logout failed");
       }

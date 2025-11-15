@@ -29,13 +29,15 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistAppStore}>
-        <QueryClientProvider client={queryClient}>
-          <AppContent />
-        </QueryClientProvider>
-      </PersistGate>
-    </Provider>
+    <div className="h-screen w-full">
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistAppStore}>
+          <QueryClientProvider client={queryClient}>
+            <AppContent />
+          </QueryClientProvider>
+        </PersistGate>
+      </Provider>
+    </div>
   );
 };
 

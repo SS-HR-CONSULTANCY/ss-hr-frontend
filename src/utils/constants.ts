@@ -48,7 +48,7 @@ import type {
 } from "@/types/apiTypes/adminApiTypes";
 import type { RoleType } from "./zod/commonZod";
 
-export const companyName = "ShahaalamGroups";
+export const companyName = "Shahaalam Groups";
 
 export const roleValues = ["user", "admin", "systemAdmin"] as const;
 
@@ -150,7 +150,7 @@ export const services: ServiceProps[] = [
     description:
       "Comprehensive travel planning and support for your international needs.",
     hoverDescription:
-      "Our comprehensive travel services cover everything from flight bookings and hotel arrangements to itinerary planning and travel insurance. We ensure a smooth and stress-free journey by handling all the essential details, so you can focus on enjoying your trip. Benefit: End-to-end travel support for a seamless experience.",
+      "Our comprehensive travel services cover everything from flight bookings and hotel arrangements to itinerary planning and travel insurance. We ensure a smooth and stress free journey by handling all the essential details, so you can focus on enjoying your trip. Benefit: End to end travel support for a seamless experience.",
     imageUrl: toursAndTravels,
     href: "#services",
 
@@ -160,9 +160,9 @@ export const services: ServiceProps[] = [
     buttonText: "See More",
     buttonUrl: "/toursandtravels",
     points: [
-      "We handle end-to-end travel arrangements, including flights, accommodations, and local transport, ensuring you have a seamless experience.",
+      "We handle end to end travel arrangements, including flights, accommodations, and local transport, ensuring you have a seamless experience.",
       "Our affordable and flexible packages are tailored to meet the unique needs of families, solo travelers, and business trips.",
-      "We provide round-the-clock customer support to assist you during your journey, no matter where you are.",
+      "We provide round the clock customer support to assist you during your journey, no matter where you are.",
       "Each travel plan is carefully designed to match your preferences, ensuring comfort and convenience at every stage.",
       "We take care of all the essential details in advance so you can focus solely on enjoying your trip.",
     ],
@@ -170,7 +170,7 @@ export const services: ServiceProps[] = [
       "If you would like to make an enquiry for this service, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
-    heroTitle: "Discover Stress-Free Tours Around The World",
+    heroTitle: "Discover Stress free Tours Around The World",
   },
   {
     id: "visaservice",
@@ -204,7 +204,7 @@ export const services: ServiceProps[] = [
     id: "ticketservice",
     title: "Ticket Service",
     description:
-      "Affordable and hassle-free flight ticket booking for your journeys.",
+      "Affordable and hassle free flight ticket booking for your journeys.",
     hoverDescription:
       "Secure your flights and other transportation with our simple and convenient booking service. We compare prices and options from multiple providers to find the best deals, saving you time and money. Relax and let us handle the details.",
     imageUrl: ticketService,
@@ -217,10 +217,10 @@ export const services: ServiceProps[] = [
     buttonUrl: "/ticketservice",
     points: [
       "We compare multiple airlines and providers to secure the best possible fares for your journey.",
-      "Our service ensures quick booking confirmations and hassle-free payment processes.",
+      "Our service ensures quick booking confirmations and hassle free payment processes.",
       "Flexible rescheduling and cancellation options are available to suit your changing plans.",
       "We provide assistance with both international and domestic flight bookings for individuals and groups.",
-      "Our goal is to save you both time and money while ensuring your travel is stress-free.",
+      "Our goal is to save you both time and money while ensuring your travel is stress free.",
     ],
     contactText:
       "If you would like to make an enquiry for ticket booking, please contact us.",
@@ -232,7 +232,7 @@ export const services: ServiceProps[] = [
     id: "certificationservice",
     title: "Certificate Attestation",
     description:
-      "Hassle-free document attestation for smooth international processing.",
+      "Hassle free document attestation for smooth international processing.",
     hoverDescription:
       "We provide expert certificate attestation services for a wide range of documents and destinations worldwide. Our experienced team is familiar with the specific requirements of various embassies and consulates, ensuring a smooth and successful attestation process.",
     imageUrl: certificateAttestationService,
@@ -254,7 +254,7 @@ export const services: ServiceProps[] = [
       "If you would like to enquire about attestation services, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
-    heroTitle: "Smooth And Hassle-Free Certificate Attestation",
+    heroTitle: "Smooth And Hassle Free Certificate Attestation",
   },
   {
     id: "medicalrecruitservice",
@@ -303,7 +303,7 @@ export const services: ServiceProps[] = [
       "We help job seekers find positions that align with their skills, experience, and career goals.",
       "Our extensive network of employers provides access to opportunities across diverse industries.",
       "We streamline the recruitment process, reducing the time between application and placement.",
-      "Employers gain access to pre-screened candidates who are motivated and qualified for the role.",
+      "Employers gain access to pre screened candidates who are motivated and qualified for the role.",
       "Our recruitment team provides career guidance and support to ensure candidates make informed choices.",
     ],
     contactText:

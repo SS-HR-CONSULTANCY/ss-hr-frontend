@@ -1,4 +1,5 @@
 import React from "react";
+import Loading from "@/pages/common/Loading";
 import { useAppSelector } from "../hooks/redux";
 import { Navigate, useLocation } from "react-router-dom";
 import type { ProtectedRouteProps } from "@/types/componentTypes/routerTypes";
@@ -14,9 +15,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <Loading />
     );
   }
 
@@ -61,7 +60,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // ✅ allowed → render child route
   return <>{children}</>;
 };
 

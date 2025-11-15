@@ -55,7 +55,7 @@ const Header: React.FC = ({
               />
             </Link>
             <a href={homeUrl} className="items-center gap-2 text-xl font-bold">
-              {name + " Testing"}
+              {name.toUpperCase()}
             </a>
             {showNavigation && (customNavigation || <Navigation />)}
           </NavbarLeft>
