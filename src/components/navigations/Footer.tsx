@@ -73,7 +73,7 @@ const Footer = ({
             </div>
           </FooterColumn>
         </FooterContent>
-        <FooterContent className="w-full flex justify-center overflow-hidden md:py-10">
+        <FooterContent className="w-full justify-center overflow-hidden md:py-10 hidden">
           <h1
             className="
       font-extrabold 

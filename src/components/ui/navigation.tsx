@@ -13,6 +13,7 @@ import { navLinks, services } from "@/utils/constants";
 import type { navLinkProps } from "@/types/componentTypes/headerTypes";
 import { navigationMenuTriggerStyle } from "./navigation-menu-variants";
 import type { ContentCardProps } from "@/types/componentTypes/servicesTypes";
+import { useLocation } from "react-router-dom";
 
 interface NavigationProps {
   menuItems?: navLinkProps[];
@@ -37,8 +38,13 @@ export default function Navigation({
   logoHref = "http://localhost:3000",
   introItems = [ ],
 }: NavigationProps) {
+
+  const location = useLocation();
+const pathname = location.pathname;
+
+
   return (
-    <NavigationMenu className="hidden md:flex">
+    <NavigationMenu className="hidden lg:flex">
       <NavigationMenuList>
         {menuItems
         .filter(item => item.isForDesk)
@@ -46,7 +52,7 @@ export default function Navigation({
           <NavigationMenuItem key={index}>
             {item.isLink ? (
               <NavigationMenuLink
-                className={navigationMenuTriggerStyle()}
+                className={cn(navigationMenuTriggerStyle(), pathname === item.href && "bg-accent text-accent-foreground")}
                 asChild
               >
                 <a href={item.href}>{item.text}</a>
@@ -64,9 +70,9 @@ export default function Navigation({
                             href={logoHref}
                           >
                             {logo}
-                            <div className="mt-4 mb-2 text-lg font-medium">
+                            <h4 className="mt-4 mb-2 text-lg font-medium">
                               {logoTitle}
-                            </div>
+                            </h4>
                             <p className="text-muted-foreground text-sm leading-tight">
                               {logoDescription}
                             </p>

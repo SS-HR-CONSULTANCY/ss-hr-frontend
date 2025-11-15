@@ -44,7 +44,7 @@ const Header: React.FC = ({
   return (
     <header className={cn("sticky top-0 z-50 h-auto", className)}>
       <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
-      <div className="relative max-w-7xl mx-auto px-4 md:px-0">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <NavbarComponent>
           <NavbarLeft>
             <Link to={homeUrl}>
@@ -105,12 +105,13 @@ const Header: React.FC = ({
               </Button>
             )}
 
-            <div
-              className="relative flex rounded-full cursor-pointer"
+            <Button
+            variant="ghost"
+              className="relative flex rounded-full cursor-pointer bg-0"
               onClick={() => dispatch(toggleTheme())}
             >
-              {theme === "dark" ? <Sun /> : <Moon />}
-            </div>
+              {theme === "dark" ? <Sun className="size-6" /> : <Moon className="size-6" />}
+            </Button>
 
             <Sheet>
               <SheetTrigger asChild>
