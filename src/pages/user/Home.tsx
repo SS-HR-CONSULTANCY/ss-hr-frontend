@@ -6,7 +6,7 @@ import Footer from "@/components/navigations/Footer";
 
 const Home: React.FC = () => {
   return (
-    <div className="p-0 m-0">
+    <div className="p-0 m-0 transition-colors duration-1000">
       <AosComponent>
         <Header />
         <Outlet />

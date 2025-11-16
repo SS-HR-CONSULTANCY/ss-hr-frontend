@@ -24,7 +24,7 @@ const ServiceDetailedContent: React.FC<ServiceDetailedContentProps> = ({
         <div className="absolute inset-0 bg-black/50"></div>
         <h1
           className="relative z-10 text-4xl md:text-6xl font-bold text-white text-center"
-          data-aos="fade-down"
+          data-aos="fade-up"
         >
           {bannerTitle}
         </h1>
@@ -33,11 +33,11 @@ const ServiceDetailedContent: React.FC<ServiceDetailedContentProps> = ({
       <div className="w-full py-12 px-4 md:px-0">
         <div className="max-w-7xl mx-auto space-y-4">
           <div className="mb-10">
-            <p className="textsm md:text-lg text-justify" data-aos="fade-down">
+            <p className="textsm md:text-lg text-justify" data-aos="fade-up">
               {hoverDescription || "Loading description"}
             </p>
           </div>
-          <ul className="space-y-4" data-aos="fade-down">
+          <ul className="space-y-4" data-aos="fade-up">
             {points.map((point, index) => (
               <li key={index} className="flex items-start gap-3">
                 <CheckCircle className="text-green-600 w-5 h-5 shrink-0 mt-1" />

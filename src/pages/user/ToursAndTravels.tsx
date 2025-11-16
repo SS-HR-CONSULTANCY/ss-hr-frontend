@@ -15,7 +15,7 @@ const ToursAndTravels: React.FC = () => {
           <div className="absolute inset-0 bg-black/50"></div>
           <h1
             className="relative z-10 text-4xl md:text-6xl font-bold text-white text-center"
-            data-aos="fade-down"
+            data-aos="fade-up"
           >
             Experience Your Perfect Journey With Us
           </h1>

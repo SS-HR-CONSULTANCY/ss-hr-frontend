@@ -46,7 +46,7 @@ const Header: React.FC = ({
       <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <NavbarComponent>
-          <NavbarLeft>
+          <NavbarLeft className="flex items-center gap-3 flex-none" >
             <Link to={homeUrl}>
               <img
                 src={logoTransparent}
@@ -57,7 +57,10 @@ const Header: React.FC = ({
             <a href={homeUrl} className="items-center gap-2 text-xl font-bold">
               {name.toUpperCase()}
             </a>
-            {showNavigation && (customNavigation || <Navigation />)}
+            {/* {showNavigation && (customNavigation || <Navigation />)} */}
+            <div className="hidden lg:flex flex-1 justify-center">
+  {showNavigation && (customNavigation || <Navigation />)}
+</div>
           </NavbarLeft>
           <NavbarRight>
             {user && isAuthenticated ? (
@@ -118,7 +121,7 @@ const Header: React.FC = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="shrink-0 md:hidden"
+                  className="shrink-0 lg:hidden"
                 >
                   <Menu className="size-5" />
                   <span className="sr-only">Toggle navigation menu</span>
