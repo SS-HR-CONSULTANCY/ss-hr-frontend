@@ -26,13 +26,11 @@ export const useAdminPayments = () => {
   });
 
   const handleViewPayment = (paymentId: string) => {
-    console.log("viewing payment : ",paymentId)
     if (!paymentId) return;
     dispatch(openViewPaymentDetails(paymentId));
   };
 
   const handleEditPayment = (paymentId: string) => {
-    console.log("eidt payment")
     if (!paymentId) return;
     dispatch(openEditPaymentForm(paymentId));
   };

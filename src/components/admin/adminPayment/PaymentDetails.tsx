@@ -96,8 +96,6 @@ const PaymentDetails: React.FC = () => {
     });
   };
 
-  console.log("paymentDetails : ",paymentDetails);
-
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">

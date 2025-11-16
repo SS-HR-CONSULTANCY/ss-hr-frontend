@@ -76,6 +76,5 @@ export const adminGetUserDetailsId = async (
   userId: string,
 ): Promise<AdminFetchUserDetailsResponse> => {
   const response = await axiosInstance.get(`/admin/users/details/${userId}`);
-  console.log("response : ",response);
   return response.data.data;
 };

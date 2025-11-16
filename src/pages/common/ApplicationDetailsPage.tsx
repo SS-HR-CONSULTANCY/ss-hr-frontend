@@ -67,8 +67,6 @@ const ApplicationDetailsPage: React.FC = () => {
             status: data.status
         });
 
-        console.log("res : ",res);
-
         if (res.success) {
             toast.success("Application Status Updated");
             data.status = status

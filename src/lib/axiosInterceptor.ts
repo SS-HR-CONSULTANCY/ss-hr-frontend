@@ -9,24 +9,19 @@ export const setupAxiosInterceptors = () => {
       return response;
     },
     (error) => {
-      console.log("Error Checking : ", error);
       if (error.response?.status === 400) {
-        console.log("first");
         return error.response;
       }
       if (error.response?.status === 401) {
-        console.log("two");
         store.dispatch(setAuthUser(null));
         toast.error("Session expired. Please log in again.");
         return;
       }
       if (error.response?.status === 403) {
-        console.log("three");
         store.dispatch(setAuthUser(null));
         toast.error("Your account has been blocked.");
         return;
       }
-      console.log("four");
       return Promise.reject(error);
     },
   );

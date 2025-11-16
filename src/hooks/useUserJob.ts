@@ -12,7 +12,6 @@ export const useUserJob = () => {
 
     const handleApplyJob = async (_id: Job["_id"]) => {
         const res = await userApplyJob(_id);
-        console.log("res : ", res)
         if (res.success) {
             toast.success(res.message);
             queryClient.setQueryData(['jobs'], (oldJobs: UserfetchAllJobsResponse[] | undefined) => {

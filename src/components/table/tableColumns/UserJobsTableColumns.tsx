@@ -58,7 +58,6 @@ export const UserJobsTableColumns = (
       id: "actions",
       cell: ({ row }) => {
         const job = row.original;
-        console.log("job : ",job)
         return (
           <div className="flex items-center space-x-2">
             <Button
