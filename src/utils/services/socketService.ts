@@ -2,9 +2,9 @@ import { io, Socket } from "socket.io-client";
 
 export let socket: Socket | null = null;
 
-export const connectSocket = (userId: string, baseUrl: string) => {
+export const connectSocket = (userId: string, backendUrl: string) => {
   if (!socket) {
-    socket = io(baseUrl, { query: { userId }, autoConnect: true });
+    socket = io(backendUrl, { query: { userId }, autoConnect: true });
   }
   return socket;
 };

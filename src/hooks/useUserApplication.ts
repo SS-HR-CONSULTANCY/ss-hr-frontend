@@ -1,4 +1,3 @@
-import { baseURL } from "@/lib/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import type { Job } from "@/types/entities/job";
@@ -28,7 +27,7 @@ export const useUserApplication = () => {
     };
 
     const handleViewJobDetails = async (_id: Job["_id"]) => {
-        navigate(`${baseURL}/user/jobs/${_id}`);
+        navigate(`/user/applications/${_id}`);
     }
 
     return {
