@@ -1,6 +1,6 @@
 import React from "react";
 import { Briefcase } from "lucide-react";
-import Loading from "@/pages/common/Loading";
+import Loading from "@/pages/common/LoadingPage";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { userGetJobById } from "@/utils/apis/userApi";

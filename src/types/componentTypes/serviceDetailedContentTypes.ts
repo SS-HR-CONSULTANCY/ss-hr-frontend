@@ -1,3 +1,5 @@
+import type { SEOConfig } from "../commonTypes";
+
 export interface ServiceDetailedContentProps {
   banner: string;
   bannerTitle: string;
@@ -6,4 +8,5 @@ export interface ServiceDetailedContentProps {
   contactText: string;
   contactUrl: string;
   contactButtonText: string;
+  seoData: SEOConfig;
 }

@@ -1,56 +1,62 @@
 import {
   services,
+  SEO_DATA,
   userApplicationRoutes,
   adminApplicationRoutes,
 } from "@/utils/constants";
 import { lazy } from "react";
-import AboutUs from "@/pages/user/AboutUs";
 import ProtectedRoute from "./ProtectedRoute";
-import EmailVerify from "@/pages/auth/EmailVerify";
 import { createBrowserRouter } from "react-router-dom";
 
-const Otp = lazy(() => import("@/pages/auth/Otp"));
-const Home = lazy(() => import("@/pages/user/Home"));
-const Login = lazy(() => import("@/pages/auth/Login"));
-const Landing = lazy(() => import("@/pages/user/Landing"));
-const Register = lazy(() => import("@/pages/auth/Register"));
+const OtpPage = lazy(() => import("@/pages/auth/OtpPage"));
+const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
+const HomePage = lazy(() => import("@/pages/common/HomePage"));
 const ChatPage = lazy(() => import("@/pages/common/ChatPage"));
-const Error404 = lazy(() => import("@/pages/common/Error404"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
-const ContactPage = lazy(() => import("@/pages/user/ContactPage"));
 const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
+const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
+const AboutUsPage = lazy(() => import("@/pages/common/AboutUsPage"));
+const ContactPage = lazy(() => import("@/pages/common/ContactPage"));
 const AdminReports = lazy(() => import("@/pages/admin/AdminReports"));
 const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
 const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
 const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
-const UpdatePassword = lazy(() => import("@/pages/auth/UpdatePassword"));
-// const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
-const ToursAndTravels = lazy(() => import("@/pages/user/ToursAndTravels"));
+const LandingLayout = lazy(() => import("@/pages/common/LandingLayout"));
+const EmailVerifyPage = lazy(() => import("@/pages/auth/EmailVerifyPage"));
 const JobDetailsPage = lazy(() => import("@/pages/common/JobDetailsPage"));
 const UserApplications = lazy(() => import("@/pages/user/UserApplications"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminUserDetails = lazy(() => import("@/pages/admin/AdminUserDetails"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
-const ApplicationDetails = lazy(() => import("@/pages/common/ApplicationDetails"));
+const UpdatePasswordPage = lazy(() => import("@/pages/auth/UpdatePasswordPage"));
+const ToursAndTravelsPage = lazy(() => import("@/pages/common/ToursAndTravelsPage"));
+const RouteErrorBoundary = lazy(() => import("@/components/common/RouteErrorBoundary"))
+const ApplicationDetailsPage = lazy(() => import("@/pages/common/ApplicationDetailsPage"));
 const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
+
+// const ErrorTestPage = lazy(() => import("@/pages/common/ErrorTestPage"));
+// const Error404Page = lazy(() => import("@/pages/common/Error404Page"));
+// const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <LandingLayout />,
+    errorElement: <RouteErrorBoundary />,
     children: [
-      { path: "/", element: <Landing /> },
-      { path: "/toursandtravels", element: <ToursAndTravels /> },
+      { path: "/", element: <HomePage /> },
+      { path: "/toursandtravels", element: <ToursAndTravelsPage /> },
       { path: "/contact", element: <ContactPage /> },
-      { path: "/aboutUs", element: <AboutUs /> },
+      { path: "/aboutUs", element: <AboutUsPage /> },
       {
         path: "/visaservice",
         element: (
           <ServiceDetailedContent
             {...services.find((s) => s.id === "visaservice")!}
+            seoData={SEO_DATA.VISA_SERVICE}
           />
         ),
       },
@@ -59,6 +65,7 @@ const appRouter = createBrowserRouter([
         element: (
           <ServiceDetailedContent
             {...services.find((s) => s.id === "ticketservice")!}
+            seoData={SEO_DATA.TICKET_SERVICE}
           />
         ),
       },
@@ -67,6 +74,7 @@ const appRouter = createBrowserRouter([
         element: (
           <ServiceDetailedContent
             {...services.find((s) => s.id === "certificationservice")!}
+            seoData={SEO_DATA.CERTIFICATION_SERVICE}
           />
         ),
       },
@@ -75,6 +83,7 @@ const appRouter = createBrowserRouter([
         element: (
           <ServiceDetailedContent
             {...services.find((s) => s.id === "medicalrecruitservice")!}
+            seoData={SEO_DATA.MEDICAL_RECRUIT}
           />
         ),
       },
@@ -83,6 +92,7 @@ const appRouter = createBrowserRouter([
         element: (
           <ServiceDetailedContent
             {...services.find((s) => s.id === "cvwritingservice")!}
+            seoData={SEO_DATA.CV_WRITING}
           />
         ),
       },
@@ -91,6 +101,7 @@ const appRouter = createBrowserRouter([
         element: (
           <ServiceDetailedContent
             {...services.find((s) => s.id === "webdevelopment")!}
+            seoData={SEO_DATA.WEB_DEVELOPMENT}
           />
         ),
       },
@@ -99,19 +110,19 @@ const appRouter = createBrowserRouter([
         element: (
           <ServiceDetailedContent
             {...services.find((s) => s.id === "laboursupplyservice")!}
+            seoData={SEO_DATA.LABOUR_SERVICES}
           />
         ),
       },
-      { path: "*", element: <Error404 /> },
     ],
   },
-  { path: "register", element: <Register /> },
-  { path: "verify-otp", element: <Otp /> },
-  { path: "verify-email", element: <EmailVerify /> },
-  { path: "update-password", element: <UpdatePassword /> },
-  { path: "ss-hr-admin/login", element: <Login role="admin" /> },
-  { path: "ss-hr-system-admin/login", element: <Login role="systemAdmin" /> },
-  { path: "login", element: <Login role="user" /> },
+  { path: "register", element: <RegisterPage /> },
+  { path: "verify-otp", element: <OtpPage /> },
+  { path: "verify-email", element: <EmailVerifyPage /> },
+  { path: "update-password", element: <UpdatePasswordPage /> },
+  { path: "ss-hr-admin/login", element: <LoginPage role="admin" /> },
+  { path: "ss-hr-system-admin/login", element: <LoginPage role="systemAdmin" /> },
+  { path: "login", element: <LoginPage role="user" /> },
   {
     path: "/user",
     element: (
@@ -120,6 +131,7 @@ const appRouter = createBrowserRouter([
         routes={userApplicationRoutes}
       />
     ),
+    errorElement: <RouteErrorBoundary />,
     children: [
       {
         index: true,
@@ -169,7 +181,6 @@ const appRouter = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      { path: "*", element: <Error404 /> },
     ],
   },
   {
@@ -180,6 +191,7 @@ const appRouter = createBrowserRouter([
         routes={adminApplicationRoutes}
       />
     ),
+    errorElement: <RouteErrorBoundary />,
     children: [
       {
         index: true,
@@ -249,7 +261,7 @@ const appRouter = createBrowserRouter([
         path: "applications/:id",
         element: (
           <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
-            <ApplicationDetails />
+            <ApplicationDetailsPage />
           </ProtectedRoute>
         ),
       },
@@ -293,10 +305,14 @@ const appRouter = createBrowserRouter([
       //     </ProtectedRoute>
       //   ),
       // },
-      { path: "*", element: <Error404 /> },
     ],
   },
-  { path: "*", element: <Error404 /> },
+  // {
+  //   path: "/error-test",
+  //   element: <ErrorTestPage />,
+  //   errorElement: <RouteErrorBoundary />,
+  // },
+  // { path: "*", element: <Error404Page /> },
 ]);
 
 export default appRouter;

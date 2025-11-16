@@ -1,5 +1,5 @@
 import React from "react";
-import Loading from "./Loading";
+import Loading from "./LoadingPage";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { Briefcase, User } from "lucide-react";
@@ -15,7 +15,7 @@ import DataFetchingError from "@/components/common/DataFetchingError";
 import { updateApplicationStatus, type UpdateApplicationStatusForm } from "@/utils/zod/adminZod";
 import { adminGetApplicationById, adminUpdateApplicationStatus } from "@/utils/apis/adminApplicationApi";
 
-const ApplicationDetails: React.FC = () => {
+const ApplicationDetailsPage: React.FC = () => {
     const { id } = useParams();
 
     const { data, isLoading, isError, error } = useQuery({
@@ -158,4 +158,4 @@ const ApplicationDetails: React.FC = () => {
     );
 };
 
-export default ApplicationDetails;
+export default ApplicationDetailsPage;

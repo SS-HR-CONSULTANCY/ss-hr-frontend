@@ -14,7 +14,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { emailVerifySchema, type EmailVerifyForm } from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
-const EmailVerify: React.FC = () => {
+const EmailVerifyPage: React.FC = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -97,4 +97,4 @@ const EmailVerify: React.FC = () => {
   )
 }
 
-export default EmailVerify
+export default EmailVerifyPage;

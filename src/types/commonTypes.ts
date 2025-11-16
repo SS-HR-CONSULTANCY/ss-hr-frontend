@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { Role } from "./entities/user";
+import type { RoleType } from "@/utils/zod/commonZod";
 
 export interface ApiError {
   message: string;
@@ -11,7 +11,7 @@ export interface ApiError {
 export interface Route {
   path: string;
   name: string;
-  roles: Role[];
+  roles: RoleType[];
 }
 
 export interface ApiBaseResponse {
@@ -50,3 +50,12 @@ export type userDetail<T> = {
     key: keyof T;
     type: string;
 };
+
+export interface SEOConfig {
+  title: string;
+  description: string;
+  keywords?: string;
+  canonical: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}

@@ -5,7 +5,7 @@ import visaService from "../assets/svgs/serviceSvg/visa.svg";
 import cvWriting from "../assets/svgs/serviceSvg/cvWriting.svg";
 import ticketService from "../assets/svgs/serviceSvg/ticket.svg";
 import jobRecruitment from "../assets/svgs/serviceSvg/hiring.svg";
-import type { Route, statsMapIntrface } from "@/types/commonTypes";
+import type { Route, SEOConfig, statsMapIntrface } from "@/types/commonTypes";
 import webDevBanner from "../assets/serviceBanners/webDevBanner.jpg";
 import type { mdDataProps } from "@/types/componentTypes/aboutTypes";
 import labourSupply from "../assets/svgs/serviceSvg/labourSupply.svg";
@@ -849,3 +849,112 @@ export const genderOptions = [
   { label: "Female", value: "female" },
   { label: "Other", value: "other" }
 ];
+
+
+export const SEO_DATA: Record<string, SEOConfig> = {
+  HOME: {
+    title: "SS HR Consultancy – Recruitment & Travel Services",
+    description:
+      "SS HR Consultancy provides global recruitment, travel services, visa assistance, ticketing, and workforce solutions.",
+    keywords:
+      "ss hr consultancy, recruitment, visa service, travel agency, manpower",
+    canonical: "https://sshrconsultancy.com/",
+    ogTitle: "SS HR Consultancy",
+    ogDescription:
+      "Your trusted partner for HR recruitment and travel services.",
+  },
+
+  ABOUT_US: {
+    title: "About Us – SS HR Consultancy",
+    description:
+      "Learn about SS HR Consultancy, our mission, values, and professional HR recruitment services.",
+    keywords: "about ss hr, hr consultancy, recruitment company",
+    canonical: "https://sshrconsultancy.com/about",
+    ogTitle: "About SS HR Consultancy",
+    ogDescription: "Know more about our mission and recruitment expertise.",
+  },
+
+  CONTACT_US: {
+    title: "Contact Us – SS HR Consultancy",
+    description:
+      "Get in touch with SS HR Consultancy for recruitment, workforce solutions, and travel services.",
+    keywords: "contact ss hr, hr consultancy contact, recruitment help",
+    canonical: "https://sshrconsultancy.com/contact",
+    ogTitle: "Contact SS HR Consultancy",
+    ogDescription: "Reach out for HR, recruitment, and travel solutions.",
+  },
+
+  TOURS_AND_TRAVELS: {
+    title: "Tours & Travels – SS HR Consultancy",
+    description:
+      "Explore world tours, travel packages, visa services, and custom travel planning.",
+    keywords: "tours, travel, world tour packages, travel agency, trips",
+    canonical: "https://sshrconsultancy.com/toursandtravels",
+    ogTitle: "Tours & Travels",
+    ogDescription:
+      "Plan your perfect journey with our world tour and travel services.",
+  },
+
+  VISA_SERVICE: {
+    title: "Visa Service – SS HR Consultancy",
+    description: "Professional visa processing and documentation services.",
+    keywords: "visa service, visa assistance",
+    canonical: "https://sshrconsultancy.com/visaservice",
+  },
+
+  TICKET_SERVICE: {
+    title: "Ticket Booking – SS HR Consultancy",
+    description: "Affordable and quick flight ticket booking services.",
+    keywords: "ticket booking, flight booking",
+    canonical: "https://sshrconsultancy.com/ticketservice",
+  },
+
+  CERTIFICATION_SERVICE: {
+    title: "Certification Service – SS HR Consultancy",
+    description: "Attestation, authentication and certificate clearing services.",
+    keywords: "certificate attestation",
+    canonical: "https://sshrconsultancy.com/certificationservice",
+  },
+
+  MEDICAL_RECRUIT: {
+    title: "Medical Recruitment – SS HR Consultancy",
+    description: "Healthcare and medical staff overseas recruitment services.",
+    canonical: "https://sshrconsultancy.com/medicalrecruit",
+  },
+
+  CV_WRITING: {
+    title: "CV Writing – SS HR Consultancy",
+    description: "Professional CV writing to boost your global job chances.",
+    canonical: "https://sshrconsultancy.com/cvwriting",
+  },
+
+  WEB_DEVELOPMENT: {
+    title: "Web Development – SS HR Consultancy",
+    description: "Build high-quality websites and apps with our IT team.",
+    canonical: "https://sshrconsultancy.com/webdevelopment",
+  },
+
+  LABOUR_SERVICES: {
+    title: "Labour Supply Services – SS HR Consultancy",
+    description: "Providing skilled and unskilled manpower globally.",
+    canonical: "https://sshrconsultancy.com/labourservices",
+  },
+
+  REGISTER: {
+    title: "Register – SS HR Consultancy",
+    description: "Create your account to apply for jobs and services.",
+    canonical: "https://sshrconsultancy.com/register",
+  },
+
+  LOGIN: {
+    title: "Login – SS HR Consultancy",
+    description: "Access your account to manage applications and services.",
+    canonical: "https://sshrconsultancy.com/login",
+  },
+
+  ERROR_404: {
+    title: "Page Not Found – SS HR Consultancy",
+    description: "The page you are looking for does not exist.",
+    canonical: "https://sshrconsultancy.com/404",
+  }
+};

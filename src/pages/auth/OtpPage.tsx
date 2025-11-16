@@ -16,7 +16,7 @@ import { stopTimer, updateTimer } from "../../store/slices/authSlice";
 import type { VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
-const Otp: React.FC = () => {
+const OtpPage: React.FC = () => {
   
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -157,4 +157,4 @@ const Otp: React.FC = () => {
   );
 };
 
-export default Otp;
+export default OtpPage;

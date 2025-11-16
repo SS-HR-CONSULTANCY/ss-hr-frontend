@@ -1,5 +1,5 @@
 import React from 'react';
-import Loading from '../common/Loading';
+import Loading from '../common/LoadingPage';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Briefcase, MapPin, User } from 'lucide-react';

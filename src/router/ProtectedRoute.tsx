@@ -1,5 +1,5 @@
 import React from "react";
-import Loading from "@/pages/common/Loading";
+import Loading from "@/pages/common/LoadingPage";
 import { useAppSelector } from "../hooks/redux";
 import { Navigate, useLocation } from "react-router-dom";
 import type { ProtectedRouteProps } from "@/types/componentTypes/routerTypes";

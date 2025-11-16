@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import { Provider } from "react-redux";
+import { HeadProvider } from "react-head";
 import { useSelector } from "react-redux";
 import appRouter from "./router/appRouter";
-import Loading from "./pages/common/Loading";
+import Loading from "./pages/common/LoadingPage";
 import { ToastContainer } from "react-toastify";
 import ThemeWrapper from "./utils/ThemeWrapper";
 import { queryClient } from "./lib/queryClient";
@@ -33,7 +34,9 @@ const App = () => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistAppStore}>
           <QueryClientProvider client={queryClient}>
+             <HeadProvider>
             <AppContent />
+             </HeadProvider>
           </QueryClientProvider>
         </PersistGate>
       </Provider>
