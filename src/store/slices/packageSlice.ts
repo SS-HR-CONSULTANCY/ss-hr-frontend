@@ -32,12 +32,7 @@ const packageSlice = createSlice({
       state.isViewPackageDetailsOpen = false;
       state.selectedPackageId = null;
     },
-    closeAllPackageModals: (state) => {
-      state.isAddPackageFormOpen = false;
-      state.isEditPackageFormOpen = false;
-      state.isViewPackageDetailsOpen = false;
-      state.selectedPackageId = null;
-    },
+    resetPackageSlice: () => initialState,
   },
 });
 
@@ -47,7 +42,7 @@ export const {
   closeEditPackageForm,
   openViewPackageDetails,
   closeViewPackageDetails,
-  closeAllPackageModals,
+  resetPackageSlice,
 } = packageSlice.actions;
 
 export default packageSlice.reducer;

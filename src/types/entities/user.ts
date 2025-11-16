@@ -1,9 +1,11 @@
+import type { GenderType, RoleType } from "@/utils/zod/commonZod";
+
 export interface User {
   _id: string;
   serialNumber: string;
   fullName: string;
   email: string;
-  role: Role;
+  role: RoleType;
   isVerified: boolean;
   isBlocked: boolean;
   profileImage: string;
@@ -12,8 +14,13 @@ export interface User {
   phone: string;
   phoneTwo: string;
   googleId: string;
+  gender: GenderType;
+  nationality: string;
+  linkedInUsername?: string;
+  portfolioUrl?: string;
+  dob: string;
+  professionalStatus: string;
+  resume?: File | string;
   createdAt: string;
   updatedAt: string;
 }
-
-export type Role = "user" | "admin" | "superAdmin" | "systemAdmin";

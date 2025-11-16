@@ -67,15 +67,7 @@ const chatSlice = createSlice({
       state.socketId = null;
       state.isConnected = false;
     },
-    clearChatSlice: (state) => {
-      state.onlineUsers = null;
-      state.lastMessages = {};
-      state.selectedUser = null;
-      state.socketId = null;
-      state.isConnected = false;
-      state.messages = null;
-      state.isMessagesLoading = false;
-    },
+    resetChatSlice: () => intitalState,
   },
   extraReducers: (builder) => {
     builder.addCase(sendMessage.fulfilled, (state, action) => {
@@ -90,7 +82,7 @@ export const {
   setSelectedUser,
   setMessages,
   addNewMessage,
-  clearChatSlice,
+  resetChatSlice,
   setSocketConnected,
   setSocketDisconnected,
 } = chatSlice.actions;

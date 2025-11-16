@@ -6,7 +6,7 @@ const CallToAction = () => {
   return (
     <section
       className={cn(
-        "w-full py-16 md:py-24 bg-gradient-to-b from-background to-muted text-center",
+        "w-full py-16 md:py-24 text-center",
       )}
     >
       <div

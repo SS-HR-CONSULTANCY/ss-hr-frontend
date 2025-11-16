@@ -22,7 +22,7 @@ const Heading: React.FC<HeadingProps> = ({
       data-aos={`${dataaos}`}
     >
       <h2
-        className={`text-black dark:text-white scroll-m-20 border-b border-gray-500 dark:border-gray-400 pb-2 text-3xl font-semibold first:mt-0 ${headingClassName}`}
+        className={`text-black dark:text-white scroll-m-20 border-b border-gray-500 dark:border-gray-400 pb-2 text-xl md:text-3xl font-semibold first:mt-0 ${headingClassName}`}
       >
         {heading}
       </h2>

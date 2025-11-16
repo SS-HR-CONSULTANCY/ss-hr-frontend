@@ -1,44 +1,38 @@
+import React from "react";
 import { Plus } from "lucide-react";
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import JobDetails from "@/pages/common/JobDetailsPage";
+import { useAdminJobs } from "@/hooks/useAdminJobs";
 import { useDispatch, useSelector } from "react-redux";
-import AddJobForm from "@/components/admin/AddJobForm";
-import { useQueryClient } from "@tanstack/react-query";
-import EditJobForm from "@/components/admin/EditJobForm";
 import CommonTable from "@/components/common/CommonTable";
-import { JobHandlers } from "@/utils/helpers/jobHelpers";
 import type { AppDispatch, RootState } from "@/store/store";
+import { toggleAddJobForm, } from "@/store/slices/jobSlice";
+import { adminFetchAllJobs } from "@/utils/apis/adminJobApi";
+import AddJobForm from "@/components/admin/adminJob/AddJobForm";
 import TablePageHeader from "@/components/common/TablePageHeader";
-import { adminFetchAllJobs, adminGetJobById } from "@/utils/apis/adminJobApi";
+import EditJobForm from "@/components/admin/adminJob/EditJobForm";
 import type { AdminfetchAllJobsResponse } from "@/types/apiTypes/adminApiTypes";
-import {
-  toggleAddJobForm,
-  closeViewDetailsModal,
-} from "@/store/slices/jobSlice";
 import { AdminJobsTableColumns } from "@/components/table/tableColumns/AdminJobTableColumn";
 
 const AdminJobsPage: React.FC = () => {
-  const queryClient = useQueryClient();
+  
   const dispatch = useDispatch<AppDispatch>();
-  const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
-  const { handleViewDetails, handleEdit, handleDelete } = JobHandlers(
-    dispatch,
-    queryClient,
-    setDeletingJobId,
-  );
+
+  const { 
+    handleDelete, 
+    handleEdit, 
+    handleViewDetails
+  } = useAdminJobs();
+
+
   const {
     isAddJobFormOpen,
-    isEditJobFormOpen,
-    isViewDetailsModalOpen,
-    viewingJobId,
+    isEditJobFormOpen
   } = useSelector((state: RootState) => state.job);
 
   const columns = AdminJobsTableColumns(
     handleViewDetails,
     handleEdit,
     handleDelete,
-    deletingJobId,
   );
 
   return (
@@ -67,13 +61,6 @@ const AdminJobsPage: React.FC = () => {
 
       {isAddJobFormOpen && <AddJobForm />}
       {isEditJobFormOpen && <EditJobForm />}
-      {isViewDetailsModalOpen && viewingJobId && (
-        <JobDetails
-          jobId={viewingJobId}
-          onClose={() => dispatch(closeViewDetailsModal())}
-          fetchJobById={() => adminGetJobById(viewingJobId)}
-        />
-      )}
     </>
   );
 };

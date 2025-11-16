@@ -62,12 +62,12 @@ export const PaymentTableColumns = (
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "paymentStatus",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const status = row.original.status;
+      const status = row.original.paymentStatus;
       const getStatusStyle = (status: string) => {
         switch (status) {
           case "pending":

@@ -1,5 +1,5 @@
-import { formatBoolean, formatDate } from "@/utils/helpers/infoDisplayHelper";
 import { Copy } from "lucide-react";
+import { formatBoolean, formatDate } from "@/utils/helpers/infoDisplayHelper";
 
 export interface InfoDisplayProps {
   label: string;
@@ -56,9 +56,9 @@ const InfoDisplay: React.FC<InfoDisplayProps> = ({
         href={value}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-blue-500 hover:underline"
+        className="text-blue-500 hover:underline flex"
       >
-        {value}
+        View {label}
       </a>
     );
   } else {
@@ -66,12 +66,12 @@ const InfoDisplay: React.FC<InfoDisplayProps> = ({
   }
 
   return (
-    <tr className={`${!isLast ? "border-b border-[var(--boxBorder)]" : ""}`}>
-      <td className="p-4 font-medium text-[var(--infoDataLabel)] w-4/12">
+    <div className={`flex ${!isLast ? "border-b" : ""}`}>
+      <div className="p-4 font-semibold w-4/12">
         {label}
-      </td>
-      <td className="p-4 w-8/12">{displayValue}</td>
-    </tr>
+      </div>
+      <div className="p-4 w-8/12">{displayValue}</div>
+    </div>
   );
 };
 

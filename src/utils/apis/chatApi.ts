@@ -1,17 +1,15 @@
-import { axiosInstance } from "@/lib/axios";
-import type { RootState } from "@/store/store";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { Message } from "@/types/entities/message";
-import { connectSocket, disconnectSocket } from "../services/socketService";
 import {
   addNewMessage,
   setMessages,
   setSocketConnected,
   setSocketDisconnected,
 } from "@/store/slices/chatSlice";
+import type { RootState } from "@/store/store";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { axiosInstance, backendUrl } from "@/lib/axios";
+import type { Message } from "@/types/entities/message";
+import { connectSocket, disconnectSocket } from "../services/socketService";
 import type { FetchAllUsersForChatSidebarResponse } from "@/types/apiTypes/commonApiTypes";
-
-const BASE_URL = "http://localhost:5000";
 
 export const getMessages = createAsyncThunk<
   Array<Message>,
@@ -48,7 +46,7 @@ export const connectChatSocket = createAsyncThunk<
   const authUser = getState().auth.user;
   if (!authUser) return;
 
-  const socket = connectSocket(authUser._id as string, BASE_URL);
+  const socket = connectSocket(authUser._id as string, backendUrl);
 
   socket.on("connect", () => {
     dispatch(setSocketConnected({ socketId: socket.id as string }));

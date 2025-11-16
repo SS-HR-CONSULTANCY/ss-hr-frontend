@@ -18,7 +18,7 @@ const CommonTable = <T,>({
   id,
   dummyData,
   showDummyData,
-  pageSize = 5,
+  pageSize = 10,
   showDatePicker,
   saveDataInStore,
 }: CommonTableComponentProps<T>) => {
