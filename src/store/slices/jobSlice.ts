@@ -3,9 +3,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 interface JobState {
   isAddJobFormOpen: boolean;
   isEditJobFormOpen: boolean;
-  isViewDetailsModalOpen: boolean;
   selectedJobId: string | null;
-  viewingJobId: string | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -13,9 +11,7 @@ interface JobState {
 const initialState: JobState = {
   isAddJobFormOpen: false,
   isEditJobFormOpen: false,
-  isViewDetailsModalOpen: false,
   selectedJobId: null,
-  viewingJobId: null,
   isLoading: false,
   error: null,
 };
@@ -24,7 +20,6 @@ const jobSlice = createSlice({
   name: "job",
   initialState,
   reducers: {
-    // Add Job Form
     toggleAddJobForm: (state) => {
       state.isAddJobFormOpen = !state.isAddJobFormOpen;
       if (!state.isAddJobFormOpen) {
@@ -56,17 +51,6 @@ const jobSlice = createSlice({
       state.selectedJobId = null;
     },
 
-    // View Details Modal
-    openViewDetailsModal: (state, action: PayloadAction<string>) => {
-      state.isViewDetailsModalOpen = true;
-      state.viewingJobId = action.payload;
-    },
-    closeViewDetailsModal: (state) => {
-      state.isViewDetailsModalOpen = false;
-      state.viewingJobId = null;
-    },
-
-    // Loading states
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
@@ -84,8 +68,6 @@ export const {
   toggleEditJobForm,
   openEditJobForm,
   closeEditJobForm,
-  openViewDetailsModal,
-  closeViewDetailsModal,
   setLoading,
   setError,
   resetJobSlice,

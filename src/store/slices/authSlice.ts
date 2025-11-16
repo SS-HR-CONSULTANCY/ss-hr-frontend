@@ -22,7 +22,6 @@ const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
   isLoading: false,
-  error: null,
   otpRemainingTime: 0,
   otpTimerIsRunning: false,
   profileImageUpdating: false,
@@ -35,9 +34,6 @@ const authSlice = createSlice({
   reducers: {
     setAuthUser: (state: AuthState, action: PayloadAction<User | null>) => {
       state.user = action.payload;
-    },
-    clearError: (state: AuthState) => {
-      state.error = null;
     },
     startTimer: (state: AuthState, action: PayloadAction<number>) => {
       state.otpRemainingTime = action.payload;
@@ -65,21 +61,18 @@ const authSlice = createSlice({
     builder
       .addCase(signup.pending, (state: AuthState) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(signup.fulfilled, (state: AuthState, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = action.payload.user;
-        state.error = null;
         state.otpRemainingTime = 60;
         state.otpTimerIsRunning = true;
       })
-      .addCase(signup.rejected, (state: AuthState, action) => {
+      .addCase(signup.rejected, (state: AuthState) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
-        state.error = action.payload as string;
       });
 
     builder
@@ -91,68 +84,56 @@ const authSlice = createSlice({
         state.otpTimerIsRunning = false;
         state.otpRemainingTime = 0;
         state.isAuthenticated = false;
-        state.error = null;
       })
       .addCase(verifyOtp.rejected, (state: AuthState) => {
         state.isLoading = false;
         state.isAuthenticated = false;
-        state.error = null;
       });
 
     builder
       .addCase(signin.pending, (state: AuthState) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(signin.fulfilled, (state: AuthState, action) => {
         state.isLoading = false;
         state.isAuthenticated = true;
-        console.log("action.payload.user : ",action.payload.user);
         state.user = action.payload.user;
-        state.error = null;
       })
-      .addCase(signin.rejected, (state: AuthState, action) => {
+      .addCase(signin.rejected, (state: AuthState) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
-        state.error = action.payload as string;
       });
 
     builder
       .addCase(signout.pending, (state: AuthState) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(signout.fulfilled, (state: AuthState) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
-        state.error = null;
       })
-      .addCase(signout.rejected, (state: AuthState, action) => {
+      .addCase(signout.rejected, (state: AuthState) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
-        state.error = action.payload as string;
       });
 
     builder
       .addCase(resendOtp.pending, (state: AuthState) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(resendOtp.fulfilled, (state: AuthState, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = action.payload.user;
-        state.error = null;
         state.otpRemainingTime = 60;
         state.otpTimerIsRunning = true;
       })
-      .addCase(resendOtp.rejected, (state: AuthState, action) => {
+      .addCase(resendOtp.rejected, (state: AuthState) => {
         state.isLoading = false;
         state.isAuthenticated = false;
-        state.error = action.payload as string;
       });
 
     builder
@@ -185,7 +166,6 @@ const authSlice = createSlice({
 });
 
 export const {
-  clearError,
   setAuthUser,
   startTimer,
   updateTimer,
