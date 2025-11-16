@@ -29,9 +29,7 @@ const Footer = ({
   const copyrightText = copyright.replace("2025", currentYear.toString());
 
   return (
-    <footer
-      className={`w-full bg-zinc-100 dark:bg-zinc-900 ${className}`}
-    >
+    <footer className={`w-full bg-zinc-100 dark:bg-zinc-900 ${className}`}>
       <FooterNew className="max-w-7xl mx-auto px-4 md:px-0 bg-zinc-100 dark:bg-zinc-900">
         <FooterContent className="flex flex-col md:flex-row md:justify-between">
           {columns.map((column, index) => (

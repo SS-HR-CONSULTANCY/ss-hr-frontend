@@ -5,7 +5,7 @@ import { useAdminJobs } from "@/hooks/useAdminJobs";
 import { useDispatch, useSelector } from "react-redux";
 import CommonTable from "@/components/common/CommonTable";
 import type { AppDispatch, RootState } from "@/store/store";
-import { toggleAddJobForm, } from "@/store/slices/jobSlice";
+import { toggleAddJobForm } from "@/store/slices/jobSlice";
 import { adminFetchAllJobs } from "@/utils/apis/adminJobApi";
 import AddJobForm from "@/components/admin/adminJob/AddJobForm";
 import TablePageHeader from "@/components/common/TablePageHeader";
@@ -14,20 +14,13 @@ import type { AdminfetchAllJobsResponse } from "@/types/apiTypes/adminApiTypes";
 import { AdminJobsTableColumns } from "@/components/table/tableColumns/AdminJobTableColumn";
 
 const AdminJobsPage: React.FC = () => {
-  
   const dispatch = useDispatch<AppDispatch>();
 
-  const { 
-    handleDelete, 
-    handleEdit, 
-    handleViewDetails
-  } = useAdminJobs();
+  const { handleDelete, handleEdit, handleViewDetails } = useAdminJobs();
 
-
-  const {
-    isAddJobFormOpen,
-    isEditJobFormOpen
-  } = useSelector((state: RootState) => state.job);
+  const { isAddJobFormOpen, isEditJobFormOpen } = useSelector(
+    (state: RootState) => state.job,
+  );
 
   const columns = AdminJobsTableColumns(
     handleViewDetails,

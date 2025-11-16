@@ -12,14 +12,12 @@ interface JobDetailsPageProps {
   isAdmin?: boolean;
 }
 
-const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
-  isAdmin
-}) => {
-
+const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ isAdmin }) => {
   const { id } = useParams();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryFn: () => isAdmin ? adminGetJobById(id as string) : userGetJobById(id as string),
+    queryFn: () =>
+      isAdmin ? adminGetJobById(id as string) : userGetJobById(id as string),
     queryKey: ["job-detail", id],
     staleTime: 1 * 60 * 1000,
     enabled: !!id,
@@ -54,9 +52,7 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
       {data && (
         <>
           <InfoDisplay label="Job ID" value={data.jobUniqueId} />
-          {isAdmin && (
-            <InfoDisplay label="Company" value={data.companyName} />
-          )}
+          {isAdmin && <InfoDisplay label="Company" value={data.companyName} />}
           <InfoDisplay label="Designation" value={data.designation} />
           <InfoDisplay label="Industry" value={data.industry} />
           <InfoDisplay label="Nationality" value={data.nationality} />
@@ -68,7 +64,6 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({
           <InfoDisplay label="Posted On" value={data.createdAt} isDate />
         </>
       )}
-
     </div>
   );
 };

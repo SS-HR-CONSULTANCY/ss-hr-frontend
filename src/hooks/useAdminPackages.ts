@@ -11,7 +11,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfirmToast } from "@/components/table/tableColumns/ConfirmToast";
 
 export const useAdminPackages = () => {
-
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
@@ -64,4 +63,4 @@ export const useAdminPackages = () => {
     handleEditPackage,
     handleDeletePackage,
   };
-}
+};

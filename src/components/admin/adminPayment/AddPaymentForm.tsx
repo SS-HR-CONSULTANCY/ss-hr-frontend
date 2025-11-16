@@ -162,7 +162,9 @@ const AddPaymentForm: React.FC = () => {
                   placeholder="Enter customer name"
                 />
                 {errors.customerName && (
-                  <p className="text-red-500 text-sm mt-1">{errors.customerName}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.customerName}
+                  </p>
                 )}
               </div>
 
@@ -180,7 +182,9 @@ const AddPaymentForm: React.FC = () => {
                   placeholder="Enter package name"
                 />
                 {errors.packageName && (
-                  <p className="text-red-500 text-sm mt-1">{errors.packageName}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.packageName}
+                  </p>
                 )}
               </div>
             </div>
@@ -201,7 +205,9 @@ const AddPaymentForm: React.FC = () => {
                   placeholder="50,000"
                 />
                 {errors.totalAmount && (
-                  <p className="text-red-500 text-sm mt-1">{errors.totalAmount}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.totalAmount}
+                  </p>
                 )}
               </div>
 
@@ -212,12 +218,16 @@ const AddPaymentForm: React.FC = () => {
                 <Input
                   id="paidAmount"
                   value={formatCurrency(formData.paidAmount.toString())}
-                  onChange={(e) => handleAmountChange("paidAmount", e.target.value)}
+                  onChange={(e) =>
+                    handleAmountChange("paidAmount", e.target.value)
+                  }
                   className=""
                   placeholder="20,000"
                 />
                 {errors.paidAmount && (
-                  <p className="text-red-500 text-sm mt-1">{errors.paidAmount}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.paidAmount}
+                  </p>
                 )}
               </div>
             </div>
@@ -245,9 +255,9 @@ const AddPaymentForm: React.FC = () => {
                 </Label>
                 <Select
                   value={formData.paymentMethod}
-                  onValueChange={(value: "googlepay" | "banktransfer" | "cash") =>
-                    setFormData({ ...formData, paymentMethod: value })
-                  }
+                  onValueChange={(
+                    value: "googlepay" | "banktransfer" | "cash",
+                  ) => setFormData({ ...formData, paymentMethod: value })}
                 >
                   <SelectTrigger className="">
                     <SelectValue placeholder="Select payment method" />
@@ -266,16 +276,18 @@ const AddPaymentForm: React.FC = () => {
                 </Label>
                 <Select
                   value={formData.paymentStatus || "pending"}
-                  onValueChange={(value: "pending" | "partiallyPaid" | "fullyPaid") =>
-                    setFormData({ ...formData, paymentStatus: value })
-                  }
+                  onValueChange={(
+                    value: "pending" | "partiallyPaid" | "fullyPaid",
+                  ) => setFormData({ ...formData, paymentStatus: value })}
                 >
                   <SelectTrigger className="">
                     <SelectValue placeholder="Select payment status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="partiallyPaid">Partially Paid</SelectItem>
+                    <SelectItem value="partiallyPaid">
+                      Partially Paid
+                    </SelectItem>
                     <SelectItem value="fullyPaid">Fully Paid</SelectItem>
                   </SelectContent>
                 </Select>
@@ -295,13 +307,14 @@ const AddPaymentForm: React.FC = () => {
                   className=""
                 />
                 {errors.paymentDate && (
-                  <p className="text-red-500 text-sm mt-1">{errors.paymentDate}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.paymentDate}
+                  </p>
                 )}
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
               <div className="space-y-2">
                 <Label htmlFor="referenceId" className="">
                   Reference ID
@@ -316,7 +329,9 @@ const AddPaymentForm: React.FC = () => {
                   placeholder="GP123456789"
                 />
                 {errors.referenceId && (
-                  <p className="text-red-500 text-sm mt-1">{errors.referenceId}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.referenceId}
+                  </p>
                 )}
               </div>
 
@@ -334,7 +349,9 @@ const AddPaymentForm: React.FC = () => {
                   placeholder="https://drive.google.com/file/d/..."
                 />
                 {errors.paymentProof && (
-                  <p className="text-red-500 text-sm mt-1">{errors.paymentProof}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.paymentProof}
+                  </p>
                 )}
               </div>
             </div>

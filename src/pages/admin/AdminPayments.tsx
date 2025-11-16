@@ -17,12 +17,9 @@ import { AdminPaymentTableColumns } from "@/components/table/tableColumns/AdminP
 const AdminPayments: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const {
-    handleDeletePayment,
-    handleEditPayment,
-    handleViewPayment
-  } = useAdminPayments();
-  
+  const { handleDeletePayment, handleEditPayment, handleViewPayment } =
+    useAdminPayments();
+
   const column = AdminPaymentTableColumns(
     handleDeletePayment,
     handleEditPayment,

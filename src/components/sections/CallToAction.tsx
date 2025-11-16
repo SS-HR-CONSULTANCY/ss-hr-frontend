@@ -4,11 +4,7 @@ import { callToActionData } from "@/utils/constants";
 
 const CallToAction = () => {
   return (
-    <section
-      className={cn(
-        "w-full py-16 md:py-24 text-center",
-      )}
-    >
+    <section className={cn("w-full py-16 md:py-24 text-center")}>
       <div
         className="container mx-auto max-w-3xl flex flex-col items-center gap-6 px-4"
         data-aos="fade-up"

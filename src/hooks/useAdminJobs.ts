@@ -9,56 +9,54 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ConfirmToast } from "@/components/table/tableColumns/ConfirmToast";
 
 export const useAdminJobs = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-    const queryClient = useQueryClient();
+  const deleteMutation = useMutation({
+    mutationFn: (packageId: string) => deleteJob(packageId),
+    onSuccess: () => {
+      toast.success("Job deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["admin-jobs"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete job");
+    },
+  });
 
-    const deleteMutation = useMutation({
-        mutationFn: (packageId: string) => deleteJob(packageId),
-        onSuccess: () => {
-            toast.success("Job deleted successfully!");
-            queryClient.invalidateQueries({ queryKey: ["admin-jobs"] });
-        },
-        onError: () => {
-            toast.error("Failed to delete job");
-        },
-    });
+  const handleViewDetails = (jobId: string) => {
+    navigate(`/ss-hr-admin/jobs/${jobId}`);
+  };
 
-    const handleViewDetails = (jobId: string) => {
-        navigate(`/ss-hr-admin/jobs/${jobId}`);
-    };
+  const handleEdit = (jobId: string) => {
+    dispatch(openEditJobForm(jobId));
+  };
 
-    const handleEdit = (jobId: string) => {
-        dispatch(openEditJobForm(jobId));
-    };
+  const handleDelete = (packageId: string) => {
+    toast(
+      ({ closeToast }) =>
+        React.createElement(ConfirmToast, {
+          message: "Are you sure you want to delete this job?",
+          confirmText: "Delete",
+          cancelText: "Cancel",
+          onConfirm: () => {
+            deleteMutation.mutate(packageId);
+            closeToast();
+          },
+          onCancel: closeToast,
+        }),
+      {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+        closeButton: false,
+      },
+    );
+  };
 
-    const handleDelete = (packageId: string) => {
-        toast(
-            ({ closeToast }) =>
-                React.createElement(ConfirmToast, {
-                    message: "Are you sure you want to delete this job?",
-                    confirmText: "Delete",
-                    cancelText: "Cancel",
-                    onConfirm: () => {
-                        deleteMutation.mutate(packageId);
-                        closeToast();
-                    },
-                    onCancel: closeToast,
-                }),
-            {
-                position: "top-center",
-                autoClose: false,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: false,
-                closeButton: false,
-            },
-        );
-    };
-
-
-    return { handleViewDetails, handleEdit, handleDelete };
+  return { handleViewDetails, handleEdit, handleDelete };
 };

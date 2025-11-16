@@ -8,10 +8,8 @@ export interface SignupResponse extends ApiBaseResponse {
   user: User;
 }
 
-
 // verify otp
 export type VerifyOtpRequest = Pick<User, "otp" | "verificationToken" | "role">;
-
 
 // sign in
 export type SigninRequest = Pick<User, "email" | "role"> & {
@@ -23,7 +21,6 @@ export interface SigninResponse extends ApiBaseResponse {
   careerData: CareerData;
 }
 
-
 // resend otp
 export type ResendOtpRequest = Pick<User, "role" | "verificationToken"> & {
   email?: string;
@@ -32,15 +29,16 @@ export interface ResendOtpResponse extends ApiBaseResponse {
   user: User;
 }
 
-
 // update password
-export type UpdatePasswordRequest = Pick<User, "email" | "verificationToken" | "role"> & {
+export type UpdatePasswordRequest = Pick<
+  User,
+  "email" | "verificationToken" | "role"
+> & {
   password: string;
 };
-
 
 // update password
 export type VerifyEmailRequest = Pick<User, "email">;
 export interface VerifyEmailResponse extends ApiBaseResponse {
- data: Pick<User, "email" | "verificationToken" | "role">;
-} 
+  data: Pick<User, "email" | "verificationToken" | "role">;
+}

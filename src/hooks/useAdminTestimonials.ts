@@ -64,4 +64,4 @@ export const useAdminTestimonials = () => {
     handleDeleteTestimonial,
     isDeleting: deleteMutation.isPending,
   };
-}
+};

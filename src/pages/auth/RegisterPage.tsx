@@ -20,12 +20,9 @@ import { registerSchema, type RegisterForm } from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const RegisterPage: React.FC = () => {
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector(
-    (state) => state.auth,
-  );
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const {
     register,
@@ -128,7 +125,8 @@ const RegisterPage: React.FC = () => {
                 <Button
                   type="submit"
                   className="w-full cursor-pointer"
-                  disabled={isSubmitting || !isValid}>
+                  disabled={isSubmitting || !isValid}
+                >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <LoaderCircle className="animate-spin" />

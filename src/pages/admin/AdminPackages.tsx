@@ -21,7 +21,8 @@ interface AdminPackagesProps {
 
 const AdminPackages: React.FC<AdminPackagesProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { handleDeletePackage, handleEditPackage, handleViewPackage } = useAdminPackages();
+  const { handleDeletePackage, handleEditPackage, handleViewPackage } =
+    useAdminPackages();
   const column = AdminPackageTableColumns(
     handleDeletePackage,
     handleEditPackage,
@@ -60,11 +61,9 @@ const AdminPackages: React.FC<AdminPackagesProps> = () => {
         pageSize={10}
       />
 
-
       {isAddPackageFormOpen && <AddPackageForm />}
       {isEditPackageFormOpen && <EditPackageForm />}
       {isViewPackageDetailsOpen && <PackageDetails />}
-
     </>
   );
 };

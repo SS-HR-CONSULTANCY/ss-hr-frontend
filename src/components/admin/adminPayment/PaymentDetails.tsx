@@ -113,17 +113,23 @@ const PaymentDetails: React.FC = () => {
             {/* Customer & Package Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="p-4 border rounded-lg">
-                <h3 className="text-lg font-semibold mb-3">Customer Information</h3>
+                <h3 className="text-lg font-semibold mb-3">
+                  Customer Information
+                </h3>
                 <div className="space-y-2">
                   <div>
                     <span className="text-sm ">Customer Name:</span>
-                    <p className="font-medium ">{paymentDetails.customerName}</p>
+                    <p className="font-medium ">
+                      {paymentDetails.customerName}
+                    </p>
                   </div>
                 </div>
               </div>
 
               <div className="p-4 border rounded-lg">
-                <h3 className="text-lg font-semibold  mb-3">Package Information</h3>
+                <h3 className="text-lg font-semibold  mb-3">
+                  Package Information
+                </h3>
                 <div className="space-y-2">
                   <div>
                     <span className="text-sm ">Package Name:</span>
@@ -163,7 +169,9 @@ const PaymentDetails: React.FC = () => {
             {/* Payment Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="p-4 border rounded-lg">
-                <h3 className="text-lg font-semibold  mb-3">Payment Information</h3>
+                <h3 className="text-lg font-semibold  mb-3">
+                  Payment Information
+                </h3>
                 <div className="space-y-3">
                   <div>
                     <span className="text-sm ">Payment Method:</span>
@@ -224,7 +232,9 @@ const PaymentDetails: React.FC = () => {
 
             {/* Timestamps */}
             <div className="p-4 border rounded-lg">
-              <h3 className="text-lg font-semibold  mb-3">Record Information</h3>
+              <h3 className="text-lg font-semibold  mb-3">
+                Record Information
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="">Created:</span>

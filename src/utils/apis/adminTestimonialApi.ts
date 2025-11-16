@@ -1,5 +1,8 @@
 import { axiosInstance } from "@/lib/axios";
-import type { Testimonial, UpdateTestimonialFormData } from "@/types/entities/testimonial";
+import type {
+  Testimonial,
+  UpdateTestimonialFormData,
+} from "@/types/entities/testimonial";
 import {
   buildQueryParams,
   parseNewCommonResponse,

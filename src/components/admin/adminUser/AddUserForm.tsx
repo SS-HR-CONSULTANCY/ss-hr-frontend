@@ -10,10 +10,13 @@ import { closeAddUserModal } from "@/store/slices/userSlice";
 import { adminCreateUser } from "@/utils/apis/adminUserApi";
 import type { AdminCrateUserForm } from "@/utils/zod/adminZod";
 import { X, Mail, Lock, Phone, UserCheck, Loader, User } from "lucide-react";
-import { REGEX_FULL_NAME, REGEX_PASSWORD, REGEX_PHONE } from "@/utils/zod/regex";
+import {
+  REGEX_FULL_NAME,
+  REGEX_PASSWORD,
+  REGEX_PHONE,
+} from "@/utils/zod/regex";
 
 const AddUserForm: React.FC = () => {
-
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
@@ -31,49 +34,52 @@ const AddUserForm: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof AdminCrateUserForm, string>> = {};
 
-  if (!formData.fullName.trim()) {
-    newErrors.fullName = "Full name is required";
-  } else if (formData.fullName.length < 4 || formData.fullName.length > 30) {
-    newErrors.fullName = "Full name must be 4–30 characters";
-  } else if (!REGEX_FULL_NAME.test(formData.fullName)) {
-    newErrors.fullName = "Full name contains invalid characters";
-  }
-
-  if (!formData.email.trim()) {
-    newErrors.email = "Email is required";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    newErrors.email = "Invalid email format";
-  }
-
-  if (!formData.password.trim()) {
-    newErrors.password = "Password is required";
-  } else if (formData.password.length < 8 || formData.password.length > 50) {
-    newErrors.password = "Password must be 8–50 characters";
-  } else if (!REGEX_PASSWORD.test(formData.password)) {
-    newErrors.password = "Password contains invalid characters";
-  }
-
-  if (!formData.phone.trim()) {
-    newErrors.phone = "Phone is required";
-  } else if (formData.phone.length < 7 || formData.phone.length > 20) {
-    newErrors.phone = "Phone must be 7–20 digits";
-  } else if (!REGEX_PHONE.test(formData.phone)) {
-    newErrors.phone = "Phone contains invalid characters";
-  }
-
-  if (formData.phoneTwo?.trim()) {
-    if (formData.phoneTwo.length < 7 || formData.phoneTwo.length > 20) {
-      newErrors.phoneTwo = "Phone Two must be 7–20 digits";
-    } else if (!REGEX_PHONE.test(formData.phoneTwo)) {
-      newErrors.phoneTwo = "Phone Two contains invalid characters";
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    } else if (formData.fullName.length < 4 || formData.fullName.length > 30) {
+      newErrors.fullName = "Full name must be 4–30 characters";
+    } else if (!REGEX_FULL_NAME.test(formData.fullName)) {
+      newErrors.fullName = "Full name contains invalid characters";
     }
-  }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8 || formData.password.length > 50) {
+      newErrors.password = "Password must be 8–50 characters";
+    } else if (!REGEX_PASSWORD.test(formData.password)) {
+      newErrors.password = "Password contains invalid characters";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone is required";
+    } else if (formData.phone.length < 7 || formData.phone.length > 20) {
+      newErrors.phone = "Phone must be 7–20 digits";
+    } else if (!REGEX_PHONE.test(formData.phone)) {
+      newErrors.phone = "Phone contains invalid characters";
+    }
+
+    if (formData.phoneTwo?.trim()) {
+      if (formData.phoneTwo.length < 7 || formData.phoneTwo.length > 20) {
+        newErrors.phoneTwo = "Phone Two must be 7–20 digits";
+      } else if (!REGEX_PHONE.test(formData.phoneTwo)) {
+        newErrors.phoneTwo = "Phone Two contains invalid characters";
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (field: keyof AdminCrateUserForm, value: string) => {
+  const handleInputChange = (
+    field: keyof AdminCrateUserForm,
+    value: string,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
     if (errors[field]) {

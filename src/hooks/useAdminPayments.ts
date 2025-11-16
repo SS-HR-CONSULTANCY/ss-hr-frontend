@@ -66,4 +66,4 @@ export const useAdminPayments = () => {
     handleDeletePayment,
     isDeleting: deleteMutation.isPending,
   };
-}
+};

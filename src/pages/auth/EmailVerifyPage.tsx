@@ -15,7 +15,6 @@ import { emailVerifySchema, type EmailVerifyForm } from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const EmailVerifyPage: React.FC = () => {
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -37,7 +36,7 @@ const EmailVerifyPage: React.FC = () => {
       .then((res) => {
         if (res?.success) {
           toast.success(res?.message || "Otp has been sent");
-          navigate('/verify-otp');
+          navigate("/verify-otp");
         } else {
           toast.error(res?.message || "Failed to send otp");
         }
@@ -51,10 +50,7 @@ const EmailVerifyPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
         <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
-          <FormHeader
-            title="Verify Email"
-            description="Enter your email"
-          />
+          <FormHeader title="Verify Email" description="Enter your email" />
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <FormField<EmailVerifyForm>
@@ -70,7 +66,8 @@ const EmailVerifyPage: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isSubmitting || !isValid}>
+                disabled={isSubmitting || !isValid}
+              >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <LoaderCircle className="animate-spin" />
@@ -94,7 +91,7 @@ const EmailVerifyPage: React.FC = () => {
         </Card>
       </BackgroundBeamsWithCollision>
     </div>
-  )
-}
+  );
+};
 
 export default EmailVerifyPage;

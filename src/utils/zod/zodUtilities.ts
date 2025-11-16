@@ -1,14 +1,15 @@
 import { z } from "zod";
 
 // ObjectId field zod validation
-export const objectIdField = (fieldName = "ID") => z
-  .string()
-  .min(1, { message: `${fieldName} is required` })
-  .regex(/^[0-9a-fA-F]{24}$/, { message: `Invalid ${fieldName} format` });
+export const objectIdField = (fieldName = "ID") =>
+  z
+    .string()
+    .min(1, { message: `${fieldName} is required` })
+    .regex(/^[0-9a-fA-F]{24}$/, { message: `Invalid ${fieldName} format` });
 
 // Boolean field zod validation
 export const booleanField = (fieldName = "Boolean") =>
-  z.boolean().refine(val => typeof val === 'boolean', {
+  z.boolean().refine((val) => typeof val === "boolean", {
     message: `${fieldName} must be boolean`,
   });
 
@@ -43,43 +44,34 @@ export const optionalStringField = (
   min: number,
   max: number,
   regex: RegExp,
-  message: string
+  message: string,
 ) => {
   return z
     .string()
     .trim()
     .optional()
-    .refine(
-      (val) => !val || regex.test(val),
-      {
-        message: `${fieldName}: ${message}`,
-      }
-    )
-    .refine(
-      (val) => !val || (val.length >= min && val.length <= max),
-      {
-        message: `${fieldName} must be between ${min} and ${max} characters.`,
-      }
-    );
+    .refine((val) => !val || regex.test(val), {
+      message: `${fieldName}: ${message}`,
+    })
+    .refine((val) => !val || (val.length >= min && val.length <= max), {
+      message: `${fieldName} must be between ${min} and ${max} characters.`,
+    });
 };
 
 // Date common field
-export const dateField = z.preprocess(
-  (val) => {
-    if (typeof val === "string" || val instanceof String) {
-      const parsed = new Date(val as string);
-      if (!isNaN(parsed.getTime())) return parsed;
-    }
-    return val;
-  },
-  z.date()
-);
+export const dateField = z.preprocess((val) => {
+  if (typeof val === "string" || val instanceof String) {
+    const parsed = new Date(val as string);
+    if (!isNaN(parsed.getTime())) return parsed;
+  }
+  return val;
+}, z.date());
 
 // Number field zod validation
 export const numberField = (
   fieldName = "Value",
   min?: number,
-  max?: number
+  max?: number,
 ) => {
   let schema = z.coerce.number().int();
 
@@ -96,7 +88,8 @@ export const numberField = (
 
 // String enum field
 export const enumField = (fieldName: string, values: readonly string[]) =>
-  z.enum(values as [string, ...string[]]) // cast to tuple for TypeScript
+  z
+    .enum(values as [string, ...string[]]) // cast to tuple for TypeScript
     .refine((val) => values.includes(val), {
       message: `${fieldName} must be one of: ${values.join(", ")}`,
     });
@@ -109,16 +102,22 @@ export const stringArrayField = (
   itemMin?: number,
   itemMax?: number,
   regex?: RegExp,
-  regexMessage = "Invalid format"
+  regexMessage = "Invalid format",
 ) => {
   let itemSchema = z.string().min(1, { message: `${fieldName} is required` });
 
   if (itemMin !== undefined) {
-    itemSchema = itemSchema.min(itemMin, `${fieldName} item must be at least ${itemMin} characters`);
+    itemSchema = itemSchema.min(
+      itemMin,
+      `${fieldName} item must be at least ${itemMin} characters`,
+    );
   }
 
   if (itemMax !== undefined) {
-    itemSchema = itemSchema.max(itemMax, `${fieldName} item must be at most ${itemMax} characters`);
+    itemSchema = itemSchema.max(
+      itemMax,
+      `${fieldName} item must be at most ${itemMax} characters`,
+    );
   }
 
   if (regex !== undefined) {
@@ -128,18 +127,27 @@ export const stringArrayField = (
   let arraySchema = z.array(itemSchema);
 
   if (arrayMin !== undefined) {
-    arraySchema = arraySchema.min(arrayMin, `At least ${arrayMin} ${fieldName.toLowerCase()}(s) required`);
+    arraySchema = arraySchema.min(
+      arrayMin,
+      `At least ${arrayMin} ${fieldName.toLowerCase()}(s) required`,
+    );
   }
 
   if (arrayMax !== undefined) {
-    arraySchema = arraySchema.max(arrayMax, `At most ${arrayMax} ${fieldName.toLowerCase()}(s) allowed`);
+    arraySchema = arraySchema.max(
+      arrayMax,
+      `At most ${arrayMax} ${fieldName.toLowerCase()}(s) allowed`,
+    );
   }
 
   return arraySchema;
 };
 
 // Optional url
-export const optionalUrl = z.union([z.string().url("Invalid photo URL"), z.literal("")]);
+export const optionalUrl = z.union([
+  z.string().url("Invalid photo URL"),
+  z.literal(""),
+]);
 
 // Reusable helper: parse stringified JSON into array
 export const jsonArrayParser = <T>(schema: z.ZodType<T>) =>
@@ -154,4 +162,3 @@ export const jsonArrayParser = <T>(schema: z.ZodType<T>) =>
     }),
     z.array(schema),
   ]);
-

@@ -34,9 +34,9 @@ const App = () => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistAppStore}>
           <QueryClientProvider client={queryClient}>
-             <HeadProvider>
-            <AppContent />
-             </HeadProvider>
+            <HeadProvider>
+              <AppContent />
+            </HeadProvider>
           </QueryClientProvider>
         </PersistGate>
       </Provider>

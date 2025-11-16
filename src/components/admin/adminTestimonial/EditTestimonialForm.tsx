@@ -80,8 +80,6 @@ const EditTestimonialForm: React.FC = () => {
 
     if (!validateForm()) return;
 
-    
-
     const res = await updateTestimonial({
       testimonialId: selectedTestimonialId!,
       testimonialData: formData,
@@ -145,18 +143,18 @@ const EditTestimonialForm: React.FC = () => {
             />
           </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="clientPhoto">Client Photo ( drive link )</Label>
-          <input
-            type="text"
-            id="clientPhoto"
-            value={formData.clientPhoto || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, clientPhoto: e.target.value })}
-            className="block w-full text-sm border p-2"
-          />
-        </div>
-                    
+          <div className="space-y-2">
+            <Label htmlFor="clientPhoto">Client Photo ( drive link )</Label>
+            <input
+              type="text"
+              id="clientPhoto"
+              value={formData.clientPhoto || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, clientPhoto: e.target.value })
+              }
+              className="block w-full text-sm border p-2"
+            />
+          </div>
         </div>
 
         {/* <div className="space-y-2">

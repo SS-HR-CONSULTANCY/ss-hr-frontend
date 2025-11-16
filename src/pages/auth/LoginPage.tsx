@@ -24,10 +24,7 @@ interface LoginProps {
   role: RoleType;
 }
 
-const LoginPage: React.FC<LoginProps> = ({
-  role
-}) => {
-
+const LoginPage: React.FC<LoginProps> = ({ role }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useSelector(
@@ -95,7 +92,13 @@ const LoginPage: React.FC<LoginProps> = ({
         <BackgroundBeamsWithCollision>
           <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
             <FormHeader
-              title={role === roleValues[0] ? "Sign In With your credentials" : role === roleValues[1] ? "Admin Login" : "System Admin Login"}
+              title={
+                role === roleValues[0]
+                  ? "Sign In With your credentials"
+                  : role === roleValues[1]
+                    ? "Admin Login"
+                    : "System Admin Login"
+              }
               description="Enter your credentials to access your account"
             />
             <CardContent>
@@ -126,7 +129,8 @@ const LoginPage: React.FC<LoginProps> = ({
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={isSubmitting || !isValid}>
+                  disabled={isSubmitting || !isValid}
+                >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <LoaderCircle className="animate-spin" />

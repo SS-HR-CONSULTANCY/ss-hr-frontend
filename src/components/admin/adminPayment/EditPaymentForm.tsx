@@ -170,7 +170,9 @@ const EditPaymentForm: React.FC = () => {
                   placeholder="Enter customer name"
                 />
                 {errors.customerName && (
-                  <p className="text-red-500 text-sm mt-1">{errors.customerName}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.customerName}
+                  </p>
                 )}
               </div>
 
@@ -206,7 +208,9 @@ const EditPaymentForm: React.FC = () => {
                   placeholder="50,000"
                 />
                 {errors.totalAmount && (
-                  <p className="text-red-500 text-sm mt-1">{errors.totalAmount}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.totalAmount}
+                  </p>
                 )}
               </div>
 
@@ -217,12 +221,16 @@ const EditPaymentForm: React.FC = () => {
                 <Input
                   id="paidAmount"
                   value={formatCurrency((formData.paidAmount || 0).toString())}
-                  onChange={(e) => handleAmountChange("paidAmount", e.target.value)}
+                  onChange={(e) =>
+                    handleAmountChange("paidAmount", e.target.value)
+                  }
                   className=""
                   placeholder="20,000"
                 />
                 {errors.paidAmount && (
-                  <p className="text-red-500 text-sm mt-1">{errors.paidAmount}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.paidAmount}
+                  </p>
                 )}
               </div>
             </div>
@@ -247,16 +255,18 @@ const EditPaymentForm: React.FC = () => {
                 </Label>
                 <Select
                   value={formData.paymentStatus || "pending"}
-                  onValueChange={(value: "pending" | "partiallyPaid" | "fullyPaid") =>
-                    setFormData({ ...formData, paymentStatus: value })
-                  }
+                  onValueChange={(
+                    value: "pending" | "partiallyPaid" | "fullyPaid",
+                  ) => setFormData({ ...formData, paymentStatus: value })}
                 >
                   <SelectTrigger className="">
                     <SelectValue placeholder="Select payment status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="partiallyPaid">Partially Paid</SelectItem>
+                    <SelectItem value="partiallyPaid">
+                      Partially Paid
+                    </SelectItem>
                     <SelectItem value="fullyPaid">Fully Paid</SelectItem>
                   </SelectContent>
                 </Select>
@@ -268,9 +278,9 @@ const EditPaymentForm: React.FC = () => {
                 </Label>
                 <Select
                   value={formData.paymentMethod || "googlepay"}
-                  onValueChange={(value: "googlepay" | "banktransfer" | "cash") =>
-                    setFormData({ ...formData, paymentMethod: value })
-                  }
+                  onValueChange={(
+                    value: "googlepay" | "banktransfer" | "cash",
+                  ) => setFormData({ ...formData, paymentMethod: value })}
                 >
                   <SelectTrigger className="">
                     <SelectValue placeholder="Select payment method" />
@@ -297,7 +307,9 @@ const EditPaymentForm: React.FC = () => {
                   className=""
                 />
                 {errors.paymentDate && (
-                  <p className="text-red-500 text-sm mt-1">{errors.paymentDate}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.paymentDate}
+                  </p>
                 )}
               </div>
             </div>
@@ -317,7 +329,9 @@ const EditPaymentForm: React.FC = () => {
                   placeholder="GP123456789"
                 />
                 {errors.referenceId && (
-                  <p className="text-red-500 text-sm mt-1">{errors.referenceId}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.referenceId}
+                  </p>
                 )}
               </div>
 

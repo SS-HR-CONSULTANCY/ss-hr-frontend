@@ -13,7 +13,7 @@ const ServiceDetailedContent: React.FC<ServiceDetailedContentProps> = ({
   contactText,
   contactUrl,
   contactButtonText,
-  seoData
+  seoData,
 }) => {
   const navigate = useNavigate();
 

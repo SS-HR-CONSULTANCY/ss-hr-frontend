@@ -25,7 +25,6 @@ import type { SidebarProps } from "@/types/componentTypes/sidebarTypes";
 import { toggleAdminSidebar, toggleTheme } from "@/store/slices/appSlice";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
-
   const { handleLogout } = useAuthHook();
   const dispatch = useDispatch<AppDispatch>();
   const { theme, sidebarOpen } = useSelector((state: RootState) => state.app);

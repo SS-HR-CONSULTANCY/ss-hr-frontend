@@ -44,11 +44,10 @@ export interface statsMapIntrface<T> {
   plans?: string[];
 }
 
-
 export type userDetail<T> = {
-    label: string;
-    key: keyof T;
-    type: string;
+  label: string;
+  key: keyof T;
+  type: string;
 };
 
 export interface SEOConfig {
