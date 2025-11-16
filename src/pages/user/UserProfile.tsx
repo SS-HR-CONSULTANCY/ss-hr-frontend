@@ -6,7 +6,6 @@ import ProfileDetailsSection from "@/components/user/ProfileDetailsSection";
 import CareerPreferencesSection from "@/components/user/CareerPreferencesSection";
 
 const UserProfile: React.FC = () => {
-
   return (
     <div className="border-2 rounded-md border-blue-950 dark:border-gray-300 p-2 md:p-4">
       <div className="flex items-center justify-between w-full p-4">

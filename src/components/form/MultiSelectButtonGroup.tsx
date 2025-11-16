@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { type FieldValues, type Path, type UseFormSetValue } from "react-hook-form";
+import {
+  type FieldValues,
+  type Path,
+  type UseFormSetValue,
+} from "react-hook-form";
 
 interface MultiSelectButtonGroupProps<T extends FieldValues> {
   id: Path<T>;
@@ -22,7 +26,7 @@ export const MultiSelectButtonGroup = <T extends FieldValues>({
   setValue,
   disabled,
   error,
-  isEditing
+  isEditing,
 }: MultiSelectButtonGroupProps<T>) => {
   const toggleSelect = (value: string) => {
     const newValues = selectedValues.includes(value)
@@ -33,7 +37,14 @@ export const MultiSelectButtonGroup = <T extends FieldValues>({
 
   return (
     <div className="space-y-2">
-      <Label className="text-xs md:text-sm">{label} {isEditing && (<span className="mx-2 font-semibold text-blue-900 dark:text-blue-500">Multiple Selection</span>)}</Label>
+      <Label className="text-xs md:text-sm">
+        {label}{" "}
+        {isEditing && (
+          <span className="mx-2 font-semibold text-blue-900 dark:text-blue-500">
+            Multiple Selection
+          </span>
+        )}
+      </Label>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
           const selected = selectedValues.includes(option.value);
@@ -45,7 +56,7 @@ export const MultiSelectButtonGroup = <T extends FieldValues>({
               className={cn(
                 "cursor-pointer select-none transition-all px-3 py-1 text-sm",
                 disabled && "pointer-events-none",
-                selected ? "" : "hover:bg-accent"
+                selected ? "" : "hover:bg-accent",
               )}
             >
               {option.label}

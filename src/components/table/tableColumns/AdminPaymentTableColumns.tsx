@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi";
 
-export const PaymentTableColumns = (
+export const AdminPaymentTableColumns = (
   handleDeletePayment: (paymentId: string) => void,
   handleEditPayment: (paymentId: string) => void,
   handleViewPayment: (paymentId: string) => void,
@@ -71,13 +71,13 @@ export const PaymentTableColumns = (
       const getStatusStyle = (status: string) => {
         switch (status) {
           case "pending":
-            return "text-yellow-500";
-          case "partiallypaid":
-            return "text-blue-500";
-          case "fullypaid":
-            return "text-green-500";
+            return "text-yellow-600 bg-yellow-100";
+          case "partiallyPaid":
+            return "text-blue-600 bg-blue-100";
+          case "fullyPaid":
+            return "text-green-600 bg-green-100";
           default:
-            return "text-gray-500";
+            return "text-gray-600 bg-gray-100";
         }
       };
 
@@ -85,9 +85,9 @@ export const PaymentTableColumns = (
         switch (status) {
           case "pending":
             return "Pending";
-          case "partiallypaid":
+          case "partiallyPaid":
             return "Partially Paid";
-          case "fullypaid":
+          case "fullyPaid":
             return "Fully Paid";
           default:
             return status;
@@ -116,7 +116,7 @@ export const PaymentTableColumns = (
             variant="ghost"
             size="sm"
             onClick={() => handleViewPayment(paymentData._id)}
-            className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50 cursor-pointer"
+            className="h-8 w-8 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
             title="View Details"
           >
             <Eye className="h-4 w-4" />
@@ -126,7 +126,7 @@ export const PaymentTableColumns = (
             variant="ghost"
             size="sm"
             onClick={() => handleEditPayment(paymentData._id)}
-            className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50 cursor-pointer"
+            className="h-8 w-8 p-0 text-green-500 cursor-pointer hover:bg-green-500/20 hover:text-green-500"
             title="Edit Payment"
           >
             <Edit className="h-4 w-4" />
@@ -136,7 +136,7 @@ export const PaymentTableColumns = (
             variant="ghost"
             size="sm"
             onClick={() => handleDeletePayment(paymentData._id)}
-            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer"
+            className="h-8 w-8 p-0 text-red-500 cursor-pointer hover:bg-red-500/20 hover:text-red-500"
             title="Delete Payment"
           >
             <Trash2 className="h-4 w-4" />

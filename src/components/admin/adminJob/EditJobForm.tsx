@@ -14,7 +14,6 @@ import { adminGetJobById, adminUpdateJob } from "@/utils/apis/adminJobApi";
 import { createJobSchema, type CreateJobForm } from "@/utils/zod/adminZod";
 
 const EditJobForm: React.FC = () => {
-
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);

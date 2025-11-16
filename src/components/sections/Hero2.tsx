@@ -18,7 +18,6 @@ const Hero2 = () => {
   return (
     <section className="min-h-screen flex items-center py-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center px-4">
-
         <div className="relative w-full h-[300px] sm:h-[350px] md:h-[450px] lg:h-[550px]">
           <AnimatePresence mode="wait">
             <motion.img
@@ -79,7 +78,6 @@ const Hero2 = () => {
             </CardContent>
           </Card>
         </div>
-
       </div>
     </section>
   );

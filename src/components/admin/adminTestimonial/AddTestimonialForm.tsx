@@ -12,7 +12,6 @@ import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { CreateTestimonialFormData } from "@/types/entities/testimonial";
 
 const AddTestimonialForm: React.FC = () => {
-
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
@@ -144,12 +143,13 @@ const AddTestimonialForm: React.FC = () => {
         </div> */}
 
         <div className="space-y-2">
-          <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
+          <Label htmlFor="clientPhoto">Client Photo ( drive link )</Label>
           <input
             type="text"
             id="clientPhoto"
             onChange={(e) =>
-              setFormData({ ...formData, clientPhoto: e.target.value })}
+              setFormData({ ...formData, clientPhoto: e.target.value })
+            }
             className="block w-full text-sm border p-2"
           />
           {/* {previewImage && (

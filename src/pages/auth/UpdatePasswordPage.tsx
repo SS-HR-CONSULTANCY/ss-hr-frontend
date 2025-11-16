@@ -15,11 +15,13 @@ import { HomeIcon, LoaderCircle, User } from "lucide-react";
 import PasswordStrength from "@/components/form/PasswordStrength";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { getPasswordStrength } from "@/utils/helpers/passwordStrength";
-import { updatePasswordSchema, type UpdatePasswordForm } from "@/utils/zod/authZod";
+import {
+  updatePasswordSchema,
+  type UpdatePasswordForm,
+} from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const UpdatePasswordPage: React.FC = () => {
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -28,7 +30,7 @@ const UpdatePasswordPage: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-    watch
+    watch,
   } = useForm<UpdatePasswordForm>({
     resolver: zodResolver(updatePasswordSchema),
     mode: "onChange",
@@ -43,21 +45,23 @@ const UpdatePasswordPage: React.FC = () => {
 
   const onSubmit = async (data: UpdatePasswordForm) => {
     const { password } = data;
-    if(!user || !user.email || !user?.verificationToken || !user.role) {
+    if (!user || !user.email || !user?.verificationToken || !user.role) {
       toast.error("Please try again.");
       return;
     }
-    await dispatch(updatePassword({ 
-      password, 
-      email: user.email, 
-      verificationToken: user.verificationToken, 
-      role: user.role
-    }))
+    await dispatch(
+      updatePassword({
+        password,
+        email: user.email,
+        verificationToken: user.verificationToken,
+        role: user.role,
+      }),
+    )
       .unwrap()
       .then((res) => {
         if (res?.success) {
           toast.success(res?.message || "Logged In Successfully");
-          navigate('/login');
+          navigate("/login");
         } else {
           toast.error(res?.message || "Login failed");
         }
@@ -77,7 +81,6 @@ const UpdatePasswordPage: React.FC = () => {
           />
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
               <FormField<UpdatePasswordForm>
                 id="password"
                 label="Password"
@@ -110,7 +113,8 @@ const UpdatePasswordPage: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full cursor-pointer"
-                disabled={isSubmitting || !isValid}>
+                disabled={isSubmitting || !isValid}
+              >
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <LoaderCircle className="animate-spin" />
@@ -134,7 +138,7 @@ const UpdatePasswordPage: React.FC = () => {
         </Card>
       </BackgroundBeamsWithCollision>
     </div>
-  )
-}
+  );
+};
 
 export default UpdatePasswordPage;

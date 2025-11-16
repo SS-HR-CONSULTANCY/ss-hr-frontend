@@ -15,9 +15,9 @@ export interface CareerData {
   currentCompany?: string;
   industry?: string;
 
-  currentJobType?: JobtypeType;                
-  preferredJobTypes?: JobtypeType[];            
-  preferredWorkModes?: WorkModeType[];                     
+  currentJobType?: JobtypeType;
+  preferredJobTypes?: JobtypeType[];
+  preferredWorkModes?: WorkModeType[];
 
   resume: File | string;
 

@@ -31,11 +31,21 @@ const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminUserDetails = lazy(() => import("@/pages/admin/AdminUserDetails"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
-const UpdatePasswordPage = lazy(() => import("@/pages/auth/UpdatePasswordPage"));
-const ToursAndTravelsPage = lazy(() => import("@/pages/common/ToursAndTravelsPage"));
-const RouteErrorBoundary = lazy(() => import("@/components/common/RouteErrorBoundary"))
-const ApplicationDetailsPage = lazy(() => import("@/pages/common/ApplicationDetailsPage"));
-const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
+const UpdatePasswordPage = lazy(
+  () => import("@/pages/auth/UpdatePasswordPage"),
+);
+const ToursAndTravelsPage = lazy(
+  () => import("@/pages/common/ToursAndTravelsPage"),
+);
+const RouteErrorBoundary = lazy(
+  () => import("@/components/common/RouteErrorBoundary"),
+);
+const ApplicationDetailsPage = lazy(
+  () => import("@/pages/common/ApplicationDetailsPage"),
+);
+const ServiceDetailedContent = lazy(
+  () => import("@/components/sections/ServiceDetailedContent"),
+);
 
 const appRouter = createBrowserRouter([
   {
@@ -117,7 +127,10 @@ const appRouter = createBrowserRouter([
   { path: "verify-email", element: <EmailVerifyPage /> },
   { path: "update-password", element: <UpdatePasswordPage /> },
   { path: "ss-hr-admin/login", element: <LoginPage role="admin" /> },
-  { path: "ss-hr-system-admin/login", element: <LoginPage role="systemAdmin" /> },
+  {
+    path: "ss-hr-system-admin/login",
+    element: <LoginPage role="systemAdmin" />,
+  },
   { path: "login", element: <LoginPage role="user" /> },
   {
     path: "/user",

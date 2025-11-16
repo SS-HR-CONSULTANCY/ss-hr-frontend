@@ -15,14 +15,8 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({ data }) => {
-  const {
-    title,
-    description,
-    keywords,
-    ogTitle,
-    ogDescription,
-    canonical,
-  } = data;
+  const { title, description, keywords, ogTitle, ogDescription, canonical } =
+    data;
 
   return (
     <>

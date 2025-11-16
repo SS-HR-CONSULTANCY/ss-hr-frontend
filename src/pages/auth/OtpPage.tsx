@@ -17,7 +17,6 @@ import type { VerifyOtpRequest } from "@/types/apiTypes/authApiTypes";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const OtpPage: React.FC = () => {
-  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user, otpTimerIsRunning, otpRemainingTime, isUpdatingPassword } =
@@ -30,7 +29,7 @@ const OtpPage: React.FC = () => {
     formState: { errors, isSubmitting, isValid },
   } = useForm<OtpForm>({
     resolver: zodResolver(otpSchema),
-    mode: "onChange", 
+    mode: "onChange",
     defaultValues: {
       otp: "",
       verificationToken: user?.verificationToken,
@@ -53,7 +52,7 @@ const OtpPage: React.FC = () => {
       .then((res) => {
         if (res.success) {
           toast.success(res.message || "Otp verified");
-          if(isUpdatingPassword) {
+          if (isUpdatingPassword) {
             navigate("/update-password");
           } else {
             navigate("/login");
@@ -120,7 +119,8 @@ const OtpPage: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full cursor-pointer"
-                disabled={isSubmitting || !isValid}>
+                disabled={isSubmitting || !isValid}
+              >
                 {isSubmitting && !resentLoading ? (
                   <span className="flex items-center gap-2">
                     <LoaderCircle className="animate-spin" />

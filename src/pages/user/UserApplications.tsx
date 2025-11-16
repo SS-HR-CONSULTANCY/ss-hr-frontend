@@ -6,28 +6,26 @@ import type { UserFetchAllApplicationsResponse } from "@/types/apiTypes/userApiT
 import { UserApplicationsTableColumns } from "@/components/table/tableColumns/UserApplicationsTableColumns";
 
 const UserApplications: React.FC = () => {
+  const {
+    handleUpdateJobApplication,
+    // handleViewJobDetails
+  } = useUserApplication();
 
-    const {
-        handleUpdateJobApplication,
-        // handleViewJobDetails
-    } = useUserApplication();
+  const columns = UserApplicationsTableColumns(
+    handleUpdateJobApplication,
+    // handleViewJobDetails
+  );
 
-    const columns = UserApplicationsTableColumns(
-        handleUpdateJobApplication,
-        // handleViewJobDetails
-    );
-
-    return (
-        <CommonTable<UserFetchAllApplicationsResponse>
-            fetchApiFunction={userFetchAllApplications}
-            queryKey="applications"
-            heading="Jobs"
-            description="Lit of jobs according to the comapnies"
-            column={columns}
-            columnsCount={4}
-        />
-    );
+  return (
+    <CommonTable<UserFetchAllApplicationsResponse>
+      fetchApiFunction={userFetchAllApplications}
+      queryKey="applications"
+      heading="Jobs"
+      description="Lit of jobs according to the comapnies"
+      column={columns}
+      columnsCount={4}
+    />
+  );
 };
 
-
-export default UserApplications
+export default UserApplications;

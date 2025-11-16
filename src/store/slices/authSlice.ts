@@ -50,10 +50,10 @@ const authSlice = createSlice({
       state.otpTimerIsRunning = false;
     },
     setProfileSignedUrl: (state, action: PayloadAction<string>) => {
-      state.user = {...state.user, profileImage: action.payload}
+      state.user = { ...state.user, profileImage: action.payload };
     },
     setResumeSignedUrl: (state, action: PayloadAction<string>) => {
-        state.user = {...state.user, resume: action.payload};
+      state.user = { ...state.user, resume: action.payload };
     },
     resetAuthStore: () => initialState,
   },
@@ -136,33 +136,35 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       });
 
-    builder
-      .addCase(updatePassword.fulfilled, (state: AuthState) => {
-        state.otpRemainingTime = 0;
-        state.otpTimerIsRunning = false;
-        state.isUpdatingPassword = false;
-        state.user = null;
-      });
+    builder.addCase(updatePassword.fulfilled, (state: AuthState) => {
+      state.otpRemainingTime = 0;
+      state.otpTimerIsRunning = false;
+      state.isUpdatingPassword = false;
+      state.user = null;
+    });
 
-    builder
-      .addCase(updateProfileInfo.fulfilled, (state, action: PayloadAction<UpdateUserInfoResponse>) => {
-          state.user = { ...state.user, ...action.payload.data };
-      });
+    builder.addCase(
+      updateProfileInfo.fulfilled,
+      (state, action: PayloadAction<UpdateUserInfoResponse>) => {
+        state.user = { ...state.user, ...action.payload.data };
+      },
+    );
 
-    builder
-      .addCase(verifyEmail.fulfilled, (state, action: PayloadAction<VerifyEmailResponse>) => {
+    builder.addCase(
+      verifyEmail.fulfilled,
+      (state, action: PayloadAction<VerifyEmailResponse>) => {
         state.otpRemainingTime = 60;
         state.otpTimerIsRunning = true;
         state.isUpdatingPassword = true;
         state.user = {
-          ...state.user, 
+          ...state.user,
           email: action.payload.data.email,
           verificationToken: action.payload.data.verificationToken,
-          role: action.payload.data.role
+          role: action.payload.data.role,
         };
-      });
-
-  }
+      },
+    );
+  },
 });
 
 export const {
@@ -172,6 +174,6 @@ export const {
   stopTimer,
   resetAuthStore,
   setProfileSignedUrl,
-  setResumeSignedUrl
+  setResumeSignedUrl,
 } = authSlice.actions;
 export default authSlice.reducer;

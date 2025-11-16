@@ -12,10 +12,13 @@ import { resetUserSlice } from "@/store/slices/userSlice";
 import { resetPackageSlice } from "@/store/slices/packageSlice";
 import { resetPaymentSlice } from "@/store/slices/paymentSlice";
 import { resetTestimonialSlice } from "@/store/slices/testimonialSlice";
-import { persistAppStore, type AppDispatch, type RootState } from "@/store/store";
+import {
+  persistAppStore,
+  type AppDispatch,
+  type RootState,
+} from "@/store/store";
 
 const useAuthHook = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.auth.user);

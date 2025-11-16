@@ -34,7 +34,6 @@ const Header: React.FC = ({
   customNavigation,
   className,
 }: NavbarProps) => {
-
   const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector((state: RootState) => state.app.theme);
 
@@ -46,7 +45,7 @@ const Header: React.FC = ({
       <div className="fade-bottom bg-background/15 absolute left-0 h-18 w-full backdrop-blur-lg"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <NavbarComponent>
-          <NavbarLeft className="flex items-center gap-3 flex-none" >
+          <NavbarLeft className="flex items-center gap-3 flex-none">
             <Link to={homeUrl}>
               <img
                 src={logoTransparent}
@@ -116,7 +115,11 @@ const Header: React.FC = ({
               className="relative flex rounded-full cursor-pointer bg-0"
               onClick={() => dispatch(toggleTheme())}
             >
-              {theme === "dark" ? <Sun className="size-6" /> : <Moon className="size-6" />}
+              {theme === "dark" ? (
+                <Sun className="size-6" />
+              ) : (
+                <Moon className="size-6" />
+              )}
             </Button>
 
             <Sheet>

@@ -7,13 +7,13 @@ import CommonTable from "@/components/common/CommonTable";
 import { useAdminPackages } from "@/hooks/useAdminPackages";
 import type { AppDispatch, RootState } from "@/store/store";
 import { getAllPackages } from "@/utils/apis/adminPackageApi";
+import TablePageHeader from "@/components/common/TablePageHeader";
+import { toggleAddPackageForm } from "@/store/slices/packageSlice";
 import AddPackageForm from "@/components/admin/adminPackage/AddPackageForm";
 import PackageDetails from "@/components/admin/adminPackage/PackageDetails";
 import EditPackageForm from "@/components/admin/adminPackage/EditPackageForm";
-import TablePageHeader from "@/components/common/TablePageHeader";
-import { toggleAddPackageForm } from "@/store/slices/packageSlice";
 import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/adminApiTypes";
-import { PackageTableColumns } from "@/components/table/tableColumns/PackageTableColumns";
+import { AdminPackageTableColumns } from "@/components/table/tableColumns/AdminPackageTableColumns";
 
 interface AdminPackagesProps {
   showButton?: boolean;
@@ -21,8 +21,9 @@ interface AdminPackagesProps {
 
 const AdminPackages: React.FC<AdminPackagesProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { handleDeletePackage, handleEditPackage, handleViewPackage } = useAdminPackages();
-  const column = PackageTableColumns(
+  const { handleDeletePackage, handleEditPackage, handleViewPackage } =
+    useAdminPackages();
+  const column = AdminPackageTableColumns(
     handleDeletePackage,
     handleEditPackage,
     handleViewPackage,
@@ -60,11 +61,9 @@ const AdminPackages: React.FC<AdminPackagesProps> = () => {
         pageSize={10}
       />
 
-
       {isAddPackageFormOpen && <AddPackageForm />}
       {isEditPackageFormOpen && <EditPackageForm />}
       {isViewPackageDetailsOpen && <PackageDetails />}
-
     </>
   );
 };

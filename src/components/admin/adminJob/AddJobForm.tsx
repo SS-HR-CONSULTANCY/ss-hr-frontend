@@ -14,7 +14,6 @@ import { closeAddJobForm } from "@/store/slices/jobSlice";
 import { createJobSchema, type CreateJobForm } from "@/utils/zod/adminZod";
 
 const AddJobForm: React.FC = () => {
-
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
 

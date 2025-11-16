@@ -14,10 +14,9 @@ import type { AdminfetchAllUsersResponse } from "@/types/apiTypes/adminApiTypes"
 import { AdminUserTableColumns } from "@/components/table/tableColumns/AdminUserTableColumn";
 
 const AdminUsers: React.FC = () => {
-
   const dispatch = useDispatch();
 
-  const { handleDelete, handleEdit, handleViewDetails} = useAdminUsers();
+  const { handleDelete, handleEdit, handleViewDetails } = useAdminUsers();
 
   const { isAddUserModalOpen, isEditUserModalOpen, isUserDetailsModalOpen } =
     useSelector((state: RootState) => state.user);

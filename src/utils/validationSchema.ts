@@ -1,33 +1,40 @@
 import { z } from "zod";
 
 // career Data zod schema
-export const jobTypeEnum = z.enum(["full-time", "part-time", "contract", "internship", "freelance"]);
+export const jobTypeEnum = z.enum([
+  "full-time",
+  "part-time",
+  "contract",
+  "internship",
+  "freelance",
+]);
 export const workModeEnum = z.enum(["onsite", "remote", "hybrid"]);
 
 export const careerDataSchema = z
   .object({
-    currentSalary: z
-      .coerce.number()
+    currentSalary: z.coerce
+      .number()
       .min(0, "Current salary must be greater than or equal to 0")
       .max(100000000, "Current salary seems too high")
       .optional(),
 
-    expectedSalary: z
-      .coerce.number()
+    expectedSalary: z.coerce
+      .number()
       .min(0, "Expected salary must be greater than or equal to 0")
       .max(100000000, "Expected salary seems too high")
       .optional(),
 
     immediateJoiner: z.coerce.boolean(),
-    noticePeriod: z
-      .coerce.number()
+    noticePeriod: z.coerce
+      .number()
       .optional()
       .or(z.nan()) // allow empty if hidden
-      .refine((val) => val == null || val >= 0, "Notice period must be positive"),
+      .refine(
+        (val) => val == null || val >= 0,
+        "Notice period must be positive",
+      ),
 
-    experience: z
-      .string()
-      .optional(),
+    experience: z.string().optional(),
 
     currentDesignation: z
       .string()
@@ -55,7 +62,10 @@ export const careerDataSchema = z
     preferredWorkModes: z.array(workModeEnum).optional(),
   })
   .superRefine((data, ctx) => {
-    if (!data.immediateJoiner && (data.noticePeriod === undefined || data.noticePeriod === null)) {
+    if (
+      !data.immediateJoiner &&
+      (data.noticePeriod === undefined || data.noticePeriod === null)
+    ) {
       ctx.addIssue({
         code: "custom",
         path: ["noticePeriod"],
@@ -64,5 +74,3 @@ export const careerDataSchema = z
     }
   });
 export type CareerData = z.infer<typeof careerDataSchema>;
-
-

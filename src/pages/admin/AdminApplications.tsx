@@ -7,19 +7,13 @@ import type { AdminfetchAllApplicationsResponse } from "@/types/apiTypes/adminAp
 import { AdminApplicationsTableColumns } from "@/components/table/tableColumns/AdminApplicationTableColumn";
 
 const AdminApplications: React.FC = () => {
-
   const { handleViewApplicationDetails } = useAdminApplications();
 
-  const columns = AdminApplicationsTableColumns(
-    handleViewApplicationDetails
-  );
+  const columns = AdminApplicationsTableColumns(handleViewApplicationDetails);
 
   return (
     <>
-      <TablePageHeader
-        title="Applications"
-        subtitle="View job applications"
-      />
+      <TablePageHeader title="Applications" subtitle="View job applications" />
       <CommonTable<AdminfetchAllApplicationsResponse>
         fetchApiFunction={adminFetchAllPApplications}
         queryKey="applications"
@@ -27,7 +21,6 @@ const AdminApplications: React.FC = () => {
         description="List of job applications from users"
         column={columns}
         columnsCount={5}
-
       />
     </>
   );

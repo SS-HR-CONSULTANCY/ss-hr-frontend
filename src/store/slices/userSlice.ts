@@ -3,8 +3,15 @@ import type { Address } from "@/types/entities/address";
 import type { SigninResponse } from "@/types/apiTypes/authApiTypes";
 import { createAddress, createCareerData } from "@/utils/apis/userApi";
 import type { UserSliceState } from "../../types/slice/userSliceTypes";
-import { createSlice, type ActionReducerMapBuilder, type PayloadAction } from "@reduxjs/toolkit";
-import type { CreateOrUpdateCareerDataResponse, UpdateAddressResponse } from "@/types/apiTypes/userApiTypes";
+import {
+  createSlice,
+  type ActionReducerMapBuilder,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import type {
+  CreateOrUpdateCareerDataResponse,
+  UpdateAddressResponse,
+} from "@/types/apiTypes/userApiTypes";
 
 const initialState: UserSliceState = {
   userAddress: null,
@@ -25,7 +32,10 @@ const userSlice = createSlice({
     closeAddUserModal: (state: UserSliceState) => {
       state.isAddUserModalOpen = false;
     },
-    openEditUserModal: (state: UserSliceState, action: PayloadAction<string>) => {
+    openEditUserModal: (
+      state: UserSliceState,
+      action: PayloadAction<string>,
+    ) => {
       state.isEditUserModalOpen = true;
       state.selectedUserId = action.payload;
     },
@@ -33,7 +43,10 @@ const userSlice = createSlice({
       state.isEditUserModalOpen = false;
       state.selectedUserId = null;
     },
-    openUserDetailsModal: (state: UserSliceState, action: PayloadAction<string>) => {
+    openUserDetailsModal: (
+      state: UserSliceState,
+      action: PayloadAction<string>,
+    ) => {
       state.isUserDetailsModalOpen = true;
       state.selectedUserId = action.payload;
     },
@@ -54,21 +67,24 @@ const userSlice = createSlice({
           ...(state.userAddress ?? ({} as Address)),
           ...action.payload.data,
         } as Address;
-      });
+      },
+    );
 
     builder.addCase(
       createCareerData.fulfilled,
       (state, action: PayloadAction<CreateOrUpdateCareerDataResponse>) => {
-        state.userCareerData = { ...action.payload.data }
-      });
+        state.userCareerData = { ...action.payload.data };
+      },
+    );
 
     builder.addCase(
       signin.fulfilled,
       (state, action: PayloadAction<SigninResponse>) => {
         state.userAddress = action.payload.address || null;
         state.userCareerData = action.payload.careerData || null;
-      });
-  }
+      },
+    );
+  },
 });
 
 export const {

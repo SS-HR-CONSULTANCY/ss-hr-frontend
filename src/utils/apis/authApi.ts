@@ -105,30 +105,33 @@ export const resendOtp = createAsyncThunk<ResendOtpResponse, ResendOtpRequest>(
   },
 );
 
-export const verifyEmail = createAsyncThunk<VerifyEmailResponse, VerifyEmailRequest>(
-  "auth/verify-email",
-  async (data: VerifyEmailRequest, thunkAPI) => {
-    try {
-      const response = await axiosInstance.post("/auth/verify-email", data);
-      return response.data;
-    } catch (err) {
-      const error = err as AxiosError<ApiBaseResponse>;
-      return thunkAPI.rejectWithValue(
-        error.response?.data || {
-          success: false,
-          message: "Something went wrong",
-        },
-      );
-    }
-  },
-);
+export const verifyEmail = createAsyncThunk<
+  VerifyEmailResponse,
+  VerifyEmailRequest
+>("auth/verify-email", async (data: VerifyEmailRequest, thunkAPI) => {
+  try {
+    const response = await axiosInstance.post("/auth/verify-email", data);
+    return response.data;
+  } catch (err) {
+    const error = err as AxiosError<ApiBaseResponse>;
+    return thunkAPI.rejectWithValue(
+      error.response?.data || {
+        success: false,
+        message: "Something went wrong",
+      },
+    );
+  }
+});
 
 export const updatePassword = createAsyncThunk<
   ApiBaseResponse,
   UpdatePasswordRequest
 >("auth/updatePassword", async (authData: UpdatePasswordRequest, thunkAPI) => {
   try {
-    const response = await axiosInstance.patch("/auth/update-password", authData);
+    const response = await axiosInstance.patch(
+      "/auth/update-password",
+      authData,
+    );
     return response.data;
   } catch (err) {
     const error = err as AxiosError<ApiBaseResponse>;

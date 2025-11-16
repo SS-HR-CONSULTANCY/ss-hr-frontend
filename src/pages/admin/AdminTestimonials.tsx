@@ -11,7 +11,7 @@ import { toggleAddTestimonialForm } from "@/store/slices/testimonialSlice";
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 import AddTestimonialForm from "@/components/admin/adminTestimonial/AddTestimonialForm";
 import TestimonialDetails from "@/components/admin/adminTestimonial/TestimonialDetails";
-import { TestimonialTableColumns } from "@/components/table/tableColumns/TestimonialTableColumns";
+import { AdminTestimonialTableColumns } from "@/components/table/tableColumns/AdminTestimonialTableColumns";
 import EditTestimonialForm from "@/components/admin/adminTestimonial/EditTestimonialForm";
 
 const AdminTestimonials: React.FC = () => {
@@ -24,7 +24,7 @@ const AdminTestimonials: React.FC = () => {
     isDeleting,
   } = useAdminTestimonials();
 
-  const column = TestimonialTableColumns(
+  const column = AdminTestimonialTableColumns(
     handleDeleteTestimonial,
     handleEditTestimonial,
     handleViewTestimonial,

@@ -17,16 +17,16 @@ import type {
 export type AdminfetchAllPaymentsResponse = {
   _id: string;
   customerName: string;
-   packageName: string;
-   totalAmount: number;
-   paidAmount: number;
-   balanceAmount: number;
-   paymentMethod: PaymentMethod;
-   paymentDate: string;
-   paymentStatus: PaymentStatus;
-   referenceId: string;
-   paymentProof: string;
-   adminNotes: string;
+  packageName: string;
+  totalAmount: number;
+  paidAmount: number;
+  balanceAmount: number;
+  paymentMethod: PaymentMethod;
+  paymentDate: string;
+  paymentStatus: PaymentStatus;
+  referenceId: string;
+  paymentProof: string;
+  adminNotes: string;
   createdAt: string;
   updatedAt: string;
 };

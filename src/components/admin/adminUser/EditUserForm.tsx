@@ -81,35 +81,35 @@ const EditUserForm: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof EditUserFormData, string>> = {};
 
-  if (!formData.fullName.trim()) {
-    newErrors.fullName = "Full name is required";
-  } else if (formData.fullName.length < 4 || formData.fullName.length > 30) {
-    newErrors.fullName = "Full name must be 4–30 characters";
-  } else if (!REGEX_FULL_NAME.test(formData.fullName)) {
-    newErrors.fullName = "Full name contains invalid characters";
-  }
-
-  if (!formData.email.trim()) {
-    newErrors.email = "Email is required";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    newErrors.email = "Invalid email format";
-  }
-
-  if (!formData.phone.trim()) {
-    newErrors.phone = "Phone is required";
-  } else if (formData.phone.length < 7 || formData.phone.length > 20) {
-    newErrors.phone = "Phone must be 7–20 digits";
-  } else if (!REGEX_PHONE.test(formData.phone)) {
-    newErrors.phone = "Phone contains invalid characters";
-  }
-
-  if (formData.phoneTwo?.trim()) {
-    if (formData.phoneTwo.length < 7 || formData.phoneTwo.length > 20) {
-      newErrors.phoneTwo = "Phone Two must be 7–20 digits";
-    } else if (!REGEX_PHONE.test(formData.phoneTwo)) {
-      newErrors.phoneTwo = "Phone Two contains invalid characters";
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    } else if (formData.fullName.length < 4 || formData.fullName.length > 30) {
+      newErrors.fullName = "Full name must be 4–30 characters";
+    } else if (!REGEX_FULL_NAME.test(formData.fullName)) {
+      newErrors.fullName = "Full name contains invalid characters";
     }
-  }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone is required";
+    } else if (formData.phone.length < 7 || formData.phone.length > 20) {
+      newErrors.phone = "Phone must be 7–20 digits";
+    } else if (!REGEX_PHONE.test(formData.phone)) {
+      newErrors.phone = "Phone contains invalid characters";
+    }
+
+    if (formData.phoneTwo?.trim()) {
+      if (formData.phoneTwo.length < 7 || formData.phoneTwo.length > 20) {
+        newErrors.phoneTwo = "Phone Two must be 7–20 digits";
+      } else if (!REGEX_PHONE.test(formData.phoneTwo)) {
+        newErrors.phoneTwo = "Phone Two contains invalid characters";
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

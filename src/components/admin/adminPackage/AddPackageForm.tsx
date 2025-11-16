@@ -190,7 +190,9 @@ const AddPackageForm: React.FC = () => {
                   placeholder="Enter package name"
                 />
                 {errors.packageName && (
-                  <p className="text-red-500 text-sm mt-1">{errors.packageName}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.packageName}
+                  </p>
                 )}
               </div>
 
@@ -229,7 +231,9 @@ const AddPackageForm: React.FC = () => {
                 placeholder="Enter package description..."
               />
               {errors.description && (
-                <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description}
+                </p>
               )}
             </div>
 
@@ -341,16 +345,18 @@ const AddPackageForm: React.FC = () => {
                   <div key={key} className="flex items-center space-x-2">
                     <Checkbox
                       id={key}
-                      checked={formData[key as keyof typeof formData] as boolean}
+                      checked={
+                        formData[key as keyof typeof formData] as boolean
+                      }
                       onCheckedChange={(checked) =>
                         handleServiceChange(
                           key as
-                          | "food"
-                          | "accommodation"
-                          | "travelCard"
-                          | "utilityBills"
-                          | "airportPickup"
-                          | "jobGuidance",
+                            | "food"
+                            | "accommodation"
+                            | "travelCard"
+                            | "utilityBills"
+                            | "airportPickup"
+                            | "jobGuidance",
                           checked as boolean,
                         )
                       }
