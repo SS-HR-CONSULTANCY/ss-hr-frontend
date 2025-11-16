@@ -51,16 +51,17 @@ const Header: React.FC = ({
               <img
                 src={logoTransparent}
                 alt="SS HR"
+                width={40}
+                height={40}
                 className="size-10 cursor-pointer"
               />
             </Link>
             <a href={homeUrl} className="items-center gap-2 text-xl font-bold">
               {name.toUpperCase()}
             </a>
-            {/* {showNavigation && (customNavigation || <Navigation />)} */}
             <div className="hidden lg:flex flex-1 justify-center">
-  {showNavigation && (customNavigation || <Navigation />)}
-</div>
+              {showNavigation && (customNavigation || <Navigation />)}
+            </div>
           </NavbarLeft>
           <NavbarRight>
             {user && isAuthenticated ? (
@@ -71,6 +72,8 @@ const Header: React.FC = ({
                       <img
                         src={user.profileImage || noprofileImage}
                         alt="Profile"
+                        width={32}
+                        height={32}
                         className="w-8 h-8 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
                       />
                     ) : (
@@ -109,7 +112,7 @@ const Header: React.FC = ({
             )}
 
             <Button
-            variant="ghost"
+              variant="ghost"
               className="relative flex rounded-full cursor-pointer bg-0"
               onClick={() => dispatch(toggleTheme())}
             >
