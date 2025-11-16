@@ -37,10 +37,6 @@ const RouteErrorBoundary = lazy(() => import("@/components/common/RouteErrorBoun
 const ApplicationDetailsPage = lazy(() => import("@/pages/common/ApplicationDetailsPage"));
 const ServiceDetailedContent = lazy(() => import("@/components/sections/ServiceDetailedContent"));
 
-// const ErrorTestPage = lazy(() => import("@/pages/common/ErrorTestPage"));
-// const Error404Page = lazy(() => import("@/pages/common/Error404Page"));
-// const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
-
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -297,22 +293,8 @@ const appRouter = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      // {
-      //   path: "settings",
-      //   element: (
-      //     <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
-      //       <AdminSettings />
-      //     </ProtectedRoute>
-      //   ),
-      // },
     ],
   },
-  // {
-  //   path: "/error-test",
-  //   element: <ErrorTestPage />,
-  //   errorElement: <RouteErrorBoundary />,
-  // },
-  // { path: "*", element: <Error404Page /> },
 ]);
 
 export default appRouter;
