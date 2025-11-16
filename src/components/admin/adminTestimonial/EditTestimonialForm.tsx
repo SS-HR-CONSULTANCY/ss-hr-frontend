@@ -146,7 +146,7 @@ const EditTestimonialForm: React.FC = () => {
           </div>
 
         <div className="space-y-2">
-          <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
+          <Label htmlFor="clientPhoto">Client Photo ( drive link )</Label>
           <input
             type="text"
             id="clientPhoto"

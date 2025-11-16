@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/adminApiTypes";
 
-export const PackageTableColumns = (
+export const AdminPackageTableColumns = (
   handleDeletePackage: (packageId: string) => void,
   handleEditPackage: (packageId: string) => void,
   handleViewPackage: (packageId: string) => void,

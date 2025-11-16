@@ -12,7 +12,7 @@ import AddPaymentForm from "@/components/admin/adminPayment/AddPaymentForm";
 import PaymentDetails from "@/components/admin/adminPayment/PaymentDetails";
 import EditPaymentForm from "@/components/admin/adminPayment/EditPaymentForm";
 import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi";
-import { PaymentTableColumns } from "@/components/table/tableColumns/PaymentTableColumns";
+import { AdminPaymentTableColumns } from "@/components/table/tableColumns/AdminPaymentTableColumns";
 
 const AdminPayments: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +23,7 @@ const AdminPayments: React.FC = () => {
     handleViewPayment
   } = useAdminPayments();
   
-  const column = PaymentTableColumns(
+  const column = AdminPaymentTableColumns(
     handleDeletePayment,
     handleEditPayment,
     handleViewPayment,

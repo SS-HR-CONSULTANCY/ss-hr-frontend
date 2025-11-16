@@ -6,7 +6,7 @@ import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import noProfile from "../../../assets/defaultImgaes/noProfile.png";
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 
-export const TestimonialTableColumns = (
+export const AdminTestimonialTableColumns = (
   handleDeleteTestimonial: (testimonialId: string) => void,
   handleEditTestimonial: (testimonialId: string) => void,
   handleViewTestimonial: (testimonialId: string) => void,
@@ -18,7 +18,7 @@ export const TestimonialTableColumns = (
       <DataTableColumnHeader column={column} title="Photo" />
     ),
     cell: ({ row }) => {
-      const img = row.original.clientPhoto || noProfile;
+      const img = row.original.clientPhoto ?? noProfile;
       return (
         <img
           src={img}

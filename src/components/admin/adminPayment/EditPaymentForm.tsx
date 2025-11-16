@@ -323,7 +323,7 @@ const EditPaymentForm: React.FC = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="paymentProof" className="">
-                  Payment Proof URL
+                  Payment Proof ( drive link )
                 </Label>
                 <Input
                   id="paymentProof"
