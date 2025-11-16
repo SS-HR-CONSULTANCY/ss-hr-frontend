@@ -30,7 +30,7 @@ const Footer = ({
 
   return (
     <footer
-      className={`w-full border-t bg-zinc-100 dark:bg-zinc-900 ${className}`}
+      className={`w-full bg-zinc-100 dark:bg-zinc-900 ${className}`}
     >
       <FooterNew className="max-w-7xl mx-auto px-4 md:px-0 bg-zinc-100 dark:bg-zinc-900">
         <FooterContent className="flex flex-col md:flex-row md:justify-between">

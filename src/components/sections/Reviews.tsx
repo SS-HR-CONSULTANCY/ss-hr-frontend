@@ -26,10 +26,10 @@ const Reviews: React.FC = () => {
   }, [data, error, isError, isLoading]);
 
   return (
-    <section id="reviews" className="py-16">
+    <section id="reviews" className="pt-16">
       <Heading
         heading="Reviews"
-        dataaos="fade-down"
+        dataaos="fade-up"
         headingDescription="See what our customers are saying about us."
         mainDivClassName="text-center mx-auto max-w-2xl"
       />
@@ -90,7 +90,7 @@ const Reviews: React.FC = () => {
             ></path>
             <path
               d="M1250 120L0 12.48 0 0 1200 0 1200 120z"
-              className="fill-white dark:fill-black"
+              className="fill-zinc-100 dark:fill-zinc-900"
             ></path>
           </svg>
         </div>
