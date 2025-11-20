@@ -46,7 +46,7 @@ const AdminOverview: React.FC = () => {
         queryKey="overviewStats"
         statsMap={statsMapForAdminOverview}
         shimmerCount={8}
-        showDummyData
+        showDummyData={false}
         dummyData={dummyAdminOverviewStats}
       />
 
