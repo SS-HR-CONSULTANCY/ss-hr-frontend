@@ -2,7 +2,7 @@ import React from "react";
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 import { SEO_DATA } from "@/utils/constants";
-import SEO from "@/components/common/SeoProps";
+import SEO from "@/components/common/SEOProps";
 import errorLottie from "../../assets/lotteFiles/Error404Animation.json";
 
 const Error404Page: React.FC = () => {

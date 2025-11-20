@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 // import { SEO_DATA } from "@/utils/constants";
-// import SEO from "@/components/common/SeoProps";
+// import SEO from "@/components/common/SEOProps";
 import AosComponent from "@/utils/AosComponent";
 import Header from "@/components/navigations/Header";
 import Footer from "@/components/navigations/Footer";

@@ -1,7 +1,7 @@
 import React from "react";
 import { SEO_DATA } from "@/utils/constants";
 import AosComponent from "@/utils/AosComponent";
-import SEO from "@/components/common/SeoProps";
+import SEO from "@/components/common/SEOProps";
 import ImageGrid from "@/components/sections/ImageGrid";
 import worldTour from "../../assets/serviceBanners/worldTour.png";
 import PackagesPricing from "@/components/sections/PackagesPricing";

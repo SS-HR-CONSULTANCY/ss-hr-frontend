@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import type { ServiceDetailedContentProps } from "@/types/componentTypes/serviceDetailedContentTypes";
-import SEO from "../common/SeoProps";
+import SEO from "../common/SEOProps";
 
 const ServiceDetailedContent: React.FC<ServiceDetailedContentProps> = ({
   banner,

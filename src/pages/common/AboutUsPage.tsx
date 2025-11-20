@@ -1,6 +1,6 @@
 import React from "react";
 import Lottie from "lottie-react";
-import SEO from "@/components/common/SeoProps";
+import SEO from "@/components/common/SEOProps";
 import Heading from "@/components/common/Heading";
 import world from "../../assets/lotteFiles/world.json";
 import { achievements, mdData, SEO_DATA, words } from "@/utils/constants";

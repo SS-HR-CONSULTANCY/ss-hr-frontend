@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { signin } from "@/utils/apis/authApi";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "@/store/store";
-import SEO from "@/components/common/SeoProps";
+import SEO from "@/components/common/SEOProps";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "../../hooks/redux";
 import FormField from "@/components/form/FormFiled";

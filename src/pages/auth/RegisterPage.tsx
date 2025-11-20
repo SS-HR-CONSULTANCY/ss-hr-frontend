@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { SEO_DATA } from "@/utils/constants";
 import { signup } from "@/utils/apis/authApi";
 import { useNavigate } from "react-router-dom";
-import SEO from "@/components/common/SeoProps";
+import SEO from "@/components/common/SEOProps";
 import { Button } from "@/components/ui/button";
 import FormField from "@/components/form/FormFiled";
 import CustomLink from "@/components/form/CustomLink";

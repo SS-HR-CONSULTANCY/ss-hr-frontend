@@ -1,6 +1,6 @@
 import React from "react";
 import Contact from "@/components/sections/Contact";
-import SEO from "@/components/common/SeoProps";
+import SEO from "@/components/common/SEOProps";
 import { SEO_DATA } from "@/utils/constants";
 
 const ContactPage: React.FC = () => {
