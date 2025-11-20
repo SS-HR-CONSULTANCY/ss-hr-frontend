@@ -32,10 +32,10 @@ export const createJobSchema = z.object({
   industry,
   jobDescription,
   benifits,
-  salary: z.number().min(0).max(100000),
+  salary: z.coerce.number(),
   skills,
   nationality,
-  vacancy: z.number().min(1).max(100000),
+  vacancy: z.coerce.number(),
 });
 
 export type CreateJobForm = z.infer<typeof createJobSchema>;
