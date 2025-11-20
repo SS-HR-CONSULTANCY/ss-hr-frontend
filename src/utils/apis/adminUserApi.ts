@@ -1,6 +1,9 @@
 import { axiosInstance } from "@/lib/axios";
 import type { User } from "@/types/entities/user";
-import type { AdminfetchAllUsersResponse } from "@/types/apiTypes/adminApiTypes";
+import type {
+  AdminfetchAllUsersResponse,
+  AdminFetchUserDetailsResponse,
+} from "@/types/apiTypes/adminApiTypes";
 import {
   buildQueryParams,
   parseNewCommonResponse,
@@ -25,14 +28,12 @@ export interface SingleUserResponse {
   user: User;
 }
 
-export interface CreateUserRequest {
-  fullName: string;
-  email: string;
+export type CreateUserRequest = Pick<
+  User,
+  "fullName" | "email" | "phone" | "phoneTwo"
+> & {
   password: string;
-  role: "user" | "admin";
-  phone?: string;
-  phoneTwo?: string;
-}
+};
 
 export interface UpdateUserRequest {
   fullName?: string;
@@ -74,4 +75,11 @@ export const adminDeleteUser = async (userId: string) => {
 
 export const adminFetchUserStats = async () => {
   return await axiosInstance.get("/admin/users/stats");
+};
+
+export const adminGetUserDetailsId = async (
+  userId: string,
+): Promise<AdminFetchUserDetailsResponse> => {
+  const response = await axiosInstance.get(`/admin/users/details/${userId}`);
+  return response.data.data;
 };

@@ -54,7 +54,7 @@ const ContentCard = ({
                 </p>
                 <Button
                   variant="link"
-                  className="justify-center mt-auto cursor-pointer"
+                  className="justify-center mt-auto cursor-pointer text-white"
                   onClick={() => navigate(buttonUrl)}
                 >
                   {buttonText}

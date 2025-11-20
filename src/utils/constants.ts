@@ -5,7 +5,6 @@ import visaService from "../assets/svgs/serviceSvg/visa.svg";
 import cvWriting from "../assets/svgs/serviceSvg/cvWriting.svg";
 import ticketService from "../assets/svgs/serviceSvg/ticket.svg";
 import jobRecruitment from "../assets/svgs/serviceSvg/hiring.svg";
-import type { Route, statsMapIntrface } from "@/types/commonTypes";
 import webDevBanner from "../assets/serviceBanners/webDevBanner.jpg";
 import type { mdDataProps } from "@/types/componentTypes/aboutTypes";
 import labourSupply from "../assets/svgs/serviceSvg/labourSupply.svg";
@@ -16,6 +15,7 @@ import type { ServiceProps } from "@/types/componentTypes/servicesTypes";
 import cvWritingBanner from "../assets/serviceBanners/cvWritingBanner.jpg";
 import toursAndTravels from "../assets/svgs/serviceSvg/toursAndTravels.svg";
 import medicalRecBanner from "../assets/serviceBanners/medicalRecBanner.jpg";
+import type { Route, SEOConfig, statsMapIntrface } from "@/types/commonTypes";
 import certificateBanner from "../assets/serviceBanners/certificateBanner.jpg";
 import visaServiceBanner from "../assets/serviceBanners/visaServiceBanner.jpg";
 import labourSupplyBanner from "../assets/serviceBanners/labourSupplyBanner.jpg";
@@ -46,8 +46,53 @@ import type {
   AdminFetchRevenueReportStatsDataResponse,
   AdminFetchUserReportStatsDataResponse,
 } from "@/types/apiTypes/adminApiTypes";
+import type { RoleType } from "./zod/commonZod";
 
-export const companyName = "ShahaalamGroups";
+export const companyName = "Shahaalam Groups";
+
+export const roleValues = ["user", "admin", "systemAdmin"] as const;
+
+export const adminRoleValues = ["admin", "systemAdmin"] as const;
+
+export const limitedroleValues = ["user", "admin"] as const;
+
+export const genderValues = ["male", "female", "other"] as const;
+
+export const jobValues = [
+  "full-time",
+  "part-time",
+  "contract",
+  "internship",
+  "freelance",
+] as const;
+
+export const workModeValues = ["onsite", "remote", "hybrid"] as const;
+
+export const paymentMethodValues = [
+  "googlepay",
+  "banktransfer",
+  "cash",
+] as const;
+
+export const paymentStatusValues = [
+  "fullyPaid",
+  "partiallyPaid",
+  "pending",
+] as const;
+
+export const applicationStatusValues = [
+  "applied",
+  "cancelledByUser",
+  "revewing",
+  "rejected",
+  "placed",
+] as const;
+
+export const roleLoginRoutes: Record<RoleType, string> = {
+  admin: "/ss-hr-admin/login",
+  systemAdmin: "/ss-hr-system-admin/login",
+  user: "/login",
+};
 
 // Header compoenent constants
 export const siteUrlConfig: SiteUrlConfigProps = {
@@ -125,7 +170,7 @@ export const services: ServiceProps[] = [
     description:
       "Comprehensive travel planning and support for your international needs.",
     hoverDescription:
-      "Our comprehensive travel services cover everything from flight bookings and hotel arrangements to itinerary planning and travel insurance. We ensure a smooth and stress-free journey by handling all the essential details, so you can focus on enjoying your trip. Benefit: End-to-end travel support for a seamless experience.",
+      "Our comprehensive travel services cover everything from flight bookings and hotel arrangements to itinerary planning and travel insurance. We ensure a smooth and stress free journey by handling all the essential details, so you can focus on enjoying your trip. Benefit: End to end travel support for a seamless experience.",
     imageUrl: toursAndTravels,
     href: "#services",
 
@@ -135,9 +180,9 @@ export const services: ServiceProps[] = [
     buttonText: "See More",
     buttonUrl: "/toursandtravels",
     points: [
-      "We handle end-to-end travel arrangements, including flights, accommodations, and local transport, ensuring you have a seamless experience.",
+      "We handle end to end travel arrangements, including flights, accommodations, and local transport, ensuring you have a seamless experience.",
       "Our affordable and flexible packages are tailored to meet the unique needs of families, solo travelers, and business trips.",
-      "We provide round-the-clock customer support to assist you during your journey, no matter where you are.",
+      "We provide round the clock customer support to assist you during your journey, no matter where you are.",
       "Each travel plan is carefully designed to match your preferences, ensuring comfort and convenience at every stage.",
       "We take care of all the essential details in advance so you can focus solely on enjoying your trip.",
     ],
@@ -145,7 +190,7 @@ export const services: ServiceProps[] = [
       "If you would like to make an enquiry for this service, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
-    heroTitle: "Discover Stress-Free Tours Around The World",
+    heroTitle: "Discover Stress free Tours Around The World",
   },
   {
     id: "visaservice",
@@ -179,7 +224,7 @@ export const services: ServiceProps[] = [
     id: "ticketservice",
     title: "Ticket Service",
     description:
-      "Affordable and hassle-free flight ticket booking for your journeys.",
+      "Affordable and hassle free flight ticket booking for your journeys.",
     hoverDescription:
       "Secure your flights and other transportation with our simple and convenient booking service. We compare prices and options from multiple providers to find the best deals, saving you time and money. Relax and let us handle the details.",
     imageUrl: ticketService,
@@ -192,10 +237,10 @@ export const services: ServiceProps[] = [
     buttonUrl: "/ticketservice",
     points: [
       "We compare multiple airlines and providers to secure the best possible fares for your journey.",
-      "Our service ensures quick booking confirmations and hassle-free payment processes.",
+      "Our service ensures quick booking confirmations and hassle free payment processes.",
       "Flexible rescheduling and cancellation options are available to suit your changing plans.",
       "We provide assistance with both international and domestic flight bookings for individuals and groups.",
-      "Our goal is to save you both time and money while ensuring your travel is stress-free.",
+      "Our goal is to save you both time and money while ensuring your travel is stress free.",
     ],
     contactText:
       "If you would like to make an enquiry for ticket booking, please contact us.",
@@ -207,7 +252,7 @@ export const services: ServiceProps[] = [
     id: "certificationservice",
     title: "Certificate Attestation",
     description:
-      "Hassle-free document attestation for smooth international processing.",
+      "Hassle free document attestation for smooth international processing.",
     hoverDescription:
       "We provide expert certificate attestation services for a wide range of documents and destinations worldwide. Our experienced team is familiar with the specific requirements of various embassies and consulates, ensuring a smooth and successful attestation process.",
     imageUrl: certificateAttestationService,
@@ -229,7 +274,7 @@ export const services: ServiceProps[] = [
       "If you would like to enquire about attestation services, please reach out to us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
-    heroTitle: "Smooth And Hassle-Free Certificate Attestation",
+    heroTitle: "Smooth And Hassle Free Certificate Attestation",
   },
   {
     id: "medicalrecruitservice",
@@ -278,7 +323,7 @@ export const services: ServiceProps[] = [
       "We help job seekers find positions that align with their skills, experience, and career goals.",
       "Our extensive network of employers provides access to opportunities across diverse industries.",
       "We streamline the recruitment process, reducing the time between application and placement.",
-      "Employers gain access to pre-screened candidates who are motivated and qualified for the role.",
+      "Employers gain access to pre screened candidates who are motivated and qualified for the role.",
       "Our recruitment team provides career guidance and support to ensure candidates make informed choices.",
     ],
     contactText:
@@ -551,45 +596,58 @@ export const userApplicationRoutes: Route[] = [
   { path: "applications", name: "Applications", roles: ["user"] },
   { path: "chat", name: "Chat", roles: ["user"] },
 ];
+
 export const adminApplicationRoutes: Route[] = [
   {
     path: "overview",
     name: "Overview",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "users",
     name: "Users",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "jobs",
     name: "Jobs",
-    roles: ["admin", "superAdmin", "admin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "packages",
     name: "Packages",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "applications",
     name: "Applications",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
-  { path: "chat", name: "Chat", roles: ["superAdmin", "admin"] },
+  {
+    path: "chat",
+    name: "Chat",
+    roles: ["admin", "systemAdmin"],
+  },
   {
     path: "payments",
     name: "Payments",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
   {
     path: "testimonials",
     name: "Testimonials",
-    roles: ["admin", "superAdmin", "systemAdmin"],
+    roles: ["admin", "systemAdmin"],
   },
-  { path: "reports", name: "Reports", roles: ["superAdmin", "systemAdmin"] },
-  { path: "settings", name: "Settings", roles: ["superAdmin"] },
+  {
+    path: "reports",
+    name: "Reports",
+    roles: ["admin", "systemAdmin"],
+  },
+  // {
+  //   path: "settings",
+  //   name: "Settings",
+  //   roles: ["superAdmin"]
+  // },
 ];
 
 // Chat component shimmer constants
@@ -749,7 +807,7 @@ export const statsMapForAdminOverview: Array<
 export const mdData: mdDataProps[] = [
   {
     profileImage: md1,
-    name: "Shine Son",
+    name: "Shah Alam",
     quote:
       "I want to make people happy when they travel and work around the world just like my dad.",
   },
@@ -770,3 +828,163 @@ export const achievements: string[] = [
   "3000+ job recruitments successfully completed",
   "Offering multiple sector services worldwide",
 ];
+
+// PO BOX accepted countries
+export const poBoxCountries = [
+  "AE",
+  "OM",
+  "QA",
+  "BH",
+  "SA",
+  "KW",
+  "JO",
+  "LB",
+  "YE",
+];
+
+// Career data constants
+export const jobTypeOptions = [
+  { label: "Full Time", value: "full-time" },
+  { label: "Part Time", value: "part-time" },
+  { label: "Contract", value: "contract" },
+  { label: "Internship", value: "internship" },
+  { label: "Freelance", value: "freelance" },
+];
+
+export const workModeOptions = [
+  { label: "Onsite", value: "onsite" },
+  { label: "Remote", value: "remote" },
+  { label: "Hybrid", value: "hybrid" },
+];
+
+export const booleanOptions = [
+  { label: "Yes", value: "true" },
+  { label: "No", value: "false" },
+];
+
+export const applicationStatusOptions = [
+  { label: "Reviewing", value: applicationStatusValues[2] },
+  { label: "Rejected", value: applicationStatusValues[3] },
+  { label: "Placed", value: applicationStatusValues[4] },
+];
+
+export const roleOptions = [
+  { label: "Admin", value: "admin" },
+  { label: "Super Admin", value: "superAdmin" },
+  { label: "System Admin", value: "systemAdmin" },
+];
+
+export const genderOptions = [
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
+  { label: "Other", value: "other" },
+];
+
+export const SEO_DATA: Record<string, SEOConfig> = {
+  HOME: {
+    title: "SS HR Consultancy – Recruitment & Travel Services",
+    description:
+      "SS HR Consultancy provides global recruitment, travel services, visa assistance, ticketing, and workforce solutions.",
+    keywords:
+      "ss hr consultancy, recruitment, visa service, travel agency, manpower",
+    canonical: "https://sshrconsultancy.com/",
+    ogTitle: "SS HR Consultancy",
+    ogDescription:
+      "Your trusted partner for HR recruitment and travel services.",
+  },
+
+  ABOUT_US: {
+    title: "About Us – SS HR Consultancy",
+    description:
+      "Learn about SS HR Consultancy, our mission, values, and professional HR recruitment services.",
+    keywords: "about ss hr, hr consultancy, recruitment company",
+    canonical: "https://sshrconsultancy.com/about",
+    ogTitle: "About SS HR Consultancy",
+    ogDescription: "Know more about our mission and recruitment expertise.",
+  },
+
+  CONTACT_US: {
+    title: "Contact Us – SS HR Consultancy",
+    description:
+      "Get in touch with SS HR Consultancy for recruitment, workforce solutions, and travel services.",
+    keywords: "contact ss hr, hr consultancy contact, recruitment help",
+    canonical: "https://sshrconsultancy.com/contact",
+    ogTitle: "Contact SS HR Consultancy",
+    ogDescription: "Reach out for HR, recruitment, and travel solutions.",
+  },
+
+  TOURS_AND_TRAVELS: {
+    title: "Tours & Travels – SS HR Consultancy",
+    description:
+      "Explore world tours, travel packages, visa services, and custom travel planning.",
+    keywords: "tours, travel, world tour packages, travel agency, trips",
+    canonical: "https://sshrconsultancy.com/toursandtravels",
+    ogTitle: "Tours & Travels",
+    ogDescription:
+      "Plan your perfect journey with our world tour and travel services.",
+  },
+
+  VISA_SERVICE: {
+    title: "Visa Service – SS HR Consultancy",
+    description: "Professional visa processing and documentation services.",
+    keywords: "visa service, visa assistance",
+    canonical: "https://sshrconsultancy.com/visaservice",
+  },
+
+  TICKET_SERVICE: {
+    title: "Ticket Booking – SS HR Consultancy",
+    description: "Affordable and quick flight ticket booking services.",
+    keywords: "ticket booking, flight booking",
+    canonical: "https://sshrconsultancy.com/ticketservice",
+  },
+
+  CERTIFICATION_SERVICE: {
+    title: "Certification Service – SS HR Consultancy",
+    description:
+      "Attestation, authentication and certificate clearing services.",
+    keywords: "certificate attestation",
+    canonical: "https://sshrconsultancy.com/certificationservice",
+  },
+
+  MEDICAL_RECRUIT: {
+    title: "Medical Recruitment – SS HR Consultancy",
+    description: "Healthcare and medical staff overseas recruitment services.",
+    canonical: "https://sshrconsultancy.com/medicalrecruit",
+  },
+
+  CV_WRITING: {
+    title: "CV Writing – SS HR Consultancy",
+    description: "Professional CV writing to boost your global job chances.",
+    canonical: "https://sshrconsultancy.com/cvwriting",
+  },
+
+  WEB_DEVELOPMENT: {
+    title: "Web Development – SS HR Consultancy",
+    description: "Build high-quality websites and apps with our IT team.",
+    canonical: "https://sshrconsultancy.com/webdevelopment",
+  },
+
+  LABOUR_SERVICES: {
+    title: "Labour Supply Services – SS HR Consultancy",
+    description: "Providing skilled and unskilled manpower globally.",
+    canonical: "https://sshrconsultancy.com/labourservices",
+  },
+
+  REGISTER: {
+    title: "Register – SS HR Consultancy",
+    description: "Create your account to apply for jobs and services.",
+    canonical: "https://sshrconsultancy.com/register",
+  },
+
+  LOGIN: {
+    title: "Login – SS HR Consultancy",
+    description: "Access your account to manage applications and services.",
+    canonical: "https://sshrconsultancy.com/login",
+  },
+
+  ERROR_404: {
+    title: "Page Not Found – SS HR Consultancy",
+    description: "The page you are looking for does not exist.",
+    canonical: "https://sshrconsultancy.com/404",
+  },
+};

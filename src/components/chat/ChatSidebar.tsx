@@ -1,5 +1,4 @@
 import { Users } from "lucide-react";
-import { dummyUsers } from "@/utils/dummyData";
 import { useQuery } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
@@ -66,7 +65,7 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({ getUsers }) => {
     enabled: !useDummy,
   });
 
-  const users = useDummy ? dummyUsers : (data ?? []);
+  const users = data;
 
   const filteredUsers = useMemo(() => {
     return showOnlineOnly

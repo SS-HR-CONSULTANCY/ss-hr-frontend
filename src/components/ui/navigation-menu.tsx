@@ -1,8 +1,8 @@
-import { ChevronDownIcon } from "@radix-ui/react-icons";
-import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { navigationMenuTriggerStyle } from "./navigation-menu-variants";
+import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 
 function NavigationMenu({
   className,
@@ -13,7 +13,7 @@ function NavigationMenu({
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
       className={cn(
-        "relative z-10 flex max-w-max flex-1 items-center justify-center",
+        "relative z-10 flex items-center justify-center gap-4",
         className
       )}
       {...props}

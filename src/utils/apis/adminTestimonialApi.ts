@@ -1,5 +1,8 @@
 import { axiosInstance } from "@/lib/axios";
-import type { Testimonial } from "@/types/entities/testimonial";
+import type {
+  Testimonial,
+  UpdateTestimonialFormData,
+} from "@/types/entities/testimonial";
 import {
   buildQueryParams,
   parseNewCommonResponse,
@@ -51,7 +54,7 @@ export const getAllTestimonials = async (
 };
 
 export const createTestimonial = async (
-  data: FormData,
+  data: Partial<Testimonial>,
 ): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.post("/admin/testimonials", data);
   return response.data;
@@ -71,7 +74,7 @@ export const updateTestimonial = async ({
   testimonialData,
 }: {
   testimonialId: string;
-  testimonialData: FormData;
+  testimonialData: UpdateTestimonialFormData;
 }): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.patch(
     `/admin/testimonials/${testimonialId}`,

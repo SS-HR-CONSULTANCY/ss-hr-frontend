@@ -1,7 +1,7 @@
-
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import React, { useState, type JSX } from "react";
+import noImage from "../../assets/defaultImgaes/noImage.png";
 
 type Card = {
   id: number;
@@ -62,7 +62,7 @@ const ImageComponent = ({ card }: { card: Card }) => {
   return (
     <motion.img
       layoutId={`image-${card.id}-image`}
-      src={card.thumbnail}
+      src={card.thumbnail || noImage}
       height="500"
       width="500"
       className={cn(

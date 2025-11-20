@@ -11,8 +11,8 @@ const RememberMeWithFP: React.FC = () => {
         <Label htmlFor="remember-me">Remember me</Label>
       </div>
       <Link
-        to="/forgot-password"
-        className="text-sm text-muted-foreground hover:underline"
+        to="/verify-email"
+        className="text-sm text-muted-foreground hover:underline cursor-pointer"
       >
         Forgot password?
       </Link>

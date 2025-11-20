@@ -16,72 +16,67 @@ const Hero2 = () => {
   }, []);
 
   return (
-    <section className="h-screen">
-      <div className="max-w-7xl mx-auto flex md:flex-row h-full items-center justify-around">
-        <div className="col-span-6">
+    <section className="min-h-screen flex items-center py-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center px-4">
+        <div className="relative w-full h-[300px] sm:h-[350px] md:h-[450px] lg:h-[550px]">
           <AnimatePresence mode="wait">
-            <motion.h1
-              key={services[index].heroTitle}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+            <motion.img
+              key={services[index].imageUrl}
+              src={services[index].imageUrl}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
-              className="mb-4 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-6xl"
-            >
-              {services[index].heroTitle}
-            </motion.h1>
+              className="absolute inset-0 w-full h-full object-contain"
+            />
           </AnimatePresence>
-
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={services[index].hoverDescription}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.6 }}
-              className="mb-6 max-w-2xl text-lg"
-            >
-              {services[index].hoverDescription}
-            </motion.p>
-          </AnimatePresence>
-
-          <Badge className="mb-4">India & Dubai</Badge>
-
-          <div className="mt-8">
-            <Card className="max-w-xl">
-              <CardContent className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium">Sign up to your dream</p>
-                  <p className="text-xs">availability services</p>
-                </div>
-                <div className="hidden items-center gap-3 md:flex">
-                  <div className="rounded-md border p-2 text-sm">
-                    {services[index].title}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
-        <div className="col-span-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={services[index].imageUrl}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.8 }}
-              className=""
-            >
-              <img
-                src={services[index].imageUrl}
-                data-aos="fade-left"
-                alt="Hero illustration"
-                className="object-contain w-full h-full"
-              />
-            </motion.div>
-          </AnimatePresence>
+        <div className="flex flex-col">
+          <div className="relative min-h-[160px]">
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={services[index].heroTitle}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.6 }}
+                className="text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight"
+              >
+                {services[index].heroTitle}
+              </motion.h1>
+            </AnimatePresence>
+
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={services[index].hoverDescription}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.5 }}
+                className="mt-4 text-lg max-w-2xl"
+              >
+                {services[index].hoverDescription}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          <Badge className="mt-4 w-fit">India & Dubai</Badge>
+
+          <Card className="mt-8 max-w-md">
+            <CardContent className="flex items-center justify-between gap-4 py-2 md:py-4">
+              <div>
+                <p className="text-sm font-medium">Sign up to your dream</p>
+                <p className="text-xs">availability services</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="rounded-md border p-1 md:p-2 text-xs md:text-sm">
+                  {services[index].title}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>

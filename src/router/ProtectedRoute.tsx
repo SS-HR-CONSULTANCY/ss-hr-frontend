@@ -1,4 +1,5 @@
 import React from "react";
+import Loading from "@/pages/common/LoadingPage";
 import { useAppSelector } from "../hooks/redux";
 import { Navigate, useLocation } from "react-router-dom";
 import type { ProtectedRouteProps } from "@/types/componentTypes/routerTypes";
@@ -13,21 +14,21 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!isAuthenticated) {
-    if (location.pathname.startsWith("/admin")) {
-      return <Navigate to="/admin/login" state={{ from: location }} replace />;
+    if (
+      location.pathname.startsWith("/ss-hr-admin") ||
+      location.pathname.startsWith("ss-hr-system-admin")
+    ) {
+      return (
+        <Navigate to="/ss-hr-admin/login" state={{ from: location }} replace />
+      );
     }
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // if role restriction is present
   if (requiredRole && user?.role && !requiredRole.includes(user?.role)) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -62,7 +63,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // ✅ allowed → render child route
   return <>{children}</>;
 };
 

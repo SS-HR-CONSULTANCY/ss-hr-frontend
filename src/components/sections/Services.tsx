@@ -9,7 +9,7 @@ const Services: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-0">
         <Heading
           heading="Our Services"
-          dataaos="fade-down"
+          dataaos="fade-up"
           headingDescription="Seamlessly navigate your career and travel journey to Dubai with our comprehensive services. We understand that relocating to a new country involves many complexities. That’s why we offer personalized support at every stage, from securing your dream job and obtaining your visa to arranging comfortable and convenient travel. Imagine a stress-free transition, focused on your success and enjoyment—that’s what we deliver."
           mainDivClassName="text-center mx-auto max-w-2xl"
         />

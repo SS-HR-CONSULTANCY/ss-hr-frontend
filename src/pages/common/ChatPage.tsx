@@ -1,5 +1,5 @@
 import React from "react";
-import Loading from "./Loading";
+import Loading from "./LoadingPage";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import ChatSidebar from "@/components/chat/ChatSidebar";

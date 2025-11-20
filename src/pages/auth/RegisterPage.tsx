@@ -1,0 +1,157 @@
+import { toast } from "react-toastify";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { SEO_DATA } from "@/utils/constants";
+import { signup } from "@/utils/apis/authApi";
+import { useNavigate } from "react-router-dom";
+import SEO from "@/components/common/SeoProps";
+import { Button } from "@/components/ui/button";
+import FormField from "@/components/form/FormFiled";
+import CustomLink from "@/components/form/CustomLink";
+import FormHeader from "@/components/form/FormHeader";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { HomeIcon, LoaderCircle, User } from "lucide-react";
+import PasswordStrength from "@/components/form/PasswordStrength";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import type { RegisterRequest } from "@/types/slice/authSliceTypes";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { getPasswordStrength } from "@/utils/helpers/passwordStrength";
+import { registerSchema, type RegisterForm } from "@/utils/zod/authZod";
+import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+
+const RegisterPage: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+    watch,
+  } = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
+    mode: "onChange",
+  });
+
+  const password = watch("password");
+  const passwordStrength = getPasswordStrength(password || "");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  const onSubmit = async (data: RegisterForm) => {
+    await dispatch(signup(data))
+      .unwrap()
+      .then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Otp has been send to your email");
+          navigate("/verify-otp");
+        } else {
+          toast.error(res?.message || "Otp sending failed, please try again");
+        }
+      })
+      .catch((error) => {
+        toast.error(error.message || "An error occurred during signup.");
+      });
+  };
+
+  return (
+    <>
+      <SEO data={SEO_DATA.REGISTER} />
+      <div className="min-h-screen flex items-center justify-center">
+        <BackgroundBeamsWithCollision>
+          <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
+            <FormHeader
+              title="Sign In"
+              description="Enter your credentials to access your account"
+            />
+            <CardContent>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <FormField<RegisterRequest>
+                  id="fullName"
+                  label="Full Name"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Enter your full name"
+                  error={errors.fullName?.message}
+                  register={register}
+                />
+
+                <FormField<RegisterRequest>
+                  id="email"
+                  label="Email Address"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="Enter your email"
+                  error={errors.email?.message}
+                  register={register}
+                />
+
+                <FormField<RegisterRequest>
+                  id="password"
+                  label="Password"
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="Enter your password"
+                  error={errors.password?.message}
+                  register={register}
+                  showTogglePassword
+                />
+
+                {password && (
+                  <PasswordStrength
+                    password={password}
+                    passwordStrength={passwordStrength}
+                  />
+                )}
+
+                <FormField<RegisterRequest>
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="Confirm your password"
+                  error={errors.confirmPassword?.message}
+                  register={register}
+                  showTogglePassword
+                />
+
+                <input type="hidden" value="user" {...register("role")} />
+
+                <Button
+                  type="submit"
+                  className="w-full cursor-pointer"
+                  disabled={isSubmitting || !isValid}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <LoaderCircle className="animate-spin" />
+                      Creating account...
+                    </span>
+                  ) : (
+                    "Create Account"
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+
+            <CardFooter className="flex flex-col space-y-4 w-full">
+              <CustomLink
+                href="/login"
+                text="Sign in to existing account"
+                icon={User}
+              />
+              <CustomLink href="/" text="Bck to home" icon={HomeIcon} />
+            </CardFooter>
+          </Card>
+        </BackgroundBeamsWithCollision>
+      </div>
+    </>
+  );
+};
+
+export default RegisterPage;

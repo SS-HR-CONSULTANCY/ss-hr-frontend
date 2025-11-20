@@ -1,4 +1,5 @@
-import type { Role, User } from "../entities/user";
+import type { User } from "../entities/user";
+import type { RoleType } from "@/utils/zod/commonZod";
 
 export interface LoginRequest {
   email: string;
@@ -10,7 +11,7 @@ export interface RegisterRequest {
   email: string;
   password: string;
   confirmPassword: string;
-  role: Role;
+  role: RoleType;
 }
 
 export interface AuthResponse {
@@ -20,12 +21,11 @@ export interface AuthResponse {
 }
 
 export interface AuthState {
-  user: User | null;
+  user: Partial<User> | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  error: string | null;
   otpRemainingTime: number;
   otpTimerIsRunning: boolean;
   profileImageUpdating: boolean;
-  otpForUpdatePassword: boolean;
+  isUpdatingPassword: boolean;
 }

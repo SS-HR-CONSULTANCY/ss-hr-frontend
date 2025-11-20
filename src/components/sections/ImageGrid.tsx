@@ -9,7 +9,7 @@ const ImageGrid: React.FC = () => {
     <div className="h-screen py-20 w-full">
       <Heading
         heading="Package Destinations"
-        dataaos="fade-down"
+        dataaos="fade-up"
         headingDescription="Checkout our plans destinations"
         mainDivClassName="text-center mx-auto max-w-2xl"
       />

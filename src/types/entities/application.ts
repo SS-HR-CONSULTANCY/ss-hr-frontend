@@ -1,12 +1,11 @@
+import type { ApplicationStatusType } from "@/utils/zod/commonZod";
+
 export interface Application {
   _id: string;
-  userId: string;
   jobId: string;
-  cvLink: string;
+  userId: string;
+  status: ApplicationStatusType;
+  applicationUniqueId: string;
   createdAt: string;
   updatedAt: string;
-
-  username: string;
-  company: string;
-  designation: string;
 }

@@ -1,100 +1,76 @@
-import * as yup from "yup";
-import type { Role } from "@/types/entities/user";
 import { z } from "zod";
 
-// Register Form Schema
-export const registerSchema = yup.object({
-  fullName: yup
-    .string()
-    .min(2, "Full name must be at least 2 characters")
-    .max(100, "Full name must be less than 100 characters")
-    .required("Full name is required"),
-  email: yup
-    .string()
-    .email("Please enter a valid email address")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-    )
-    .required("Password is required"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Passwords must match")
-    .required("Please confirm your password"),
-  role: yup
-    .mixed<Role>()
-    .oneOf(["user", "admin", "superAdmin"] as const)
-    .required(),
-});
+// career Data zod schema
+export const jobTypeEnum = z.enum([
+  "full-time",
+  "part-time",
+  "contract",
+  "internship",
+  "freelance",
+]);
+export const workModeEnum = z.enum(["onsite", "remote", "hybrid"]);
 
-// Otp Form Schema
-export const otpSchema = yup.object({
-  otp: yup.string().required("Otp is required"),
-  verificationToken: yup.string().required("Token required"),
-  role: yup.mixed<Role>().oneOf(["user", "admin", "superAdmin"]).required(),
-});
+export const careerDataSchema = z
+  .object({
+    currentSalary: z.coerce
+      .number()
+      .min(0, "Current salary must be greater than or equal to 0")
+      .max(100000000, "Current salary seems too high")
+      .optional(),
 
-// Login Form Schema
-export const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email("Please enter a valid email address")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
-  role: yup
-    .mixed<Role>()
-    .oneOf(["user", "admin", "superAdmin", "systemAdmin"])
-    .required(),
-});
+    expectedSalary: z.coerce
+      .number()
+      .min(0, "Expected salary must be greater than or equal to 0")
+      .max(100000000, "Expected salary seems too high")
+      .optional(),
 
-// Add job  Form Schema
-export const CreateJobZodSchema = z.object({
-  companyName: z
-    .string()
-    .min(2, "Company name must be at least 2 characters")
-    .max(100, "Company name must be at most 100 characters")
-    .trim(),
+    immediateJoiner: z.coerce.boolean(),
+    noticePeriod: z.coerce
+      .number()
+      .optional()
+      .or(z.nan()) // allow empty if hidden
+      .refine(
+        (val) => val == null || val >= 0,
+        "Notice period must be positive",
+      ),
 
-  designation: z
-    .string()
-    .min(2, "Designation must be at least 2 characters")
-    .max(100, "Designation must be at most 100 characters")
-    .trim(),
+    experience: z.string().optional(),
 
-  industry: z
-    .string()
-    .min(2, "Industry must be at least 2 characters")
-    .max(100, "Industry must be at most 100 characters")
-    .trim(),
+    currentDesignation: z
+      .string()
+      .trim()
+      .min(2, "Designation must be at least 2 characters")
+      .max(100, "Designation too long")
+      .optional(),
 
-  jobDescription: z
-    .string()
-    .min(10, "Job description must be at least 10 characters"),
+    currentCompany: z
+      .string()
+      .trim()
+      .min(2, "Company name must be at least 2 characters")
+      .max(100, "Company name too long")
+      .optional(),
 
-  benifits: z.string().min(2, "Benefits must be at least 2 characters"),
+    industry: z
+      .string()
+      .trim()
+      .min(2, "Industry name must be at least 2 characters")
+      .max(100, "Industry name too long")
+      .optional(),
 
-  salary: z
-    .number()
-    .int()
-    .min(1, "Salary must be at least 1")
-    .max(100, "Salary cannot exceed 1000"),
-
-  skills: z.string().min(2, "Skills must be at least 2 characters"),
-
-  nationality: z.string().min(2, "Nationality must be at least 2 characters"),
-
-  vacancy: z
-    .number()
-    .int()
-    .min(1, "Vacancy must be at least 1")
-    .max(1000, "Vacancy cannot exceed 1000"),
-});
-
-export type CreateJobZodType = z.infer<typeof CreateJobZodSchema>;
+    currentJobType: jobTypeEnum.optional(),
+    preferredJobTypes: z.array(jobTypeEnum).optional(),
+    preferredWorkModes: z.array(workModeEnum).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (
+      !data.immediateJoiner &&
+      (data.noticePeriod === undefined || data.noticePeriod === null)
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["noticePeriod"],
+        message: "Notice period is required if you are not an immediate joiner",
+      });
+    }
+  });
+export type CareerData = z.infer<typeof careerDataSchema>;

@@ -25,17 +25,8 @@ import type { SidebarProps } from "@/types/componentTypes/sidebarTypes";
 import { toggleAdminSidebar, toggleTheme } from "@/store/slices/appSlice";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
+  const { handleLogout } = useAuthHook();
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((store: RootState) => store.auth);
-  const route: string =
-    user?.role === "admin" ||
-    user?.role === "superAdmin" ||
-    user?.role === "systemAdmin"
-      ? "/admin/login"
-      : user?.role === "user"
-        ? "/login"
-        : "/";
-  const { handleLogout } = useAuthHook({ route });
   const { theme, sidebarOpen } = useSelector((state: RootState) => state.app);
 
   const iconMap: Record<string, React.ReactNode> = {
@@ -83,18 +74,19 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
           />
 
           {routes.map((route) => {
-            const tab = (
-              <SingleTab
-                key={route.path}
-                icon={getIcon(route.name)}
-                text={route.name}
-                sidebarOpen={sidebarOpen}
-              />
-            );
-
             return (
-              <NavLink key={route.path} to={route.path}>
-                {tab}
+              <NavLink
+                key={route.path}
+                to={route.path}
+                className={({ isActive }) =>
+                  `block ${isActive ? "bg-slate-600 rounded-lg" : ""} transition-colors duration-200`
+                }
+              >
+                <SingleTab
+                  icon={getIcon(route.name)}
+                  text={route.name}
+                  sidebarOpen={sidebarOpen}
+                />
               </NavLink>
             );
           })}
