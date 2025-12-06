@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
 import type { User as UserType } from "@/types/entities/user";
@@ -15,13 +15,7 @@ const UserDetails: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [user, setUser] = useState<UserType | null>(null);
 
-  useEffect(() => {
-    if (selectedUserId) {
-      fetchUserData();
-    }
-  }, [selectedUserId]);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     if (!selectedUserId) return;
 
     setLoading(true);
@@ -36,7 +30,13 @@ const UserDetails: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedUserId]);
+
+  useEffect(() => {
+    if (selectedUserId) {
+      fetchUserData();
+    }
+  }, [selectedUserId, fetchUserData]);
 
   const handleCopyUserId = async () => {
     if (!user) return;

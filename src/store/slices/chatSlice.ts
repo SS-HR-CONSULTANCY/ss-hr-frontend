@@ -1,3 +1,4 @@
+import type { Socket } from "socket.io-client";
 import type { User } from "@/types/entities/user";
 import { sendMessage } from "@/utils/apis/chatApi";
 import type { Message } from "@/types/entities/message";
@@ -21,7 +22,7 @@ interface chatSliceInitalState {
   isConnected: boolean;
   messages: Message[] | null;
   isMessagesLoading: boolean;
-  chatSocket: any;
+  chatSocket: Socket | null;
 }
 
 const intitalState: chatSliceInitalState = {
@@ -69,7 +70,7 @@ const chatSlice = createSlice({
       state.socketId = null;
       state.isConnected = false;
     },
-    setChatSocket: (state, action: PayloadAction<any>) => {
+    setChatSocket: (state, action: PayloadAction<Socket | null>) => {
       state.chatSocket = action.payload;
     },
     clearChatSocket: (state) => {

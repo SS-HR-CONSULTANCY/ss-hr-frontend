@@ -23,7 +23,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     if (isAuthenticated && user) {
       dispatch(checkUserStatus());
     }
-  }, []);
+  }, [dispatch, isAuthenticated, user]);
 
   return (
     <>

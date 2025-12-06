@@ -67,7 +67,7 @@ const ChatContainer: React.FC = () => {
       socket?.off("typing");
       socket?.off("stopTyping");
     };
-  }, [socket, selectedUser]);
+  }, [selectedUser, user]);
 
   if (!selectedUser) return <NoChatSelectedSShimmer className="w-9/12" />;
 

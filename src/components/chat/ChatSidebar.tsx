@@ -85,7 +85,7 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({ getUsers }) => {
     return () => {
       socket?.off("getOnlineUsers", handleOnlineUsers);
     };
-  }, [socket, handleOnlineUsers]);
+  }, [handleOnlineUsers]);
 
   useEffect(() => {
     const setNewMessage = (message: setLatMessageProps) => {
@@ -99,7 +99,7 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({ getUsers }) => {
     return () => {
       socket?.off("newMessage", setNewMessage);
     };
-  }, [socket]);
+  }, []);
 
   return (
     <aside

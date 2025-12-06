@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
 import type { AppDispatch, RootState } from "@/store/store";
@@ -47,13 +47,7 @@ const EditUserForm: React.FC = () => {
     Partial<Record<keyof EditUserFormData, string>>
   >({});
 
-  useEffect(() => {
-    if (selectedUserId) {
-      fetchUserData();
-    }
-  }, [selectedUserId]);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     if (!selectedUserId) return;
 
     setLoadingUser(true);
@@ -76,7 +70,13 @@ const EditUserForm: React.FC = () => {
     } finally {
       setLoadingUser(false);
     }
-  };
+  }, [selectedUserId]);
+
+  useEffect(() => {
+    if (selectedUserId) {
+      fetchUserData();
+    }
+  }, [selectedUserId, fetchUserData]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof EditUserFormData, string>> = {};
