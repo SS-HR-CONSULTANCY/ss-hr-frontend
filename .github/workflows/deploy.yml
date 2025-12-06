@@ -50,5 +50,3 @@ jobs:
 
       - name: Run TypeScript Type Checking
         run: npm run type-check
-
-

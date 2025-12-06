@@ -41,9 +41,7 @@ export const adminFetchUserReportStatsData =
 
 export const adminFetchApplicationsReportStatsData =
   async (): Promise<AdminFetchApplicationsReportStatsDataResponse> => {
-    const response = await axiosInstance.get(
-      "/admin/applications/stats",
-    );
+    const response = await axiosInstance.get("/admin/applications/stats");
     return response.data.data;
   };
 
@@ -63,9 +61,7 @@ export const adminFetchReportUserGraphData =
 
 export const adminFetchReportApplicationGraphData =
   async (): Promise<AdminFetchReportApplicationsGraphsDataResponse> => {
-    const response = await axiosInstance.get(
-      "/admin/applications/graph-data",
-    );
+    const response = await axiosInstance.get("/admin/applications/graph-data");
     return response.data.data;
   };
 
