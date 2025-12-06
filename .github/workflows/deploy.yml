@@ -66,7 +66,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "🚀 Starting frontend deployment on EC2..."
-            
+
             # Check if directory exists
             if [ ! -d "/home/ubuntu/ss-hr-frontend" ]; then
               echo "📂 Directory not found. Cloning repository..."
