@@ -117,8 +117,6 @@ const AdminReports: React.FC = () => {
             queryKey="userReportStats"
             statsMap={statsMapForAdminUserStats}
             shimmerCount={5}
-            showDummyData
-            dummyData={dummyAdminUserReportStats}
           />
         </>
       )}
@@ -134,8 +132,6 @@ const AdminReports: React.FC = () => {
             queryKey="applicationReportStats"
             statsMap={statsMapForApplications}
             shimmerCount={2}
-            showDummyData
-            dummyData={dummyAdminApplicationsReportStats}
           />
         </>
       )}
@@ -151,8 +147,6 @@ const AdminReports: React.FC = () => {
             queryKey="revenueReportStats"
             statsMap={statsMapForRevenue}
             shimmerCount={3}
-            showDummyData
-            dummyData={dummyAdminRevenueReportStats}
           />
         </>
       )}

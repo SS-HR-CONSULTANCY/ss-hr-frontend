@@ -22,13 +22,13 @@ import { axiosInstance } from "@/lib/axios";
 // overview
 export const adminFetchOverviewStatsData =
   async (): Promise<AdminFetchOverviewStatsDataResponse> => {
-    const response = await axiosInstance.get("/admin/getOverviewStats");
+    const response = await axiosInstance.get("/admin/users/overview/stats");
     return response.data.data;
   };
 
 export const adminFetchOverviewGrraphData =
   async (): Promise<AdminFetchOverviewGraphsDataResponse> => {
-    const response = await axiosInstance.get("/admin/getOverviewGraphData");
+    const response = await axiosInstance.get("/admin/users/overview/graph-data");
     return response.data.data;
   };
 
@@ -36,21 +36,21 @@ export const adminFetchOverviewGrraphData =
 export const adminFetchUserReportStatsData =
   async (): Promise<AdminFetchUserReportStatsDataResponse> => {
     const response = await axiosInstance.get("/admin/users/stats");
-    return response.data.data;
+    return response.data.stats;
   };
 
 export const adminFetchApplicationsReportStatsData =
   async (): Promise<AdminFetchApplicationsReportStatsDataResponse> => {
     const response = await axiosInstance.get("/admin/applications/stats");
-    return response.data.data;
+    return response.data.stats;
   };
 
 export const adminFetchRevenueReportStatsData =
   async (): Promise<AdminFetchRevenueReportStatsDataResponse> => {
     const response = await axiosInstance.get(
-      "/admin/getRevenueReportStatsData",
+      "/admin/payments/stats",
     );
-    return response.data.data;
+    return response.data.stats;
   };
 
 export const adminFetchReportUserGraphData =
@@ -68,7 +68,7 @@ export const adminFetchReportApplicationGraphData =
 export const adminFetchReportPaymentsGraphData =
   async (): Promise<AdminFetchReportPaymentsGraphsDataResponse> => {
     const response = await axiosInstance.get(
-      "/admin/getReportPaymentsGraphData",
+      "/admin/payments/graph-data",
     );
     return response.data.data;
   };
