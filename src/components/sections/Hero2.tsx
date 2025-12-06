@@ -67,7 +67,7 @@ const Hero2 = () => {
             <CardContent className="flex items-center justify-between gap-4 py-2 md:py-4">
               <div>
                 <p className="text-sm font-medium">
-                  Sign up to your dream test
+                  Sign up to your dream
                 </p>
                 <p className="text-xs">availability services</p>
               </div>
