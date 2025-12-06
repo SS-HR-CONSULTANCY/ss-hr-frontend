@@ -10,8 +10,6 @@ interface DashboardStatsProps<T extends Record<string, number>> {
   statsMap: Array<statsMapIntrface<T>>;
   plan?: string;
   shimmerCount: number;
-  dummyData: T;
-  showDummyData: boolean;
 }
 
 const DashboardStats = <T extends Record<string, number>>({
@@ -19,8 +17,6 @@ const DashboardStats = <T extends Record<string, number>>({
   queryKey,
   statsMap,
   shimmerCount,
-  dummyData,
-  showDummyData,
 }: DashboardStatsProps<T>) => {
   const {
     data: dashboardStats,
@@ -32,17 +28,13 @@ const DashboardStats = <T extends Record<string, number>>({
     queryFn: queryFunction,
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
-    enabled: !showDummyData, // 🔑 skip query if showing dummy data
   });
-
-  // ✅ Use dummyData if showDummyData = true, else API data
-  const statsSource = showDummyData ? dummyData : dashboardStats;
 
   return (
     <>
-      {isNumericDataLoading && !showDummyData ? (
+      {isNumericDataLoading ? (
         <DashboardStatsShimmer count={shimmerCount} />
-      ) : isNumericDataError && numericDataError && !showDummyData ? (
+      ) : isNumericDataError && numericDataError ? (
         <DataFetchingError message="Data fetching failed" />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -51,7 +43,7 @@ const DashboardStats = <T extends Record<string, number>>({
                 <StatsCard
                   key={key as string}
                   title={title}
-                  value={statsSource?.[key] ?? 0}
+                  value={dashboardStats?.[key] ?? 0}
                   icon={icon}
                   price={price}
                 />

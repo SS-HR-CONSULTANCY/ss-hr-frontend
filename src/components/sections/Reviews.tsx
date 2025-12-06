@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import Heading from "../common/Heading";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { dummyTestimonials } from "@/utils/dummyData";
 import { AuroraBackground } from "../ui/aurora-background";
 import type { Testimonial } from "@/types/entities/testimonial";
 import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
@@ -19,7 +18,7 @@ const Reviews: React.FC = () => {
 
   useEffect(() => {
     if (!data || data.length === 0 || isLoading || (isError && error)) {
-      setTestimonials(dummyTestimonials);
+      setTestimonials([]);
     } else {
       setTestimonials(data);
     }
@@ -63,14 +62,14 @@ const Reviews: React.FC = () => {
         >
           <div className="relative w-full max-w-screen overflow-hidden">
             <InfiniteMovingCards
-              items={testmonials || dummyTestimonials}
+              items={testmonials || []}
               direction="right"
               speed="normal"
             />
           </div>
           <div className="relative w-full max-w-screen overflow-hidden mt-4 hidden md:block">
             <InfiniteMovingCards
-              items={testmonials || dummyTestimonials}
+              items={testmonials || []}
               direction="left"
               speed="normal"
             />

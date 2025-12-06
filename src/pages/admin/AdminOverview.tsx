@@ -16,11 +16,6 @@ import {
   adminFetchOverviewGrraphData,
   adminFetchOverviewStatsData,
 } from "@/utils/apis/adminApi";
-import {
-  dummyAdminOverviewStats,
-  overviewPaymentsDummyData,
-  overviewUserDummyData,
-} from "@/utils/dummyData";
 
 const AdminOverview: React.FC = () => {
   const {
@@ -46,8 +41,6 @@ const AdminOverview: React.FC = () => {
         queryKey="overviewStats"
         statsMap={statsMapForAdminOverview}
         shimmerCount={8}
-        showDummyData={false}
-        dummyData={dummyAdminOverviewStats}
       />
 
       <Heading
@@ -88,28 +81,6 @@ const AdminOverview: React.FC = () => {
           className="bg-gray-200 dark:bg-gray-600 rounded-md text-red-500"
         />
       )}
-
-      {/* graph Dummy Data */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AreaGroupedChart
-          title="Users data graph"
-          description="New and old users comparison"
-          chartData={overviewUserDummyData}
-          dataKeyOne="newUsers"
-          dataKeyTwo="oldUsers"
-          chartConfig={overviewUserDataChartConfig}
-        />
-
-        <BarChartVertical
-          title="Applications Chart"
-          description="Application count detail chart"
-          chartData={overviewPaymentsDummyData}
-          dataKeyOne="users"
-          dataKeyTwo="applications"
-          chartConfig={overviewPaymentsDataChartConfig}
-        />
-      </div>
-      {/* graph Dummy Data end */}
     </div>
   );
 };

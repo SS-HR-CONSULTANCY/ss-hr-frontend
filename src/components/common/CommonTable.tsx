@@ -16,8 +16,6 @@ const CommonTable = <T,>({
   column,
   columnsCount,
   id,
-  dummyData,
-  showDummyData,
   pageSize = 10,
   showDatePicker,
   saveDataInStore,
@@ -58,21 +56,11 @@ const CommonTable = <T,>({
     ],
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
-    enabled: !showDummyData,
   });
 
-  const tableData =
-    showDummyData && dummyData && dummyData.length > 0
-      ? dummyData.slice(
-          pagination.pageIndex * pagination.pageSize,
-          (pagination.pageIndex + 1) * pagination.pageSize,
-        )
-      : (data?.data ?? []);
+  const tableData = data?.data ?? [];
 
-  const totalPages =
-    showDummyData && dummyData
-      ? Math.ceil(dummyData.length / pagination.pageSize)
-      : (data?.totalPages ?? 0);
+  const totalPages = data?.totalPages ?? 0;
 
   useEffect(() => {
     if (!saveDataInStore || !data) return;
@@ -107,7 +95,7 @@ const CommonTable = <T,>({
         </div>
       </div>
 
-      {isLoading && !showDummyData ? (
+      {isLoading ? (
         <div className="mt-2">
           <TableShimmer columnsCount={columnsCount} />
         </div>

@@ -34,18 +34,6 @@ import {
   adminFetchUserReportStatsData,
 } from "@/utils/apis/adminApi";
 import {
-  applicationDummyData,
-  dummyAdminApplicationsReportStats,
-  dummyAdminRevenueReportStats,
-  dummyAdminUserReportStats,
-  reportTableDataDummyData,
-  reportUserDummyData,
-  revenueDummyData,
-  weeklyApplicationDummyData,
-  weeklyPaymentsDummyData,
-  weeklyUsersDummyData,
-} from "@/utils/dummyData";
-import {
   type AdminFetchApplicationsReportStatsDataResponse,
   type AdminFetchReportApplicationsGraphsDataResponse,
   type AdminFetchReportPaymentsGraphsDataResponse,
@@ -261,81 +249,6 @@ const AdminReports: React.FC = () => {
         />
       )}
 
-      {/* Graphs Dummy Data */}
-      <Heading
-        heading="Graphs"
-        headingDescription="Detailed report graph data"
-        mainDivClassName="w-6/12"
-      />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {activeTab == "users" && (
-          <>
-            <RadialChart
-              title="Weekly Distribution"
-              description={`Weekly users data`}
-              chartData={weeklyUsersDummyData}
-              dataKeyOne="count"
-              dataKeyTwo="day"
-              chartConfig={radialChartConfig}
-            />
-            <ChartLineMultiple
-              title="User data graph"
-              description="Aggregated user report line graph"
-              chartData={reportUserDummyData}
-              chartConfig={reportUserDummyDataConfig}
-              dataKeys={[
-                "totalUsers",
-                "newUsers",
-                "oldUsers",
-                "jobApplicants",
-                "packageUsedUsers",
-              ]}
-            />
-          </>
-        )}
-
-        {activeTab === "applications" && (
-          <>
-            <RadialChart
-              title="Weekly Distribution"
-              description={`Weekly application data`}
-              chartData={weeklyApplicationDummyData}
-              dataKeyOne="count"
-              dataKeyTwo="day"
-              chartConfig={radialChartConfig}
-            />
-            <ChartLineMultiple
-              title="Application data graph"
-              description="Aggregated application report line chart"
-              chartData={applicationDummyData}
-              chartConfig={applicationConfig}
-              dataKeys={["totalApplicants", "successfulPlacements"]}
-            />
-          </>
-        )}
-
-        {activeTab === "revenue" && (
-          <>
-            <RadialChart
-              title="Weekly Distribution"
-              description={`Weekly payment data`}
-              chartData={weeklyPaymentsDummyData}
-              dataKeyOne="count"
-              dataKeyTwo="day"
-              chartConfig={radialChartConfig}
-            />
-            <ChartLineMultiple
-              title="Revenue data graph"
-              description="Aggregated revenue report line chart"
-              chartData={revenueDummyData}
-              chartConfig={revenueDummyDataConfig}
-              dataKeys={["totalRevenue", "packageRevenue", "hiringRevenue"]}
-            />
-          </>
-        )}
-      </div>
-      {/* Graph dummy data over */}
-
       {/* Report table and generate report */}
       <Heading
         heading="Reports table data"
@@ -350,8 +263,6 @@ const AdminReports: React.FC = () => {
           description="List of the report data aggregated from database"
           column={AdminReportDataTableColumns}
           columnsCount={5}
-          dummyData={reportTableDataDummyData}
-          showDummyData={true}
           showDatePicker
           saveDataInStore
         />
