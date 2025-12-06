@@ -28,7 +28,9 @@ export const adminFetchOverviewStatsData =
 
 export const adminFetchOverviewGrraphData =
   async (): Promise<AdminFetchOverviewGraphsDataResponse> => {
-    const response = await axiosInstance.get("/admin/users/overview/graph-data");
+    const response = await axiosInstance.get(
+      "/admin/users/overview/graph-data",
+    );
     return response.data.data;
   };
 
@@ -47,9 +49,7 @@ export const adminFetchApplicationsReportStatsData =
 
 export const adminFetchRevenueReportStatsData =
   async (): Promise<AdminFetchRevenueReportStatsDataResponse> => {
-    const response = await axiosInstance.get(
-      "/admin/payments/stats",
-    );
+    const response = await axiosInstance.get("/admin/payments/stats");
     return response.data.stats;
   };
 
@@ -67,9 +67,7 @@ export const adminFetchReportApplicationGraphData =
 
 export const adminFetchReportPaymentsGraphData =
   async (): Promise<AdminFetchReportPaymentsGraphsDataResponse> => {
-    const response = await axiosInstance.get(
-      "/admin/payments/graph-data",
-    );
+    const response = await axiosInstance.get("/admin/payments/graph-data");
     return response.data.data;
   };
 
