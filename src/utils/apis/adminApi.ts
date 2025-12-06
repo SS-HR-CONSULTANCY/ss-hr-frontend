@@ -35,14 +35,14 @@ export const adminFetchOverviewGrraphData =
 // Reports stats
 export const adminFetchUserReportStatsData =
   async (): Promise<AdminFetchUserReportStatsDataResponse> => {
-    const response = await axiosInstance.get("/admin/getUserReportStatsData");
+    const response = await axiosInstance.get("/admin/users/stats");
     return response.data.data;
   };
 
 export const adminFetchApplicationsReportStatsData =
   async (): Promise<AdminFetchApplicationsReportStatsDataResponse> => {
     const response = await axiosInstance.get(
-      "/admin/getApplicationsReportStatsData",
+      "/admin/applications/stats",
     );
     return response.data.data;
   };
@@ -57,14 +57,14 @@ export const adminFetchRevenueReportStatsData =
 
 export const adminFetchReportUserGraphData =
   async (): Promise<AdminFetchReportUserswGraphsDataResponse> => {
-    const response = await axiosInstance.get("/admin/getReportUsersGraphData");
+    const response = await axiosInstance.get("/admin/users/graph-data");
     return response.data.data;
   };
 
 export const adminFetchReportApplicationGraphData =
   async (): Promise<AdminFetchReportApplicationsGraphsDataResponse> => {
     const response = await axiosInstance.get(
-      "/admin/getReportApplicationsGraphData",
+      "/admin/applications/graph-data",
     );
     return response.data.data;
   };

@@ -21,6 +21,7 @@ interface chatSliceInitalState {
   isConnected: boolean;
   messages: Message[] | null;
   isMessagesLoading: boolean;
+  chatSocket: any;
 }
 
 const intitalState: chatSliceInitalState = {
@@ -31,6 +32,7 @@ const intitalState: chatSliceInitalState = {
   isConnected: false,
   messages: null,
   isMessagesLoading: false,
+  chatSocket: null,
 };
 
 const chatSlice = createSlice({
@@ -67,6 +69,12 @@ const chatSlice = createSlice({
       state.socketId = null;
       state.isConnected = false;
     },
+    setChatSocket: (state, action: PayloadAction<any>) => {
+      state.chatSocket = action.payload;
+    },
+    clearChatSocket: (state) => {
+      state.chatSocket = null;
+    },
     resetChatSlice: () => intitalState,
   },
   extraReducers: (builder) => {
@@ -85,5 +93,7 @@ export const {
   resetChatSlice,
   setSocketConnected,
   setSocketDisconnected,
+  setChatSocket,
+  clearChatSocket,
 } = chatSlice.actions;
 export default chatSlice.reducer;
