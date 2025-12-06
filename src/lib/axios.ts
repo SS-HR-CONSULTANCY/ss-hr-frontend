@@ -11,6 +11,6 @@ export const frontendUrl =
     : import.meta.env.VITE_FRONTEND_PRODUCTION_URL;
 
 export const axiosInstance = axios.create({
-  baseURL: `${backendUrl}/api`,
+  baseURL: backendUrl.endsWith("/api") ? backendUrl : `${backendUrl}/api`,
   withCredentials: true,
 });
