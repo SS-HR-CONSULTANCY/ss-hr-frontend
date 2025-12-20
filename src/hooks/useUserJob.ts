@@ -4,6 +4,7 @@ import type { Job } from "@/types/entities/job";
 import { userApplyJob } from "@/utils/apis/userApi";
 import { useQueryClient } from "@tanstack/react-query";
 import type { UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
+import { isAxiosError } from "axios";
 
 export const useUserJob = () => {
   const queryClient = useQueryClient();
@@ -29,10 +30,12 @@ export const useUserJob = () => {
       } else {
         toast.error(res.message);
       }
-    } catch (error: any) {
-      toast.error(
-        error.response?.data?.message || "Failed to submit application",
-      );
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to submit application");
+      }
     }
   };
 
