@@ -33,8 +33,6 @@ const RegisterPage: React.FC = () => {
     mode: "onChange",
   });
 
-
-
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/", { replace: true });
@@ -99,8 +97,6 @@ const RegisterPage: React.FC = () => {
                   register={register}
                   showTogglePassword
                 />
-
-
 
                 <FormField<RegisterRequest>
                   id="confirmPassword"
