@@ -47,8 +47,6 @@ const MessageInput: React.FC<MessageInputProps> = ({
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-
-
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
@@ -58,7 +56,11 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
     try {
       if (file) {
-        const { uploadUrl, key } = await getUploadUrl(file, user._id, "messages");
+        const { uploadUrl, key } = await getUploadUrl(
+          file,
+          user._id,
+          "messages",
+        );
         await uploadToS3(file, uploadUrl);
         imageKey = key;
       }

@@ -34,7 +34,7 @@ const ChatContainer: React.FC = () => {
     return () => {
       unsubscribeFromMessages();
     };
-  }, [subscribeToMessages, unsubscribeFromMessages, selectedUser]); 
+  }, [subscribeToMessages, unsubscribeFromMessages, selectedUser]);
 
   useEffect(() => {
     if (!selectedUser || !user) return;
