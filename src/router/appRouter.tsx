@@ -120,9 +120,13 @@ const appRouter = createBrowserRouter([
           />
         ),
       },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
     ],
   },
-  { path: "register", element: <RegisterPage /> },
+
   { path: "verify-otp", element: <OtpPage /> },
   { path: "verify-email", element: <EmailVerifyPage /> },
   { path: "update-password", element: <UpdatePasswordPage /> },

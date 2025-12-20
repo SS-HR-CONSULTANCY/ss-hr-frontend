@@ -11,11 +11,11 @@ import CustomLink from "@/components/form/CustomLink";
 import FormHeader from "@/components/form/FormHeader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HomeIcon, LoaderCircle, User } from "lucide-react";
-import PasswordStrength from "@/components/form/PasswordStrength";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import type { RegisterRequest } from "@/types/slice/authSliceTypes";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { getPasswordStrength } from "@/utils/helpers/passwordStrength";
+
 import { registerSchema, type RegisterForm } from "@/utils/zod/authZod";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
@@ -28,14 +28,12 @@ const RegisterPage: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-    watch,
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     mode: "onChange",
   });
 
-  const password = watch("password");
-  const passwordStrength = getPasswordStrength(password || "");
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -102,12 +100,7 @@ const RegisterPage: React.FC = () => {
                   showTogglePassword
                 />
 
-                {password && (
-                  <PasswordStrength
-                    password={password}
-                    passwordStrength={passwordStrength}
-                  />
-                )}
+
 
                 <FormField<RegisterRequest>
                   id="confirmPassword"

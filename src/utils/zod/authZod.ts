@@ -2,7 +2,6 @@ import z from "zod";
 import {
   confirmPassword,
   email,
-  fullName,
   otp,
   password,
   role,
@@ -10,12 +9,22 @@ import {
 } from "./commonZod";
 
 // register form zod schema
+// register form zod schema
 export const registerSchema = z
   .object({
-    fullName,
+    fullName: z
+      .string()
+      .min(4, "Full Name must be at least 4 characters")
+      .max(50, "Full Name must be at most 50 characters"),
     email,
-    password,
-    confirmPassword,
+    password: z
+      .string()
+      .min(4, "Password must be at least 4 characters")
+      .max(50, "Password must be at most 50 characters"),
+    confirmPassword: z
+      .string()
+      .min(4, "Confirm Password must be at least 4 characters")
+      .max(50, "Confirm Password must be at most 50 characters"),
     role,
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -35,7 +44,10 @@ export type OtpForm = z.infer<typeof otpSchema>;
 // otp form zod schema
 export const loginSchema = z.object({
   email,
-  password,
+  password: z
+    .string()
+    .min(4, "Password must be at least 4 characters")
+    .max(50, "Password must be at most 50 characters"),
   role,
 });
 export type LoginForm = z.infer<typeof loginSchema>;
