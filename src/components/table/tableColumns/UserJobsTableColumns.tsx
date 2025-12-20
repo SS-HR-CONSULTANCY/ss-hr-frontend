@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Eye, RefreshCw } from "lucide-react";
+import { Eye, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
@@ -88,9 +88,9 @@ export const UserJobsTableColumns = (
   dark:hover:text-white
   transition-colors"
               onClick={() => handleApplyJob(job._id)}
-              title="Apply"
+              title="Apply for this job"
             >
-              <RefreshCw className="h-4 w-4" />
+              <Send className="h-4 w-4" />
             </Button>
           )}
         </div>

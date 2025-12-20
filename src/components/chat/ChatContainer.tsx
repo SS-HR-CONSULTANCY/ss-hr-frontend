@@ -16,9 +16,11 @@ import {
   disconnectChatSocket,
   getMessages,
 } from "@/utils/apis/chatApi";
+import { useMessage } from "@/hooks/useSocketHook";
 
 const ChatContainer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { subscribeToMessages, unsubscribeFromMessages } = useMessage();
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [messageSenderId, setMessageSenderId] = useState<string | null>(null);
   const messageEndRef = useRef<HTMLDivElement | null>(null);
@@ -26,6 +28,13 @@ const ChatContainer: React.FC = () => {
     (store: RootState) => store.chat,
   );
   const { user } = useSelector((store: RootState) => store.auth);
+
+  useEffect(() => {
+    subscribeToMessages();
+    return () => {
+      unsubscribeFromMessages();
+    };
+  }, [subscribeToMessages, unsubscribeFromMessages, selectedUser]); 
 
   useEffect(() => {
     if (!selectedUser || !user) return;

@@ -10,25 +10,29 @@ export const useUserJob = () => {
   const navigate = useNavigate();
 
   const handleApplyJob = async (_id: Job["_id"]) => {
-    const res = await userApplyJob(_id);
-    if (res.success) {
-      toast.success(res.message);
-      queryClient.setQueryData(
-        ["jobs"],
-        (oldJobs: UserfetchAllJobsResponse[] | undefined) => {
-          if (!oldJobs || oldJobs.length === 0) {
-            queryClient.invalidateQueries({ queryKey: ["jobs"] });
-            return oldJobs ?? [];
-          }
-          return oldJobs.map((job) =>
-            job._id === res.data.jobId
-              ? { ...job, applied: res.data.status }
-              : job,
-          );
-        },
+    try {
+      const res = await userApplyJob(_id);
+      if (res.success) {
+        toast.success(res.message);
+        queryClient.setQueryData(
+          ["jobs"],
+          (oldJobs: UserfetchAllJobsResponse[] | undefined) => {
+            if (!oldJobs || oldJobs.length === 0) {
+              queryClient.invalidateQueries({ queryKey: ["jobs"] });
+              return oldJobs ?? [];
+            }
+            return oldJobs.map((job) =>
+              job._id === res.data.jobId ? { ...job, applied: true } : job,
+            );
+          },
+        );
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message || "Failed to submit application",
       );
-    } else {
-      toast.error(res.message);
     }
   };
 

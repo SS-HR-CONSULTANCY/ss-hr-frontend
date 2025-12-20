@@ -25,7 +25,7 @@ import noprofileImage from "../../assets/defaultImgaes/noProfile.png";
 import logoTransparent from "../../assets/logos/logo-transparent.png";
 import type { NavbarProps } from "@/types/componentTypes/headerTypes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { siteUrlConfig, navLinks, companyName, links } from "@/utils/constants";
+import { siteUrlConfig, navLinks, companyName } from "@/utils/constants";
 
 const Header: React.FC = ({
   name = companyName,
@@ -67,17 +67,22 @@ const Header: React.FC = ({
               <div className="hidden md:block">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    {user.profileImage ? (
-                      <img
-                        src={user.profileImage || noprofileImage}
-                        alt="Profile"
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
-                      />
-                    ) : (
-                      <UserCircle className="cursor-pointer" />
-                    )}
+                    <div className="flex items-center gap-2 cursor-pointer underline-offset-4 hover:underline">
+                      <span className="font-semibold text-sm">
+                        {user?.fullName?.split(" ")[0]}
+                      </span>
+                      {user.profileImage ? (
+                        <img
+                          src={user.profileImage || noprofileImage}
+                          alt="Profile"
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 rounded-full object-cover border-2 border-gray-300"
+                        />
+                      ) : (
+                        <UserCircle className="size-8" />
+                      )}
+                    </div>
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent
@@ -85,16 +90,15 @@ const Header: React.FC = ({
                     align="end"
                     sideOffset={8}
                   >
-                    {user.role === "user" &&
-                      links.map((link) => (
-                        <DropdownMenuItem asChild key={link.url}>
-                          <Link to={link.url}>{link.text}</Link>
-                        </DropdownMenuItem>
-                      ))}
+                    {user.role === "user" && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/user">Dashboard</Link>
+                      </DropdownMenuItem>
+                    )}
 
                     {user.role === "admin" && (
                       <DropdownMenuItem asChild>
-                        <Link to="/admin/dashboard">Dashboard</Link>
+                        <Link to="/ss-hr-admin">Dashboard</Link>
                       </DropdownMenuItem>
                     )}
 

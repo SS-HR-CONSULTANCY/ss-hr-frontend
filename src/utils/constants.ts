@@ -89,7 +89,7 @@ export const applicationStatusValues = [
 ] as const;
 
 export const roleLoginRoutes: Record<RoleType, string> = {
-  admin: "/ss-hr-admin/login",
+  admin: "/admin/login",
   systemAdmin: "/ss-hr-system-admin/login",
   user: "/login",
 };

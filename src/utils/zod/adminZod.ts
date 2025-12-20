@@ -12,7 +12,9 @@ import {
   password,
   phone,
   phoneTwo,
+  salary,
   skills,
+  vacancy,
 } from "./commonZod";
 
 // admin create new user
@@ -32,10 +34,10 @@ export const createJobSchema = z.object({
   industry,
   jobDescription,
   benifits,
-  salary: z.coerce.number(),
+  salary,
   skills,
   nationality,
-  vacancy: z.coerce.number(),
+  vacancy,
 });
 
 export type CreateJobForm = z.infer<typeof createJobSchema>;

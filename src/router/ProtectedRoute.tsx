@@ -22,9 +22,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       location.pathname.startsWith("/ss-hr-admin") ||
       location.pathname.startsWith("ss-hr-system-admin")
     ) {
-      return (
-        <Navigate to="/ss-hr-admin/login" state={{ from: location }} replace />
-      );
+      return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

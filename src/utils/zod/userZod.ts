@@ -4,23 +4,21 @@ import {
   REGEX_COMPANY_NAME,
   REGEX_INDUSTRY,
   REGEX_TEXT_DOT_AMP,
-  REGEX_URL,
   REGEX_USERNAME,
 } from "./regex";
 import {
-  currentSalary,
   email,
-  expectedSalary,
-  experience,
   fullName,
   gender,
+  nationality,
+  phone,
+  professionalStatus,
+  currentSalary,
+  expectedSalary,
+  experience,
   immediateJoiner,
   jobType,
-  nationality,
   noticePeriod,
-  phone,
-  phoneTwo,
-  professionalStatus,
   workMode,
 } from "./commonZod";
 
@@ -29,7 +27,6 @@ export const userProfileDataSchema = z.object({
   fullName,
   email,
   phone,
-  phoneTwo,
   gender,
   nationality,
   linkedInUsername: optionalStringField(
@@ -38,13 +35,6 @@ export const userProfileDataSchema = z.object({
     40,
     REGEX_USERNAME,
     "Enter a valid LinkedIn username (letters, numbers, or hyphens only).",
-  ),
-  portfolioUrl: optionalStringField(
-    "Portfolio URL",
-    9,
-    200,
-    REGEX_URL,
-    "Enter a valid portfolio URL (must start with http:// or https://).",
   ),
   dob: z
     .string()

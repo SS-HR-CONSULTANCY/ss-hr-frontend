@@ -20,7 +20,7 @@ const AdminApplications: React.FC = () => {
         heading="Job Applications"
         description="List of job applications from users"
         column={columns}
-        columnsCount={5}
+        columnsCount={7}
       />
     </>
   );

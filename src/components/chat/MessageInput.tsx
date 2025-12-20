@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { socket } from "@/utils/services/socketService";
 import type { AppDispatch, RootState } from "@/store/store";
 import type { MessageInputProps } from "@/types/componentTypes/chatTypes";
+import { getUploadUrl, uploadToS3 } from "@/utils/apis/s3Api";
 
 const MessageInput: React.FC<MessageInputProps> = ({
   setIsTyping,
@@ -46,22 +47,29 @@ const MessageInput: React.FC<MessageInputProps> = ({
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+
+
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
+    if (!user || !user._id || !selectedUser) return;
 
-    const formData = new FormData();
-    if (file) {
-      formData.append("messageImage", file);
-    }
-    formData.append("text", text.trim());
+    let imageKey: string | undefined;
 
     try {
-      if (!selectedUser) return;
+      if (file) {
+        const { uploadUrl, key } = await getUploadUrl(file, user._id, "messages");
+        await uploadToS3(file, uploadUrl);
+        imageKey = key;
+      }
+
       dispatch(
         sendMessage({
-          selectedUserId: selectedUser?._id,
-          messageData: formData,
+          selectedUserId: selectedUser._id,
+          messageData: {
+            text: text.trim(),
+            image: imageKey,
+          },
         }),
       );
       setText("");

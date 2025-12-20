@@ -38,11 +38,9 @@ const ProfileDetailsSection: React.FC = () => {
       fullName: user?.fullName || "",
       email: user?.email || "",
       phone: user?.phone || "",
-      phoneTwo: user?.phoneTwo || "",
       gender: user?.gender,
       nationality: user?.nationality || "",
       linkedInUsername: user?.linkedInUsername || "",
-      portfolioUrl: user?.portfolioUrl || "",
       dob: user?.dob || "",
       professionalStatus: user?.professionalStatus || "",
     },
@@ -133,30 +131,6 @@ const ProfileDetailsSection: React.FC = () => {
             )}
           />
 
-          <Controller
-            name="phoneTwo"
-            control={control}
-            render={({ field }) => (
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Phone 2{" "}
-                  {isEditing && <span className="mx-2 text-red-500">*</span>}
-                </label>
-                <PhoneInput
-                  id="phoneTwo"
-                  defaultCountry="AE"
-                  placeholder={
-                    isEditing ? "Enter phone number" : "Not provided"
-                  }
-                  value={field.value}
-                  onChange={(val) => field.onChange(val || "")}
-                  disabled={!isEditing}
-                  error={errors.phoneTwo?.message}
-                />
-              </div>
-            )}
-          />
-
           <FormField<ProfileDataForm>
             id="gender"
             label="Gender"
@@ -212,10 +186,8 @@ const ProfileDetailsSection: React.FC = () => {
 
           <FormField<ProfileDataForm>
             id="professionalStatus"
-            label="Professional Status"
-            placeholder={
-              isEditing ? "Enter Professional Status" : "Not provided"
-            }
+            label="Profession"
+            placeholder={isEditing ? "Enter Profession" : "Not provided"}
             type="text"
             register={register}
             error={errors.professionalStatus?.message}
@@ -232,18 +204,6 @@ const ProfileDetailsSection: React.FC = () => {
             register={register}
             error={errors.linkedInUsername?.message}
             defaultValue={user?.linkedInUsername}
-            readOnly={!isEditing}
-            required={false}
-          />
-
-          <FormField<ProfileDataForm>
-            id="portfolioUrl"
-            label="Portfolio"
-            placeholder={isEditing ? "Enter portfolio url" : "Not provided"}
-            type="text"
-            register={register}
-            error={errors.portfolioUrl?.message}
-            defaultValue={user?.portfolioUrl}
             readOnly={!isEditing}
             required={false}
           />

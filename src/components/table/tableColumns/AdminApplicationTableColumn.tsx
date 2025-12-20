@@ -15,6 +15,12 @@ export const AdminApplicationsTableColumns = (
     ),
   },
   {
+    accessorKey: "userName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Applicant Name" />
+    ),
+  },
+  {
     accessorKey: "jobUniqueId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Job ID" />
@@ -76,7 +82,7 @@ export const AdminApplicationsTableColumns = (
   {
     accessorKey: "updatedAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Applient On" />
+      <DataTableColumnHeader column={column} title="Applied On" />
     ),
     cell: ({ row }) => {
       const date = dayjs(row.original.updatedAt).format("DD MMM YYYY");

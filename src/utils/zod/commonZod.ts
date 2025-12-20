@@ -169,9 +169,9 @@ export const jobDescription = stringField(
   REGEX_LONG_TEXT,
 );
 export const benifits = stringField("benefits", 2, 1000, REGEX_BENEFITS);
-export const salary = numberField("salary", 1, 1000);
+export const salary = numberField("salary", 1, 1000000000);
 export const skills = stringField("skills", 2, 500, REGEX_SKILLS);
-export const vacancy = numberField("vacancy", 1, 1000);
+export const vacancy = numberField("vacancy", 1, 100000);
 
 export const packageName = stringField(
   "packageName",

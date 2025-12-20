@@ -18,14 +18,13 @@ export type UpdateUserInfo = Pick<
   User,
   | "fullName"
   | "phone"
-  | "phoneTwo"
   | "email"
   | "gender"
   | "dob"
   | "nationality"
   | "professionalStatus"
 > &
-  Partial<Pick<User, "linkedInUsername" | "portfolioUrl">>;
+  Partial<Pick<User, "linkedInUsername">>;
 export interface UpdateUserInfoResponse extends ApiBaseResponse {
   data: UpdateUserInfo;
 }

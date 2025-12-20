@@ -1,5 +1,4 @@
 import {
-  addNewMessage,
   setMessages,
   setSocketConnected,
   setSocketDisconnected,
@@ -25,7 +24,7 @@ export const getMessages = createAsyncThunk<
 
 export const sendMessage = createAsyncThunk<
   Message,
-  { selectedUserId: string; messageData: FormData }
+  { selectedUserId: string; messageData: { text: string; image?: string } }
 >("messages/sendMessage", async ({ selectedUserId, messageData }, thunkAPI) => {
   const response = await axiosInstance.post(
     `/message/send/${selectedUserId}`,
@@ -50,10 +49,6 @@ export const connectChatSocket = createAsyncThunk<
 
   socket.on("connect", () => {
     dispatch(setSocketConnected({ socketId: socket.id as string }));
-  });
-
-  socket.on("newMessage", (newMessage: Message) => {
-    dispatch(addNewMessage(newMessage));
   });
 });
 

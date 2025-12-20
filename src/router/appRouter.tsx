@@ -130,7 +130,7 @@ const appRouter = createBrowserRouter([
   { path: "verify-otp", element: <OtpPage /> },
   { path: "verify-email", element: <EmailVerifyPage /> },
   { path: "update-password", element: <UpdatePasswordPage /> },
-  { path: "ss-hr-admin/login", element: <LoginPage role="admin" /> },
+  { path: "admin/login", element: <LoginPage role="admin" /> },
   {
     path: "ss-hr-system-admin/login",
     element: <LoginPage role="systemAdmin" />,

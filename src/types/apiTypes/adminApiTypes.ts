@@ -97,6 +97,7 @@ export type AdminfetchAllApplicationsResponse = {
   updatedAt: Application["updatedAt"];
   status: Application["status"];
   applicationUniqueId: Application["applicationUniqueId"];
+  userName: string;
 } & adminFetchApplicationsJobFields;
 
 export type adminfetchApplicationJobDetailFields = Pick<
