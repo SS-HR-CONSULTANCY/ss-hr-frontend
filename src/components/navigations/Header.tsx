@@ -22,7 +22,7 @@ import { toggleTheme } from "@/store/slices/appSlice";
 import { Menu, Moon, Sun, UserCircle } from "lucide-react";
 import type { AppDispatch, RootState } from "@/store/store";
 import noprofileImage from "../../assets/defaultImgaes/noProfile.png";
-import logoTransparent from "../../assets/logos/logo-transparent.png";
+
 import type { NavbarProps } from "@/types/componentTypes/headerTypes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { siteUrlConfig, navLinks, companyName } from "@/utils/constants";
@@ -48,7 +48,7 @@ const Header: React.FC = ({
           <NavbarLeft className="flex items-center gap-3 flex-none">
             <Link to={homeUrl}>
               <img
-                src={logoTransparent}
+                src="/logos/logo-transparent.png"
                 alt="SS HR"
                 width={40}
                 height={40}

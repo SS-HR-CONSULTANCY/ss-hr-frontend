@@ -7,7 +7,7 @@ import {
 import { MapPin } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import type { FooterProps } from "@/types/componentTypes/footerTypes";
-import logoTransparent from "../../assets/logos/logo-transparent.png";
+
 import {
   companyName,
   footerAddress,
@@ -63,7 +63,7 @@ const Footer = ({
           <FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1 align-end">
             <div className="flex items-center flex-col justify-center h-full space-y-4">
               <img
-                src={logoTransparent}
+                src="/logos/logo-transparent.png"
                 alt="SS HR"
                 className="size-20 cursor-pointer"
               />
