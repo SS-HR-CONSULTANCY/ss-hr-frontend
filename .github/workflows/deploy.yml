@@ -24,6 +24,11 @@ jobs:
           git config --global --add safe.directory /var/www/ss-hr-consultancy/frontend
           git stash
           git pull origin main
+          
+          # Inject Environment Variables into building root
+          echo "VITE_ENVIRONMENT=${{ secrets.VITE_ENVIRONMENT }}" > .env
+          echo "VITE_BACKEND_PRODUCTION_URL=${{ secrets.VITE_BACKEND_PRODUCTION_URL }}" >> .env
+          
           npm install
           npm run build
           # Depending on hosting PM2 might be naming it differently, usually 'ss-hr-frontend', restart all to be safe if unspecified
