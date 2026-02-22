@@ -14,7 +14,7 @@ const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
 const HomePage = lazy(() => import("@/pages/common/HomePage"));
 const ChatPage = lazy(() => import("@/pages/common/ChatPage"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
-const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
+
 const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const AboutUsPage = lazy(() => import("@/pages/common/AboutUsPage"));
 const ContactPage = lazy(() => import("@/pages/common/ContactPage"));
@@ -150,15 +150,7 @@ const appRouter = createBrowserRouter([
         index: true,
         element: (
           <ProtectedRoute requiredRole={["user"]}>
-            <UserProfile />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "profile",
-        element: (
-          <ProtectedRoute requiredRole={["user"]}>
-            <UserProfile />
+            <UserJobs />
           </ProtectedRoute>
         ),
       },

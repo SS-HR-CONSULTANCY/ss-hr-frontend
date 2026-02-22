@@ -12,16 +12,13 @@ import {
 } from "@/components/ui/navbar";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import useAuthHook from "@/hooks/useAuthHook";
 import { useAppSelector } from "@/hooks/redux";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
-import { toggleTheme } from "@/store/slices/appSlice";
-import { Menu, Moon, Sun, UserCircle } from "lucide-react";
-import type { AppDispatch, RootState } from "@/store/store";
+import { Menu, UserCircle } from "lucide-react";
 import noprofileImage from "../../assets/defaultImgaes/noProfile.png";
+import logoImage from "../../assets/logos/logo-transparent.png";
 
 import type { NavbarProps } from "@/types/componentTypes/headerTypes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -34,9 +31,6 @@ const Header: React.FC = ({
   customNavigation,
   className,
 }: NavbarProps) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const theme = useSelector((state: RootState) => state.app.theme);
-
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const { handleLogout } = useAuthHook();
 
@@ -48,7 +42,7 @@ const Header: React.FC = ({
           <NavbarLeft className="flex items-center gap-3 flex-none">
             <Link to={homeUrl}>
               <img
-                src="/logos/logo-transparent.png"
+                src={logoImage}
                 alt="SS HR"
                 width={40}
                 height={40}
@@ -114,17 +108,7 @@ const Header: React.FC = ({
               </Button>
             )}
 
-            <Button
-              variant="ghost"
-              className="relative flex rounded-full cursor-pointer bg-0"
-              onClick={() => dispatch(toggleTheme())}
-            >
-              {theme === "dark" ? (
-                <Sun className="size-6" />
-              ) : (
-                <Moon className="size-6" />
-              )}
-            </Button>
+
 
             <Sheet>
               <SheetTrigger asChild>

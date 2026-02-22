@@ -108,7 +108,6 @@ export const siteUrlConfig: SiteUrlConfigProps = {
 
 export const links: { url: string; text: string }[] = [
   { url: "/user", text: "Dashboard" },
-  { url: "/user/profile", text: "Profile" },
   { url: "/user/jobs", text: "Jobs" },
   { url: "/user/applications", text: "Applications" },
   { url: "/user/chat", text: "Chat" },
@@ -591,7 +590,6 @@ export const callToActionData: CallToActionProps = {
 
 // Routes
 export const userApplicationRoutes: Route[] = [
-  { path: "profile", name: "Profile", roles: ["user"] },
   { path: "jobs", name: "Jobs", roles: ["user"] },
   { path: "applications", name: "Applications", roles: ["user"] },
   { path: "chat", name: "Chat", roles: ["user"] },

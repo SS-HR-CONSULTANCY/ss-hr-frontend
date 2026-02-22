@@ -7,6 +7,7 @@ import {
 import { MapPin } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import type { FooterProps } from "@/types/componentTypes/footerTypes";
+import logoImage from "../../assets/logos/logo-transparent.png";
 
 import {
   companyName,
@@ -53,7 +54,7 @@ const Footer = ({
                 {address}
               </h6>
               <a
-                href="https://maps.app.goo.gl/XRxwHvB2YGcXZSok7"
+                href="https://share.google/lF70z36vtQBfk07oW"
                 className="flex mt-4"
               >
                 <MapPin /> Google Map
@@ -63,7 +64,7 @@ const Footer = ({
           <FooterColumn className="col-span-2 sm:col-span-3 md:col-span-1 align-end">
             <div className="flex items-center flex-col justify-center h-full space-y-4">
               <img
-                src="/logos/logo-transparent.png"
+                src={logoImage}
                 alt="SS HR"
                 className="size-20 cursor-pointer"
               />

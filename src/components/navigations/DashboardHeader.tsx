@@ -1,17 +1,12 @@
 import React from "react";
 import useAuthHook from "@/hooks/useAuthHook";
 import { useNavigate } from "react-router-dom";
-import { toggleTheme } from "@/store/slices/appSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { HomeIcon, LogOut, Moon, Sun } from "lucide-react";
-import type { AppDispatch, RootState } from "@/store/store";
+import { HomeIcon, LogOut } from "lucide-react";
 import noProfile from "../../assets/defaultImgaes/noProfile.png";
 import type { DashboardHeaderProps } from "@/types/componentTypes/AdminHeaderTypes";
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const theme = useSelector((state: RootState) => state.app.theme);
   const { handleLogout } = useAuthHook();
 
   return (
@@ -31,12 +26,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user }) => {
           >
             <HomeIcon />
           </button>
-          <button
-            className="relative flex rounded-full cursor-pointer"
-            onClick={() => dispatch(toggleTheme())}
-          >
-            {theme === "dark" ? <Sun /> : <Moon />}
-          </button>
+
           <button
             className="relative flex rounded-full cursor-pointer"
             onClick={handleLogout}

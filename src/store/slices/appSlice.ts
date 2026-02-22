@@ -1,11 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { appSliceInitialState } from "@/types/slice/appSliceTypes";
 
-const savedTheme =
-  (localStorage.getItem("theme") as "light" | "dark") || "light";
+
 
 const initialState: appSliceInitialState = {
-  theme: savedTheme,
+  theme: "dark",
   sidebarOpen: false,
 };
 
@@ -14,12 +13,12 @@ const appSlice = createSlice({
   initialState: initialState,
   reducers: {
     toggleTheme: (state) => {
-      state.theme = state.theme === "light" ? "dark" : "light";
-      localStorage.setItem("theme", state.theme);
+      state.theme = "dark";
+      localStorage.setItem("theme", "dark");
     },
-    setTheme: (state, action) => {
-      state.theme = action.payload;
-      localStorage.setItem("theme", state.theme);
+    setTheme: (state) => {
+      state.theme = "dark";
+      localStorage.setItem("theme", "dark");
     },
     toggleAdminSidebar: (state) => {
       state.sidebarOpen = !state.sidebarOpen;
