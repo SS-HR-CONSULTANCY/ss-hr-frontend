@@ -21,6 +21,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /var/www/ss-hr-consultancy/frontend
+          git config --global --add safe.directory /var/www/ss-hr-consultancy/frontend
           git stash
           git pull origin main
           npm install
