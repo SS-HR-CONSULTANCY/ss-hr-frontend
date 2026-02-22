@@ -33,5 +33,6 @@ jobs:
           npm run build
           # Depending on hosting PM2 might be naming it differently, usually 'ss-hr-frontend', restart all to be safe if unspecified
           pm2 restart all || true
-          sudo cp -r dist/* /var/www/html/
-          sudo systemctl restart nginx
+          # Note: Nginx doesn't need restarting just for changed static HTML/JS files!
+          # We remove sudo here. To make this work, you must give tonyk ownership of /var/www/html on the server.
+          cp -r dist/* /var/www/html/
