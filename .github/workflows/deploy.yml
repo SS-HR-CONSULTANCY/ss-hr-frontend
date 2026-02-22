@@ -25,3 +25,5 @@ jobs:
           git pull origin main
           npm install
           npm run build
+          # Depending on hosting PM2 might be naming it differently, usually 'ss-hr-frontend', restart all to be safe if unspecified
+          pm2 restart all || true
