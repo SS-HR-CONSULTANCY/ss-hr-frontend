@@ -7,7 +7,7 @@ import {
 import { MapPin } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import type { FooterProps } from "@/types/componentTypes/footerTypes";
-import logoImage from "../../assets/logos/logo-transparent.png";
+import logoImage from "../../assets/logos/brand-icon.png";
 
 import {
   companyName,

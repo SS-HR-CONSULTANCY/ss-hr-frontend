@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/ui/navigation";
 import { Menu, UserCircle } from "lucide-react";
 import noprofileImage from "../../assets/defaultImgaes/noProfile.png";
-import logoImage from "../../assets/logos/logo-transparent.png";
+import logoImage from "../../assets/logos/brand-icon.png";
 
 import type { NavbarProps } from "@/types/componentTypes/headerTypes";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";

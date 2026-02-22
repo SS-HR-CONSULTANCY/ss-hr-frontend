@@ -1,6 +1,6 @@
 import React from "react";
 import { CardDescription, CardHeader, CardTitle } from "../ui/card";
-import logoImage from "../../assets/logos/logo-transparent.png";
+import logoImage from "../../assets/logos/brand-icon.png";
 
 interface FormHeader {
   title: string;
