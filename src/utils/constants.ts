@@ -523,17 +523,20 @@ export const footerData = [
   {
     title: "Contact",
     links: [
-      { text: "Instagram", href: "" },
+      { text: "Instagram", href: "https://www.instagram.com/ss__human_resource?igsh=Y2tyNHJ4N2N5dGNy" },
       { text: "Facebook", href: "" },
       {
         text: "Linkedin",
         href: "https://www.linkedin.com/company/ss-human-resource-consultancy/",
       },
-      { text: "Phone (India)  +91 9349714742", href: "tel:+91 9349714742" },
-      { text: "Phone (UAE) +971 0523664492", href: "tel:+971 0523664492" },
+       { text: "Phone (UAE) +971 523664492", href: "tel:+971 523664492" },
+        { text: "Phone (UAE) +971 542326583", href: "tel:+971 542326583" },
+       { text: "Phone (UAE) +971 542326584", href: "tel:+971 542326584" },
+      { text: "Phone (India) +91 9349714742", href: "tel:+91 9349714742" },
+     
       {
-        text: "Email - aalamconsultancy0@gmail.com",
-        href: "mailto:aalamconsultancy0@gmail.com",
+        text: "Email - hello@sshrconsultancy.com",
+        href: "mailto:hello@sshrconsultancy.com",
       },
     ],
   },
@@ -547,27 +550,28 @@ export const footerPoliciesData = [
 export const footerCopyright =
   "© 2025 sshrconsultancy.com All rights reserved";
 export const footerAddress =
-  "Al Qiyadah Metro Station Exit2, Old Labour Office Al Kazim Building Entrance B, Dubai, UAE";
+  "Al Qiyadah Metro Station Exit2, Abu Saif Business Center,Al Kazim Building, Entrance B, Dubai, UAE";
 
 // Contact component constants
 export const contactData: ContactItem[] = [
+    {
+    icon: Phone,
+    label: "Phone (UAE)",
+    value: "+971 523664492",
+    href: "#",
+  },
   {
     icon: Phone,
     label: "Phone (India)",
-    value: "+91 97154 3274799",
-    href: "tel:+91971543274799",
+    value: "+91 9349714742",
+    href: "#",
   },
-  {
-    icon: Phone,
-    label: "Phone (UAE)",
-    value: "+971 0523664492",
-    href: "tel:0523664492",
-  },
+
   {
     icon: Mail,
     label: "Email",
-    value: "aalamconsultancy0@gmail.com",
-    href: "mailto:aalamconsultancy0@gmail.com",
+    value: "hello@sshrconsultancy.com",
+    href: "hello@sshrconsultancy.com",
   },
   {
     icon: MapPin,
@@ -575,7 +579,7 @@ export const contactData: ContactItem[] = [
     value: "Dubai & India",
   },
 ];
-export const businessHours = "Mon–Sat, 9:30 AM – 6:30 PM";
+export const businessHours = "Mon–Sat, 9:00 AM – 6:00 PM";
 
 // CallToAction compoenent constats
 export const callToActionData: CallToActionProps = {
