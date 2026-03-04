@@ -113,3 +113,6 @@ export type UserFetchAllApplicationsResponse = Pick<
   "_id" | "designation" | "jobUniqueId"
 > &
   Pick<Application, "updatedAt" | "status" | "_id">;
+
+// User fetch packages
+export type UserfetchAllPackagesResponse = import("../entities/package").Package;

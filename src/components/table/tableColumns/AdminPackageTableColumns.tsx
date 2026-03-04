@@ -3,6 +3,19 @@ import { Eye, Edit, Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { AdminfetchAllPackagesResponse } from "@/types/apiTypes/adminApiTypes";
+import type { PackageCategoryType } from "@/types/entities/package";
+
+const CATEGORY_LABELS: Record<PackageCategoryType, string> = {
+  general: "General",
+  visitvisa: "Visit Visa",
+  visa: "Visa",
+};
+
+const CATEGORY_COLORS: Record<PackageCategoryType, string> = {
+  general: "bg-gray-100 text-gray-700",
+  visitvisa: "bg-blue-100 text-blue-700",
+  visa: "bg-green-100 text-green-700",
+};
 
 export const AdminPackageTableColumns = (
   handleDeletePackage: (packageId: string) => void,
@@ -16,34 +29,36 @@ export const AdminPackageTableColumns = (
     ),
   },
   {
-    accessorKey: "packageType",
+    accessorKey: "packageCategory",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Package Type" />
-    ),
-  },
-  {
-    accessorKey: "description",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Description" />
+      <DataTableColumnHeader column={column} title="Category" />
     ),
     cell: ({ row }) => {
-      const text = row.original.description;
-      const truncatedText =
-        text.length > 50 ? `${text.substring(0, 50)}...` : text;
-      return truncatedText;
+      const cat = row.original.packageCategory as PackageCategoryType | undefined;
+      if (!cat) return <span className="text-gray-400 text-xs">—</span>;
+      return (
+        <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${CATEGORY_COLORS[cat] ?? "bg-gray-100 text-gray-700"}`}>
+          {CATEGORY_LABELS[cat] ?? cat}
+        </span>
+      );
     },
   },
   {
-    accessorKey: "priceIN",
+    accessorKey: "price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Price (INR)" />
+      <DataTableColumnHeader column={column} title="Price" />
     ),
+    cell: ({ row }) => `${row.original.currency ?? ""} ${row.original.price ?? ""}`.trim(),
   },
   {
-    accessorKey: "priceUAE",
+    accessorKey: "packageIncludes",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Price (AED)" />
+      <DataTableColumnHeader column={column} title="Package Includes" />
     ),
+    cell: ({ row }) => {
+      const text = row.original.packageIncludes ?? "";
+      return text.length > 60 ? `${text.substring(0, 60)}...` : text;
+    },
   },
   {
     accessorKey: "actions",

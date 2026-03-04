@@ -7,6 +7,7 @@ import userReducer from "./slices/userSlice";
 import testimonialReducer from "./slices/testimonialSlice";
 import packageReducer from "./slices/packageSlice";
 import paymentReducer from "@/store/slices/paymentSlice";
+import enquiryReducer from "@/store/slices/enquirySlice";
 import localStorage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
@@ -26,6 +27,7 @@ const rootReducers = {
   testimonial: testimonialReducer,
   package: packageReducer,
   payment: paymentReducer,
+  enquiry: enquiryReducer,
 };
 
 const persistedReducer = persistReducer(

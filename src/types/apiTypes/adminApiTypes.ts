@@ -14,13 +14,12 @@ export type AdminCreateNewJob = Pick<
   Job,
   | "companyName"
   | "designation"
-  | "industry"
+  | "location"
   | "jobDescription"
   | "benifits"
   | "salary"
-  | "skills"
-  | "nationality"
   | "vacancy"
+  | "currency"
 >;
 
 export type AdminfetchAllJobsResponse = Pick<
@@ -28,8 +27,9 @@ export type AdminfetchAllJobsResponse = Pick<
   | "_id"
   | "companyName"
   | "designation"
-  | "vacancy"
   | "salary"
+  | "vacancy"
+  | "currency"
   | "createdAt"
   | "jobUniqueId"
 >;
@@ -38,13 +38,12 @@ export type AdminUpdateJobRequest = Pick<
   Job,
   | "companyName"
   | "designation"
-  | "industry"
+  | "location"
   | "jobDescription"
   | "benifits"
   | "salary"
-  | "skills"
-  | "nationality"
   | "vacancy"
+  | "currency"
 >;
 
 export type AdminfetchAllUsersResponse = Pick<
@@ -63,11 +62,10 @@ export type AdminfetchAllPackagesResponse = Pick<
   Package,
   | "_id"
   | "packageName"
-  | "description"
-  | "priceIN"
-  | "priceUAE"
-  | "packageType"
-  | "features"
+  | "price"
+  | "currency"
+  | "packageIncludes"
+  | "packageCategory"
   | "createdAt"
 >;
 
@@ -104,14 +102,13 @@ export type adminfetchApplicationJobDetailFields = Pick<
   Job,
   | "designation"
   | "companyName"
-  | "vacancy"
   | "createdAt"
   | "benifits"
-  | "industry"
+  | "vacancy"
+  | "currency"
+  | "location"
   | "jobDescription"
-  | "nationality"
   | "salary"
-  | "skills"
   | "jobUniqueId"
 >;
 export type adminFetchApplicationUserDetails = Pick<
@@ -359,4 +356,17 @@ export interface AdminFetchUserDetailsResponse extends ApiBaseResponse {
   userData: AdminfetchUserDetailFields;
   address: AdminFetchUserAddressDetails | null;
   careerData: AdminFetchUserCareerDataDetailsResponse | null;
+}
+
+export interface AdminFetchAllEnquiriesResponse {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+  status: "unread" | "read";
+  createdAt: string;
+  updatedAt: string;
 }

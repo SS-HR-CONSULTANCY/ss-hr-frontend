@@ -27,34 +27,18 @@ export interface SinglePackageResponse {
 
 export interface CreatePackageRequest {
   packageName: string;
-  description: string;
-  priceIN: string;
-  priceUAE: string;
-  packageType: "jobpackage" | "tourpackage";
-  packageDuration: number;
-  features: string[];
-  food: boolean;
-  accommodation: boolean;
-  travelCard: boolean;
-  utilityBills: boolean;
-  airportPickup: boolean;
-  jobGuidance: boolean;
+  price: string;
+  currency: "Rs." | "AED";
+  packageIncludes: string;
+  packageCategory: "general" | "visitvisa" | "visa";
 }
 
 export interface UpdatePackageRequest {
   packageName?: string;
-  description?: string;
-  priceIN?: string;
-  priceUAE?: string;
-  packageType?: "jobpackage" | "tourpackage";
-  packageDuration?: number;
-  features?: string[];
-  food?: boolean;
-  accommodation?: boolean;
-  travelCard?: boolean;
-  utilityBills?: boolean;
-  airportPickup?: boolean;
-  jobGuidance?: boolean;
+  price?: string;
+  currency?: "Rs." | "AED";
+  packageIncludes?: string;
+  packageCategory?: "general" | "visitvisa" | "visa";
 }
 
 export const getAllPackages = async (
@@ -104,13 +88,7 @@ export const getPackageStats = async (): Promise<
   return response.data;
 };
 
-export const getPackagesByType = async (
-  packageType: string,
-  params?: FetchFunctionParams,
-): Promise<ApiPaginatedResponse<Package>> => {
-  const query = buildQueryParams(params);
-  const response = await axiosInstance.get(
-    `/admin/packages/type/${packageType}${query ? `?${query}` : ""}`,
-  );
+export const getPublicPackages = async (): Promise<ApiPaginatedResponse<Package>> => {
+  const response = await axiosInstance.get("/admin/packages/public");
   return parseNewCommonResponse<Package>(response.data);
 };

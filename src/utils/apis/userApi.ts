@@ -129,3 +129,14 @@ export const userGetJobById = async (
   const response = await axiosInstance.get(`/user/jobs/${jobId}`);
   return response.data.data;
 };
+
+export const userFetchAllPackages = async (
+  params?: FetchFunctionParams & { category?: string },
+): Promise<ApiPaginatedResponse<import("@/types/entities/package").Package>> => {
+  const query = buildQueryParams(params);
+  const categoryParam = params?.category ? `&category=${params.category}` : "";
+  const response = await axiosInstance.get(
+    `/user/packages${query ? `?${query}${categoryParam}` : (categoryParam ? `?${categoryParam.slice(1)}` : "")}`,
+  );
+  return parseNewCommonResponse(response.data);
+};

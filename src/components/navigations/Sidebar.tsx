@@ -13,6 +13,7 @@ import {
   Notebook,
   Settings,
   User,
+  Mail,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -35,6 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     jobs: <Briefcase />,
     packages: <LayoutGrid />,
     applications: <CalendarCheck />,
+    enquiries: <Mail />,
     payments: <HandCoins />,
     testimonials: <Star />,
     reports: <Notebook />,

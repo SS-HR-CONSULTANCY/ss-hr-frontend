@@ -1,51 +1,29 @@
-export type PackageType = "jobpackage" | "tourpackage";
+export type CurrencyType = "Rs." | "AED";
+export type PackageCategoryType = "general" | "visitvisa" | "visa";
+
 export interface Package {
   _id: string;
   packageName: string;
-  description: string;
-  priceIN: string;
-  priceUAE: string;
-  packageType: PackageType;
-  packageDuration: number;
-  features: string[];
-  food: boolean;
-  accommodation: boolean;
-  travelCard: boolean;
-  utilityBills: boolean;
-  airportPickup: boolean;
-  jobGuidance: boolean;
+  price: string;
+  currency: CurrencyType;
+  packageIncludes: string;
+  packageCategory: PackageCategoryType;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreatePackageFormData {
   packageName: string;
-  description: string;
-  priceIN: string;
-  priceUAE: string;
-  packageType: PackageType;
-  packageDuration: number;
-  features: string[];
-  food: boolean;
-  accommodation: boolean;
-  travelCard: boolean;
-  utilityBills: boolean;
-  airportPickup: boolean;
-  jobGuidance: boolean;
+  price: string;
+  currency: CurrencyType;
+  packageIncludes: string;
+  packageCategory: PackageCategoryType;
 }
 
 export interface UpdatePackageFormData {
   packageName?: string;
-  description?: string;
-  priceIN?: string;
-  priceUAE?: string;
-  packageType?: PackageType;
-  packageDuration?: number;
-  features?: string[];
-  food?: boolean;
-  accommodation?: boolean;
-  travelCard?: boolean;
-  utilityBills?: boolean;
-  airportPickup?: boolean;
-  jobGuidance?: boolean;
+  price?: string;
+  currency?: CurrencyType;
+  packageIncludes?: string;
+  packageCategory?: PackageCategoryType;
 }

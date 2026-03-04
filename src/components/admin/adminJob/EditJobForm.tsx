@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 import FormField from "../../form/FormFiled";
 import { Button } from "@/components/ui/button";
 import AdminFormHeader from "../AdminFormHeader";
@@ -11,7 +12,8 @@ import { closeEditJobForm } from "@/store/slices/jobSlice";
 import type { AppDispatch, RootState } from "@/store/store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminGetJobById, adminUpdateJob } from "@/utils/apis/adminJobApi";
-import { createJobSchema, type CreateJobForm } from "@/utils/zod/adminZod";
+import { createJobSchema } from "@/utils/zod/adminZod";
+import type { CreateJobForm } from "@/utils/zod/adminZod";
 
 const EditJobForm: React.FC = () => {
   const queryClient = useQueryClient();
@@ -33,17 +35,15 @@ const EditJobForm: React.FC = () => {
     formState: { errors, isSubmitting, isValid },
     reset,
   } = useForm<CreateJobForm>({
-    resolver: zodResolver(createJobSchema),
+    resolver: zodResolver(createJobSchema) as any,
     defaultValues: {
       companyName: "",
       designation: "",
-      industry: "",
-      jobDescription: "",
+      location: "",
       benifits: "",
-      salary: 0,
-      skills: "",
-      nationality: "",
+      salary: "" as any,
       vacancy: 1,
+      currency: "Rs",
     },
   });
 
@@ -52,18 +52,17 @@ const EditJobForm: React.FC = () => {
       reset({
         companyName: data.companyName,
         designation: data.designation,
-        industry: data.industry,
+        location: data.location,
         jobDescription: data.jobDescription,
         benifits: data.benifits,
         salary: data.salary,
-        skills: data.skills,
-        nationality: data.nationality,
         vacancy: data.vacancy,
+        currency: data.currency as "Rs" | "AED",
       });
     }
   }, [data, reset]);
 
-  const onSubmit = async (data: CreateJobForm) => {
+  const onSubmit: SubmitHandler<CreateJobForm> = async (data) => {
     setLoading(true);
     if (!selectedJobId) {
       toast.error("Something wet wrong");
@@ -71,7 +70,14 @@ const EditJobForm: React.FC = () => {
     }
 
     try {
-      const response = await adminUpdateJob(selectedJobId, data);
+      const formattedData = {
+        ...data,
+        salary: Number(data.salary),
+        benifits: data.benifits ?? "",
+        vacancy: Number(data.vacancy),
+      };
+      
+      const response = await adminUpdateJob(selectedJobId, formattedData);
 
       if (response.success) {
         toast.success(response.message || "Job updated successfully!");
@@ -128,42 +134,52 @@ const EditJobForm: React.FC = () => {
                   />
 
                   <FormField<CreateJobForm>
-                    id="industry"
-                    label="Industry"
+                    id="location"
+                    label="Location"
                     type="text"
-                    placeholder="e.g., IT Services"
-                    error={errors.industry?.message}
+                    placeholder="e.g., Dubai, UAE"
+                    error={errors.location?.message}
                     register={register}
                   />
 
-                  <FormField<CreateJobForm>
-                    id="nationality"
-                    label="Preferred Nationality"
-                    type="text"
-                    placeholder="e.g., Indian"
-                    error={errors.nationality?.message}
-                    register={register}
-                  />
-
-                  <FormField<CreateJobForm>
-                    id="salary"
-                    label="Average Salary (LPA)"
-                    type="number"
-                    placeholder="Enter salary"
-                    error={errors.salary?.message}
-                    register={register}
-                    registerOptions={{ valueAsNumber: true }}
-                  />
+                  <div className="flex gap-2">
+                    <div className="w-1/3 mt-2">
+                      <FormField<CreateJobForm>
+                        id="currency"
+                        label="Currency"
+                        type="select"
+                        options={[
+                          { label: "Rs", value: "Rs" },
+                          { label: "AED", value: "AED" },
+                        ]}
+                        error={errors.currency?.message}
+                        register={register}
+                      />
+                    </div>
+                    <div className="w-2/3">
+                      <FormField<CreateJobForm>
+                        id="salary"
+                        label="Average Salary"
+                        type="number"
+                        placeholder="Enter salary"
+                        error={errors.salary?.message}
+                        register={register}
+                        registerOptions={{ valueAsNumber: true }}
+                      />
+                    </div>
+                  </div>
 
                   <FormField<CreateJobForm>
                     id="vacancy"
-                    label="Number of Openings"
+                    label="No. of Vacancies"
                     type="number"
                     placeholder="Enter number of positions"
                     error={errors.vacancy?.message}
                     register={register}
                     registerOptions={{ valueAsNumber: true }}
                   />
+
+
                 </div>
 
                 <div className="space-y-2 w-full">
@@ -187,15 +203,7 @@ const EditJobForm: React.FC = () => {
                     rows={4}
                   />
 
-                  <FormField<CreateJobForm>
-                    id="skills"
-                    label="Required Skills (comma separated)"
-                    type="textarea"
-                    placeholder="e.g., React, Node.js"
-                    error={errors.skills?.message as string}
-                    register={register}
-                    rows={4}
-                  />
+
                 </div>
               </div>
 

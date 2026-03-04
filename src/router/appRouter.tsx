@@ -11,6 +11,7 @@ import { createBrowserRouter } from "react-router-dom";
 const OtpPage = lazy(() => import("@/pages/auth/OtpPage"));
 const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
+const UserPackages = lazy(() => import("@/pages/user/UserPackages"));
 const HomePage = lazy(() => import("@/pages/common/HomePage"));
 const ChatPage = lazy(() => import("@/pages/common/ChatPage"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
@@ -30,6 +31,7 @@ const UserApplications = lazy(() => import("@/pages/user/UserApplications"));
 const DashboardLayout = lazy(() => import("@/pages/common/DashboardLayout"));
 const AdminUserDetails = lazy(() => import("@/pages/admin/AdminUserDetails"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
+const AdminEnquiries = lazy(() => import("@/pages/admin/AdminEnquiries"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const UpdatePasswordPage = lazy(
   () => import("@/pages/auth/UpdatePasswordPage"),
@@ -179,6 +181,14 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
+        path: "packages",
+        element: (
+          <ProtectedRoute requiredRole={["user"]}>
+            <UserPackages />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "chat",
         element: (
           <ProtectedRoute requiredRole={["user"]}>
@@ -259,6 +269,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminApplications />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "enquiries",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+            <AdminEnquiries />
           </ProtectedRoute>
         ),
       },

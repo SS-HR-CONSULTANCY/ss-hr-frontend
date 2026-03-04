@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { Eye, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
@@ -7,7 +6,6 @@ import type { UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
 
 export const UserJobsTableColumns = (
   handleApplyJob: (joibId: string) => void,
-  handleViewJobDetails: (joibId: string) => void,
 ): ColumnDef<UserfetchAllJobsResponse>[] => [
   {
     accessorKey: "jobUniqueId",
@@ -44,53 +42,26 @@ export const UserJobsTableColumns = (
     },
   },
   {
-    accessorKey: "applied",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Applied" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <span className="font-semibol text-green-600 dark:text-green-400">
-          {row.original.applied ? "Applied" : "Not Applied"}
-        </span>
-      );
-    },
-  },
-  {
     accessorKey: "actions",
-    header: "Actions",
+    header: "Action",
     id: "actions",
     cell: ({ row }) => {
       const job = row.original;
       return (
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleViewJobDetails(job._id)}
-            className="text-blue-500 cursor-pointer h-8 w-8 p-0
-  hover:bg-blue-100
-  dark:hover:bg-blue-900
-  hover:text-blue-600
-  dark:hover:text-white
-  transition-colors"
-            title="View Details"
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-          {!job.applied && (
+          {job.applied ? (
+            <span className="font-semibold text-green-600 dark:text-green-400">
+              Applied
+            </span>
+          ) : (
             <Button
               variant="outline"
-              className="text-blue-500 cursor-pointer h-8 w-8 p-0
-  hover:bg-blue-100
-  dark:hover:bg-blue-900
-  hover:text-blue-600
-  dark:hover:text-white
+              size="sm"
+              className="text-white bg-blue-600 hover:bg-blue-700 cursor-pointer h-8 px-4
   transition-colors"
               onClick={() => handleApplyJob(job._id)}
-              title="Apply for this job"
             >
-              <Send className="h-4 w-4" />
+              Apply
             </Button>
           )}
         </div>

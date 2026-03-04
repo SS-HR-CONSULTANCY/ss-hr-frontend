@@ -6,11 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import type { AppDispatch } from "@/store/store";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { createPackage } from "@/utils/apis/adminPackageApi";
 import { toggleAddPackageForm } from "@/store/slices/packageSlice";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CreatePackageFormData } from "@/types/entities/package";
+import type { CreatePackageFormData, CurrencyType, PackageCategoryType } from "@/types/entities/package";
 import {
   Select,
   SelectContent,
@@ -19,24 +18,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const CATEGORY_LABELS: Record<PackageCategoryType, string> = {
+  general: "General",
+  visitvisa: "Visit Visa",
+  visa: "Visa",
+};
+
 const AddPackageForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState<CreatePackageFormData>({
     packageName: "",
-    description: "",
-    priceIN: "",
-    priceUAE: "",
-    packageType: "jobpackage",
-    packageDuration: 0,
-    features: [""],
-    food: false,
-    accommodation: false,
-    travelCard: false,
-    utilityBills: false,
-    airportPickup: false,
-    jobGuidance: false,
+    price: "",
+    currency: "AED",
+    packageIncludes: "",
+    packageCategory: "general",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -55,21 +52,7 @@ const AddPackageForm: React.FC = () => {
   });
 
   const resetForm = () => {
-    setFormData({
-      packageName: "",
-      description: "",
-      priceIN: "",
-      priceUAE: "",
-      packageType: "jobpackage",
-      packageDuration: 0,
-      features: [""],
-      food: false,
-      accommodation: false,
-      travelCard: false,
-      utilityBills: false,
-      airportPickup: false,
-      jobGuidance: false,
-    });
+    setFormData({ packageName: "", price: "", currency: "AED", packageIncludes: "", packageCategory: "general" });
     setErrors({});
   };
 
@@ -82,27 +65,14 @@ const AddPackageForm: React.FC = () => {
       newErrors.packageName = "Package name must be at least 2 characters";
     }
 
-    if (!formData.description.trim()) {
-      newErrors.description = "Description is required";
-    } else if (formData.description.length < 10) {
-      newErrors.description = "Description must be at least 10 characters";
+    if (!formData.price.trim()) {
+      newErrors.price = "Price is required";
     }
 
-    if (!formData.priceIN.trim()) {
-      newErrors.priceIN = "Price in INR is required";
-    }
-
-    if (!formData.priceUAE.trim()) {
-      newErrors.priceUAE = "Price in AED is required";
-    }
-
-    if (formData.packageDuration < 1 || formData.packageDuration > 365) {
-      newErrors.packageDuration = "Duration must be between 1 and 365 days";
-    }
-
-    const validFeatures = formData.features.filter((f) => f.trim());
-    if (validFeatures.length === 0) {
-      newErrors.features = "At least one feature is required";
+    if (!formData.packageIncludes.trim()) {
+      newErrors.packageIncludes = "Package includes is required";
+    } else if (formData.packageIncludes.trim().length < 5) {
+      newErrors.packageIncludes = "Package includes must be at least 5 characters";
     }
 
     setErrors(newErrors);
@@ -112,8 +82,7 @@ const AddPackageForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      const validFeatures = formData.features.filter((f) => f.trim());
-      createMutation.mutate({ ...formData, features: validFeatures });
+      createMutation.mutate(formData);
     }
   };
 
@@ -122,262 +91,99 @@ const AddPackageForm: React.FC = () => {
     resetForm();
   };
 
-  const addFeature = () => {
-    setFormData({ ...formData, features: [...formData.features, ""] });
-  };
-
-  const removeFeature = (index: number) => {
-    const newFeatures = formData.features.filter((_, i) => i !== index);
-    setFormData({ ...formData, features: newFeatures });
-  };
-
-  const updateFeature = (index: number, value: string) => {
-    const newFeatures = [...formData.features];
-    newFeatures[index] = value;
-    setFormData({ ...formData, features: newFeatures });
-  };
-
-  const handlePriceINChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    // Remove existing ₹ symbol
-    value = value.replace(/₹\s?/g, "");
-    // Add ₹ symbol if value is not empty
-    const formattedValue = value ? `₹ ${value}` : "";
-    setFormData({ ...formData, priceIN: formattedValue });
-  };
-
-  const handlePriceUAEChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    value = value.replace(/AED\s?/g, "");
-    const formattedValue = value ? `AED ${value}` : "";
-    setFormData({ ...formData, priceUAE: formattedValue });
-  };
-
-  const handleServiceChange = (
-    service: keyof Pick<
-      CreatePackageFormData,
-      | "food"
-      | "accommodation"
-      | "travelCard"
-      | "utilityBills"
-      | "airportPickup"
-      | "jobGuidance"
-    >,
-    checked: boolean,
-  ) => {
-    setFormData({ ...formData, [service]: checked });
-  };
-
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 rounded-lg shadow-sm border max-w-4xl mx-auto bg-white dark:bg-gray-700 text-black dark:text-white">
+      <div className="bg-white rounded-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 rounded-lg shadow-sm border mx-auto bg-white dark:bg-gray-700 text-black dark:text-white">
           <h2 className="text-xl font-semibold mb-6">Add New Package</h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="packageName">Package Name</Label>
+              <Input
+                id="packageName"
+                value={formData.packageName}
+                onChange={(e) => setFormData({ ...formData, packageName: e.target.value })}
+                placeholder="Enter package name"
+              />
+              {errors.packageName && (
+                <p className="text-red-500 text-sm">{errors.packageName}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="packageName" className="">
-                  Package Name
-                </Label>
+                <Label htmlFor="price">Price</Label>
                 <Input
-                  id="packageName"
-                  value={formData.packageName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, packageName: e.target.value })
-                  }
-                  className=""
-                  placeholder="Enter package name"
+                  id="price"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  placeholder="e.g. 5000"
                 />
-                {errors.packageName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.packageName}
-                  </p>
+                {errors.price && (
+                  <p className="text-red-500 text-sm">{errors.price}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="packageType" className="">
-                  Package Type
-                </Label>
+                <Label htmlFor="currency">Currency</Label>
                 <Select
-                  value={formData.packageType}
-                  onValueChange={(value: "jobpackage" | "tourpackage") =>
-                    setFormData({ ...formData, packageType: value })
+                  value={formData.currency}
+                  onValueChange={(value: CurrencyType) =>
+                    setFormData({ ...formData, currency: value })
                   }
                 >
-                  <SelectTrigger className="">
-                    <SelectValue placeholder="Select package type" />
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select currency" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="jobpackage">Job Package</SelectItem>
-                    <SelectItem value="tourpackage">Tour Package</SelectItem>
+                    <SelectItem value="Rs.">Rs.</SelectItem>
+                    <SelectItem value="AED">AED</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description" className="">
-                Description
-              </Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
+              <Label htmlFor="packageCategory">Category</Label>
+              <Select
+                value={formData.packageCategory}
+                onValueChange={(value: PackageCategoryType) =>
+                  setFormData({ ...formData, packageCategory: value })
                 }
-                className=""
-                placeholder="Enter package description..."
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(CATEGORY_LABELS) as PackageCategoryType[]).map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {CATEGORY_LABELS[key]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="packageIncludes">Package Includes</Label>
+              <Textarea
+                id="packageIncludes"
+                value={formData.packageIncludes}
+                onChange={(e) => setFormData({ ...formData, packageIncludes: e.target.value })}
+                placeholder="Describe what is included in this package..."
+                rows={6}
               />
-              {errors.description && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.description}
-                </p>
+              {errors.packageIncludes && (
+                <p className="text-red-500 text-sm">{errors.packageIncludes}</p>
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="priceIN" className="">
-                  Price (INR)
-                </Label>
-                <Input
-                  id="priceIN"
-                  value={formData.priceIN}
-                  onChange={handlePriceINChange}
-                  className=""
-                  placeholder="₹ 2,50,000"
-                />
-                {errors.priceIN && (
-                  <p className="text-red-500 text-sm mt-1">{errors.priceIN}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="priceUAE" className="">
-                  Price (AED)
-                </Label>
-                <Input
-                  id="priceUAE"
-                  value={formData.priceUAE}
-                  onChange={handlePriceUAEChange}
-                  className=""
-                  placeholder="AED 8,500"
-                />
-                {errors.priceUAE && (
-                  <p className="text-red-500 text-sm mt-1">{errors.priceUAE}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="packageDuration" className="">
-                  Duration (Days)
-                </Label>
-                <Input
-                  id="packageDuration"
-                  type="number"
-                  min="1"
-                  max="365"
-                  value={formData.packageDuration || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      packageDuration: parseInt(e.target.value) || 0,
-                    })
-                  }
-                  className=""
-                  placeholder="Enter duration in days"
-                />
-                {errors.packageDuration && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.packageDuration}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Features */}
-            <div className="space-y-2">
-              <Label className="">Package Features</Label>
-              <div className="space-y-2 mt-2">
-                {formData.features.map((feature, index) => (
-                  <div key={index} className="flex gap-2">
-                    <Input
-                      value={feature}
-                      onChange={(e) => updateFeature(index, e.target.value)}
-                      className=""
-                      placeholder="Enter feature"
-                    />
-                    {formData.features.length > 1 && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => removeFeature(index)}
-                        className="border-red-300 text-red-600 hover:bg-red-50"
-                      >
-                        Remove
-                      </Button>
-                    )}
-                  </div>
-                ))}
-                <Button type="button" variant={"outline"} onClick={addFeature}>
-                  Add Feature
-                </Button>
-                {errors.features && (
-                  <p className="text-red-500 text-sm mt-1">{errors.features}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Services */}
-            <div>
-              <Label className="mb-3 block">Included Services</Label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {[
-                  { key: "food", label: "Food" },
-                  { key: "accommodation", label: "Accommodation" },
-                  { key: "travelCard", label: "Travel Card" },
-                  { key: "utilityBills", label: "Utility Bills" },
-                  { key: "airportPickup", label: "Airport Pickup" },
-                  { key: "jobGuidance", label: "Job Guidance" },
-                ].map(({ key, label }) => (
-                  <div key={key} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={key}
-                      checked={
-                        formData[key as keyof typeof formData] as boolean
-                      }
-                      onCheckedChange={(checked) =>
-                        handleServiceChange(
-                          key as
-                            | "food"
-                            | "accommodation"
-                            | "travelCard"
-                            | "utilityBills"
-                            | "airportPickup"
-                            | "jobGuidance",
-                          checked as boolean,
-                        )
-                      }
-                    />
-                    <Label htmlFor={key} className="text-sm">
-                      {label}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" variant={"outline"} onClick={handleCancel}>
+              <Button type="button" variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={createMutation.isPending}
-                variant={"outline"}
-              >
+              <Button type="submit" variant="outline" disabled={createMutation.isPending}>
                 {createMutation.isPending ? "Creating..." : "Create Package"}
               </Button>
             </div>

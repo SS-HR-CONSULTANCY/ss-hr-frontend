@@ -14,7 +14,7 @@ export const useUserJob = () => {
     try {
       const res = await userApplyJob(_id);
       if (res.success) {
-        toast.success(res.message);
+        toast.success(res.message || "Application submitted successfully!");
         queryClient.setQueryData(
           ["jobs"],
           (oldJobs: UserfetchAllJobsResponse[] | undefined) => {
@@ -28,7 +28,7 @@ export const useUserJob = () => {
           },
         );
       } else {
-        toast.error(res.message);
+        toast.error("Failed to submit application");
       }
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.message) {

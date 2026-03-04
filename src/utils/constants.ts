@@ -48,7 +48,7 @@ import type {
 } from "@/types/apiTypes/adminApiTypes";
 import type { RoleType } from "./zod/commonZod";
 
-export const companyName = "Shahaalam Groups";
+export const companyName = "SS HR Consultancy";
 
 export const roleValues = ["user", "admin", "systemAdmin"] as const;
 
@@ -109,7 +109,6 @@ export const siteUrlConfig: SiteUrlConfigProps = {
 export const links: { url: string; text: string }[] = [
   { url: "/user", text: "Dashboard" },
   { url: "/user/jobs", text: "Jobs" },
-  { url: "/user/applications", text: "Applications" },
   { url: "/user/chat", text: "Chat" },
 ];
 
@@ -130,19 +129,19 @@ export const navLinks: navLinkProps[] = [
     isForMob: true,
   },
   {
+    text: "Packages",
+    href: siteUrlConfig.travelpackages,
+    isLink: true,
+    isForDesk: true,
+    isForMob: true,
+  },
+  {
     text: "Services",
     href: siteUrlConfig.services,
     content: "components",
     isForDesk: true,
   },
   { text: "Services", href: siteUrlConfig.services, isForMob: true },
-  {
-    text: "Tours & Travels",
-    href: siteUrlConfig.travelpackages,
-    isLink: true,
-    isForDesk: true,
-    isForMob: true,
-  },
   {
     text: "Web Development",
     href: siteUrlConfig.webdevelopment,
@@ -417,6 +416,9 @@ export const services: ServiceProps[] = [
   },
 ];
 
+const hiddenFromNav = ["webdevelopment", "toursandtravels", "ticketservice", "cvwritingservice"];
+export const navServices = services.filter((s) => !hiddenFromNav.includes(s.id));
+
 // About component constants
 export const words: string =
   "Established in 2021, SS Human Resource Consultancy & Tours & Travels has quickly become a leader in providing comprehensive HR and travel solutions. Our experienced team boasts extensive knowledge of the Dubai job market and travel industry. We pride ourselves on delivering personalized service and exceeding client expectations, making us your trusted partner for both career advancement and memorable travel experiences.";
@@ -595,7 +597,6 @@ export const callToActionData: CallToActionProps = {
 // Routes
 export const userApplicationRoutes: Route[] = [
   { path: "jobs", name: "Jobs", roles: ["user"] },
-  { path: "applications", name: "Applications", roles: ["user"] },
   { path: "chat", name: "Chat", roles: ["user"] },
 ];
 
@@ -623,6 +624,11 @@ export const adminApplicationRoutes: Route[] = [
   {
     path: "applications",
     name: "Applications",
+    roles: ["admin", "systemAdmin"],
+  },
+  {
+    path: "enquiries",
+    name: "Enquiries",
     roles: ["admin", "systemAdmin"],
   },
   {

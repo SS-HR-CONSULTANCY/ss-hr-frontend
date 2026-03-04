@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { services } from "@/utils/constants";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
 
 const Hero2 = () => {
   const [index, setIndex] = useState(0);
@@ -62,21 +61,6 @@ const Hero2 = () => {
           </div>
 
           <Badge className="mt-4 w-fit">India & Dubai</Badge>
-
-          <Card className="mt-8 max-w-md">
-            <CardContent className="flex items-center justify-between gap-4 py-2 md:py-4">
-              <div>
-                <p className="text-sm font-medium">Sign up to your dream</p>
-                <p className="text-xs">availability services</p>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="rounded-md border p-1 md:p-2 text-xs md:text-sm">
-                  {services[index].title}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </section>

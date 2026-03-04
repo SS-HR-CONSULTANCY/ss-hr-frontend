@@ -9,7 +9,7 @@ import {
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import LaunchUI from "../logos/launch-ui";
-import { navLinks, services } from "@/utils/constants";
+import { navLinks, navServices } from "@/utils/constants";
 import type { navLinkProps } from "@/types/componentTypes/headerTypes";
 import { navigationMenuTriggerStyle } from "./navigation-menu-variants";
 import type { ContentCardProps } from "@/types/componentTypes/servicesTypes";
@@ -31,7 +31,7 @@ interface NavigationProps {
 
 export default function Navigation({
   menuItems = navLinks,
-  components = services,
+  components = navServices,
   logo = <LaunchUI />,
   logoTitle = "Launch UI",
   logoDescription = "Landing page template built with React, Shadcn/ui and Tailwind that you can copy/paste into your project.",

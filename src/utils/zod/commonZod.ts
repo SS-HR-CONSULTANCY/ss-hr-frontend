@@ -162,6 +162,12 @@ export const designation = stringField(
   REGEX_TEXT_DOT_AMP,
 );
 export const industry = stringField("industry", 2, 100, REGEX_INDUSTRY);
+export const location = stringField(
+  "location",
+  2,
+  200,
+  REGEX_TEXT_DOT_AMP,
+);
 export const jobDescription = stringField(
   "jobDescription",
   10,

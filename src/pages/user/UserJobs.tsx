@@ -6,9 +6,9 @@ import type { UserfetchAllJobsResponse } from "@/types/apiTypes/userApiTypes";
 import { UserJobsTableColumns } from "@/components/table/tableColumns/UserJobsTableColumns";
 
 const UserJobs: React.FC = () => {
-  const { handleApplyJob, handleViewJobDetails } = useUserJob();
+  const { handleApplyJob } = useUserJob();
 
-  const columns = UserJobsTableColumns(handleApplyJob, handleViewJobDetails);
+  const columns = UserJobsTableColumns(handleApplyJob);
 
   return (
     <CommonTable<UserfetchAllJobsResponse>

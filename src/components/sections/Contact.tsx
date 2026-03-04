@@ -7,6 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { businessHours, contactData } from "@/utils/constants";
+import { useMutation } from "@tanstack/react-query";
+import { submitEnquiry } from "@/utils/apis/enquiryApi";
+import { toast } from "react-toastify";
 import {
   Card,
   CardContent,
@@ -16,13 +19,40 @@ import {
 } from "@/components/ui/card";
 
 export default function Contact() {
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+
+  const mutation = useMutation({
+    mutationFn: submitEnquiry,
+    onSuccess: () => {
+      toast.success("Message sent successfully! We will get back to you soon.");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to send message. Please try again later.");
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
-    // TODO: send to your API / form service
-    setTimeout(() => setLoading(false), 800);
+    mutation.mutate(formData);
   }
 
   return (
@@ -71,41 +101,42 @@ export default function Contact() {
               <form onSubmit={onSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field id="firstName" label="First name">
-                    <Input id="firstName" name="firstName" required />
+                    <Input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required />
                   </Field>
                   <Field id="lastName" label="Last name">
-                    <Input id="lastName" name="lastName" required />
+                    <Input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
                   </Field>
                 </div>
 
                 <Field id="email" label="Email">
-                  <Input id="email" type="email" name="email" required />
+                  <Input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required />
                 </Field>
 
                 <Field id="phone" label="Phone (optional)">
-                  <Input id="phone" name="phone" />
+                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} />
                 </Field>
 
                 <Field id="subject" label="Subject">
                   <Input
                     id="subject"
                     name="subject"
+                    value={formData.subject} onChange={handleChange}
                     placeholder="Visa inquiry, Tickets, Recruitment…"
                     required
                   />
                 </Field>
 
                 <Field id="message" label="Message">
-                  <Textarea id="message" name="message" rows={5} required />
+                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={5} required />
                 </Field>
 
                 <Button
                   type="submit"
                   className="w-full sm:w-auto cursor-pointer"
-                  disabled={loading}
+                  disabled={mutation.isPending}
                 >
                   <Send className="mr-2 size-4" />
-                  {loading ? "Sending..." : "Send message"}
+                  {mutation.isPending ? "Sending..." : "Send message"}
                 </Button>
               </form>
             </CardContent>
