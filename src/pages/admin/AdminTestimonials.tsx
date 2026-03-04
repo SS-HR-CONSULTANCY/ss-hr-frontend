@@ -40,15 +40,15 @@ const AdminTestimonials: React.FC = () => {
   return (
     <>
       <TablePageHeader
-        title="Testimonials"
-        subtitle="Client testimonials about our HR consultancy services"
+        title="Reviews"
+        subtitle="Client reviews about our HR consultancy services"
         actionButton={
           <Button
             onClick={() => dispatch(toggleAddTestimonialForm())}
             variant="outline"
           >
             <Plus className="h-5 w-5" />
-            Add New Testimonial
+            Add New Review
           </Button>
         }
       />
@@ -60,7 +60,6 @@ const AdminTestimonials: React.FC = () => {
         description=""
         column={column}
         columnsCount={6}
-        showDummyData={false}
         pageSize={10}
       />
 

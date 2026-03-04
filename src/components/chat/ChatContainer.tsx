@@ -11,11 +11,7 @@ import { formatTo24HourTime } from "@/utils/helpers/chatHelper";
 import avatarImage from "../../assets/defaultImgaes/noProfile.png";
 import NoChatSelectedSShimmer from "../shimmer/NoChatSelectedSShimmer";
 import type { SocketDataInterface } from "@/types/componentTypes/chatTypes";
-import {
-  connectChatSocket,
-  disconnectChatSocket,
-  getMessages,
-} from "@/utils/apis/chatApi";
+import { getMessages } from "@/utils/apis/chatApi";
 import { useMessage } from "@/hooks/useSocketHook";
 
 const ChatContainer: React.FC = () => {
@@ -30,22 +26,17 @@ const ChatContainer: React.FC = () => {
   const { user } = useSelector((store: RootState) => store.auth);
 
   useEffect(() => {
+    if (selectedUser) {
+      dispatch(getMessages({ selectedUserId: selectedUser._id }));
+    }
+  }, [dispatch, selectedUser]);
+
+  useEffect(() => {
     subscribeToMessages();
     return () => {
       unsubscribeFromMessages();
     };
   }, [subscribeToMessages, unsubscribeFromMessages, selectedUser]);
-
-  useEffect(() => {
-    if (!selectedUser || !user) return;
-
-    dispatch(getMessages({ selectedUserId: selectedUser._id }));
-    dispatch(connectChatSocket());
-
-    return () => {
-      dispatch(disconnectChatSocket());
-    };
-  }, [dispatch, selectedUser, user]);
 
   useEffect(() => {
     if (messageEndRef.current && (messages || isTyping)) {

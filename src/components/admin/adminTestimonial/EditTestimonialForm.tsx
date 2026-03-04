@@ -25,7 +25,6 @@ const EditTestimonialForm: React.FC = () => {
 
   const [formData, setFormData] = useState<UpdateTestimonialFormData>({
     clientName: "",
-    clientPhoto: "",
     designation: "",
     testimonial: "",
     isVisible: true,
@@ -52,7 +51,6 @@ const EditTestimonialForm: React.FC = () => {
     if (testimonialData?.testimonial) {
       setFormData({
         clientName: testimonialData.testimonial.clientName,
-        clientPhoto: testimonialData.testimonial.clientPhoto,
         designation: testimonialData.testimonial.designation,
         testimonial: testimonialData.testimonial.testimonial,
         isVisible: testimonialData.testimonial.isVisible,
@@ -68,7 +66,7 @@ const EditTestimonialForm: React.FC = () => {
     }
 
     if (formData.testimonial && formData.testimonial.length < 20) {
-      newErrors.testimonial = "Testimonial must be at least 20 characters";
+      newErrors.testimonial = "Review must be at least 20 characters";
     }
 
     setErrors(newErrors);
@@ -87,12 +85,12 @@ const EditTestimonialForm: React.FC = () => {
 
     if (res) {
       if (res.success) {
-        toast.success("Testimonial updated successfully");
+        toast.success("Review updated successfully");
         queryClient.invalidateQueries({ queryKey: ["testimonials"] });
         dispatch(closeEditTestimonialForm());
       }
     } else {
-      toast.error("Failed to update testimonial");
+      toast.error("Failed to update review");
     }
   };
 
@@ -106,7 +104,7 @@ const EditTestimonialForm: React.FC = () => {
 
   return (
     <div className="p-6 rounded-lg shadow-sm border max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-6">Edit Testimonial</h2>
+      <h2 className="text-xl font-semibold mb-6">Edit Review</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -143,41 +141,13 @@ const EditTestimonialForm: React.FC = () => {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="clientPhoto">Client Photo ( drive link )</Label>
-            <input
-              type="text"
-              id="clientPhoto"
-              value={formData.clientPhoto || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, clientPhoto: e.target.value })
-              }
-              className="block w-full text-sm border p-2"
-            />
-          </div>
         </div>
 
-        {/* <div className="space-y-2">
-          <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
-          <input
-            type="file"
-            id="clientPhoto"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="block w-full text-sm border p-2"
-          />
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="mt-2 w-24 h-24 object-cover rounded-full border"
-            />
-          )}
-        </div> */}
+
 
         <div className="space-y-2">
           <Label htmlFor="testimonial" className="">
-            Testimonial
+            Review
           </Label>
           <Textarea
             id="testimonial"
@@ -186,7 +156,7 @@ const EditTestimonialForm: React.FC = () => {
               setFormData({ ...formData, testimonial: e.target.value })
             }
             className=""
-            placeholder="Enter client testimonial..."
+            placeholder="Enter client review..."
           />
           {errors.testimonial && (
             <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>
@@ -198,7 +168,7 @@ const EditTestimonialForm: React.FC = () => {
             className="pr-[15px] text-[15px] leading-none"
             htmlFor="isVisible"
           >
-            Make testimonial visible to public
+            Make review visible to public
           </label>
           <Switch.Root
             className="relative h-[25px] w-[42px] cursor-default rounded-full bg-gray-300 shadow-[0_2px_10px] shadow-gray-400 outline-none focus:shadow-[0_0_0_2px] focus:shadow-blue-500 data-[state=checked]:bg-blue-600"
@@ -217,7 +187,7 @@ const EditTestimonialForm: React.FC = () => {
             Cancel
           </Button>
           <Button type="submit" variant="outline">
-            {"Update Testimonial"}
+            {"Update Review"}
           </Button>
         </div>
       </form>

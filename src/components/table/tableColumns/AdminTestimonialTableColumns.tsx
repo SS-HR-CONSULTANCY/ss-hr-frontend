@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import noProfile from "../../../assets/defaultImgaes/noProfile.png";
+
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
 
 export const AdminTestimonialTableColumns = (
@@ -12,22 +12,7 @@ export const AdminTestimonialTableColumns = (
   handleViewTestimonial: (testimonialId: string) => void,
   isDeleting: boolean,
 ): ColumnDef<AdminfetchAllTestimonialsResponse>[] => [
-  {
-    accessorKey: "clientPhoto",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Photo" />
-    ),
-    cell: ({ row }) => {
-      const img = row.original.clientPhoto ?? noProfile;
-      return (
-        <img
-          src={img}
-          alt={row.original.clientName}
-          className="w-10 h-10 rounded-full object-cover"
-        />
-      );
-    },
-  },
+
   {
     accessorKey: "clientName",
     header: ({ column }) => (
@@ -43,7 +28,7 @@ export const AdminTestimonialTableColumns = (
   {
     accessorKey: "testimonial",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Testimonial" />
+      <DataTableColumnHeader column={column} title="Review" />
     ),
     cell: ({ row }) => {
       const text = row.original.testimonial;
@@ -113,7 +98,7 @@ export const AdminTestimonialTableColumns = (
             size="sm"
             onClick={() => handleEditTestimonial(testimonial._id)}
             className="h-8 w-8 p-0 text-green-500 hover:text-green-500 hover:bg-green-500/20 cursor-pointer"
-            title="Edit Testimonial"
+            title="Edit Review"
           >
             <Edit className="h-4 w-4" />
           </Button>
@@ -123,7 +108,7 @@ export const AdminTestimonialTableColumns = (
             size="sm"
             onClick={() => handleDeleteTestimonial(testimonial._id)}
             className="h-8 w-8 p-0 text-red-500 hover:text-red-500 hover:bg-red-500/20 cursor-pointer"
-            title="Delete Testimonial"
+            title="Delete Review"
             disabled={isDeleting}
           >
             <Trash2 className="h-4 w-4" />

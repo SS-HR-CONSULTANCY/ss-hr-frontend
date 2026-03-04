@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Loading from "./LoadingPage";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState, AppDispatch } from "@/store/store";
 import ChatSidebar from "@/components/chat/ChatSidebar";
 import ChatContainer from "@/components/chat/ChatContainer";
+import { connectChatSocket, disconnectChatSocket } from "@/utils/apis/chatApi";
 import {
   adminFetchUsersFroChatSideBar,
   userFetchUsersFroChatSideBar,
@@ -11,6 +12,16 @@ import {
 
 const ChatPage: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (user?._id) {
+      dispatch(connectChatSocket());
+    }
+    return () => {
+      dispatch(disconnectChatSocket());
+    };
+  }, [user?._id, dispatch]);
 
   if (!user) return <Loading />;
 

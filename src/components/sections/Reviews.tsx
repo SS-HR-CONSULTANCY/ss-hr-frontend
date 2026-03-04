@@ -67,13 +67,7 @@ const Reviews: React.FC = () => {
               speed="normal"
             />
           </div>
-          <div className="relative w-full max-w-screen overflow-hidden mt-4 hidden md:block">
-            <InfiniteMovingCards
-              items={testmonials || []}
-              direction="left"
-              speed="normal"
-            />
-          </div>
+
         </motion.div>
         <div className="w-full overflow-hidden leading-[0] rotate-180">
           <svg

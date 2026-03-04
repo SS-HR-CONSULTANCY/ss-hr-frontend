@@ -159,7 +159,7 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({ getUsers }) => {
                     </p>
                   )}
                 </div>
-                <div className="flex text-sm lg:text-md text-stone-500 dark:text-stone-300">
+                <div className="flex items-center gap-2 text-sm lg:text-md text-stone-500 dark:text-stone-300">
                   {getLastMessage(user._id) ? (
                     <p className="font-normal truncate">
                       {getLastMessage(user._id)?.message}
@@ -169,6 +169,13 @@ const ChatSidebar: React.FC<ChatSideBarProps> = ({ getUsers }) => {
                   ) : (
                     "Offline"
                   )}
+                  <div
+                    className={`w-3 h-3 rounded-full border-2 border-white ${
+                      onlineUsers?.includes(user._id)
+                        ? "bg-green-500"
+                        : "bg-gray-400"
+                    }`}
+                  />
                 </div>
               </div>
             </button>

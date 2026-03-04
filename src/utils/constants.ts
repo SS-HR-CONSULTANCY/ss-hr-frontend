@@ -512,30 +512,26 @@ export const ImageGridData: ImageGridDataProps[] = [
 // Footer compoenent constants
 export const footerData = [
   {
-    title: "Quick Links",
+    title: "Social Media",
     links: [
-      { text: "Home", href: "/" },
-      { text: "About Us", href: "#aboutus" },
-      { text: "Services", href: "#services" },
-      { text: "Packages", href: "#packages" },
-      { text: "Web Development", href: "/web-development" },
-      { text: "Contact", href: "#contact" },
-    ],
-  },
-  {
-    title: "Contact",
-    links: [
-      { text: "Instagram", href: "https://www.instagram.com/ss__human_resource?igsh=Y2tyNHJ4N2N5dGNy" },
+      {
+        text: "Instagram",
+        href: "https://www.instagram.com/ss__human_resource?igsh=Y2tyNHJ4N2N5dGNy",
+      },
       { text: "Facebook", href: "" },
       {
         text: "Linkedin",
         href: "https://www.linkedin.com/company/ss-human-resource-consultancy/",
       },
-       { text: "Phone (UAE) +971 523664492", href: "tel:+971 523664492" },
-        { text: "Phone (UAE) +971 542326583", href: "tel:+971 542326583" },
-       { text: "Phone (UAE) +971 542326584", href: "tel:+971 542326584" },
+    ],
+  },
+  {
+    title: "Contacts",
+    links: [
+      { text: "Phone (UAE) +971 523664492", href: "tel:+971 523664492" },
+      { text: "Phone (UAE) +971 5423226583", href: "tel:+971 5423226583" },
+      { text: "Phone (UAE) +971 5423226584", href: "tel:+971 5423226584" },
       { text: "Phone (India) +91 9349714742", href: "tel:+91 9349714742" },
-     
       {
         text: "Email - hello@sshrconsultancy.com",
         href: "mailto:hello@sshrconsultancy.com",

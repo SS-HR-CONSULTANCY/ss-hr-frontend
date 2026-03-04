@@ -17,7 +17,6 @@ const AddTestimonialForm: React.FC = () => {
 
   const [formData, setFormData] = useState<CreateTestimonialFormData>({
     clientName: "",
-    clientPhoto: "",
     designation: "",
     testimonial: "",
   });
@@ -28,7 +27,6 @@ const AddTestimonialForm: React.FC = () => {
   const resetForm = () => {
     setFormData({
       clientName: "",
-      clientPhoto: "",
       designation: "",
       testimonial: "",
     });
@@ -50,9 +48,9 @@ const AddTestimonialForm: React.FC = () => {
     }
 
     if (!formData.testimonial?.trim()) {
-      newErrors.testimonial = "Testimonial text is required";
+      newErrors.testimonial = "Review text is required";
     } else if (formData.testimonial.length < 20) {
-      newErrors.testimonial = "Testimonial must be at least 20 characters";
+      newErrors.testimonial = "Review must be at least 20 characters";
     }
 
     setErrors(newErrors);
@@ -84,13 +82,13 @@ const AddTestimonialForm: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ["testimonials"] });
       }
     } else {
-      toast.error("Testimonial adding failed");
+      toast.error("Review adding failed");
     }
   };
 
   return (
     <div className="p-6 rounded-lg shadow-sm border max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-6">Add New Testimonial</h2>
+      <h2 className="text-xl font-semibold mb-6">Add New Review</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -125,51 +123,17 @@ const AddTestimonialForm: React.FC = () => {
           </div>
         </div>
 
-        {/* <div className="space-y-2">
-          <Label htmlFor="clientPhoto">Client Photo (Optional)</Label>
-          <input
-            type="file"
-            id="clientPhoto"
-            onChange={handleFileChange}
-            className="block w-full text-sm border p-2"
-          />
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="mt-2 w-24 h-24 object-cover rounded-full border"
-            />
-          )}
-        </div> */}
+
 
         <div className="space-y-2">
-          <Label htmlFor="clientPhoto">Client Photo ( drive link )</Label>
-          <input
-            type="text"
-            id="clientPhoto"
-            onChange={(e) =>
-              setFormData({ ...formData, clientPhoto: e.target.value })
-            }
-            className="block w-full text-sm border p-2"
-          />
-          {/* {previewImage && (
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="mt-2 w-24 h-24 object-cover rounded-full border"
-            />
-          )} */}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="testimonial">Testimonial</Label>
+          <Label htmlFor="testimonial">Review</Label>
           <Textarea
             id="testimonial"
             value={formData.testimonial}
             onChange={(e) =>
               setFormData({ ...formData, testimonial: e.target.value })
             }
-            placeholder="Enter client testimonial..."
+            placeholder="Enter client review..."
           />
           {errors.testimonial && (
             <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>
@@ -181,7 +145,7 @@ const AddTestimonialForm: React.FC = () => {
             Cancel
           </Button>
           <Button type="submit" variant="outline">
-            Creating testimonial
+            Creating review
           </Button>
         </div>
       </form>

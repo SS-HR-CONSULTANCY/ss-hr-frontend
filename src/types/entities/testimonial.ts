@@ -1,7 +1,6 @@
 export interface Testimonial {
   _id: string;
   clientName: string;
-  clientPhoto: string;
   designation: string;
   testimonial: string;
   isVisible: boolean;
@@ -11,14 +10,12 @@ export interface Testimonial {
 
 export interface CreateTestimonialFormData {
   clientName: string;
-  clientPhoto: string;
   designation: string;
   testimonial: string;
 }
 
 export interface UpdateTestimonialFormData {
   clientName?: string;
-  clientPhoto?: string;
   designation?: string;
   testimonial?: string;
   isVisible?: boolean;

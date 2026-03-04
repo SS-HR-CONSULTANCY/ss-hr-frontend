@@ -30,14 +30,12 @@ export interface SingleTestimonialResponse {
 
 export interface CreateTestimonialRequest {
   clientName: string;
-  clientPhoto?: string;
   designation: string;
   testimonial: string;
 }
 
 export interface UpdateTestimonialRequest {
   clientName?: string;
-  clientPhoto?: File;
   designation?: string;
   testimonial?: string;
   isVisible?: boolean;
