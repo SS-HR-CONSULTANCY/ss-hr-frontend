@@ -19,7 +19,6 @@ const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
 const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const AboutUsPage = lazy(() => import("@/pages/common/AboutUsPage"));
 const ContactPage = lazy(() => import("@/pages/common/ContactPage"));
-const AdminReports = lazy(() => import("@/pages/admin/AdminReports"));
 const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
 const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
@@ -309,14 +308,6 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
             <AdminTestimonials />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "reports",
-        element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
-            <AdminReports />
           </ProtectedRoute>
         ),
       },

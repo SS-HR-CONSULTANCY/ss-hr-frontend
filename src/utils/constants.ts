@@ -39,6 +39,8 @@ import {
   Package,
   Phone,
   Users,
+  Wallet,
+  TrendingUp,
 } from "lucide-react";
 import type {
   AdminFetchApplicationsReportStatsDataResponse,
@@ -636,17 +638,12 @@ export const adminApplicationRoutes: Route[] = [
   },
   {
     path: "payments",
-    name: "Payments",
+    name: "Payment Tracking",
     roles: ["admin", "systemAdmin"],
   },
   {
     path: "testimonials",
     name: "Testimonials",
-    roles: ["admin", "systemAdmin"],
-  },
-  {
-    path: "reports",
-    name: "Reports",
     roles: ["admin", "systemAdmin"],
   },
   // {
@@ -994,3 +991,29 @@ export const SEO_DATA: Record<string, SEOConfig> = {
     canonical: "https://sshrconsultancy.com/404",
   },
 };
+
+export const statsMapForPaymentTracking: Array<
+  statsMapIntrface<{
+    totalPayments: number;
+    totalRevenue: number;
+    totalPending: number;
+  }>
+> = [
+  {
+    title: "Total Payments",
+    key: "totalPayments",
+    icon: ClipboardList,
+  },
+  {
+    title: "Total Revenue",
+    key: "totalRevenue",
+    icon: Wallet,
+    price: true,
+  },
+  {
+    title: "Total Pending",
+    key: "totalPending",
+    icon: TrendingUp,
+    price: true,
+  },
+];

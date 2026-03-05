@@ -3,6 +3,7 @@ import Loading from "@/pages/common/LoadingPage";
 import { useAppSelector } from "../hooks/redux";
 import { Navigate, useLocation } from "react-router-dom";
 import type { ProtectedRouteProps } from "@/types/componentTypes/routerTypes";
+import LoginPrompt from "@/components/common/LoginPrompt";
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
@@ -24,6 +25,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     ) {
       return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
+
+    if (location.pathname.includes("/jobs") || location.pathname.includes("/user")) {
+        return <LoginPrompt />;
+    }
+
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

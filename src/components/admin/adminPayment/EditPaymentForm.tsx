@@ -38,6 +38,7 @@ const EditPaymentForm: React.FC = () => {
     paymentMethod: paymentMethodValues[0],
     paymentDate: "",
     paymentProof: "",
+    invoiceUrl: "",
     paymentStatus: paymentStatusValues[0],
     adminNotes: "",
   });
@@ -79,6 +80,7 @@ const EditPaymentForm: React.FC = () => {
         referenceId: payment.referenceId,
         paymentDate: payment.paymentDate?.split("T")[0] || payment.paymentDate,
         paymentProof: payment.paymentProof,
+        invoiceUrl: payment.invoiceUrl,
         adminNotes: payment.adminNotes,
       });
     }
@@ -151,7 +153,7 @@ const EditPaymentForm: React.FC = () => {
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 rounded-lg shadow-sm border max-w-4xl mx-auto">
-          <h2 className="text-xl font-semibold mb-6">Edit Payment</h2>
+          <h2 className="text-xl font-semibold mb-6">Edit Unified Record (Payment, Invoice & Receipt)</h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Customer & Package Information */}
@@ -314,40 +316,50 @@ const EditPaymentForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="referenceId" className="">
-                  Reference ID
-                </Label>
-                <Input
-                  id="referenceId"
-                  value={formData.referenceId || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, referenceId: e.target.value })
-                  }
-                  className=""
-                  placeholder="GP123456789"
-                />
-                {errors.referenceId && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.referenceId}
-                  </p>
-                )}
-              </div>
+            {/* Invoice & Receipt Details */}
+            <div className="space-y-4 border-t pt-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500">Invoice & Receipt Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="referenceId">Reference ID</Label>
+                  <Input
+                    id="referenceId"
+                    value={formData.referenceId || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, referenceId: e.target.value })
+                    }
+                    placeholder="GP123456789"
+                  />
+                  {errors.referenceId && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.referenceId}
+                    </p>
+                  )}
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="paymentProof" className="">
-                  Payment Proof ( drive link )
-                </Label>
-                <Input
-                  id="paymentProof"
-                  value={formData.paymentProof || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, paymentProof: e.target.value })
-                  }
-                  className=""
-                  placeholder="https://drive.google.com/file/d/..."
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="invoiceUrl">Invoice Link (Drive)</Label>
+                  <Input
+                    id="invoiceUrl"
+                    value={formData.invoiceUrl || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, invoiceUrl: e.target.value })
+                    }
+                    placeholder="https://drive.google.com/file/d/..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="paymentProof">Receipt Link (Drive)</Label>
+                  <Input
+                    id="paymentProof"
+                    value={formData.paymentProof || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, paymentProof: e.target.value })
+                    }
+                    placeholder="https://drive.google.com/file/d/..."
+                  />
+                </div>
               </div>
             </div>
 

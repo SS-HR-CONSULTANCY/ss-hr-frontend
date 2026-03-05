@@ -13,6 +13,7 @@ export interface Payment {
   paymentStatus: PaymentStatus;
   referenceId: string;
   paymentProof: string;
+  invoiceUrl: string;
   adminNotes: string;
   createdAt: string;
   updatedAt: string;
@@ -31,6 +32,7 @@ export interface CreatePaymentFormData {
   referenceId: string;
   paymentDate: string;
   paymentProof: string;
+  invoiceUrl: string;
   adminNotes: string;
 }
 
@@ -47,6 +49,7 @@ export interface UpdatePaymentFormData {
   paymentDate?: string;
   referenceId?: string;
   paymentProof?: string;
+  invoiceUrl?: string;
   adminNotes?: string;
 }
 

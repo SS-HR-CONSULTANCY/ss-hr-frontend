@@ -1,12 +1,12 @@
 import type { SEOConfig } from "../commonTypes";
 
 export interface ServiceDetailedContentProps {
-  banner: string;
-  bannerTitle: string;
-  hoverDescription: string;
-  points: string[];
-  contactText: string;
-  contactUrl: string;
-  contactButtonText: string;
+  banner?: string;
+  bannerTitle?: string;
+  hoverDescription?: string;
+  points?: string[];
+  contactText?: string;
+  contactUrl?: string;
+  contactButtonText?: string;
   seoData: SEOConfig;
 }

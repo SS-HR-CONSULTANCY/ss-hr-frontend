@@ -14,6 +14,7 @@ import {
   Settings,
   User,
   Mail,
+  CreditCard,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -38,6 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     applications: <CalendarCheck />,
     enquiries: <Mail />,
     payments: <HandCoins />,
+    "payment-tracking": <CreditCard />,
     testimonials: <Star />,
     reports: <Notebook />,
     logout: <LogOut />,

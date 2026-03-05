@@ -1,5 +1,5 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
@@ -101,7 +101,7 @@ const PaymentDetails: React.FC = () => {
       <div className="bg-white dark:bg-gray-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Payment Details</h2>
+            <h2 className="text-xl font-semibold">Unified Record Details</h2>
             <span
               className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(paymentDetails.status)}`}
             >
@@ -166,58 +166,93 @@ const PaymentDetails: React.FC = () => {
               </div>
             </div>
 
-            {/* Payment Details */}
+            {/* Payment & Record Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="p-4 border rounded-lg">
-                <h3 className="text-lg font-semibold  mb-3">
-                  Payment Information
-                </h3>
+                <h3 className="text-lg font-semibold mb-3">Payment Info</h3>
                 <div className="space-y-3">
-                  <div>
-                    <span className="text-sm ">Payment Method:</span>
-                    <p className="font-medium ">
-                      {getPaymentMethodLabel(paymentDetails.paymentMethod)}
-                    </p>
+                  <div className="flex justify-between border-b pb-1">
+                    <span className="text-sm text-gray-500">Method:</span>
+                    <span className="font-medium text-sm">{getPaymentMethodLabel(paymentDetails.paymentMethod)}</span>
                   </div>
-                  <div>
-                    <span className="text-sm ">Payment Date:</span>
-                    <p className="font-medium ">
-                      {formatDate(paymentDetails.paymentDate)}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-sm ">Reference ID:</span>
-                    <p className="font-medium  font-mono">
-                      {paymentDetails.referenceId}
-                    </p>
+                  <div className="flex justify-between border-b pb-1">
+                    <span className="text-sm text-gray-500">Date:</span>
+                    <span className="font-medium text-sm">{formatDate(paymentDetails.paymentDate)}</span>
                   </div>
                 </div>
               </div>
 
               <div className="p-4 border rounded-lg">
-                <h3 className="text-lg font-semibold  mb-3">Payment Proof</h3>
-                <div className="space-y-2">
-                  <span className="text-sm ">Screenshot/Receipt URL:</span>
-                  <div className="p-2 rounded border">
-                    <a
-                      href={paymentDetails.paymentProof}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm break-all"
-                    >
-                      {paymentDetails.paymentProof}
-                    </a>
+                <h3 className="text-lg font-semibold mb-3">Record Info</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between border-b pb-1">
+                    <span className="text-sm text-gray-500">Created:</span>
+                    <span className="font-medium text-xs">{formatDate(paymentDetails.createdAt)}</span>
                   </div>
-                  <Button
-                    onClick={() =>
-                      window.open(paymentDetails.paymentProof, "_blank")
-                    }
-                    variant="outline"
-                    size="sm"
-                    className="mt-2"
-                  >
-                    View Proof
-                  </Button>
+                  <div className="flex justify-between border-b pb-1">
+                    <span className="text-sm text-gray-500">Updated:</span>
+                    <span className="font-medium text-xs">{formatDate(paymentDetails.updatedAt)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Invoice & Receipt Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-lg font-semibold mb-3">Invoice & Reference</h3>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-sm text-gray-500 block">Reference ID:</span>
+                    <p className="font-medium font-mono border-b pb-1">{paymentDetails.referenceId || "N/A"}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm text-gray-500 block">Invoice Link (Drive):</span>
+                    {paymentDetails.invoiceUrl ? (
+                      <div className="mt-1 flex items-center gap-2">
+                        <Button 
+                          onClick={() => window.open(paymentDetails.invoiceUrl, "_blank")}
+                          variant="outline" 
+                          size="sm"
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          View Invoice
+                        </Button>
+                      </div>
+                    ) : (
+                      <p className="text-gray-400 italic text-sm mt-1">No Invoice Link</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-lg font-semibold mb-3">Receipt Information</h3>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-sm text-gray-500 block">Receipt Link (Drive):</span>
+                    {paymentDetails.paymentProof ? (
+                      <div className="mt-1 flex items-center gap-2">
+                        <Button 
+                          onClick={() => window.open(paymentDetails.paymentProof, "_blank")}
+                          variant="outline" 
+                          size="sm"
+                          className="text-green-600 border-green-200 hover:bg-green-50"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          View Receipt
+                        </Button>
+                      </div>
+                    ) : (
+                      <p className="text-gray-400 italic text-sm mt-1">No Receipt Link</p>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Click the buttons above to open document proofs in a new tab.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

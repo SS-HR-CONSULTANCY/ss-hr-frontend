@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Eye, Edit, Trash2, FileText } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi";
@@ -100,6 +100,59 @@ export const AdminPaymentTableColumns = (
         >
           {getStatusLabel(status)}
         </span>
+      );
+    },
+  },
+  {
+    accessorKey: "referenceId",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Ref ID" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <span className="font-mono text-xs truncate max-w-[100px] block">
+          {row.original.referenceId || "N/A"}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "invoiceUrl",
+    header: "Invoice",
+    cell: ({ row }) => {
+      const invoice = row.original.invoiceUrl;
+      return invoice ? (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => window.open(invoice, "_blank")}
+          className="text-orange-500 hover:text-orange-700 p-0 h-auto flex items-center gap-1"
+        >
+          <FileText className="h-4 w-4" />
+          <span className="text-xs text-nowrap">View</span>
+        </Button>
+      ) : (
+        <span className="text-gray-400 text-xs italic">No Invoice</span>
+      );
+    },
+  },
+  {
+    accessorKey: "paymentProof",
+    header: "Receipt",
+    cell: ({ row }) => {
+      const proof = row.original.paymentProof;
+      return proof ? (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => window.open(proof, "_blank")}
+          className="text-blue-500 hover:text-blue-700 p-0 h-auto flex items-center gap-1"
+        >
+          <FileText className="h-4 w-4" />
+          <span className="text-xs text-nowrap">View</span>
+        </Button>
+      ) : (
+        <span className="text-gray-400 text-xs italic">No Receipt</span>
       );
     },
   },

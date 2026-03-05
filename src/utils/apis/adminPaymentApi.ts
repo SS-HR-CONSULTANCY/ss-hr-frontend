@@ -26,6 +26,7 @@ export type AdminfetchAllPaymentsResponse = {
   paymentStatus: PaymentStatus;
   referenceId: string;
   paymentProof: string;
+  invoiceUrl: string;
   adminNotes: string;
   createdAt: string;
   updatedAt: string;
