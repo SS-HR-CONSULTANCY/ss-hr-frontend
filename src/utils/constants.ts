@@ -122,13 +122,6 @@ export const navLinks: navLinkProps[] = [
     isForMob: true,
   },
   {
-    text: "About Us",
-    href: siteUrlConfig.aboutus,
-    isLink: true,
-    isForDesk: true,
-    isForMob: true,
-  },
-  {
     text: "Packages",
     href: siteUrlConfig.travelpackages,
     isLink: true,
@@ -145,6 +138,13 @@ export const navLinks: navLinkProps[] = [
   {
     text: "Web Development",
     href: siteUrlConfig.webdevelopment,
+    isLink: true,
+    isForDesk: true,
+    isForMob: true,
+  },
+  {
+    text: "About Us",
+    href: siteUrlConfig.aboutus,
     isLink: true,
     isForDesk: true,
     isForMob: true,
@@ -316,7 +316,7 @@ export const services: ServiceProps[] = [
     bannerTitle: "Connecting You To Better Careers",
     showButton: true,
     buttonText: "Take A Look",
-    buttonUrl: "/user",
+    buttonUrl: "/user/jobs",
     points: [
       "We help job seekers find positions that align with their skills, experience, and career goals.",
       "Our extensive network of employers provides access to opportunities across diverse industries.",

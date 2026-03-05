@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -10,12 +9,6 @@ export const AdminJobsTableColumns = (
   handleEdit: (id: string) => void,
   handleDelete: (id: string) => void,
 ): ColumnDef<AdminfetchAllJobsResponse>[] => [
-  {
-    accessorKey: "jobUniqueId",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Job ID" />
-    ),
-  },
   {
     accessorKey: "companyName",
     header: ({ column }) => (
@@ -33,15 +26,20 @@ export const AdminJobsTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Openings" />
     ),
+    cell: ({ row }) => {
+      const vacancy = row.original.vacancy;
+      return <span>{vacancy !== undefined && vacancy !== null ? vacancy : "N/A"}</span>;
+    },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "salary",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Posted On" />
+      <DataTableColumnHeader column={column} title="Salary" />
     ),
     cell: ({ row }) => {
-      const date = dayjs(row.original.createdAt).format("DD MMM YYYY");
-      return <span>{date}</span>;
+      const salary = row.original.salary;
+      const currency = row.original.currency || "";
+      return <span>{salary ? `${currency} ${salary}` : "N/A"}</span>;
     },
   },
   {
