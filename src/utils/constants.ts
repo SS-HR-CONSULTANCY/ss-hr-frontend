@@ -304,7 +304,7 @@ export const services: ServiceProps[] = [
   },
   {
     id: "jobrecruitservice",
-    title: "Job Recruitment",
+    title: "Share Interest for Available Vacancies",
     description:
       "Helping professionals find rewarding career opportunities across industries.",
     hoverDescription:
@@ -315,8 +315,10 @@ export const services: ServiceProps[] = [
     banner: "",
     bannerTitle: "Connecting You To Better Careers",
     showButton: true,
-    buttonText: "Take A Look",
+    buttonText: "Share Interest",
     buttonUrl: "/user/jobs",
+    // We will handle the action in the component itself
+    buttonAction: "share_interest",
     points: [
       "We help job seekers find positions that align with their skills, experience, and career goals.",
       "Our extensive network of employers provides access to opportunities across diverse industries.",

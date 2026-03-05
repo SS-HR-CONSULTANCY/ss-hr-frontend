@@ -23,6 +23,7 @@ const Services: React.FC = () => {
               imageUrl={service.imageUrl}
               buttonText={service.buttonText}
               buttonUrl={service.buttonUrl}
+              buttonAction={service.buttonAction}
             />
           ))}
         </div>

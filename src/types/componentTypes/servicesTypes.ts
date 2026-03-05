@@ -1,10 +1,11 @@
 export interface ContentCardProps {
   title: string;
   description: string;
-  imageUrl?: string;
-  hoverDescription: string;
-  buttonText: string;
-  buttonUrl: string;
+  hoverDescription?: string;
+  imageUrl: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  buttonAction?: string;
 }
 
 export interface ServiceProps {
@@ -12,19 +13,17 @@ export interface ServiceProps {
   title: string;
   description: string;
   imageUrl: string;
-  hoverDescription: string;
-  href?: string;
-
+  href: string;
+  points?: string[];
+  banner?: string;
+  bannerTitle?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  buttonAction?: string;
   showButton?: boolean;
-  buttonText: string;
-  buttonUrl: string;
-
-  banner: string;
-  bannerTitle: string;
-  points: string[];
-  contactText: string;
-  contactUrl: string;
-  contactButtonText: string;
-
-  heroTitle: string;
+  contactText?: string;
+  contactButtonText?: string;
+  contactUrl?: string;
+  hoverDescription?: string;
+  heroTitle?: string;
 }

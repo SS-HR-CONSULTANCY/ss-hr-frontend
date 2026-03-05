@@ -1,7 +1,19 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { ContentCardProps } from "@/types/componentTypes/servicesTypes";
 import { Button } from "./button";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/hooks/redux";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const ContentCard = ({
   title,
@@ -9,10 +21,13 @@ const ContentCard = ({
   hoverDescription,
   imageUrl,
   buttonText,
-  buttonUrl
+  buttonUrl,
+  buttonAction,
 }: ContentCardProps) => {
 
   const navigate = useNavigate();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="w-full group/card flex text-white" data-aos="fade-up">
@@ -55,7 +70,17 @@ const ContentCard = ({
                 <Button
                   variant="link"
                   className="justify-center mt-auto cursor-pointer text-white"
-                  onClick={() => navigate(buttonUrl)}
+                  onClick={() => {
+                    if (buttonAction === "share_interest") {
+                      if (!isAuthenticated) {
+                        setIsOpen(true);
+                      } else {
+                        navigate("/user/jobs");
+                      }
+                    } else if (buttonUrl) {
+                      navigate(buttonUrl);
+                    }
+                  }}
                 >
                   {buttonText}
                 </Button>
@@ -64,6 +89,26 @@ const ContentCard = ({
           </div>
         </div>
       </div>
+
+      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Ready to explore careers?</AlertDialogTitle>
+            <AlertDialogDescription>
+              To view available vacancies and share your interest, please log in or create an account with us.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsOpen(false)}>Maybe Later</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              setIsOpen(false);
+              navigate("/login");
+            }}>
+              Log In
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
