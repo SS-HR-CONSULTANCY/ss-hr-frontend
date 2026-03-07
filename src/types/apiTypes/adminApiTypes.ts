@@ -224,15 +224,17 @@ export interface AdminFetchReportApplicationsGraphsDataResponse {
 
 // ✅ Admin report page payment and revenue graph data Response Type
 export interface AdminFetchReportPaymentsGraphsDataResponse {
-  paymentsRadialGragphData: Array<{
-    day: string;
-    count: number;
+  monthlyData: Array<{
+    name: string;
+    expense: number;
+    invoice: number;
+    receipt: number;
   }>;
-  revenueLineGraphData: Array<{
-    date: string;
-    totalRevenue: number;
-    packageRevenue: number;
-    hiringRevenue: number;
+  yearlyData: Array<{
+    name: string;
+    expense: number;
+    invoice: number;
+    receipt: number;
   }>;
 }
 

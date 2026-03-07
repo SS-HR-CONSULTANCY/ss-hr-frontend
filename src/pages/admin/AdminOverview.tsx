@@ -3,19 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import Heading from "@/components/common/Heading";
 import GraphShimmer from "@/components/shimmer/GraphShimmer";
 import { statsMapForAdminOverview } from "@/utils/constants";
-import AreaGroupedChart from "@/components/chart/AreaGroupedChart";
-import BarChartVertical from "@/components/chart/BarChartVertical";
 import DashboardStats from "@/components/dashboard/dashboardStats";
 import DataFetchingError from "@/components/common/DataFetchingError";
 import type { AdminFetchOverviewStatsDataResponse } from "@/types/apiTypes/adminApiTypes";
+import { paymentsGraphConfig } from "@/utils/chartConfig";
 import {
-  overviewPaymentsDataChartConfig,
-  overviewUserDataChartConfig,
-} from "@/utils/chartConfig";
-import {
-  adminFetchOverviewGrraphData,
+  adminFetchReportPaymentsGraphData,
   adminFetchOverviewStatsData,
 } from "@/utils/apis/adminApi";
+import PaymentGraphChart from "@/components/chart/PaymentGraphChart";
 
 const AdminOverview: React.FC = () => {
   const {
@@ -24,13 +20,13 @@ const AdminOverview: React.FC = () => {
     isError: isGraphError,
     error: graphError,
   } = useQuery({
-    queryKey: ["overviewGraph"],
-    queryFn: adminFetchOverviewGrraphData,
+    queryKey: ["overviewPaymentsGraph"],
+    queryFn: adminFetchReportPaymentsGraphData,
     refetchOnWindowFocus: false,
   });
 
   return (
-    <div className="space-y-6 text-black dark:text-white mt-4">
+    <div className="space-y-6 text-black dark:text-white mt-4 w-full">
       <Heading
         heading="Stats"
         headingDescription="Detailed overall stats"
@@ -45,34 +41,22 @@ const AdminOverview: React.FC = () => {
 
       <Heading
         heading="Graphs"
-        headingDescription="Detailed graphs data"
+        headingDescription="Detailed financial data overview"
         mainDivClassName="w-6/12"
       />
       {isGraphLoading ? (
-        <GraphShimmer count={2} />
+        <GraphShimmer count={1} />
       ) : isGraphError ? (
         <DataFetchingError
-          message={"Failed to fetch graph data" + graphError}
+          message={"Failed to fetch graph data: " + graphError}
           className="bg-gray-200 dark:bg-gray-600 rounded-md text-red-500"
         />
       ) : dashboardGraphData ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AreaGroupedChart
-            title="Users data graph"
-            description="New and old users comparison"
-            chartData={dashboardGraphData?.usersGragphData}
-            dataKeyOne="newUsers"
-            dataKeyTwo="oldUsers"
-            chartConfig={overviewUserDataChartConfig}
-          />
-
-          <BarChartVertical
-            title="Applications Chart"
-            description="Application count detail chart"
-            chartData={dashboardGraphData?.applicationsGraphData}
-            dataKeyOne="users"
-            dataKeyTwo="applications"
-            chartConfig={overviewPaymentsDataChartConfig}
+        <div className="w-full">
+          <PaymentGraphChart
+            monthlyData={dashboardGraphData.monthlyData || []}
+            yearlyData={dashboardGraphData.yearlyData || []}
+            chartConfig={paymentsGraphConfig}
           />
         </div>
       ) : (

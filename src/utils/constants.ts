@@ -643,7 +643,7 @@ export const adminApplicationRoutes: Route[] = [
   },
   {
     path: "testimonials",
-    name: "Testimonials",
+    name: "Reviews",
     roles: ["admin", "systemAdmin"],
   },
   // {

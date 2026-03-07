@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     enquiries: <Mail />,
     payments: <HandCoins />,
     "payment-tracking": <CreditCard />,
-    testimonials: <Star />,
+    reviews: <Star />,
     reports: <Notebook />,
     logout: <LogOut />,
     chat: <MessageCircle />,

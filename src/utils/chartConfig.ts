@@ -81,3 +81,18 @@ export const reportUserDummyDataConfig = {
     color: "#3B82F6",
   },
 };
+
+export const paymentsGraphConfig = {
+  expense: {
+    label: "Expense",
+    color: "#ef4444", // Red
+  },
+  invoice: {
+    label: "Invoice",
+    color: "#f59e0b", // Yellow/Orange
+  },
+  receipt: {
+    label: "Receipt",
+    color: "#10b981", // Green
+  },
+};
