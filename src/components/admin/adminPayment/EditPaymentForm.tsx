@@ -93,20 +93,8 @@ const EditPaymentForm: React.FC = () => {
       newErrors.customerName = "Customer name must be at least 2 characters";
     }
 
-    if (formData.totalAmount && formData.totalAmount <= 0) {
-      newErrors.totalAmount = "Total amount must be greater than 0";
-    }
-
     if (formData.paidAmount && formData.paidAmount < 0) {
       newErrors.paidAmount = "Paid amount cannot be negative";
-    }
-
-    if (
-      formData.totalAmount &&
-      formData.paidAmount &&
-      formData.paidAmount > formData.totalAmount
-    ) {
-      newErrors.paidAmount = "Paid amount cannot exceed total amount";
     }
 
     if (formData.referenceId && formData.referenceId.length < 3) {
@@ -145,9 +133,6 @@ const EditPaymentForm: React.FC = () => {
     return <FormLoading />;
   }
 
-  const totalAmount = formData.totalAmount || 0;
-  const paidAmount = formData.paidAmount || 0;
-  const balanceAmount = totalAmount - paidAmount;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -195,27 +180,7 @@ const EditPaymentForm: React.FC = () => {
             </div>
 
             {/* Payment Amounts */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="totalAmount" className="">
-                  Total Amount (₹)
-                </Label>
-                <Input
-                  id="totalAmount"
-                  value={formatCurrency((formData.totalAmount || 0).toString())}
-                  onChange={(e) =>
-                    handleAmountChange("totalAmount", e.target.value)
-                  }
-                  className=""
-                  placeholder="50,000"
-                />
-                {errors.totalAmount && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.totalAmount}
-                  </p>
-                )}
-              </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="paidAmount" className="">
                   Paid Amount (₹)
@@ -237,42 +202,8 @@ const EditPaymentForm: React.FC = () => {
               </div>
             </div>
 
-            {/* Balance Display */}
-            {totalAmount > 0 && (
-              <div className="p-3 rounded-lg border">
-                <span className="text-sm">Balance Amount: </span>
-                <span
-                  className={`font-medium ${balanceAmount > 0 ? "text-red-600" : "text-green-600"}`}
-                >
-                  ₹{formatCurrency(balanceAmount.toString())}
-                </span>
-              </div>
-            )}
-
             {/* Payment Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="paymentStatus" className="">
-                  Payment Status
-                </Label>
-                <Select
-                  value={formData.paymentStatus || "pending"}
-                  onValueChange={(
-                    value: "pending" | "partiallyPaid" | "fullyPaid",
-                  ) => setFormData({ ...formData, paymentStatus: value })}
-                >
-                  <SelectTrigger className="">
-                    <SelectValue placeholder="Select payment status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="partiallyPaid">
-                      Partially Paid
-                    </SelectItem>
-                    <SelectItem value="fullyPaid">Fully Paid</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="paymentMethod" className="">
@@ -316,10 +247,9 @@ const EditPaymentForm: React.FC = () => {
               </div>
             </div>
 
-            {/* Invoice & Receipt Details */}
+            {/* Reference ID Details */}
             <div className="space-y-4 border-t pt-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500">Invoice & Receipt Details</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="referenceId">Reference ID</Label>
                   <Input
@@ -335,30 +265,6 @@ const EditPaymentForm: React.FC = () => {
                       {errors.referenceId}
                     </p>
                   )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="invoiceUrl">Invoice Link (Drive)</Label>
-                  <Input
-                    id="invoiceUrl"
-                    value={formData.invoiceUrl || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, invoiceUrl: e.target.value })
-                    }
-                    placeholder="https://drive.google.com/file/d/..."
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="paymentProof">Receipt Link (Drive)</Label>
-                  <Input
-                    id="paymentProof"
-                    value={formData.paymentProof || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, paymentProof: e.target.value })
-                    }
-                    placeholder="https://drive.google.com/file/d/..."
-                  />
                 </div>
               </div>
             </div>

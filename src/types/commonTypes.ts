@@ -33,6 +33,7 @@ export interface FetchFunctionParams<T = string> {
     limit: number;
     fromDate?: string;
     toDate?: string;
+    category?: string;
   };
 }
 

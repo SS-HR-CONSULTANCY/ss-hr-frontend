@@ -36,6 +36,17 @@ const ContentCard = ({
           "border-0 cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl flex flex-col justify-end p-2 bg-contain bg-no-repeat bg-center w-full"
         )}
         style={{ backgroundImage: `url(${imageUrl})` }}
+        onClick={() => {
+          if (buttonAction === "share_interest") {
+            if (!isAuthenticated) {
+              setIsOpen(true);
+            } else {
+              navigate("/user/jobs");
+            }
+          } else if (buttonUrl) {
+            navigate(buttonUrl);
+          }
+        }}
       >
         <div className="absolute w-full h-full top-0 left-0 transition duration-300 group-hover/card:bg-black opacity-60"></div>
 
@@ -69,18 +80,7 @@ const ContentCard = ({
                 </p>
                 <Button
                   variant="link"
-                  className="justify-center mt-auto cursor-pointer text-white"
-                  onClick={() => {
-                    if (buttonAction === "share_interest") {
-                      if (!isAuthenticated) {
-                        setIsOpen(true);
-                      } else {
-                        navigate("/user/jobs");
-                      }
-                    } else if (buttonUrl) {
-                      navigate(buttonUrl);
-                    }
-                  }}
+                  className="justify-center mt-auto cursor-pointer text-white pointer-events-none"
                 >
                   {buttonText}
                 </Button>

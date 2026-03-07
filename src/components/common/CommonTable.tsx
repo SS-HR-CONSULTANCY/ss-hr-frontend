@@ -1,5 +1,12 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DataTable } from "../table/data-table";
 import { useQuery } from "@tanstack/react-query";
 import type { AppDispatch } from "@/store/store";
@@ -19,10 +26,13 @@ const CommonTable = <T,>({
   pageSize = 10,
   showDatePicker,
   saveDataInStore,
+  showCategoryFilter,
+  categoryOptions = [],
 }: CommonTableComponentProps<T>) => {
   const dispatch = useDispatch<AppDispatch>();
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [category, setCategory] = useState("all");
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -44,6 +54,7 @@ const CommonTable = <T,>({
           limit: pagination.pageSize,
           fromDate,
           toDate,
+          category,
         },
       }),
     queryKey: [
@@ -53,6 +64,7 @@ const CommonTable = <T,>({
       id,
       fromDate,
       toDate,
+      category,
     ],
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -90,6 +102,27 @@ const CommonTable = <T,>({
                 onChange={(e) => setToDate(e.target.value)}
                 className="border rounded p-2"
               />
+            </div>
+          )}
+          
+          {showCategoryFilter && (
+            <div className="mt-2">
+              <h2 className={`text-lg font-normal mb-1`}>
+                Filter by Category
+              </h2>
+              <Select value={category} onValueChange={setCategory}>
+                <SelectTrigger className="w-[180px] bg-background">
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categoryOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           )}
         </div>

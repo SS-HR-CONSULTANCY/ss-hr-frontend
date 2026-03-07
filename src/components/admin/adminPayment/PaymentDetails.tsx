@@ -45,31 +45,6 @@ const PaymentDetails: React.FC = () => {
 
   const { payment: paymentDetails } = paymentData;
 
-  const getStatusStyle = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "partiallypaid":
-        return "bg-blue-100 text-blue-800";
-      case "fullypaid":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "Pending";
-      case "partiallypaid":
-        return "Partially Paid";
-      case "fullypaid":
-        return "Fully Paid";
-      default:
-        return status;
-    }
-  };
 
   const getPaymentMethodLabel = (method: string) => {
     switch (method) {
@@ -102,11 +77,6 @@ const PaymentDetails: React.FC = () => {
         <div className="p-6 max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">Unified Record Details</h2>
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(paymentDetails.status)}`}
-            >
-              {getStatusLabel(paymentDetails.status)}
-            </span>
           </div>
 
           <div className="space-y-6">
@@ -142,25 +112,11 @@ const PaymentDetails: React.FC = () => {
             {/* Payment Summary */}
             <div className="p-4 border  rounded-lg">
               <h3 className="text-lg font-semibold mb-4">Payment Summary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-3 border rounded-lg">
-                  <span className="text-sm  block">Total Amount</span>
-                  <span className="text-lg font-bold ">
-                    {formatCurrency(paymentDetails.totalAmount)}
-                  </span>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                 <div className="text-center p-3 border rounded-lg">
                   <span className="text-sm  block">Paid Amount</span>
                   <span className="text-lg font-bold ">
                     {formatCurrency(paymentDetails.paidAmount)}
-                  </span>
-                </div>
-                <div className="text-center p-3 border rounded-lg">
-                  <span className="text-sm  block">Balance Amount</span>
-                  <span
-                    className={`text-lg font-bold ${paymentDetails.balanceAmount > 0 ? "text-red-600" : ""}`}
-                  >
-                    {formatCurrency(paymentDetails.balanceAmount)}
                   </span>
                 </div>
               </div>
@@ -197,36 +153,8 @@ const PaymentDetails: React.FC = () => {
               </div>
             </div>
 
-            {/* Invoice & Receipt Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-4 border rounded-lg">
-                <h3 className="text-lg font-semibold mb-3">Invoice & Reference</h3>
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-sm text-gray-500 block">Reference ID:</span>
-                    <p className="font-medium font-mono border-b pb-1">{paymentDetails.referenceId || "N/A"}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-500 block">Invoice Link (Drive):</span>
-                    {paymentDetails.invoiceUrl ? (
-                      <div className="mt-1 flex items-center gap-2">
-                        <Button 
-                          onClick={() => window.open(paymentDetails.invoiceUrl, "_blank")}
-                          variant="outline" 
-                          size="sm"
-                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
-                        >
-                          <FileText className="h-4 w-4 mr-1" />
-                          View Invoice
-                        </Button>
-                      </div>
-                    ) : (
-                      <p className="text-gray-400 italic text-sm mt-1">No Invoice Link</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
+            {/* Receipt Information */}
+            <div className="grid grid-cols-1 gap-6">
               <div className="p-4 border rounded-lg">
                 <h3 className="text-lg font-semibold mb-3">Receipt Information</h3>
                 <div className="space-y-4">
@@ -250,7 +178,7 @@ const PaymentDetails: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground mt-2">
-                      Click the buttons above to open document proofs in a new tab.
+                      Click the button above to open the document proof in a new tab.
                     </p>
                   </div>
                 </div>

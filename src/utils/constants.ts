@@ -533,8 +533,8 @@ export const footerData = [
     title: "Contacts",
     links: [
       { text: "Phone (UAE) +971 523664492", href: "tel:+971 523664492" },
-      { text: "Phone (UAE) +971 5423226583", href: "tel:+971 5423226583" },
-      { text: "Phone (UAE) +971 5423226584", href: "tel:+971 5423226584" },
+      { text: "Phone (UAE) +971 542326583", href: "tel:+971 542326583" },
+      { text: "Phone (UAE) +971 542326584", href: "tel:+971 542326584" },
       { text: "Phone (India) +91 9349714742", href: "tel:+91 9349714742" },
       {
         text: "Email - hello@sshrconsultancy.com",
@@ -1016,4 +1016,16 @@ export const statsMapForPaymentTracking: Array<
     icon: TrendingUp,
     price: true,
   },
+];
+
+export const EXPENSE_CATEGORIES = [
+  { label: "Salary", value: "Salary" },
+  { label: "Rent", value: "Rent" },
+  { label: "Office Supplies", value: "Office Supplies" },
+  { label: "Marketing", value: "Marketing" },
+  { label: "Travel", value: "Travel" },
+  { label: "Maintenance", value: "Maintenance" },
+  { label: "Software", value: "Software" },
+  { label: "Utilities", value: "Utilities" },
+  { label: "Others", value: "Others" },
 ];

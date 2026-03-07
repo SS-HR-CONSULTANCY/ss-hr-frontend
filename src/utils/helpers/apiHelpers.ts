@@ -11,6 +11,16 @@ export const buildQueryParams = (
   if (params?.pagination) {
     query.append("page", params.pagination.page.toString());
     query.append("limit", params.pagination.limit.toString());
+    
+    if (params.pagination.fromDate) {
+      query.append("fromDate", params.pagination.fromDate);
+    }
+    if (params.pagination.toDate) {
+      query.append("toDate", params.pagination.toDate);
+    }
+    if (params.pagination.category && params.pagination.category !== "all") {
+      query.append("category", params.pagination.category);
+    }
   }
 
   return query.toString();

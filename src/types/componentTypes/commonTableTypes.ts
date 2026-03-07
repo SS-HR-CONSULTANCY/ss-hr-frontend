@@ -15,4 +15,6 @@ export interface CommonTableComponentProps<T> {
   pageSize?: number;
   showDatePicker?: boolean;
   saveDataInStore?: boolean;
+  showCategoryFilter?: boolean;
+  categoryOptions?: { label: string; value: string }[];
 }

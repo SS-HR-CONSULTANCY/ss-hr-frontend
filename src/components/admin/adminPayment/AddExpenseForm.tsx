@@ -7,6 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPayment } from "@/utils/apis/adminPaymentApi";
+import { EXPENSE_CATEGORIES } from "@/utils/constants";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface AddExpenseFormProps {
   onClose: () => void;
@@ -16,6 +24,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onClose }) => {
   const queryClient = useQueryClient();
   const [form, setForm] = useState({
     expenseTitle: "",
+    category: "",
     date: "",
     amount: "",
     remark: "",
@@ -27,7 +36,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onClose }) => {
         customerId: "",
         packageId: "",
         customerName: form.expenseTitle,
-        packageName: "Expense",
+        packageName: form.category || "Expense",
         totalAmount: parseFloat(form.amount) || 0,
         paidAmount: parseFloat(form.amount) || 0,
         balanceAmount: 0,
@@ -49,11 +58,15 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onClose }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.expenseTitle || !form.amount || !form.date) {
-      toast.error("Title, Date and Amount are required");
+    if (!form.expenseTitle || !form.category || !form.amount || !form.date) {
+      toast.error("Title, Category, Date and Amount are required");
       return;
     }
     mutation.mutate();
+  };
+
+  const handleCategoryChange = (val: string) => {
+    setForm((prev) => ({ ...prev, category: val }));
   };
 
   const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -80,6 +93,22 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ onClose }) => {
           <div className="space-y-1">
             <Label className="text-xs text-muted-foreground">Expense Title <span className="text-red-500">*</span></Label>
             <Input className="h-8 text-sm" placeholder="e.g. Office supplies" value={form.expenseTitle} onChange={set("expenseTitle")} />
+          </div>
+
+          <div className="space-y-1">
+            <Label className="text-xs text-muted-foreground">Expense Category <span className="text-red-500">*</span></Label>
+            <Select value={form.category} onValueChange={handleCategoryChange}>
+              <SelectTrigger className="h-8 text-sm w-full">
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {EXPENSE_CATEGORIES.map((category) => (
+                  <SelectItem key={category.value} value={category.value}>
+                    {category.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

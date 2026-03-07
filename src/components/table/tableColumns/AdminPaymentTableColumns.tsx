@@ -18,22 +18,10 @@ export const AdminPaymentTableColumns = (
   {
     accessorKey: "packageName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Package" />
+      <DataTableColumnHeader column={column} title="Category" />
     ),
   },
-  {
-    accessorKey: "totalAmount",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <span className="font-medium">
-          ₹{row.original.totalAmount.toLocaleString()}
-        </span>
-      );
-    },
-  },
+
   {
     accessorKey: "paidAmount",
     header: ({ column }) => (
@@ -47,62 +35,7 @@ export const AdminPaymentTableColumns = (
       );
     },
   },
-  {
-    accessorKey: "balanceAmount",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Balance" />
-    ),
-    cell: ({ row }) => {
-      const balance = row.original.balanceAmount;
-      return (
-        <span className={`font-medium ${balance > 0 ? "text-red-500" : ""}`}>
-          ₹{balance.toLocaleString()}
-        </span>
-      );
-    },
-  },
-  {
-    accessorKey: "paymentStatus",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => {
-      const status = row.original.paymentStatus;
-      const getStatusStyle = (status: string) => {
-        switch (status) {
-          case "pending":
-            return "text-yellow-600 bg-yellow-100";
-          case "partiallyPaid":
-            return "text-blue-600 bg-blue-100";
-          case "fullyPaid":
-            return "text-green-600 bg-green-100";
-          default:
-            return "text-gray-600 bg-gray-100";
-        }
-      };
 
-      const getStatusLabel = (status: string) => {
-        switch (status) {
-          case "pending":
-            return "Pending";
-          case "partiallyPaid":
-            return "Partially Paid";
-          case "fullyPaid":
-            return "Fully Paid";
-          default:
-            return status;
-        }
-      };
-
-      return (
-        <span
-          className={`w-fit text-xs px-2 py-1 rounded-full font-medium border ${getStatusStyle(status)}`}
-        >
-          {getStatusLabel(status)}
-        </span>
-      );
-    },
-  },
   {
     accessorKey: "referenceId",
     header: ({ column }) => (
@@ -116,26 +49,7 @@ export const AdminPaymentTableColumns = (
       );
     },
   },
-  {
-    accessorKey: "invoiceUrl",
-    header: "Invoice",
-    cell: ({ row }) => {
-      const invoice = row.original.invoiceUrl;
-      return invoice ? (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => window.open(invoice, "_blank")}
-          className="text-orange-500 hover:text-orange-700 p-0 h-auto flex items-center gap-1"
-        >
-          <FileText className="h-4 w-4" />
-          <span className="text-xs text-nowrap">View</span>
-        </Button>
-      ) : (
-        <span className="text-gray-400 text-xs italic">No Invoice</span>
-      );
-    },
-  },
+
   {
     accessorKey: "paymentProof",
     header: "Receipt",
