@@ -62,9 +62,15 @@ const PackagesPricing: React.FC = () => {
 
                 {isAuthenticated ? (
                   <div className="mt-auto">
-                    <Button className="w-full cursor-pointer text-sm sm:text-base py-5">
-                      Choose Plan
-                    </Button>
+                    <a
+                      href="https://wa.me/971523664492"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button className="w-full cursor-pointer text-sm sm:text-base py-5">
+                        Contact
+                      </Button>
+                    </a>
                   </div>
                 ) : (
                   <CardFooter>
