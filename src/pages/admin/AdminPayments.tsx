@@ -15,7 +15,7 @@ import type { AdminfetchAllPaymentsResponse } from "@/utils/apis/adminPaymentApi
 import { AdminPaymentTableColumns } from "@/components/table/tableColumns/AdminPaymentTableColumns";
 import { useQuery } from "@tanstack/react-query";
 import { formatNumberToPrice } from "@/utils/helpers/priceFormater";
-import { EXPENSE_CATEGORIES } from "@/utils/constants";
+import { PAYMENT_TYPE_CATEGORIES } from "@/utils/constants";
 
 const ACTION_BUTTONS = [
   {
@@ -128,7 +128,7 @@ const AdminPayments: React.FC = () => {
         columnsCount={6}
         pageSize={10}
         showCategoryFilter={true}
-        categoryOptions={EXPENSE_CATEGORIES}
+        categoryOptions={PAYMENT_TYPE_CATEGORIES}
       />
 
       {isAddPaymentFormOpen && <AddPaymentForm />}

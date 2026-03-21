@@ -603,13 +603,8 @@ export const userApplicationRoutes: Route[] = [
 
 export const adminApplicationRoutes: Route[] = [
   {
-    path: "overview",
-    name: "Overview",
-    roles: ["admin", "systemAdmin"],
-  },
-  {
-    path: "users",
-    name: "Users",
+    path: "packages",
+    name: "Packages",
     roles: ["admin", "systemAdmin"],
   },
   {
@@ -618,8 +613,18 @@ export const adminApplicationRoutes: Route[] = [
     roles: ["admin", "systemAdmin"],
   },
   {
-    path: "packages",
-    name: "Packages",
+    path: "payments",
+    name: "Payment Tracking",
+    roles: ["admin", "systemAdmin"],
+  },
+  {
+    path: "overview",
+    name: "Overview",
+    roles: ["admin", "systemAdmin"],
+  },
+  {
+    path: "users",
+    name: "Users",
     roles: ["admin", "systemAdmin"],
   },
   {
@@ -635,11 +640,6 @@ export const adminApplicationRoutes: Route[] = [
   {
     path: "chat",
     name: "Chat",
-    roles: ["admin", "systemAdmin"],
-  },
-  {
-    path: "payments",
-    name: "Payment Tracking",
     roles: ["admin", "systemAdmin"],
   },
   {
@@ -1029,4 +1029,10 @@ export const EXPENSE_CATEGORIES = [
   { label: "Software", value: "Software" },
   { label: "Utilities", value: "Utilities" },
   { label: "Others", value: "Others" },
+];
+
+export const PAYMENT_TYPE_CATEGORIES = [
+  { label: "Expense", value: "Expense" },
+  { label: "Invoice", value: "Invoice" },
+  { label: "Receipt", value: "Receipt" },
 ];
