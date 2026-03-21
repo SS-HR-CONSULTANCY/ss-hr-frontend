@@ -1,6 +1,9 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface FooterLink {
   text: string;
   href: string;
+  icon?: LucideIcon;
 }
 
 export interface FooterColumnProps {
@@ -12,8 +15,6 @@ export interface FooterProps {
   name?: string;
   columns?: FooterColumnProps[];
   copyright?: string;
-  policies?: FooterLink[];
-  showModeToggle?: boolean;
   className?: string;
   address?: string;
 }

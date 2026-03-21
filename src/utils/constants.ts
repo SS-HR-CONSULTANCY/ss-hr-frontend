@@ -532,13 +532,14 @@ export const footerData = [
   {
     title: "Contacts",
     links: [
-      { text: "Phone (UAE) +971 523664492", href: "tel:+971 523664492" },
-      { text: "Phone (UAE) +971 542326583", href: "tel:+971 542326583" },
-      { text: "Phone (UAE) +971 542326584", href: "tel:+971 542326584" },
-      { text: "Phone (India) +91 9349714742", href: "tel:+91 9349714742" },
+      { text: "+971 523664492", href: "tel:+971523664492", icon: Phone },
+      { text: "+971 542326583", href: "tel:+971542326583", icon: Phone },
+      { text: "+971 542326584", href: "tel:+971542326584", icon: Phone },
+      { text: "+91 9349714742", href: "tel:+919349714742", icon: Phone },
       {
-        text: "Email - hello@sshrconsultancy.com",
+        text: "hello@sshrconsultancy.com",
         href: "mailto:hello@sshrconsultancy.com",
+        icon: Mail,
       },
     ],
   },

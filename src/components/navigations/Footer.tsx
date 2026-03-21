@@ -5,7 +5,7 @@ import {
   FooterContent,
 } from "@/components/ui/footer";
 import { MapPin } from "lucide-react";
-import { ModeToggle } from "@/components/ui/mode-toggle";
+
 import type { FooterProps } from "@/types/componentTypes/footerTypes";
 import logoImage from "../../assets/logos/brand-icon.png";
 
@@ -14,15 +14,12 @@ import {
   footerAddress,
   footerCopyright,
   footerData,
-  footerPoliciesData,
 } from "@/utils/constants";
 
 const Footer = ({
   name = companyName,
   columns = footerData,
   copyright = footerCopyright,
-  policies = footerPoliciesData,
-  showModeToggle = true,
   className,
   address = footerAddress,
 }: FooterProps) => {
@@ -41,8 +38,9 @@ const Footer = ({
                 <a
                   key={linkIndex}
                   href={link.href}
-                  className="text-muted-foreground text-sm hover:text-black dark:hover:text-white"
+                  className="flex items-center gap-2 text-muted-foreground text-sm hover:text-black dark:hover:text-white"
                 >
+                  {link.icon && <link.icon className="size-3.5 shrink-0" />}
                   {link.text}
                 </a>
               ))}
@@ -100,14 +98,6 @@ const Footer = ({
         </FooterContent>
         <FooterBottom className="border-t">
           <div>{copyrightText}</div>
-          <div className="flex items-center gap-4">
-            {policies.map((policy, index) => (
-              <a key={index} href={policy.href}>
-                {policy.text}
-              </a>
-            ))}
-            {showModeToggle && <ModeToggle />}
-          </div>
         </FooterBottom>
       </FooterNew>
     </footer>
