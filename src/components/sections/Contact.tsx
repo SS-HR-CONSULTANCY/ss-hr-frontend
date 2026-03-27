@@ -69,7 +69,7 @@ export default function Contact() {
           <Card className="h-full" data-aos="fade-right">
             <CardHeader>
               <CardTitle>Contact Information</CardTitle>
-              <CardDescription>We’d love to hear from you.</CardDescription>
+              <CardDescription>We'd love to hear from you.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {contactData.map((item, idx) => {
@@ -139,6 +139,42 @@ export default function Contact() {
                   {mutation.isPending ? "Sending..." : "Send message"}
                 </Button>
               </form>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Google Maps Embed */}
+        <div className="mt-10" data-aos="fade-up">
+          <Card className="overflow-hidden">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <CardTitle>Find Us Here</CardTitle>
+                  <CardDescription>
+                    Abu Saif Business Center, Al Kazim Building — Al Qiyadah Metro Station Exit 2, Entrance B, Dubai, UAE
+                  </CardDescription>
+                </div>
+                <a
+                  href="https://maps.app.goo.gl/CVHTy3H9NNVrkw9n8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                >
+                  Open in Google Maps ↗
+                </a>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <iframe
+                title="SS HR Consultancy Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.7569818325187!2d55.347243180137944!3d25.27875922005254!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5d3945927241%3A0xec15a179df5da7c0!2sSS%20HR%20Consultancy%20Tours%20and%20%20Travels!5e0!3m2!1sen!2sin!4v1774616039650!5m2!1sen!2sin"
+                width="100%"
+                height="400"
+                style={{ border: 0, display: "block" }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </CardContent>
           </Card>
         </div>
