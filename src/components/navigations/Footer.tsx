@@ -55,7 +55,7 @@ const Footer = ({
                 {address}
               </h6>
               <a
-                href="https://www.google.com/search?client=mobilesearchapp&sca_esv=9a75789331dfae63&bih=879&biw=428&channel=iss&cs=1&hl=en&rlz=1MDAPLA_enAE1025AE1025&v=408.0.868297084&sxsrf=ANbL-n4tvpAqF6NITEcfdYy806ppEpCWKA:1771475706455&kgmid=/g/11t5b5qvy2&q=Abu+Saif+Business+center&shem=epsd1,shrtsdl&shndl=30&source=sh/x/loc/act/m1/5&kgs=d67339138e00053b&utm_source=epsd1,shrtsdl,sh/x/loc/act/m1/5"
+                href="https://maps.app.goo.gl/mtS27W7FQJnYHbLPA"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex mt-4 items-center gap-2 text-sm text-muted-foreground hover:text-black dark:hover:text-white"
