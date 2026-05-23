@@ -1,4 +1,4 @@
-name: Deploy Frontend to Google Cloud
+name: Deploy Frontend
 
 on:
   push:
@@ -6,32 +6,8 @@ on:
       - main
 
 jobs:
-  deploy:
+  notify:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Deploy to Server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /var/www/ss-hr-consultancy/frontend
-          git config --global --add safe.directory /var/www/ss-hr-consultancy/frontend
-          git stash
-          git pull origin main
-          git lfs install
-          git lfs pull
-          
-          # Inject Environment Variables into building root
-          echo "VITE_ENVIRONMENT=${{ secrets.VITE_ENVIRONMENT }}" > .env
-          echo "VITE_BACKEND_PRODUCTION_URL=${{ secrets.VITE_BACKEND_PRODUCTION_URL }}" >> .env
-          
-          npm install
-          npm run build
-          # Depending on hosting PM2 might be naming it differently, usually 'ss-hr-frontend', restart all to be safe if unspecified
-          pm2 restart all || true
+      - name: Deployed via Vercel
+        run: echo "Vercel auto-deploys on push to main. No action needed."
