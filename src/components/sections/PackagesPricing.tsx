@@ -63,7 +63,7 @@ const PackagesPricing: React.FC = () => {
                 {isAuthenticated ? (
                   <div className="mt-auto">
                     <a
-                      href="https://wa.me/971523664492"
+                      href="https://wa.me/971542326584"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
