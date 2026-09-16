@@ -60,10 +60,10 @@ const RegisterPage: React.FC = () => {
       <SEO data={SEO_DATA.REGISTER} />
       <div className="min-h-screen flex items-center justify-center">
         <BackgroundBeamsWithCollision>
-          <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
+          <Card className="w-full max-w-md border border-slate-200 dark:border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0 bg-white/95 dark:bg-card/95 backdrop-blur-md">
             <FormHeader
-              title="Sign In"
-              description="Enter your credentials to access your account"
+              title="Create Account"
+              description="Enter your credentials to create your account"
             />
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

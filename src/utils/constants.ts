@@ -158,8 +158,94 @@ export const navLinks: navLinkProps[] = [
     isForDesk: true,
     isForMob: true,
   },
-  { text: "SignIn", href: siteUrlConfig.signIn, isLink: true, isForMob: true },
-  { text: "SignUp", href: siteUrlConfig.signUp, isLink: true, isForMob: true },
+];
+
+export const staticPackages = [
+  {
+    _id: "pkg-1",
+    packageName: "30-Day Dubai Tourist Visa",
+    currency: "AED",
+    price: 350,
+    packageCategory: "visitvisa",
+    packageIncludes:
+      "• 30 Days Single Entry Visa\n• Medical Insurance Included\n• Fast-track 24-48 hr processing\n• Complete documentation assistance\n• 24/7 travel support in UAE",
+  },
+  {
+    _id: "pkg-2",
+    packageName: "60-Day Dubai Tourist Visa",
+    currency: "AED",
+    price: 650,
+    packageCategory: "visitvisa",
+    packageIncludes:
+      "• 60 Days Single / Multiple Entry\n• Mandatory Health Insurance\n• Priority Embassy clearance\n• Flight itinerary assistance\n• Dedicated relocation coordinator",
+  },
+  {
+    _id: "pkg-3",
+    packageName: "Dubai Employment & Residence Visa",
+    currency: "AED",
+    price: 3500,
+    packageCategory: "visa",
+    packageIncludes:
+      "• 2-Year Residence & Work Visa Guidance\n• Medical fitness test assistance\n• Emirates ID application support\n• Labour contract attestation\n• Entry permit issuance",
+  },
+  {
+    _id: "pkg-4",
+    packageName: "Certificate Attestation Package",
+    currency: "AED",
+    price: 450,
+    packageCategory: "general",
+    packageIncludes:
+      "• Educational, Non-Educational & Commercial Documents\n• Notary, Home Dept & MEA Attestation\n• UAE Embassy verification\n• MOFA (Ministry of Foreign Affairs) stamp\n• Secure doorstep courier service",
+  },
+  {
+    _id: "pkg-5",
+    packageName: "Dubai Holiday & Desert Safari Tour",
+    currency: "AED",
+    price: 1200,
+    packageCategory: "general",
+    packageIncludes:
+      "• 4 Nights / 5 Days Hotel Accommodation\n• Desert Safari with BBQ Dinner\n• Dhow Cruise Marina with buffet\n• Dubai City Tour with Burj Khalifa entry\n• Airport pickup and drop-off",
+  },
+  {
+    _id: "pkg-6",
+    packageName: "Investor & Golden Visa Advisory",
+    currency: "AED",
+    price: 5000,
+    packageCategory: "visa",
+    packageIncludes:
+      "• Complete 10-Year Golden Visa eligibility review\n• Real Estate / Business investor documentation\n• VIP medical and Emirates ID processing\n• Family sponsorship guidance\n• End-to-end legal clearance",
+  },
+];
+
+export const staticTestimonials = [
+  {
+    _id: "test-1",
+    clientName: "Midhun Kumar",
+    designation: "Sales & Marketing Specialist",
+    testimonial:
+      "SS HR Consultancy made my transition to Dubai seamless and stress-free. Their visa processing team kept me updated at every stage, and everything was handled with complete transparency.",
+  },
+  {
+    _id: "test-2",
+    clientName: "Amal Jose",
+    designation: "Hospitality Professional",
+    testimonial:
+      "The team provided tremendous support with my certificate attestation and visa processing. Truly professional, reliable, and prompt. I highly recommend SS HR Consultancy!",
+  },
+  {
+    _id: "test-3",
+    clientName: "Sarah Al-Mansoor",
+    designation: "HR Operations Lead",
+    testimonial:
+      "Working with SS HR Consultancy has been exceptional. Their recruitment and document processing services are first class. They saved our organization valuable time and effort.",
+  },
+  {
+    _id: "test-4",
+    clientName: "Rahul Sharma",
+    designation: "Software Engineer",
+    testimonial:
+      "From ticket bookings to visa approval and travel arrangements, every detail was executed smoothly. Fantastic service and outstanding customer assistance around the clock.",
+  },
 ];
 
 // Services component constants

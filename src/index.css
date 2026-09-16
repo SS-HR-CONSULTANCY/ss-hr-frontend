@@ -334,18 +334,11 @@ body {
   }
 }
 
-/* Dark mode support (optional) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-gray-50: #1f2937;
-    --color-gray-100: #374151;
-    --color-gray-800: #f9fafb;
-    --color-gray-900: #ffffff;
-  }
-
-  .dark-mode {
-    @apply bg-gray-900 text-gray-100;
-  }
+.dark {
+  --color-gray-50: #1f2937;
+  --color-gray-100: #374151;
+  --color-gray-800: #f9fafb;
+  --color-gray-900: #ffffff;
 }
 
 @theme inline {

@@ -88,7 +88,7 @@ const OtpPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <BackgroundBeamsWithCollision>
-        <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
+        <Card className="w-full max-w-md border border-slate-200 dark:border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0 bg-white/95 dark:bg-card/95 backdrop-blur-md">
           <FormHeader
             title="Verify OTP"
             description="We have sent an OTP to your email address"

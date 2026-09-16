@@ -120,14 +120,10 @@ const Header: React.FC = ({
                 </DropdownMenu>
               </div>
             ) : (
-              <Button variant="default" asChild className="hidden md:block">
-                <a href="/login">Sign In</a>
+              <Button variant="default" asChild className="hidden md:inline-flex">
+                <a href="/contact">Contact Us</a>
               </Button>
             )}
-
-
-
-        
 
             <Sheet>
               <SheetTrigger asChild>
@@ -152,8 +148,11 @@ const Header: React.FC = ({
                     .filter(
                       (link) =>
                         link.isForMob &&
-                        (!isAuthenticated ||
-                          (link.text !== "SignIn" && link.text !== "SignUp")),
+                        link.text !== "SignIn" &&
+                        link.text !== "SignUp" &&
+                        link.text !== "Sign In" &&
+                        link.text !== "Sign Up" &&
+                        link.text !== "Login",
                     )
                     .map((link, index) => (
                       <a

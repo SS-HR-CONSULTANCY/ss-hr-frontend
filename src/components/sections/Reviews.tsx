@@ -6,23 +6,26 @@ import { AuroraBackground } from "../ui/aurora-background";
 import type { Testimonial } from "@/types/entities/testimonial";
 import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
 import { fetchTestimonials } from "@/utils/apis/userTestimonialApi";
+import { staticTestimonials } from "@/utils/constants";
 
 const Reviews: React.FC = () => {
-  const [testmonials, setTestimonials] = useState<Testimonial[]>();
+  const [testmonials, setTestimonials] = useState<Testimonial[]>(
+    staticTestimonials as unknown as Testimonial[],
+  );
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isError, error } = useQuery({
     queryKey: ["testimonials"],
     queryFn: fetchTestimonials,
     staleTime: 10 * 60 * 1000,
   });
 
   useEffect(() => {
-    if (!data || data.length === 0 || isLoading || (isError && error)) {
-      setTestimonials([]);
-    } else {
+    if (data && data.length > 0) {
       setTestimonials(data);
+    } else if (isError && error) {
+      setTestimonials(staticTestimonials as unknown as Testimonial[]);
     }
-  }, [data, error, isError, isLoading]);
+  }, [data, error, isError]);
 
   return (
     <section id="reviews" className="pt-16">

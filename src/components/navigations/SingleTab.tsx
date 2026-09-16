@@ -11,7 +11,7 @@ export const SingleTab: React.FC<SingleTabProps> = ({
     <li
       title={text}
       onClick={onClick}
-      className={`p-1 my-3 font-semibold hover:bg-gradient-to-r from-slate-300 to-slate-500 hover:text-black cursor-pointer rounded-md ${!sidebarOpen && "flex justify-center"} ${className} text-[var(--textOne)] hover:text-[var(--textOneHover)]`}
+      className={`p-1 my-2 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white cursor-pointer rounded-md transition-colors ${!sidebarOpen && "flex justify-center"} ${className}`}
     >
       {sidebarOpen ? (
         <div className="flex cursor-pointer">

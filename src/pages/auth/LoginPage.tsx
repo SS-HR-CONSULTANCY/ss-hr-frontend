@@ -90,7 +90,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
       <SEO data={SEO_DATA.LOGIN} />
       <div className="min-h-screen flex items-center justify-center">
         <BackgroundBeamsWithCollision>
-          <Card className="w-full max-w-md border border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0">
+          <Card className="w-full max-w-md border border-slate-200 dark:border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0 bg-white/95 dark:bg-card/95 backdrop-blur-md">
             <FormHeader
               title={
                 role === roleValues[0]
@@ -147,7 +147,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full mt-2 border-slate-500 hover:bg-slate-600 hover:text-white cursor-pointer"
+                    className="w-full mt-2 border-slate-300 hover:bg-slate-100 text-slate-700 dark:border-slate-500 dark:hover:bg-slate-600 dark:text-white cursor-pointer"
                     onClick={handleGoogleLogin}
                     disabled={isSubmitting}
                   >

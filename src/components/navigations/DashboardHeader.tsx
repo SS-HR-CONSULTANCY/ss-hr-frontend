@@ -10,28 +10,32 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ user }) => {
   const { handleLogout } = useAuthHook();
 
   return (
-    <header className="p-3 border shadow-md">
+    <header className="p-3 border-b border-slate-200 dark:border-slate-800 shadow-xs bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <img
             src={user?.profileImage || noProfile}
-            className="rounded-full size-6"
+            className="rounded-full size-6 object-cover"
           />
-          <h5>Hi, {user?.fullName || user?.role}</h5>
+          <h5 className="text-sm font-semibold text-slate-800 dark:text-white">
+            Hi, {user?.fullName || user?.role}
+          </h5>
         </div>
         <div className="flex items-center space-x-4">
           <button
-            className="relative flex rounded-full cursor-pointer"
+            title="Go to Home"
+            className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <HomeIcon />
+            <HomeIcon className="size-5" />
           </button>
 
           <button
-            className="relative flex rounded-full cursor-pointer"
+            title="Log out"
+            className="p-1.5 rounded-full hover:bg-red-50 dark:hover:bg-red-950/30 text-slate-600 hover:text-red-600 dark:text-slate-300 dark:hover:text-red-400 transition-colors cursor-pointer"
             onClick={handleLogout}
           >
-            <LogOut />
+            <LogOut className="size-5" />
           </button>
         </div>
       </div>

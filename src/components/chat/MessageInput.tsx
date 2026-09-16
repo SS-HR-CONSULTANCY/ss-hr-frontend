@@ -139,8 +139,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
         <div className="flex-1 flex gap-2">
           <input
             type="text"
-            className="w-full h-10 border rounded-lg"
-            placeholder=" Message"
+            className="w-full h-10 border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white px-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Type a message..."
             value={text}
             onChange={handleTyping}
           />

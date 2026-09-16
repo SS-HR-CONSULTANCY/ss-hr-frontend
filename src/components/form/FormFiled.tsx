@@ -93,7 +93,7 @@ const FormField = <T extends FieldValues>({
             }
             registerOptions?.onChange?.(e);
           }}
-          className={`${error ? "border-destructive" : ""} text-sm border border-black`}
+          className={`${error ? "border-destructive" : "border-slate-300 dark:border-input"} text-sm border`}
         />
         {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
@@ -154,7 +154,7 @@ const FormField = <T extends FieldValues>({
           readOnly={readOnly}
           placeholder={placeholder}
           {...register(id, registerOptions)}
-          className={`w-full border rounded p-2 text-sm border-black ${error ? "border-destructive" : ""}`}
+          className={`w-full border rounded p-2 text-sm bg-transparent border-slate-300 dark:border-input ${error ? "border-destructive" : ""}`}
         />
         {error && <p className="text-xs text-destructive">{error}</p>}
       </div>

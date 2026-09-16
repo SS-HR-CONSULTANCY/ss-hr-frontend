@@ -15,6 +15,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 const persistConfig = {
   key: "root",
   storage: localStorage,
+  blacklist: ["app"],
 };
 
 const rootReducers = {

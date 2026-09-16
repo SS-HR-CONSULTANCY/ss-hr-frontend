@@ -59,7 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
 
   return (
     <div
-      className={` ${sidebarOpen ? "w-[15%]" : "w-[5%]"} text-white overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col border-r bg-gradient-to-r from-slate-900 to-slate-700`}
+      className={` ${sidebarOpen ? "w-[15%]" : "w-[5%]"} bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:to-slate-700 text-slate-800 dark:text-white border-r border-slate-200 dark:border-slate-800 shadow-xs overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col`}
     >
       <div className="p-4 flex-1">
         <ul className="space-y-3">
@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                 key={route.path}
                 to={route.path}
                 className={({ isActive }) =>
-                  `block ${isActive ? "bg-slate-600 rounded-lg" : ""} transition-colors duration-200`
+                  `block ${isActive ? "bg-slate-100 text-blue-600 font-semibold dark:bg-slate-600 dark:text-white rounded-lg" : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg"} transition-colors duration-200`
                 }
               >
                 <SingleTab
