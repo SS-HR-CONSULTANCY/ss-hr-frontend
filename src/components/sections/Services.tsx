@@ -25,11 +25,7 @@ const Services: React.FC = () => {
           >
             Our Services
           </h2>
-          <p className="text-neutral-500 text-base max-w-2xl mx-auto leading-relaxed">
-            Seamlessly navigate your career and travel journey to Dubai with our
-            comprehensive services — from securing your dream job to arranging
-            comfortable travel.
-          </p>
+
         </div>
 
         {/* Services grid */}

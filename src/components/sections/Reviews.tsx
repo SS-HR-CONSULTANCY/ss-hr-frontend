@@ -36,23 +36,7 @@ const Reviews: React.FC = () => {
         mainDivClassName="text-center mx-auto max-w-2xl"
       />
       <AuroraBackground>
-        <div className="w-full overflow-hidden leading-[0]">
-          <svg
-            className="relative block rotate-y-180"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M1200 120L0 16.48 0 0 1200 0 1200 120z"
-              className="fill-[#01487e]"
-            ></path>
-            <path
-              d="M1250 120L0 12.48 0 0 1200 0 1200 120z"
-              className="fill-white dark:fill-black"
-            ></path>
-          </svg>
-        </div>
+
         <motion.div
           initial={{ opacity: 0.0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,24 +56,7 @@ const Reviews: React.FC = () => {
           </div>
 
         </motion.div>
-        <div className="w-full overflow-hidden leading-[0] rotate-180">
-          <svg
-            className="relative block"
-            style={{ transform: "rotateY(180deg)" }}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M1200 120L0 16.48 0 0 1200 0 1200 120z"
-              className="fill-[#01487e]"
-            ></path>
-            <path
-              d="M1250 120L0 12.48 0 0 1200 0 1200 120z"
-              className="fill-zinc-100 dark:fill-zinc-900"
-            ></path>
-          </svg>
-        </div>
+
       </AuroraBackground>
     </section>
   );

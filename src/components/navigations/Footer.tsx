@@ -4,7 +4,7 @@ import {
   FooterColumn,
   FooterContent,
 } from "@/components/ui/footer";
-import { MapPin } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
 
 import type { FooterProps } from "@/types/componentTypes/footerTypes";
 import logoImage from "../../assets/logos/brand-icon.png";
@@ -31,27 +31,37 @@ const Footer = ({
       <FooterNew className="max-w-7xl mx-auto px-4 md:px-0 bg-zinc-100 dark:bg-zinc-900">
         <FooterContent className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-4">
           {/* Social Media and Contacts from footerData */}
-          {columns.map((column, index) => (
-            <FooterColumn key={index} className="md:w-1/4">
-              <h3 className="text-md pt-1 font-semibold">{column.title}</h3>
-              {column.links.map((link, linkIndex) => (
-                <a
-                  key={linkIndex}
-                  href={link.href}
-                  className="flex items-center gap-2 text-muted-foreground text-sm hover:text-black dark:hover:text-white"
-                >
-                  {link.icon && <link.icon className="size-3.5 shrink-0" />}
-                  {link.text}
-                </a>
-              ))}
-            </FooterColumn>
-          ))}
+          {columns.map((column, index) => {
+            const isContacts = column.title === "Contacts";
+            return (
+              <FooterColumn key={index} className={isContacts ? "md:w-[40%]" : "md:w-[15%]"}>
+                <h3 className="text-md pt-1 font-semibold">{column.title}</h3>
+                <div className={isContacts ? "grid grid-cols-2 gap-x-4 gap-y-3 mt-2" : "flex flex-col gap-3 mt-2"}>
+                  {column.links.map((link, linkIndex) => (
+                    <a
+                      key={linkIndex}
+                      href={link.href}
+                      className={`flex items-center gap-2 text-sm ${
+                        isContacts
+                          ? "text-[#486081] hover:opacity-80 font-medium"
+                          : "text-muted-foreground hover:text-black dark:hover:text-white"
+                      }`}
+                      style={isContacts && link.text.includes('@') ? { gridColumn: "1 / -1" } : {}}
+                    >
+                      {link.icon && <link.icon className="size-3.5 shrink-0" />}
+                      <span className="truncate">{link.text}</span>
+                    </a>
+                  ))}
+                </div>
+              </FooterColumn>
+            );
+          })}
 
           {/* Address Column */}
-          <FooterColumn className="md:w-1/4">
+          <FooterColumn className="md:w-[30%]">
             <div className="flex flex-col">
               <h3 className="text-md pt-1 font-semibold">Address</h3>
-              <h6 className="text-muted-foreground text-sm mt-4 text-justify">
+              <h6 className="text-muted-foreground text-sm mt-4 text-left whitespace-pre-wrap">
                 {address}
               </h6>
               <a
@@ -66,7 +76,7 @@ const Footer = ({
           </FooterColumn>
 
           {/* Logo Column */}
-          <FooterColumn className="md:w-1/4 flex items-center md:items-end justify-center">
+          <FooterColumn className="md:w-[15%] flex items-center md:items-end justify-center">
             <div className="flex items-center flex-col justify-center space-y-4">
               <img
                 src={logoImage}
@@ -97,8 +107,16 @@ const Footer = ({
           </h1>
         </FooterContent>
         <FooterBottom className="border-t">
-          <div className="w-full text-center text-sm text-muted-foreground py-1">
-            {copyrightText}
+          <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-sm text-muted-foreground py-1">
+            <a
+              href="mailto:hello@sshrconsultancy.com"
+              className="flex items-center gap-1.5 hover:text-black dark:hover:text-white"
+            >
+              <Mail className="size-3.5" />
+              hello@sshrconsultancy.com
+            </a>
+            <span className="hidden md:inline">•</span>
+            <span>{copyrightText}</span>
           </div>
         </FooterBottom>
       </FooterNew>

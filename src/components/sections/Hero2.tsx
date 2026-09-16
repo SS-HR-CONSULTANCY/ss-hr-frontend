@@ -14,16 +14,17 @@ import {
   Compass,
   Hotel,
   Calendar,
+  Handshake,
 } from "lucide-react";
 
 // ─── Tab content config ───────────────────────────────────────────────────────
 const tabContent = {
   jobs: {
     badge: "Job Hunting Package",
-    headline: ["Find Your Dream Job.", "Process Your Visa.", "Land In Dubai."],
-    highlightLine: "Land In Dubai.",
+    headline: ["Your Trusted Partner.", "For Dubai Job", "Opportunities."],
+    highlightLine: "Opportunities.",
     description:
-      "SS HR Consultancy connects skilled professionals with top employers across India and the UAE. From resume writing to visa processing — we handle everything so you can focus on your career.",
+      "Planning to explore career opportunities in Dubai? We provide end-to-end support to help make your journey easier, from visa assistance to travel and accommodation arrangements.",
     features: [
       { icon: Briefcase, text: "Job Recruitment & Placement" },
       { icon: FileCheck, text: "Visa & Work Permit Processing" },
@@ -35,12 +36,12 @@ const tabContent = {
     cards: {
       topLeft: { icon: Users, title: "500+ Placed", sub: "Candidates Hired", tag: "✓ ACTIVE", tagColor: "#166534", tagBg: "#f0fdf4" },
       topRight: { icon: FileCheck, title: "99% Success", sub: "Visa Approvals", tag: "VERIFIED", tagColor: "#8B5E00", tagBg: "rgba(254,188,4,0.18)" },
-      bottomLeft: { icon: TrendingUp, title: "10+ Years", sub: "Trusted Experience", tag: "", tagColor: "", tagBg: "" },
+      bottomLeft: { icon: TrendingUp, title: "5+ Years", sub: "Trusted Experience", tag: "", tagColor: "", tagBg: "" },
       bottomRight: { icon: MapPin, title: "Dual Offices", sub: "India & Dubai", link: "/contact" },
     },
-    centerIcon: Briefcase,
-    centerLabel: "Job Hunting",
-    centerSub: "Career Platform",
+    centerIcon: Handshake,
+    centerLabel: "Your Travel",
+    centerSub: "Job hunting partner",
   },
   tours: {
     badge: "Tours & Travels",
@@ -145,7 +146,7 @@ const Hero2 = () => {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ minHeight: "100vh", background: "#F9F9F9" }}
+      style={{ background: "#F9F9F9" }}
     >
       {/* Canvas particles */}
       <canvas
@@ -180,7 +181,8 @@ const Hero2 = () => {
       />
 
       {/* Main content */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-20 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14 pt-24 pb-20 min-h-screen">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-20 pt-8 lg:pt-12 pb-20">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-10 lg:gap-14">
         {/* ─── LEFT COLUMN ─── */}
         <div className="lg:w-[52%] flex flex-col gap-6">
 
@@ -212,7 +214,7 @@ const Hero2 = () => {
               }
             >
               <Briefcase className="w-3.5 h-3.5" />
-              Job Hunting
+              Job Hunting Packages
             </button>
 
             {/* Tours & Travels tab */}
@@ -233,7 +235,7 @@ const Hero2 = () => {
               }
             >
               <Plane className="w-3.5 h-3.5" />
-              Tours &amp; Travels
+              Visa &amp; Travel Services
             </button>
           </div>
 
@@ -244,8 +246,8 @@ const Hero2 = () => {
           >
             {/* Headline */}
             <h1
-              className="font-black text-[#0C0C0C] leading-[1.05] tracking-tight"
-              style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)" }}
+              className="font-black leading-[1.1] tracking-tight text-[#0C0C0C] mb-6"
+              style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}
             >
               {content.headline.map((line) =>
                 line === content.highlightLine ? (
@@ -257,9 +259,6 @@ const Hero2 = () => {
                         background: "linear-gradient(90deg, #D4820A, #febc04, #F5D020)",
                         WebkitBackgroundClip: "text",
                         backgroundClip: "text",
-                        textDecoration: "underline wavy rgba(254,188,4,0.4)",
-                        textUnderlineOffset: "8px",
-                        textDecorationThickness: "2px",
                       }}
                     >
                       {line}
@@ -274,81 +273,17 @@ const Hero2 = () => {
               )}
             </h1>
 
-            <p className="text-neutral-600 text-base sm:text-lg max-w-xl leading-relaxed">
+            <p className="text-neutral-600 text-base sm:text-lg max-w-xl leading-relaxed text-justify">
               {content.description}
             </p>
 
-            {/* Feature pills */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {content.features.map(({ icon: Icon, text }) => (
-                <div
-                  key={text}
-                  className="flex items-center gap-2.5 text-xs font-bold text-neutral-800 p-3 rounded-xl"
-                  style={{
-                    background: "rgba(255,255,255,0.8)",
-                    backdropFilter: "blur(8px)",
-                    border: "1px solid rgba(0,0,0,0.06)",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                  }}
-                >
-                  <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center"
-                    style={{ background: "rgba(254,188,4,0.18)", color: "#8B5E00" }}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  {text}
-                </div>
-              ))}
-            </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Link
-                to={content.cta.url}
-                className="flex items-center justify-center gap-2 font-black text-sm px-8 py-4 rounded-2xl transition-all group"
-                style={{
-                  background: "#febc04",
-                  color: "#261900",
-                  boxShadow: "0 10px 30px rgba(254,188,4,0.3)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 15px 40px rgba(254,188,4,0.45)";
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 30px rgba(254,188,4,0.3)";
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                }}
-              >
-                {content.cta.label}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <a
-                href={content.ctaSecondary.url}
-                className="flex items-center justify-center gap-2 font-bold text-sm px-8 py-4 rounded-2xl transition-all text-[#0C0C0C]"
-                style={{
-                  background: "white",
-                  border: "1px solid rgba(0,0,0,0.12)",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,0,0,0.25)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,0,0,0.12)";
-                }}
-              >
-                {content.ctaSecondary.label}
-              </a>
-            </div>
+
           </div>
         </div>
 
         {/* ─── RIGHT COLUMN: Orbital Widget ─── */}
-        <div className="lg:w-[46%] relative w-full mt-4 lg:mt-0 flex items-center justify-center">
+        <div className="lg:w-[46%] relative w-full -mt-8 lg:mt-0 flex items-center justify-center">
           <div
             className="relative mx-auto flex items-center justify-center"
             style={{ width: "min(500px, 100%)", minHeight: "500px" }}
@@ -408,21 +343,21 @@ const Hero2 = () => {
                   opacity: animating ? 0.5 : 1,
                 }}
               >
+                <div className="text-xs font-black text-[#0C0C0C] tracking-tight">{content.centerLabel}</div>
                 <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center mb-1.5"
-                  style={{ background: "#febc04", color: "#261900", boxShadow: "0 0 18px rgba(254,188,4,0.5)" }}
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center my-1.5"
+                  style={{ background: "#febc04", color: "#261900", boxShadow: "0 0 15px rgba(254,188,4,0.4)" }}
                 >
                   <CenterIcon className="w-5 h-5" />
                 </div>
-                <div className="text-xs font-black text-[#0C0C0C] tracking-tight">{content.centerLabel}</div>
-                <div className="text-[9px] font-mono text-neutral-500 font-bold mt-0.5">{content.centerSub}</div>
+                <div className="text-xs font-black text-[#0C0C0C] tracking-tight">{content.centerSub}</div>
               </div>
             </div>
 
             {/* ── Floating stat cards ── */}
             {/* Top-left */}
             <div
-              className="absolute top-4 left-0 z-20 p-3 rounded-2xl max-w-[190px]"
+              className="absolute top-0 left-0 z-20 p-3 rounded-2xl max-w-[190px]"
               style={{
                 background: "rgba(255,255,255,0.95)",
                 backdropFilter: "blur(20px)",
@@ -454,7 +389,7 @@ const Hero2 = () => {
 
             {/* Top-right */}
             <div
-              className="absolute top-4 right-0 z-20 p-3 rounded-2xl max-w-[190px]"
+              className="absolute top-0 right-0 z-20 p-3 rounded-2xl max-w-[190px]"
               style={{
                 background: "rgba(255,255,255,0.95)",
                 backdropFilter: "blur(20px)",
@@ -540,7 +475,59 @@ const Hero2 = () => {
                 </Link>
               </div>
             </div>
+            </div>
           </div>
+        </div>
+
+        {/* ─── CTAs Centered ─── */}
+        <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-8 w-full">
+          <Link
+            to={content.cta.url}
+            className="flex items-center justify-center gap-2 font-black text-sm px-8 py-4 rounded-2xl"
+            style={{
+              background: "#febc04",
+              color: "#261900",
+              boxShadow: "0 10px 30px rgba(254,188,4,0.3)",
+            }}
+          >
+            {content.cta.label}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          <a
+            href={content.ctaSecondary.url}
+            className="flex items-center justify-center gap-2 font-bold text-sm px-8 py-4 rounded-2xl text-[#0C0C0C]"
+            style={{
+              background: "white",
+              border: "1px solid rgba(0,0,0,0.12)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
+            {content.ctaSecondary.label}
+          </a>
+        </div>
+
+        {/* ─── 4 Feature Buttons Centered ─── */}
+        <div className="mt-12 flex flex-wrap justify-center gap-4 lg:gap-8 w-full">
+          {content.features.map(({ icon: Icon, text }) => (
+            <div
+              key={text}
+              className="flex items-center justify-center gap-2 text-[10px] lg:text-xs font-bold text-neutral-800 p-2 lg:px-4 lg:py-2.5 rounded-xl transition-all"
+              style={{
+                background: "rgba(255,255,255,0.8)",
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(0,0,0,0.06)",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.05)",
+              }}
+            >
+              <div
+                className="w-6 h-6 lg:w-7 lg:h-7 rounded-lg flex-shrink-0 flex items-center justify-center"
+                style={{ background: "rgba(254,188,4,0.18)", color: "#8B5E00" }}
+              >
+                <Icon className="w-3.5 h-3.5" />
+              </div>
+              {text}
+            </div>
+          ))}
         </div>
       </div>
 

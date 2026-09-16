@@ -383,64 +383,7 @@ export const services: ServiceProps[] = [
     contactButtonText: "Enquiry",
     heroTitle: "Trusted Recruitment For Healthcare Professionals",
   },
-  {
-    id: "jobrecruitservice",
-    title: "Share Interest for Available Vacancies",
-    description:
-      "Helping professionals find rewarding career opportunities across industries.",
-    hoverDescription:
-      "We connect highly skilled professionals with rewarding career opportunities in Dubai's thriving job market. Our personalized approach and extensive network guarantee increased chances of securing your ideal role.",
-    imageUrl: jobRecruitment,
-    href: "#services",
 
-    banner: "",
-    bannerTitle: "Connecting You To Better Careers",
-    showButton: true,
-    buttonText: "Share Interest",
-    buttonUrl: "/user/jobs",
-    // We will handle the action in the component itself
-    buttonAction: "share_interest",
-    points: [
-      "We help job seekers find positions that align with their skills, experience, and career goals.",
-      "Our extensive network of employers provides access to opportunities across diverse industries.",
-      "We streamline the recruitment process, reducing the time between application and placement.",
-      "Employers gain access to pre screened candidates who are motivated and qualified for the role.",
-      "Our recruitment team provides career guidance and support to ensure candidates make informed choices.",
-    ],
-    contactText:
-      "If you would like to enquire about job recruitment, please contact us.",
-    contactUrl: "/contact",
-    contactButtonText: "Enquiry",
-    heroTitle: "Find The Right Career Opportunities Here",
-  },
-  {
-    id: "cvwritingservice",
-    title: "CV Writing",
-    description:
-      "Crafting impactful CVs that highlight your strengths and career achievements.",
-    hoverDescription:
-      "Our expert CV writing service ensures your resume stands out to recruiters. We tailor each CV to showcase your skills, experience, and accomplishments in a way that maximizes your chances of landing interviews and advancing your career.",
-    imageUrl: cvWriting,
-    href: "#services",
-
-    banner: cvWritingBanner,
-    bannerTitle: "Professional CV Writing Services",
-    showButton: true,
-    buttonText: "Learn More",
-    buttonUrl: "/cvwriting",
-    points: [
-      "We craft CVs that effectively highlight your strengths, skills, and achievements.",
-      "Our writing style ensures that your CV is clear, concise, and impactful for recruiters.",
-      "Every CV is tailored to meet the expectations of your specific industry or career path.",
-      "We optimize CVs to be applicant tracking system (ATS) friendly, improving your chances of selection.",
-      "Our service increases your likelihood of landing interviews and advancing your career.",
-    ],
-    contactText:
-      "If you would like to enquire about CV writing services, please reach out to us.",
-    contactUrl: "/contact",
-    contactButtonText: "Enquiry",
-    heroTitle: "Stand Out With A Professionally Written CV",
-  },
 
   {
     id: "laboursupplyservice",
@@ -574,7 +517,6 @@ export const footerData = [
         text: "Instagram",
         href: "https://www.instagram.com/ss__human_resource?igsh=Y2tyNHJ4N2N5dGNy",
       },
-      { text: "Facebook", href: "" },
       {
         text: "Linkedin",
         href: "https://www.linkedin.com/company/ss-human-resource-consultancy/",
@@ -588,11 +530,6 @@ export const footerData = [
       { text: "+971 542326584", href: "tel:+971542326584", icon: Phone },
       { text: "+971 542326585", href: "tel:+971542326585", icon: Phone },
       { text: "+91 9349714742", href: "tel:+919349714742", icon: Phone },
-      {
-        text: "hello@sshrconsultancy.com",
-        href: "mailto:hello@sshrconsultancy.com",
-        icon: Mail,
-      },
     ],
   },
 ];
@@ -605,7 +542,7 @@ export const footerPoliciesData = [
 export const footerCopyright =
   "© 2026 sshrconsultancy.com All rights reserved";
 export const footerAddress =
-  "Al Qiyadah Metro Station Exit2, Abu Saif Business Center,Al Kazim Building, Entrance B, Dubai, UAE";
+  "Al Qiyadah Metro Station Exit2, Abu Saif Business Center,\nAl Kazim Building, Entrance B, Dubai, UAE";
 
 // Contact component constants
 export const contactData: ContactItem[] = [
