@@ -1,4 +1,5 @@
-import type { ButtonProps } from "@/components/ui/button";
+import type { Button } from "@/components/ui/button";
+import type React from "react";
 import type { ReactNode } from "react";
 
 // Header compoenent types
@@ -10,7 +11,7 @@ export interface NavbarLink {
 export interface NavbarActionProps {
   text: string;
   href: string;
-  variant?: ButtonProps["variant"];
+  variant?: React.ComponentProps<typeof Button>["variant"];
   icon?: ReactNode;
   iconRight?: ReactNode;
   isButton?: boolean;
