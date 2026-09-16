@@ -10,18 +10,21 @@ import { queryClient } from "./lib/queryClient";
 import { RouterProvider } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PersistGate } from "redux-persist/integration/react";
-import { initGA } from "./lib/analytics";
-import usePageTracking from "./hooks/usePageTracking";
+import { initGA, trackPageView } from "./lib/analytics";
 import { setupAxiosInterceptors } from "./lib/axiosInterceptor";
 import { persistAppStore, store, type RootState } from "./store/store";
 
 setupAxiosInterceptors();
 initGA().catch(console.error);
 
+// Track page views on every route change (outside Router context — no useLocation needed)
+appRouter.subscribe((state) => {
+  trackPageView(state.location.pathname + state.location.search);
+});
+
 
 const AppContent = () => {
   const { theme } = useSelector((state: RootState) => state.app);
-  usePageTracking();
 
   return (
     <ThemeWrapper>
