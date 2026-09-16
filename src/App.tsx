@@ -10,13 +10,18 @@ import { queryClient } from "./lib/queryClient";
 import { RouterProvider } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PersistGate } from "redux-persist/integration/react";
+import { initGA } from "./lib/analytics";
+import usePageTracking from "./hooks/usePageTracking";
 import { setupAxiosInterceptors } from "./lib/axiosInterceptor";
 import { persistAppStore, store, type RootState } from "./store/store";
 
 setupAxiosInterceptors();
+initGA().catch(console.error);
+
 
 const AppContent = () => {
   const { theme } = useSelector((state: RootState) => state.app);
+  usePageTracking();
 
   return (
     <ThemeWrapper>
