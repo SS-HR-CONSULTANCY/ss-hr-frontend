@@ -30,7 +30,6 @@ export interface SiteUrlConfigProps {
   home: string;
   aboutus: string;
   travelpackages: string;
-  webdevelopment: string;
   contact: string;
   services: string;
   signIn: string;

@@ -97,7 +97,9 @@ const Footer = ({
           </h1>
         </FooterContent>
         <FooterBottom className="border-t">
-          <div>{copyrightText}</div>
+          <div className="w-full text-center text-sm text-muted-foreground py-1">
+            {copyrightText}
+          </div>
         </FooterBottom>
       </FooterNew>
     </footer>

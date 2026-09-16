@@ -101,7 +101,6 @@ export const siteUrlConfig: SiteUrlConfigProps = {
   home: "/",
   aboutus: "/aboutUs",
   travelpackages: "/toursandtravels",
-  webdevelopment: "/webdevelopment",
   contact: "/contact",
   services: "#services",
   signIn: "/login",
@@ -137,13 +136,7 @@ export const navLinks: navLinkProps[] = [
     isForDesk: true,
   },
   { text: "Services", href: siteUrlConfig.services, isForMob: true },
-  {
-    text: "Web Development",
-    href: siteUrlConfig.webdevelopment,
-    isLink: true,
-    isForDesk: true,
-    isForMob: true,
-  },
+
   {
     text: "About Us",
     href: siteUrlConfig.aboutus,
@@ -448,34 +441,7 @@ export const services: ServiceProps[] = [
     contactButtonText: "Enquiry",
     heroTitle: "Stand Out With A Professionally Written CV",
   },
-  {
-    id: "webdevelopment",
-    title: "Web Development",
-    description:
-      "Building modern, responsive, and scalable websites tailored to your needs.",
-    hoverDescription:
-      "Our web development service helps businesses establish a strong online presence. From sleek portfolio sites to dynamic web applications, we deliver custom solutions that are fast, user-friendly, and optimized for performance and growth.",
-    imageUrl: webDev,
-    href: "#services",
 
-    banner: webDevBanner,
-    bannerTitle: "Modern Scalable Web Development Services",
-    showButton: true,
-    buttonText: "Build One",
-    buttonUrl: "/webdevelopment",
-    points: [
-      "We design and develop modern websites that are responsive across all devices and platforms.",
-      "Our development approach ensures scalability so your website grows as your business expands.",
-      "We optimize every website for fast loading speeds and top performance.",
-      "SEO-friendly structures are built in to maximize visibility on search engines.",
-      "Custom features are tailored to your unique business requirements for a personalized solution.",
-    ],
-    contactText:
-      "If you would like to make an enquiry for web development, please get in touch.",
-    contactUrl: "/contact",
-    contactButtonText: "Enquiry",
-    heroTitle: "Build A Modern And Scalable Website Today",
-  },
   {
     id: "laboursupplyservice",
     title: "Labour Supply",
@@ -637,7 +603,7 @@ export const footerPoliciesData = [
 ];
 
 export const footerCopyright =
-  "© 2025 sshrconsultancy.com All rights reserved";
+  "© 2026 sshrconsultancy.com All rights reserved";
 export const footerAddress =
   "Al Qiyadah Metro Station Exit2, Abu Saif Business Center,Al Kazim Building, Entrance B, Dubai, UAE";
 
