@@ -11,6 +11,7 @@ import {
   updatePassword,
   verifyEmail,
   verifyOtp,
+  checkUserStatus,
 } from "@/utils/apis/authApi";
 import type { User } from "@/types/entities/user";
 import { updateProfileInfo } from "@/utils/apis/userApi";
@@ -163,6 +164,16 @@ const authSlice = createSlice({
           role: action.payload.data.role,
         };
       },
+    );
+
+    builder.addCase(
+      checkUserStatus.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        if (action.payload?.user) {
+          state.isAuthenticated = true;
+          state.user = action.payload.user;
+        }
+      }
     );
   },
 });

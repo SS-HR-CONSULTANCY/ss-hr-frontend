@@ -639,10 +639,7 @@ export const callToActionData: CallToActionProps = {
 };
 
 // Routes
-export const userApplicationRoutes: Route[] = [
-  { path: "jobs", name: "Jobs", roles: ["user"] },
-  { path: "chat", name: "Chat", roles: ["user"] },
-];
+export const userApplicationRoutes: Route[] = [];
 
 export const adminApplicationRoutes: Route[] = [
   {

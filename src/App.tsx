@@ -1,7 +1,10 @@
 import { Suspense } from "react";
 import { Provider } from "react-redux";
 import { HeadProvider } from "react-head";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { checkUserStatus } from "./utils/apis/authApi";
+import type { AppDispatch } from "./store/store";
 import appRouter from "./router/appRouter";
 import Loading from "./pages/common/LoadingPage";
 import { ToastContainer } from "react-toastify";
@@ -25,6 +28,14 @@ appRouter.subscribe((state) => {
 
 const AppContent = () => {
   const { theme } = useSelector((state: RootState) => state.app);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      dispatch(checkUserStatus());
+    }
+  }, [dispatch, isAuthenticated]);
 
   return (
     <ThemeWrapper>

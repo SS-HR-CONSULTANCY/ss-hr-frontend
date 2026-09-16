@@ -146,7 +146,18 @@ export const updatePassword = createAsyncThunk<
 
 export const checkUserStatus = createAsyncThunk(
   "auth/checkUserStatus",
-  async () => {
-    await axiosInstance.get("/auth/checkUserStatus", { withCredentials: true });
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get("/auth/checkUserStatus", { withCredentials: true });
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<ApiBaseResponse>;
+      return thunkAPI.rejectWithValue(
+        error.response?.data || {
+          success: false,
+          message: "Something went wrong",
+        },
+      );
+    }
   },
 );

@@ -29,6 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
   const dispatch = useDispatch<AppDispatch>();
   const { sidebarOpen } = useSelector((state: RootState) => state.app);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const iconMap: Record<string, React.ReactNode> = {
     overview: <LayoutDashboard />,
@@ -69,13 +70,15 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
             </span>
           </li>
 
-          <SingleTab
-            icon={<PanelLeft />}
-            text="Close"
-            onClick={() => dispatch(toggleAdminSidebar())}
-            sidebarOpen={sidebarOpen}
-          />
-
+          {user?.role !== "user" && (
+            <SingleTab
+              icon={<PanelLeft />}
+              text="Close"
+              onClick={() => dispatch(toggleAdminSidebar())}
+              sidebarOpen={sidebarOpen}
+            />
+          )}
+          
           {routes.map((route) => {
             return (
               <NavLink
