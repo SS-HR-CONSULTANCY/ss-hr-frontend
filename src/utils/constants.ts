@@ -102,7 +102,7 @@ export const siteUrlConfig: SiteUrlConfigProps = {
   aboutus: "/aboutUs",
   travelpackages: "/toursandtravels",
   contact: "/contact",
-  services: "#services",
+  services: "/services",
   signIn: "/login",
   signUp: "/register",
 };
@@ -213,32 +213,74 @@ export const staticPackages = [
 export const staticTestimonials = [
   {
     _id: "test-1",
-    clientName: "Midhun Kumar",
-    designation: "Sales & Marketing Specialist",
-    testimonial:
-      "SS HR Consultancy made my transition to Dubai seamless and stress-free. Their visa processing team kept me updated at every stage, and everything was handled with complete transparency.",
+    clientName: "Shafeek Sainudeen",
+    designation: "Customer",
+    testimonial: "Good Service ❤️",
+    rating: 5,
   },
   {
     _id: "test-2",
-    clientName: "Amal Jose",
-    designation: "Hospitality Professional",
-    testimonial:
-      "The team provided tremendous support with my certificate attestation and visa processing. Truly professional, reliable, and prompt. I highly recommend SS HR Consultancy!",
+    clientName: "Mahesh Kv",
+    designation: "Local Guide",
+    testimonial: "Good service",
+    rating: 5,
   },
   {
     _id: "test-3",
-    clientName: "Sarah Al-Mansoor",
-    designation: "HR Operations Lead",
-    testimonial:
-      "Working with SS HR Consultancy has been exceptional. Their recruitment and document processing services are first class. They saved our organization valuable time and effort.",
+    clientName: "Naser Hussain",
+    designation: "Customer",
+    testimonial: "Their service is best and price is affordable recommend for others",
+    rating: 5,
   },
   {
     _id: "test-4",
-    clientName: "Rahul Sharma",
-    designation: "Software Engineer",
-    testimonial:
-      "From ticket bookings to visa approval and travel arrangements, every detail was executed smoothly. Fantastic service and outstanding customer assistance around the clock.",
+    clientName: "Ganga Vs",
+    designation: "Customer",
+    testimonial: "Friendly staff and good service",
+    rating: 5,
   },
+  {
+    _id: "test-5",
+    clientName: "Dr.R.Naresh Kumar.",
+    designation: "Local Guide",
+    testimonial: "Got visa services with them . Recommended..",
+    rating: 4,
+  },
+  {
+    _id: "test-6",
+    clientName: "Martin S",
+    designation: "Customer",
+    testimonial: "100% honest HR Consultancy in the UAE.Very very genuine approach and real Gentleman.**********",
+    rating: 5,
+  },
+  {
+    _id: "test-7",
+    clientName: "Fathima sa",
+    designation: "Customer",
+    testimonial: "I had a great experience with SS HR Consultancy Tours and Travels. They were professional, honest, and supportive throughout the entire recruitment process. Their team guided me at every step and helped me secure a job in Dubai smoothly.",
+    rating: 5,
+  },
+  {
+    _id: "test-8",
+    clientName: "Vinod Pillai",
+    designation: "Customer",
+    testimonial: "SS HR consultancy വളരെ വിശ്വസിക്കാൻ പറ്റുന്ന ഒരു സ്ഥാപനമാണ്. മാനേജ്മെന്റും stafsum വളരെ ഫ്രണ്ട്ലി ആണ്. എന്റെ എക്സ്പീരിയൻസിൽ നിന്നു പറയുന്നതാണ് ദുബായിൽ ഒരു ജോലിക്കായി try ചെയ്യുന്നവർക്ക് ചൂസ് ചെയ്യാൻ പറ്റുന്ന വളരെ വിശ്വസ്തമായ ഒരു സ്ഥാപനമാണ് ss",
+    rating: 5,
+  },
+  {
+    _id: "test-9",
+    clientName: "Seetha Mohan",
+    designation: "Customer",
+    testimonial: "Excellent and trustworthy service! I always book my flight tickets and arrange my family's UAE visas through this agency. They are very responsive, professional, and always provide prompt assistance. Highly recommended. Thank you for your excellent service!",
+    rating: 5,
+  },
+  {
+    _id: "test-10",
+    clientName: "Bover Shook",
+    designation: "Customer",
+    testimonial: "The service provided was exceptionally professional, offering thorough information and effective solutions. I highly recommend.",
+    rating: 5,
+  }
 ];
 
 // Services component constants

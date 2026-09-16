@@ -82,9 +82,11 @@ const Services: React.FC = () => {
               </p>
 
               {/* CTA */}
-              {service.showButton && service.buttonUrl && (
-                <Link
-                  to={service.buttonUrl}
+              {service.showButton && (
+                <a
+                  href="https://wa.me/971542326584?text=Hello,%20I%20would%20like%20to%20learn%20more%20about%20the%20services%20you%20offer.%20Could%20you%20please%20provide%20me%20with%20more%20information?"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 mt-5 text-sm font-bold transition-all"
                   style={{ color: "#D4820A" }}
                   onMouseEnter={(e) => {
@@ -96,7 +98,7 @@ const Services: React.FC = () => {
                 >
                   {service.buttonText || "Learn More"}
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                </a>
               )}
 
               {/* Bottom accent bar on hover */}

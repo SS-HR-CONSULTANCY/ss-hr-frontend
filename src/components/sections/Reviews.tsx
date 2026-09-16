@@ -51,7 +51,7 @@ const Reviews: React.FC = () => {
             <InfiniteMovingCards
               items={testmonials || []}
               direction="right"
-              speed="normal"
+              speed="slow"
             />
           </div>
 

@@ -3,6 +3,7 @@ export interface Testimonial {
   clientName: string;
   designation: string;
   testimonial: string;
+  rating?: number;
   isVisible: boolean;
   createdAt: string;
   updatedAt: string;

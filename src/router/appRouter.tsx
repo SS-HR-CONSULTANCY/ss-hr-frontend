@@ -38,6 +38,7 @@ const UpdatePasswordPage = lazy(
 const ToursAndTravelsPage = lazy(
   () => import("@/pages/common/ToursAndTravelsPage"),
 );
+const ServicesPage = lazy(() => import("@/pages/common/ServicesPage"));
 const RouteErrorBoundary = lazy(
   () => import("@/components/common/RouteErrorBoundary"),
 );
@@ -58,6 +59,7 @@ const appRouter = createBrowserRouter([
       { path: "/toursandtravels", element: <ToursAndTravelsPage /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/aboutUs", element: <AboutUsPage /> },
+      { path: "/services", element: <ServicesPage /> },
       {
         path: "/visaservice",
         element: (

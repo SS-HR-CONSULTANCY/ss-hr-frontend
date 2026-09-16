@@ -34,10 +34,10 @@ const tabContent = {
     cta: { label: "Apply for Jobs", url: "/contact" },
     ctaSecondary: { label: "Explore Services", url: "#services" },
     cards: {
-      topLeft: { icon: Users, title: "500+ Placed", sub: "Candidates Hired", tag: "✓ ACTIVE", tagColor: "#166534", tagBg: "#f0fdf4" },
-      topRight: { icon: FileCheck, title: "99% Success", sub: "Visa Approvals", tag: "VERIFIED", tagColor: "#8B5E00", tagBg: "rgba(254,188,4,0.18)" },
-      bottomLeft: { icon: TrendingUp, title: "5+ Years", sub: "Trusted Experience", tag: "", tagColor: "", tagBg: "" },
-      bottomRight: { icon: MapPin, title: "Dual Offices", sub: "India & Dubai", link: "/contact" },
+      topLeft: { icon: Briefcase, title: "500+", sub: "Placements", tag: "✓ ACTIVE", tagColor: "#166534", tagBg: "#f0fdf4" },
+      topRight: { icon: FileCheck, title: "Job Hunting", sub: "Visit Visa Packages", tag: "VERIFIED", tagColor: "#8B5E00", tagBg: "rgba(254,188,4,0.18)" },
+      bottomLeft: { icon: Hotel, title: "Accommodation", sub: "with Food", tag: "", tagColor: "", tagBg: "" },
+      bottomRight: { icon: Plane, title: "Flight Ticket", sub: "with Airport Pickup", link: "/contact" },
     },
     centerIcon: Handshake,
     centerLabel: "Your Travel",
@@ -377,14 +377,6 @@ const Hero2 = () => {
                   <div className="text-[8px] font-mono text-neutral-500 font-bold">{content.cards.topLeft.sub}</div>
                 </div>
               </div>
-              {content.cards.topLeft.tag && (
-                <div className="mt-2 flex items-center justify-between text-[8px] font-mono font-bold text-neutral-700 pt-1.5" style={{ borderTop: "1px solid rgba(0,0,0,0.05)" }}>
-                  <span>India &amp; UAE</span>
-                  <span className="font-black px-1 py-0.5 rounded" style={{ color: content.cards.topLeft.tagColor, background: content.cards.topLeft.tagBg }}>
-                    {content.cards.topLeft.tag}
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Top-right */}
@@ -409,14 +401,6 @@ const Hero2 = () => {
                   <div className="text-[8px] font-mono text-neutral-500 font-bold">{content.cards.topRight.sub}</div>
                 </div>
               </div>
-              {content.cards.topRight.tag && (
-                <div className="mt-2 flex items-center justify-between text-[8px] font-mono font-bold text-neutral-700 pt-1.5" style={{ borderTop: "1px solid rgba(0,0,0,0.05)" }}>
-                  <span>Fast Track</span>
-                  <span className="font-black px-1 py-0.5 rounded" style={{ color: content.cards.topRight.tagColor, background: content.cards.topRight.tagBg }}>
-                    {content.cards.topRight.tag}
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Bottom-left */}

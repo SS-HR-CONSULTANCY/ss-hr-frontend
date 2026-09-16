@@ -232,7 +232,7 @@ const PackagesPricing: React.FC = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
             <a
-              href="https://wa.me/971542326584"
+              href="https://wa.me/971542326584?text=Hello,%20I%20would%20like%20to%20learn%20more%20about%20the%20services%20you%20offer.%20Could%20you%20please%20provide%20me%20with%20more%20information?"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 font-black text-sm px-6 py-3 rounded-xl transition-all"

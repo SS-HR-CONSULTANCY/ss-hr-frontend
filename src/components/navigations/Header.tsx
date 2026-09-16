@@ -56,7 +56,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* ─── DESKTOP NAV ─── */}
-          <nav className="hidden md:flex items-center gap-7">
+          <nav className="hidden md:flex items-center gap-10 lg:gap-14">
             {desktopLinks
               .filter((l) => l.text !== "Services" || l.isForDesk)
               .filter((l, i, arr) => arr.findIndex((x) => x.text === l.text) === i)
@@ -92,7 +92,7 @@ const Header: React.FC = () => {
           <div className="hidden md:flex items-center gap-3">
             {/* WhatsApp */}
             <a
-              href="https://wa.me/971542326584"
+              href="https://wa.me/971542326584?text=Hello,%20I%20would%20like%20to%20learn%20more%20about%20the%20services%20you%20offer.%20Could%20you%20please%20provide%20me%20with%20more%20information?"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-500 transition-colors px-3 py-2 rounded-xl hover:bg-green-50"

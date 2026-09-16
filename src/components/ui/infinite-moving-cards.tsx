@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "./card";
 import type { Testimonial } from "@/types/entities/testimonial";
+import { Star } from "lucide-react";
 
 export const InfiniteMovingCards = ({
   items,
@@ -87,10 +88,10 @@ export const InfiniteMovingCards = ({
             className="h-auto relative w-[250px] max-w-full shrink-0 flex-none
                rounded-2xl border border-b-0 border-zinc-200 
                bg-[linear-gradient(180deg,#fafafa,#f5f5f5)] 
-               md:w-[450px] dark:border-zinc-700 
+               md:w-[300px] dark:border-zinc-700 
                dark:bg-[linear-gradient(180deg,#27272a,#18181b)]"
           >
-            <CardContent className="flex flex-col h-full px-4 py-3 md:px-8 md:py-6">
+            <CardContent className="flex flex-col h-full px-3 py-2 md:px-4 md:py-3">
               <blockquote className="flex flex-col h-full">
                 <div
                   aria-hidden="true"
@@ -99,18 +100,36 @@ export const InfiniteMovingCards = ({
                      h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
                 ></div>
 
+                {/* Rating stars */}
+                <div className="flex items-center gap-1 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={cn(
+                        "w-3 h-3",
+                        i < (item.rating || 5)
+                          ? "fill-[#fbbc04] text-[#fbbc04]" // Google yellow
+                          : "fill-gray-200 text-gray-200"
+                      )}
+                    />
+                  ))}
+                </div>
+
                 {/* Quote text */}
-                <span className="relative z-20 text-sm leading-[1.6] font-normal text-black dark:text-white">
+                <span className="relative z-20 text-xs leading-[1.5] font-normal text-black dark:text-white">
                   {item.testimonial}
                 </span>
 
                 {/* Footer at bottom */}
-                <div className="relative z-20 mt-auto flex flex-row items-center pt-6">
-                  <span className="flex flex-col gap-1">
-                    <span className="text-sm leading-[1.6] font-semibold text-black dark:text-white">
+                <div className="relative z-20 mt-auto flex flex-row items-center gap-3 pt-4">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-300 text-slate-700 font-bold text-sm shrink-0">
+                    {item.clientName?.charAt(0)?.toUpperCase() || "C"}
+                  </div>
+                  <span className="flex flex-col">
+                    <span className="text-xs leading-[1.5] font-semibold text-black dark:text-white">
                       {item.clientName}
                     </span>
-                    <span className="text-sm leading-[1.6] font-normal text-gray-500 dark:text-gray-300">
+                    <span className="text-[10px] leading-[1.5] font-normal text-gray-500 dark:text-gray-300">
                       {item.designation}
                     </span>
                   </span>

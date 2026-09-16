@@ -34,7 +34,7 @@ const Footer = ({
           {columns.map((column, index) => {
             const isContacts = column.title === "Contacts";
             return (
-              <FooterColumn key={index} className={isContacts ? "md:w-[40%]" : "md:w-[15%]"}>
+              <FooterColumn key={index} className={isContacts ? "md:w-[30%]" : "md:w-[15%]"}>
                 <h3 className="text-md pt-1 font-semibold">{column.title}</h3>
                 <div className={isContacts ? "grid grid-cols-2 gap-x-4 gap-y-3 mt-2" : "flex flex-col gap-3 mt-2"}>
                   {column.links.map((link, linkIndex) => (
@@ -58,7 +58,7 @@ const Footer = ({
           })}
 
           {/* Address Column */}
-          <FooterColumn className="md:w-[30%]">
+          <FooterColumn className="md:w-[40%]">
             <div className="flex flex-col">
               <h3 className="text-md pt-1 font-semibold">Address</h3>
               <h6 className="text-muted-foreground text-sm mt-4 text-left whitespace-pre-wrap">
