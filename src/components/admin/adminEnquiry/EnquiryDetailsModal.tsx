@@ -15,6 +15,7 @@ import type { RootState, AppDispatch } from "@/store/store";
 import { closeViewEnquiryDetails } from "@/store/slices/enquirySlice";
 import { adminFetchAllEnquiries, adminUpdateEnquiryStatus } from "@/utils/apis/adminEnquiryApi";
 import { format } from "date-fns";
+import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
 
 const EnquiryDetailsModal: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +38,7 @@ const EnquiryDetailsModal: React.FC = () => {
   const selectedEnquiry = enquiriesData?.data?.find(e => e._id === selectedEnquiryId);
 
   const updateStatusMutation = useMutation({
-    mutationFn: (status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => 
+    mutationFn: (status: "pending" | "contacted" | "need_follow_up" | "not_interested" | "processing_application" | "completed" | "rejected_application") => 
       adminUpdateEnquiryStatus({ enquiryId: selectedEnquiryId!, status }),
     onSuccess: (data) => {
       if (data.success) {
@@ -80,15 +81,18 @@ const EnquiryDetailsModal: React.FC = () => {
                 defaultValue={selectedEnquiry.status}
                 onValueChange={handleStatusChange}
               >
-                <SelectTrigger className="w-[150px] h-8 text-xs font-semibold">
+                <SelectTrigger className={`w-[185px] h-8 text-xs font-semibold border ${getStatusConfig(selectedEnquiry.status).triggerClass}`}>
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="contacted">Contacted</SelectItem>
-                  <SelectItem value="need_follow_up">Need Follow Up</SelectItem>
-                  <SelectItem value="processing_application">Processing Application</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
+                  {Object.entries(ENQUIRY_STATUS_CONFIG).map(([value, c]) => (
+                    <SelectItem key={value} value={value}>
+                      <span className="flex items-center gap-2">
+                        <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${c.dotClass}`} />
+                        {c.label}
+                      </span>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

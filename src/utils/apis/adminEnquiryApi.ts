@@ -2,6 +2,7 @@ import { axiosInstance } from "@/lib/axios";
 import type { ApiBaseResponse, ApiPaginatedResponse, FetchFunctionParams } from "@/types/commonTypes";
 import { buildQueryParams, parseNewCommonResponse } from "@/utils/helpers/apiHelpers";
 import type { AdminFetchAllEnquiriesResponse } from "@/types/apiTypes/adminApiTypes";
+import type { EnquiryStatusKey } from "@/utils/enquiryStatusConfig";
 
 export const adminFetchAllEnquiries = async (
   params?: FetchFunctionParams,
@@ -13,7 +14,7 @@ export const adminFetchAllEnquiries = async (
 
 export const adminUpdateEnquiryStatus = async (props: {
   enquiryId: string;
-  status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
+  status: EnquiryStatusKey;
 }): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.patch(`/admin/enquiries/${props.enquiryId}/status`, {
     status: props.status,

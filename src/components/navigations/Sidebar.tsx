@@ -72,12 +72,12 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
 
   return (
     <div
-      className="w-64 bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:to-slate-700 text-slate-800 dark:text-white border-r border-slate-200 dark:border-slate-800 shadow-xs overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col"
+      className="w-64 bg-white text-slate-700 border-r border-[#b2ebf2] shadow-sm overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col"
     >
       <div className="p-4 flex-1">
-        <ul className="space-y-5">
-          <li className="px-3 pb-4">
-            <span className="text-3xl font-bold italic rounded-lg cursor-pointer">
+        <ul className="space-y-3">
+          <li className="px-3 pb-5 pt-2">
+            <span className="text-2xl font-bold tracking-tight" style={{ color: "#00b5cc" }}>
               Dashboard
             </span>
           </li>
@@ -88,7 +88,11 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                 key={route.path}
                 to={route.path}
                 className={({ isActive }) =>
-                  `block ${isActive ? "bg-slate-100 text-blue-600 font-semibold dark:bg-slate-600 dark:text-white rounded-lg" : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg"} transition-colors duration-200`
+                  `block rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#e0f7fa] text-[#00838f] font-semibold border-l-4 border-[#00b5cc]"
+                      : "text-slate-500 hover:bg-[#f0fbfc] hover:text-[#00b5cc]"
+                  }`
                 }
               >
                 <SingleTab
@@ -102,8 +106,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
         </ul>
       </div>
 
-      <ul className="p-4">
-
+      <ul className="p-4 border-t border-[#b2ebf2]">
         <SingleTab
           icon={<LogOut />}
           text="Logout"

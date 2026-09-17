@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
+import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
 
 interface WhatsappEnquiryModalProps {
   enquiry?: AdminFetchAllWhatsappEnquiriesResponse | null;
@@ -179,14 +180,18 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <Select value={formData.status} onValueChange={handleStatusChange}>
-                <SelectTrigger>
+                <SelectTrigger className={`border font-semibold ${getStatusConfig(formData.status).triggerClass}`}>
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="contacted">Contacted</SelectItem>
-                  <SelectItem value="under_processing">Under Processing</SelectItem>
-                  <SelectItem value="delivered">Delivered</SelectItem>
+                  {Object.entries(ENQUIRY_STATUS_CONFIG).map(([value, c]) => (
+                    <SelectItem key={value} value={value}>
+                      <span className="flex items-center gap-2">
+                        <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${c.dotClass}`} />
+                        {c.label}
+                      </span>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

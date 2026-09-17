@@ -31,14 +31,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <MobileWarning />
         </div>
       )}
-      <div className="h-screen bg-gradient-to-r from-slate-50 to-sky-50 dark:from-slate-800 dark:to-zinc-800 text-sm text-[#4682B4] dark:text-[#5c98ca] flex">
+      <div className="h-screen bg-white text-sm text-[#00838f] flex">
         <Sidebar routes={routes} />
         <div className="flex-1 flex flex-col min-w-0">
           <div className="shrink-0">
             <DashboardHeader user={user} />
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 md:p-4">
+          <div className="flex-1 overflow-y-auto p-2 md:p-4 bg-[#f0fbfc]">
             <Outlet />
           </div>
         </div>

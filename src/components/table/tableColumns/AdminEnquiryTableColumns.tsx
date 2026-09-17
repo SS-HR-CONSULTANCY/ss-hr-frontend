@@ -15,6 +15,7 @@ import type { AdminFetchAllEnquiriesResponse, AccountResponse } from "@/types/ap
 import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
+import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
 
 const formatWhatsAppNumber = (phone: string) => {
   if (!phone) return "";
@@ -26,7 +27,7 @@ const formatWhatsAppNumber = (phone: string) => {
   return clean;
 };
 
-const validStatuses = ["pending", "contacted", "need_follow_up", "processing_application", "completed"];
+const validStatuses = ["pending", "contacted", "need_follow_up", "not_interested", "processing_application", "completed", "rejected_application"];
 
 const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
   const initialStatus = validStatuses.includes(enquiry.status?.toLowerCase()) 
@@ -42,6 +43,8 @@ const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
     setStatus(newStatus);
   }, [enquiry.status]);
 
+  const cfg = getStatusConfig(status);
+
   return (
     <Select
       value={status}
@@ -50,15 +53,18 @@ const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
         handleUpdateStatus(enquiry._id, value as any);
       }}
     >
-      <SelectTrigger className="w-[160px] h-8 text-xs">
+      <SelectTrigger className={`w-[185px] h-8 text-xs font-semibold border ${cfg.triggerClass}`}>
         <SelectValue placeholder="Status" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="pending">Pending</SelectItem>
-        <SelectItem value="contacted">Contacted</SelectItem>
-        <SelectItem value="need_follow_up">Need Follow Up</SelectItem>
-        <SelectItem value="processing_application">Processing Application</SelectItem>
-        <SelectItem value="completed">Completed</SelectItem>
+        {Object.entries(ENQUIRY_STATUS_CONFIG).map(([value, c]) => (
+          <SelectItem key={value} value={value}>
+            <span className="flex items-center gap-2">
+              <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${c.dotClass}`} />
+              {c.label}
+            </span>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
@@ -101,7 +107,7 @@ const AccountSelectCell = ({ enquiry, handleUpdateAccount }: { enquiry: AdminFet
 export const AdminEnquiryTableColumns = (
   handleViewEnquiry: (enquiryId: string) => void,
   handleDeleteEnquiry: (enquiryId: string) => void,
-  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => void,
+  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "not_interested" | "processing_application" | "completed" | "rejected_application") => void,
   handleUpdateAccount: (enquiryId: string, account: string | null) => void
 ): ColumnDef<AdminFetchAllEnquiriesResponse>[] => [
   {

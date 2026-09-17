@@ -22,17 +22,17 @@ body {
 
 /* CSS Custom Properties for consistent theming */
 :root {
-  /* Primary Colors */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  /* Primary Colors — Peacock Blue */
+  --color-primary-50:  #e0f7fa;
+  --color-primary-100: #b2ebf2;
+  --color-primary-200: #80deea;
+  --color-primary-300: #4dd0e1;
+  --color-primary-400: #26c6da;
+  --color-primary-500: #00b5cc;
+  --color-primary-600: #0097a7;
+  --color-primary-700: #00838f;
+  --color-primary-800: #006064;
+  --color-primary-900: #004d52;
 
   /* Gray Colors */
   --color-gray-50: #f9fafb;
@@ -74,31 +74,33 @@ body {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  /* Peacock blue primary: #00b5cc → oklch(0.70 0.12 204) */
+  --primary: oklch(0.70 0.12 204);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.01 204);
+  --secondary-foreground: oklch(0.30 0.08 204);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: oklch(0.93 0.04 204);
+  --accent-foreground: oklch(0.30 0.08 204);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
+  --border: oklch(0.92 0.02 204);
+  --input: oklch(0.92 0.02 204);
+  --ring: oklch(0.70 0.12 204);
+  --chart-1: oklch(0.70 0.12 204);
+  --chart-2: oklch(0.60 0.10 184);
+  --chart-3: oklch(0.50 0.09 220);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Sidebar — pure white with peacock accents */
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.20 0.06 204);
+  --sidebar-primary: oklch(0.70 0.12 204);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.93 0.04 204);
+  --sidebar-accent-foreground: oklch(0.25 0.08 204);
+  --sidebar-border: oklch(0.90 0.03 204);
+  --sidebar-ring: oklch(0.70 0.12 204);
 }
 
 /* Base styles */
@@ -154,20 +156,22 @@ body {
 
   /* Button Components */
   .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: #00b5cc;
+    color: #fff;
   }
+  .btn-primary:hover { background-color: #0097a7; }
 
   .btn-secondary {
-    @apply bg-gray-100 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-gray-100 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 focus:ring-2 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-outline {
-    @apply border-2 border-blue-600 text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    border: 2px solid #00b5cc;
+    color: #00b5cc;
   }
-
-  .btn-danger {
-    @apply bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
-  }
+  .btn-outline:hover { background-color: #e0f7fa; }
 
   /* Input Components */
   .input-field {
