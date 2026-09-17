@@ -20,3 +20,10 @@ export const adminUpdateEnquiryStatus = async (props: {
   });
   return response.data;
 };
+
+export const adminDeleteEnquiry = async (
+  enquiryId: string
+): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.delete(`/admin/enquiries/${enquiryId}`);
+  return response.data;
+};
