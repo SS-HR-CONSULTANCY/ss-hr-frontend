@@ -663,6 +663,16 @@ export const userApplicationRoutes: Route[] = [
 
 export const adminApplicationRoutes: Route[] = [
   {
+    path: "enquiries",
+    name: "Enquiries",
+    roles: ["admin"],
+  },
+  {
+    path: "whatsapp-enquiries",
+    name: "Whatsapp Enquiries",
+    roles: ["admin"],
+  },
+  {
     path: "packages",
     name: "Packages",
     roles: ["admin"],
@@ -692,23 +702,6 @@ export const adminApplicationRoutes: Route[] = [
     name: "Applications",
     roles: ["admin"],
   },
-  {
-    path: "enquiries",
-    name: "Enquiries",
-    roles: ["admin"],
-  },
-  {
-    path: "whatsapp-enquiries",
-    name: "Whatsapp Enquiries",
-    roles: ["admin"],
-  },
-
-
-  // {
-  //   path: "settings",
-  //   name: "Settings",
-  //   roles: ["superAdmin"]
-  // },
 ];
 
 // Chat component shimmer constants
