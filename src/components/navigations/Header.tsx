@@ -61,9 +61,9 @@ const Header: React.FC = () => {
               .filter((l) => l.text !== "Services" || l.isForDesk)
               .filter((l, i, arr) => arr.findIndex((x) => x.text === l.text) === i)
               .map((link) => (
-                <a
+                <Link
                   key={link.text}
-                  href={link.href}
+                  to={link.href}
                   className="text-[14px] font-semibold transition-colors duration-200 py-1 relative"
                   style={{
                     color: isActive(link.href) ? "#D4820A" : "#4B4B4B",
@@ -84,7 +84,7 @@ const Header: React.FC = () => {
                       style={{ background: "#febc04" }}
                     />
                   )}
-                </a>
+                </Link>
               ))}
           </nav>
 
@@ -197,14 +197,14 @@ const Header: React.FC = () => {
               .filter((l) => l.isForMob)
               .filter((l, i, arr) => arr.findIndex((x) => x.text === l.text) === i)
               .map((link) => (
-                <a
+                <Link
                   key={link.text}
-                  href={link.href}
+                  to={link.href}
                   className="text-base font-semibold text-neutral-700 hover:text-[#D4820A] transition-colors py-1"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.text}
-                </a>
+                </Link>
               ))}
             <div className="flex flex-col gap-3 pt-4 border-t border-neutral-100">
               {user && isAuthenticated ? (
