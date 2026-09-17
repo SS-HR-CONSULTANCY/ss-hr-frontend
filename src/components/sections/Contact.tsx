@@ -71,7 +71,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-16">
+    <section id="contact" className="pt-8 pb-16">
       <div className="max-w-7xl mx-auto px-4 md:px-0">
         <Heading
           heading="Get in Touch"
@@ -106,12 +106,7 @@ export default function Contact() {
           </Card>
 
           <Card className="h-full" data-aos="fade-left">
-            <CardHeader>
-              <CardTitle>Send us a message</CardTitle>
-              <CardDescription>
-                We typically respond within one business day.
-              </CardDescription>
-            </CardHeader>
+
             <CardContent>
               <form onSubmit={onSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -127,8 +122,8 @@ export default function Contact() {
                   <Input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required />
                 </Field>
 
-                <Field id="phone" label="Phone (optional)">
-                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} />
+                <Field id="phone" label="Phone">
+                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
                 </Field>
 
                 <Field id="subject" label="Subject">

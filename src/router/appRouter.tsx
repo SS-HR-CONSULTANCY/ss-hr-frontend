@@ -120,11 +120,11 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/labourservices",
+        path: "/jobhunting",
         element: (
           <ServiceDetailedContent
-            {...services.find((s) => s.id === "laboursupplyservice")!}
-            seoData={SEO_DATA.LABOUR_SERVICES}
+            {...services.find((s) => s.id === "jobhuntingvisapackage")!}
+            seoData={SEO_DATA.JOB_HUNTING}
           />
         ),
       },

@@ -427,32 +427,29 @@ export const services: ServiceProps[] = [
 
 
   {
-    id: "laboursupplyservice",
-    title: "Labour Supply",
-    description:
-      "Enhance your productivity with our skilled and reliable workforce tailored to meet your project needs.",
-    hoverDescription:
-      "Our labour supply service provides expert workers and dedicated staff to support your business operations. From short-term staffing to long-term workforce solutions, we ensure efficiency, reliability, and quality to help your projects succeed.",
-    imageUrl: labourSupply,
+    id: "jobhuntingvisapackage",
+    title: "Job Hunting Visa",
+    description: "An all-inclusive package providing visa, accommodation, food, flight tickets, and job searching assistance in Dubai.",
+    hoverDescription: "Our Job Hunting Visa package offers everything you need to start your career in the UAE. Enjoy peace of mind with our all-inclusive service covering your visa, comfortable accommodation, daily meals, flight tickets, and expert job searching assistance.",
+    imageUrl: jobRecruitment,
     href: "#services",
 
     banner: labourSupplyBanner,
-    bannerTitle: "Skilled Workforce Supply Solutions",
+    bannerTitle: "Secure Your Career in Dubai",
     showButton: false,
-    buttonText: "Hire",
-    buttonUrl: "/labourservices",
+    buttonText: "Apply Now",
+    buttonUrl: "/jobhunting",
     points: [
-      "We provide skilled and reliable workers who are trained to adapt to diverse industries and projects.",
-      "Our service offers flexible staffing solutions, including short-term and long-term placements.",
-      "Each candidate undergoes a thorough screening process to ensure reliability and professionalism.",
-      "We cater to industries such as construction, hospitality, manufacturing, and logistics.",
-      "Our workforce solutions help businesses increase productivity, reduce downtime, and meet project deadlines.",
+      "Comprehensive package including UAE visa, flight tickets, and seamless airport pickup.",
+      "Comfortable accommodation and daily food provided throughout your stay.",
+      "Expert job searching assistance to help you secure the right employment opportunities.",
+      "Available in flexible durations to give you ample time to find your ideal role.",
+      "Dedicated support team to guide you through your entire job hunting journey in Dubai."
     ],
-    contactText:
-      "If you would like to make an enquiry for labour supply, please contact us.",
+    contactText: "If you would like to enquire about our Job Hunting Visa package, please contact us.",
     contactUrl: "/contact",
     contactButtonText: "Enquiry",
-    heroTitle: "Reliable Workforce Solutions For Every Business",
+    heroTitle: "Start Your Job Hunt in Dubai With Confidence",
   },
 ];
 
@@ -1021,10 +1018,10 @@ export const SEO_DATA: Record<string, SEOConfig> = {
     canonical: "https://sshrconsultancy.com/webdevelopment",
   },
 
-  LABOUR_SERVICES: {
-    title: "Labour Supply Services – SS HR Consultancy",
-    description: "Providing skilled and unskilled manpower globally.",
-    canonical: "https://sshrconsultancy.com/labourservices",
+  JOB_HUNTING: {
+    title: "Job Hunting Visa – SS HR Consultancy",
+    description: "Your gateway to employment opportunities in Dubai with our specialized visa package.",
+    canonical: "https://sshrconsultancy.com/jobhunting",
   },
 
   REGISTER: {

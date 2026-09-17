@@ -138,36 +138,7 @@ const Header: React.FC = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <>
-                <Link
-                  to="/register"
-                  className="text-[14px] font-semibold text-[#0C0C0C] border rounded-full px-5 py-2 transition-all hover:bg-neutral-50"
-                  style={{ borderColor: "rgba(0,0,0,0.12)" }}
-                >
-                  Sign Up
-                </Link>
-                <Link
-                  to="/login"
-                  className="text-[14px] font-semibold rounded-full px-5 py-2 transition-all"
-                  style={{
-                    background: "#febc04",
-                    color: "#261900",
-                    boxShadow: "0 8px 20px rgba(254,188,4,0.25)",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.boxShadow =
-                      "0 12px 28px rgba(254,188,4,0.4)";
-                    (e.currentTarget as HTMLElement).style.transform = "scale(1.02)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.boxShadow =
-                      "0 8px 20px rgba(254,188,4,0.25)";
-                    (e.currentTarget as HTMLElement).style.transform = "scale(1)";
-                  }}
-                >
-                  Login
-                </Link>
-              </>
+              null
             )}
           </div>
 
@@ -229,23 +200,7 @@ const Header: React.FC = () => {
                   Logout
                 </button>
               ) : (
-                <>
-                  <Link
-                    to="/register"
-                    className="text-sm font-semibold text-center px-5 py-3 rounded-xl border border-neutral-200 text-[#0C0C0C]"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
-                  <Link
-                    to="/login"
-                    className="text-sm font-black text-center px-5 py-3 rounded-xl"
-                    style={{ background: "#febc04", color: "#261900" }}
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Login
-                  </Link>
-                </>
+                null
               )}
             </div>
           </nav>
