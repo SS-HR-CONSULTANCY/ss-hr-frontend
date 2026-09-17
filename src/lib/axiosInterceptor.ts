@@ -14,8 +14,10 @@ export const setupAxiosInterceptors = () => {
       }
       if (error.response?.status === 401) {
         store.dispatch(setAuthUser(null));
-        toast.error("Session expired. Please log in again.");
-        return;
+        if (error.config?.url !== "/auth/checkUserStatus") {
+          toast.error("Session expired. Please log in again.");
+        }
+        return Promise.reject(error);
       }
       if (error.response?.status === 403) {
         store.dispatch(setAuthUser(null));

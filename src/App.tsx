@@ -32,10 +32,8 @@ const AppContent = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      dispatch(checkUserStatus());
-    }
-  }, [dispatch, isAuthenticated]);
+    dispatch(checkUserStatus());
+  }, [dispatch]);
 
   return (
     <ThemeWrapper>

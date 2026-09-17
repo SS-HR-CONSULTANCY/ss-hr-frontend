@@ -37,7 +37,7 @@ const useAuthHook = () => {
         dispatch(resetAuthStore());
         dispatch(resetUserSlice());
         persistAppStore.purge();
-        navigate(roleLoginRoutes[role] ?? "/login");
+        navigate("/");
       } else {
         toast.error(res.message || "Logout failed");
       }
