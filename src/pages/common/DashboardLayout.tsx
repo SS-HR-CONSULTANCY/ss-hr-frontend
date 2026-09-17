@@ -24,6 +24,18 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     }
   }, [dispatch, isAuthenticated]);
 
+  useEffect(() => {
+    if (showMobileScreenWarning) {
+      // Scale down UI for admin side by reducing the root font size
+      document.documentElement.style.fontSize = "14px";
+    } else {
+      document.documentElement.style.fontSize = "16px";
+    }
+    return () => {
+      document.documentElement.style.fontSize = "16px";
+    };
+  }, [showMobileScreenWarning]);
+
   return (
     <>
       {showMobileScreenWarning && (
