@@ -19,6 +19,7 @@ import {
   Plane,
   BriefcaseBusiness,
   CreditCard,
+  UserCog,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -47,6 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "whatsapp-enquiries": <IconBrandWhatsapp />,
     payments: <HandCoins />,
     "payment-tracking": <CreditCard />,
+    "leads": <UserCog />,
     reviews: <Star />,
     reports: <Notebook />,
     logout: <LogOut />,
@@ -73,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
       className="w-64 bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:to-slate-700 text-slate-800 dark:text-white border-r border-slate-200 dark:border-slate-800 shadow-xs overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col"
     >
       <div className="p-4 flex-1">
-        <ul className="space-y-3">
+        <ul className="space-y-5">
           <li className="px-3 pb-4">
             <span className="text-3xl font-bold italic rounded-lg cursor-pointer">
               Dashboard

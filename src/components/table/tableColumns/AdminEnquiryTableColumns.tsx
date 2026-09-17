@@ -11,8 +11,10 @@ import { Eye, Trash2 } from "lucide-react";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import type { AdminFetchAllEnquiriesResponse } from "@/types/apiTypes/adminApiTypes";
+import type { AdminFetchAllEnquiriesResponse, AccountResponse } from "@/types/apiTypes/adminApiTypes";
 import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
+import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
 
 const formatWhatsAppNumber = (phone: string) => {
   if (!phone) return "";
@@ -61,10 +63,45 @@ const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
   );
 };
 
+const AccountSelectCell = ({ enquiry, handleUpdateAccount }: { enquiry: AdminFetchAllEnquiriesResponse; handleUpdateAccount: (id: string, account: string | null) => void }) => {
+  const [account, setAccount] = useState<string>(enquiry.account || "none");
+
+  useEffect(() => {
+    setAccount(enquiry.account || "none");
+  }, [enquiry.account]);
+
+  const { data: accountsData } = useQuery({
+    queryKey: ["adminAccounts"],
+    queryFn: adminFetchAllAccounts,
+  });
+  const accounts: AccountResponse[] = accountsData?.data ?? [];
+
+  return (
+    <Select
+      value={account}
+      onValueChange={(value) => {
+        setAccount(value);
+        handleUpdateAccount(enquiry._id, value === "none" ? null : value);
+      }}
+    >
+      <SelectTrigger className="w-[130px] h-8 text-xs">
+        <SelectValue placeholder="Assign..." />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="none"><span className="text-slate-400">— None —</span></SelectItem>
+        {accounts.map((a) => (
+          <SelectItem key={a._id} value={a.name}>{a.name}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
 export const AdminEnquiryTableColumns = (
   handleViewEnquiry: (enquiryId: string) => void,
   handleDeleteEnquiry: (enquiryId: string) => void,
-  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => void
+  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => void,
+  handleUpdateAccount: (enquiryId: string, account: string | null) => void
 ): ColumnDef<AdminFetchAllEnquiriesResponse>[] => [
   {
     accessorKey: "date",
@@ -132,6 +169,18 @@ export const AdminEnquiryTableColumns = (
         />
       );
     },
+  },
+  {
+    accessorKey: "account",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Account" />
+    ),
+    cell: ({ row }) => (
+      <AccountSelectCell
+        enquiry={row.original}
+        handleUpdateAccount={handleUpdateAccount}
+      />
+    ),
   },
 
   {

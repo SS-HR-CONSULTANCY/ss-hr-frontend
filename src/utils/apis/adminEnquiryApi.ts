@@ -27,3 +27,14 @@ export const adminDeleteEnquiry = async (
   const response = await axiosInstance.delete(`/admin/enquiries/${enquiryId}`);
   return response.data;
 };
+
+export const adminUpdateEnquiryAccount = async (props: {
+  enquiryId: string;
+  account: string | null;
+}): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.patch(`/admin/enquiries/${props.enquiryId}/account`, {
+    account: props.account,
+  });
+  return response.data;
+};
+

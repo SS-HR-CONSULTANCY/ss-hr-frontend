@@ -1,7 +1,7 @@
 import React from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminEnquiryTableColumns } from "@/components/table/tableColumns/AdminEnquiryTableColumns";
-import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus } from "@/utils/apis/adminEnquiryApi";
+import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus, adminUpdateEnquiryAccount } from "@/utils/apis/adminEnquiryApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,7 +59,18 @@ const AdminEnquiries: React.FC = () => {
     updateStatusMutation.mutate({ enquiryId, status });
   };
 
-  const columns = AdminEnquiryTableColumns(handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus);
+  const updateAccountMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; account: string | null }) => adminUpdateEnquiryAccount(data),
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to update account");
+    },
+  });
+
+  const handleUpdateAccount = (enquiryId: string, account: string | null) => {
+    updateAccountMutation.mutate({ enquiryId, account });
+  };
+
+  const columns = AdminEnquiryTableColumns(handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount);
 
   return (
     <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">

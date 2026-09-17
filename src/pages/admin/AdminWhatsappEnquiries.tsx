@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminWhatsappEnquiryTableColumns } from "@/components/table/tableColumns/AdminWhatsappEnquiryTableColumns";
-import { adminFetchAllWhatsappEnquiries, adminDeleteWhatsappEnquiry, adminUpdateWhatsappEnquiryStatus } from "@/utils/apis/adminWhatsappEnquiryApi";
+import { adminFetchAllWhatsappEnquiries, adminDeleteWhatsappEnquiry, adminUpdateWhatsappEnquiryStatus, adminUpdateWhatsappEnquiry } from "@/utils/apis/adminWhatsappEnquiryApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import WhatsappEnquiryModal from "@/components/admin/whatsappEnquiry/WhatsappEnquiryModal";
@@ -65,7 +65,19 @@ const AdminWhatsappEnquiries: React.FC = () => {
     updateStatusMutation.mutate({ enquiryId, status });
   };
 
-  const columns = AdminWhatsappEnquiryTableColumns(handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus);
+  const updateAccountMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; account: string | null }) =>
+      adminUpdateWhatsappEnquiry(data.enquiryId, { account: data.account }),
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to update account");
+    },
+  });
+
+  const handleUpdateAccount = (enquiryId: string, account: string | null) => {
+    updateAccountMutation.mutate({ enquiryId, account });
+  };
+
+  const columns = AdminWhatsappEnquiryTableColumns(handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount);
 
   return (
     <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">

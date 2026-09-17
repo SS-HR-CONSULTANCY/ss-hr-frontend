@@ -35,6 +35,7 @@ const AdminUserDetails = lazy(() => import("@/pages/admin/AdminUserDetails"));
 const AdminApplications = lazy(() => import("@/pages/admin/AdminApplications"));
 const AdminEnquiries = lazy(() => import("@/pages/admin/AdminEnquiries"));
 const AdminWhatsappEnquiries = lazy(() => import("@/pages/admin/AdminWhatsappEnquiries"));
+const AdminAccounts = lazy(() => import("@/pages/admin/AdminAccounts"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const UpdatePasswordPage = lazy(
   () => import("@/pages/auth/UpdatePasswordPage"),
@@ -278,6 +279,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin"]}>
             <AdminWhatsappEnquiries />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "accounts",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <AdminAccounts />
           </ProtectedRoute>
         ),
       },

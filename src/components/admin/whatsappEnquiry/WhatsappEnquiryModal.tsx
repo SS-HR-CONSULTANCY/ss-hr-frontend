@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { adminCreateWhatsappEnquiry, adminUpdateWhatsappEnquiry } from "@/utils/apis/adminWhatsappEnquiryApi";
 import type { AdminFetchAllWhatsappEnquiriesResponse } from "@/types/apiTypes/adminApiTypes";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
+import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
 
 interface WhatsappEnquiryModalProps {
   enquiry?: AdminFetchAllWhatsappEnquiriesResponse | null;
@@ -24,6 +25,7 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
     subject: "",
     status: "pending",
     date: format(new Date(), "yyyy-MM-dd"),
+    account: "none",
   });
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
         subject: enquiry.subject,
         status: enquiry.status,
         date: format(new Date(enquiry.date), "yyyy-MM-dd"),
+        account: enquiry.account || "none",
       });
     }
   }, [enquiry]);
@@ -98,6 +101,7 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
     const payload = {
       ...formData,
       date: new Date(formData.date).toISOString(),
+      account: formData.account === "none" ? null : formData.account,
     };
 
     if (isEditing) {
@@ -108,6 +112,12 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
   };
 
   const isPending = createMutation.isPending || updateMutation.isPending;
+
+  const { data: accountsData } = useQuery({
+    queryKey: ["adminAccounts"],
+    queryFn: adminFetchAllAccounts,
+  });
+  const accounts = accountsData?.data ?? [];
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -177,6 +187,24 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
                   <SelectItem value="contacted">Contacted</SelectItem>
                   <SelectItem value="under_processing">Under Processing</SelectItem>
                   <SelectItem value="delivered">Delivered</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="account">Account (Staff)</Label>
+              <Select
+                value={formData.account}
+                onValueChange={(value) => setFormData((prev) => ({ ...prev, account: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Assign to account..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none"><span className="text-slate-400">— None —</span></SelectItem>
+                  {accounts.map((a: any) => (
+                    <SelectItem key={a._id} value={a.name}>{a.name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
