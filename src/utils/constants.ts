@@ -297,7 +297,7 @@ export const services: ServiceProps[] = [
 
     banner: "",
     bannerTitle: "Plan Memorable Tours With Us",
-    showButton: true,
+    showButton: false,
     buttonText: "See More",
     buttonUrl: "/toursandtravels",
     points: [
@@ -325,7 +325,7 @@ export const services: ServiceProps[] = [
 
     banner: visaServiceBanner,
     bannerTitle: "Quick Visa Processing Support Service",
-    showButton: true,
+    showButton: false,
     buttonText: "Know More",
     buttonUrl: "/visaservice",
     points: [
@@ -353,7 +353,7 @@ export const services: ServiceProps[] = [
 
     banner: ticketServiceBanner,
     bannerTitle: "Book Affordable Tickets With Ease",
-    showButton: true,
+    showButton: false,
     buttonText: "Learn More",
     buttonUrl: "/ticketservice",
     points: [
@@ -381,7 +381,7 @@ export const services: ServiceProps[] = [
 
     banner: certificateBanner,
     bannerTitle: "Reliable Certificate Attestation Services",
-    showButton: true,
+    showButton: false,
     buttonText: "Know More",
     buttonUrl: "/certificationservice",
     points: [
@@ -409,7 +409,7 @@ export const services: ServiceProps[] = [
 
     banner: medicalRecBanner,
     bannerTitle: "Trusted Medical Recruitment Worldwide",
-    showButton: true,
+    showButton: false,
     buttonText: "Search More",
     buttonUrl: "/medicalrecruit",
     points: [
@@ -439,7 +439,7 @@ export const services: ServiceProps[] = [
 
     banner: labourSupplyBanner,
     bannerTitle: "Skilled Workforce Supply Solutions",
-    showButton: true,
+    showButton: false,
     buttonText: "Hire",
     buttonUrl: "/labourservices",
     points: [
@@ -639,7 +639,28 @@ export const callToActionData: CallToActionProps = {
 };
 
 // Routes
-export const userApplicationRoutes: Route[] = [];
+export const userApplicationRoutes: Route[] = [
+  {
+    path: "visa-status",
+    name: "Visa Status",
+    roles: ["user"],
+  },
+  {
+    path: "ticket-status",
+    name: "Ticket Status",
+    roles: ["user"],
+  },
+  {
+    path: "tour-package-status",
+    name: "Tour Package Status",
+    roles: ["user"],
+  },
+  {
+    path: "job-hunting-package-status",
+    name: "Job Hunting Package Status",
+    roles: ["user"],
+  },
+];
 
 export const adminApplicationRoutes: Route[] = [
   {

@@ -28,7 +28,7 @@ const tabContent = {
     features: [
       { icon: Briefcase, text: "Job Recruitment & Placement" },
       { icon: FileCheck, text: "Visa & Work Permit Processing" },
-      { icon: Users, text: "CV Writing & Interview Prep" },
+      { icon: Users, text: "Job hunting packages" },
       { icon: Globe, text: "Labour Supply & HR Solutions" },
     ],
     cta: { label: "Apply for Jobs", url: "/contact" },
@@ -463,35 +463,10 @@ const Hero2 = () => {
           </div>
         </div>
 
-        {/* ─── CTAs Centered ─── */}
-        <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-8 w-full">
-          <Link
-            to={content.cta.url}
-            className="flex items-center justify-center gap-2 font-black text-sm px-8 py-4 rounded-2xl"
-            style={{
-              background: "#febc04",
-              color: "#261900",
-              boxShadow: "0 10px 30px rgba(254,188,4,0.3)",
-            }}
-          >
-            {content.cta.label}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <a
-            href={content.ctaSecondary.url}
-            className="flex items-center justify-center gap-2 font-bold text-sm px-8 py-4 rounded-2xl text-[#0C0C0C]"
-            style={{
-              background: "white",
-              border: "1px solid rgba(0,0,0,0.12)",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-            }}
-          >
-            {content.ctaSecondary.label}
-          </a>
-        </div>
+
 
         {/* ─── 4 Feature Buttons Centered ─── */}
-        <div className="mt-12 flex flex-wrap justify-center gap-4 lg:gap-8 w-full">
+        <div className="mt-12 flex flex-wrap justify-center gap-8 lg:gap-16 w-full">
           {content.features.map(({ icon: Icon, text }) => (
             <div
               key={text}
@@ -525,9 +500,9 @@ const Hero2 = () => {
             {(activeTab === "jobs"
               ? [
                   { value: "500+", label: "Candidates Placed" },
-                  { value: "99%", label: "Visa Success Rate" },
+                  { value: "2000+", label: "Issued Visas" },
                   { value: "50+", label: "Partner Companies" },
-                  { value: "10+", label: "Years of Trust" },
+                  { value: "5+", label: "Years of Trust" },
                   { value: "24/7", label: "Customer Support" },
                 ]
               : [

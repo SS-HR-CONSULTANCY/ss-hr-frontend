@@ -11,7 +11,10 @@ import { createBrowserRouter } from "react-router-dom";
 const OtpPage = lazy(() => import("@/pages/auth/OtpPage"));
 const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 const UserJobs = lazy(() => import("@/pages/user/UserJobs"));
-const UserPackages = lazy(() => import("@/pages/user/UserPackages"));
+const VisaStatus = lazy(() => import("@/pages/user/VisaStatus"));
+const TicketStatus = lazy(() => import("@/pages/user/TicketStatus"));
+const TourPackageStatus = lazy(() => import("@/pages/user/TourPackageStatus"));
+const JobHuntingPackageStatus = lazy(() => import("@/pages/user/JobHuntingPackageStatus"));
 const HomePage = lazy(() => import("@/pages/common/HomePage"));
 const ChatPage = lazy(() => import("@/pages/common/ChatPage"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
@@ -153,47 +156,39 @@ const appRouter = createBrowserRouter([
         index: true,
         element: (
           <ProtectedRoute requiredRole={["user"]}>
-            <UserJobs />
+            <VisaStatus />
           </ProtectedRoute>
         ),
       },
       {
-        path: "jobs",
+        path: "visa-status",
         element: (
           <ProtectedRoute requiredRole={["user"]}>
-            <UserJobs />
+            <VisaStatus />
           </ProtectedRoute>
         ),
       },
       {
-        path: "jobs/:id",
+        path: "ticket-status",
         element: (
           <ProtectedRoute requiredRole={["user"]}>
-            <JobDetailsPage />
+            <TicketStatus />
           </ProtectedRoute>
         ),
       },
       {
-        path: "applications",
+        path: "tour-package-status",
         element: (
           <ProtectedRoute requiredRole={["user"]}>
-            <UserApplications />
+            <TourPackageStatus />
           </ProtectedRoute>
         ),
       },
       {
-        path: "packages",
+        path: "job-hunting-package-status",
         element: (
           <ProtectedRoute requiredRole={["user"]}>
-            <UserPackages />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "chat",
-        element: (
-          <ProtectedRoute requiredRole={["user"]}>
-            <ChatPage />
+            <JobHuntingPackageStatus />
           </ProtectedRoute>
         ),
       },

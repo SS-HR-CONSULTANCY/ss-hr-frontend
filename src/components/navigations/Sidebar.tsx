@@ -15,6 +15,10 @@ import {
   User,
   Mail,
   CreditCard,
+  FileText,
+  Ticket,
+  Plane,
+  BriefcaseBusiness,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -47,6 +51,10 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     chat: <MessageCircle />,
     settings: <Settings />,
     profile: <User />,
+    "visa-status": <FileText />,
+    "ticket-status": <Ticket />,
+    "tour-package-status": <Plane />,
+    "job-hunting-package-status": <BriefcaseBusiness />,
   };
 
   const getIcon = (name: string): React.ReactNode => {
@@ -60,24 +68,15 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
 
   return (
     <div
-      className={` ${sidebarOpen ? "w-[15%]" : "w-[5%]"} bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:to-slate-700 text-slate-800 dark:text-white border-r border-slate-200 dark:border-slate-800 shadow-xs overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col`}
+      className="w-64 bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:to-slate-700 text-slate-800 dark:text-white border-r border-slate-200 dark:border-slate-800 shadow-xs overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col"
     >
       <div className="p-4 flex-1">
         <ul className="space-y-3">
           <li className="px-3 pb-4">
             <span className="text-3xl font-bold italic rounded-lg cursor-pointer">
-              {sidebarOpen ? "Dashboard" : <LayoutDashboard />}
+              Dashboard
             </span>
           </li>
-
-          {user?.role !== "user" && (
-            <SingleTab
-              icon={<PanelLeft />}
-              text="Close"
-              onClick={() => dispatch(toggleAdminSidebar())}
-              sidebarOpen={sidebarOpen}
-            />
-          )}
           
           {routes.map((route) => {
             return (
@@ -91,7 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                 <SingleTab
                   icon={getIcon(route.name)}
                   text={route.name}
-                  sidebarOpen={sidebarOpen}
+                  sidebarOpen={true}
                 />
               </NavLink>
             );
@@ -105,7 +104,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
           icon={<LogOut />}
           text="Logout"
           onClick={handleLogout}
-          sidebarOpen={sidebarOpen}
+          sidebarOpen={true}
         />
       </ul>
     </div>

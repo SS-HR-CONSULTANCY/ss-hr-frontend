@@ -3,7 +3,7 @@ import Lottie from "lottie-react";
 import SEO from "@/components/common/SEOProps";
 import Heading from "@/components/common/Heading";
 import world from "../../assets/lotteFiles/world.json";
-import { achievements, mdData, SEO_DATA, words } from "@/utils/constants";
+import { achievements, SEO_DATA, words } from "@/utils/constants";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
 const AboutUsPage: React.FC = () => {
@@ -36,33 +36,7 @@ const AboutUsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-16">
-          <Heading
-            dataaos="fade-up"
-            heading="Managing Directors"
-            headingDescription="shahaalam groups"
-            mainDivClassName="text-left"
-            headingClassName="w-full md:w-[60%]"
-          />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-10">
-            {mdData.map((data, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center p-6 shadow-md rounded-lg"
-                data-aos="fade-up"
-              >
-                <img
-                  src={data.profileImage}
-                  alt="md image"
-                  className="w-32 h-32 rounded-md object-cover mb-4"
-                />
-                <h3 className="text-xl font-semibold">{data.name}</h3>
-                <p className="text-center italic mt-2">{data.quote}</p>
-              </div>
-            ))}
-          </div>
-        </div>
 
         <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
           <Heading
