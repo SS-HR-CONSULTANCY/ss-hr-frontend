@@ -52,9 +52,9 @@ import type { RoleType } from "./zod/commonZod";
 
 export const companyName = "SS HR Consultancy";
 
-export const roleValues = ["user", "admin", "systemAdmin"] as const;
+export const roleValues = ["user", "admin"] as const;
 
-export const adminRoleValues = ["admin", "systemAdmin"] as const;
+export const adminRoleValues = ["admin"] as const;
 
 export const limitedroleValues = ["user", "admin"] as const;
 
@@ -92,7 +92,6 @@ export const applicationStatusValues = [
 
 export const roleLoginRoutes: Record<RoleType, string> = {
   admin: "/admin/login",
-  systemAdmin: "/ss-hr-system-admin/login",
   user: "/login",
 };
 
@@ -666,48 +665,35 @@ export const adminApplicationRoutes: Route[] = [
   {
     path: "packages",
     name: "Packages",
-    roles: ["admin", "systemAdmin"],
+    roles: ["admin"],
   },
   {
     path: "jobs",
     name: "Jobs",
-    roles: ["admin", "systemAdmin"],
+    roles: ["admin"],
   },
   {
     path: "payments",
     name: "Payment Tracking",
-    roles: ["admin", "systemAdmin"],
+    roles: ["admin"],
   },
   {
     path: "overview",
     name: "Overview",
-    roles: ["admin", "systemAdmin"],
+    roles: ["admin"],
   },
   {
     path: "users",
     name: "Users",
-    roles: ["admin", "systemAdmin"],
+    roles: ["admin"],
   },
   {
     path: "applications",
     name: "Applications",
-    roles: ["admin", "systemAdmin"],
+    roles: ["admin"],
   },
-  {
-    path: "enquiries",
-    name: "Enquiries",
-    roles: ["admin", "systemAdmin"],
-  },
-  {
-    path: "chat",
-    name: "Chat",
-    roles: ["admin", "systemAdmin"],
-  },
-  {
-    path: "testimonials",
-    name: "Reviews",
-    roles: ["admin", "systemAdmin"],
-  },
+
+
   // {
   //   path: "settings",
   //   name: "Settings",
@@ -935,8 +921,6 @@ export const applicationStatusOptions = [
 
 export const roleOptions = [
   { label: "Admin", value: "admin" },
-  { label: "Super Admin", value: "superAdmin" },
-  { label: "System Admin", value: "systemAdmin" },
 ];
 
 export const genderOptions = [

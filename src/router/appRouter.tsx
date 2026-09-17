@@ -137,10 +137,6 @@ const appRouter = createBrowserRouter([
   { path: "verify-email", element: <EmailVerifyPage /> },
   { path: "update-password", element: <UpdatePasswordPage /> },
   { path: "admin/login", element: <LoginPage role="admin" /> },
-  {
-    path: "ss-hr-system-admin/login",
-    element: <LoginPage role="systemAdmin" />,
-  },
   { path: "login", element: <LoginPage role="user" /> },
   {
     path: "/user",
@@ -207,7 +203,7 @@ const appRouter = createBrowserRouter([
       {
         index: true,
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminOverview />
           </ProtectedRoute>
         ),
@@ -215,7 +211,7 @@ const appRouter = createBrowserRouter([
       {
         path: "overview",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminOverview />
           </ProtectedRoute>
         ),
@@ -223,7 +219,7 @@ const appRouter = createBrowserRouter([
       {
         path: "users",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminUsers />
           </ProtectedRoute>
         ),
@@ -231,7 +227,7 @@ const appRouter = createBrowserRouter([
       {
         path: "users/:id",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminUserDetails />
           </ProtectedRoute>
         ),
@@ -239,7 +235,7 @@ const appRouter = createBrowserRouter([
       {
         path: "jobs",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminJobsPage />
           </ProtectedRoute>
         ),
@@ -247,7 +243,7 @@ const appRouter = createBrowserRouter([
       {
         path: "jobs/:id",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <JobDetailsPage isAdmin />
           </ProtectedRoute>
         ),
@@ -255,7 +251,7 @@ const appRouter = createBrowserRouter([
       {
         path: "packages",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminPackages showButton />
           </ProtectedRoute>
         ),
@@ -263,23 +259,16 @@ const appRouter = createBrowserRouter([
       {
         path: "applications",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminApplications />
           </ProtectedRoute>
         ),
       },
-      {
-        path: "enquiries",
-        element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
-            <AdminEnquiries />
-          </ProtectedRoute>
-        ),
-      },
+
       {
         path: "applications/:id",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <ApplicationDetailsPage />
           </ProtectedRoute>
         ),
@@ -287,27 +276,12 @@ const appRouter = createBrowserRouter([
       {
         path: "payments",
         element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
+          <ProtectedRoute requiredRole={["admin"]}>
             <AdminPayments />
           </ProtectedRoute>
         ),
       },
-      {
-        path: "chat",
-        element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
-            <ChatPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "testimonials",
-        element: (
-          <ProtectedRoute requiredRole={["admin", "systemAdmin"]}>
-            <AdminTestimonials />
-          </ProtectedRoute>
-        ),
-      },
+
     ],
   },
 ]);

@@ -49,7 +49,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
     if (isAuthenticated && user) {
       if (user.role === "user") {
         navigate("/", { replace: true });
-      } else if (user.role === "admin" || user.role === "systemAdmin") {
+      } else if (user.role === "admin") {
         navigate("/ss-hr-admin", { replace: true });
       } else {
         navigate("/", { replace: true });

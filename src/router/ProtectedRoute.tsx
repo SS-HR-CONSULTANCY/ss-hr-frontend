@@ -19,10 +19,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!isAuthenticated) {
-    if (
-      location.pathname.startsWith("/ss-hr-admin") ||
-      location.pathname.startsWith("ss-hr-system-admin")
-    ) {
+    if (location.pathname.startsWith("/ss-hr-admin")) {
       return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
 

@@ -500,7 +500,7 @@ const Hero2 = () => {
             {(activeTab === "jobs"
               ? [
                   { value: "500+", label: "Candidates Placed" },
-                  { value: "2000+", label: "Issued Visas" },
+                  { value: "2000+", label: "Visas Issued" },
                   { value: "50+", label: "Partner Companies" },
                   { value: "5+", label: "Years of Trust" },
                   { value: "24/7", label: "Customer Support" },

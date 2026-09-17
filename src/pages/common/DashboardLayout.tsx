@@ -17,13 +17,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
-  const { sidebarOpen } = useSelector((state: RootState) => state.app);
 
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated) {
       dispatch(checkUserStatus());
     }
-  }, [dispatch, isAuthenticated, user]);
+  }, [dispatch, isAuthenticated]);
 
   return (
     <>
