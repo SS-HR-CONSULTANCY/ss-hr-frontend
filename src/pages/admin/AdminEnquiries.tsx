@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminEnquiryTableColumns } from "@/components/table/tableColumns/AdminEnquiryTableColumns";
 import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus, adminUpdateEnquiryAccount } from "@/utils/apis/adminEnquiryApi";
@@ -45,32 +45,41 @@ const AdminEnquiries: React.FC = () => {
     return await adminFetchAllEnquiries(params);
   };
 
-  const handleViewEnquiry = (enquiryId: string) => {
+  const handleViewEnquiry = useCallback((enquiryId: string) => {
     dispatch(openViewEnquiryDetails(enquiryId));
-  };
+  }, [dispatch]);
 
-  const handleDeleteEnquiry = (enquiryId: string) => {
+  const handleDeleteEnquiry = useCallback((enquiryId: string) => {
     if (window.confirm("Are you sure you want to delete this enquiry?")) {
       deleteMutation.mutate(enquiryId);
     }
-  };
+  }, [deleteMutation]);
 
-  const handleUpdateStatus = (enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => {
+  const handleUpdateStatus = useCallback((enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => {
     updateStatusMutation.mutate({ enquiryId, status });
-  };
+  }, [updateStatusMutation]);
 
   const updateAccountMutation = useMutation({
     mutationFn: (data: { enquiryId: string; account: string | null }) => adminUpdateEnquiryAccount(data),
+    onSuccess: () => {
+      toast.success("Account updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
+    },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Failed to update account");
     },
   });
 
-  const handleUpdateAccount = (enquiryId: string, account: string | null) => {
+  const handleUpdateAccount = useCallback((enquiryId: string, account: string | null) => {
     updateAccountMutation.mutate({ enquiryId, account });
-  };
+  }, [updateAccountMutation]);
 
-  const columns = AdminEnquiryTableColumns(handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount);
+  const columns = useMemo(() => AdminEnquiryTableColumns(
+    handleViewEnquiry,
+    handleDeleteEnquiry,
+    handleUpdateStatus,
+    handleUpdateAccount
+  ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount]);
 
   return (
     <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">
