@@ -264,6 +264,14 @@ const appRouter = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: "enquiries",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <AdminEnquiries />
+          </ProtectedRoute>
+        ),
+      },
 
       {
         path: "applications/:id",

@@ -692,6 +692,11 @@ export const adminApplicationRoutes: Route[] = [
     name: "Applications",
     roles: ["admin"],
   },
+  {
+    path: "enquiries",
+    name: "Enquiries",
+    roles: ["admin"],
+  },
 
 
   // {
