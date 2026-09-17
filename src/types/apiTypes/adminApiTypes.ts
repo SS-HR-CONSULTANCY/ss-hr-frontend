@@ -193,6 +193,18 @@ export interface AdminFetchOverviewGraphsDataResponse {
   }>;
 }
 
+// ✅ Admin comprehensive overview page Response Type
+export interface AdminFetchComprehensiveOverviewResponse {
+  weeklyRegistrations: Array<{ _id: string; count: number }>;
+  monthlyRegistrations: Array<{ _id: string; count: number }>;
+  enquiryStatusCounts: Array<{ status: string; count: number }>;
+}
+
+export interface AdminFetchEnquiryAnalyticsResponse {
+  date: string;
+  count: number;
+}
+
 // ✅ Admin report page user graph data Response Type
 export interface AdminFetchReportUserswGraphsDataResponse {
   usersRadialGragphData: Array<{
