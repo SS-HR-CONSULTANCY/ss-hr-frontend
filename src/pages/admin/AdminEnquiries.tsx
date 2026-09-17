@@ -1,7 +1,7 @@
 import React from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminEnquiryTableColumns } from "@/components/table/tableColumns/AdminEnquiryTableColumns";
-import { adminFetchAllEnquiries, adminDeleteEnquiry } from "@/utils/apis/adminEnquiryApi";
+import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus } from "@/utils/apis/adminEnquiryApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,20 @@ const AdminEnquiries: React.FC = () => {
     },
   });
 
+  const updateStatusMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "under_processing" | "delivered" }) => 
+      adminUpdateEnquiryStatus(data),
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success("Enquiry status updated successfully");
+        queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to update status");
+    },
+  });
+
   const fetchEnquiries = async (params?: any) => {
     return await adminFetchAllEnquiries(params);
   };
@@ -41,7 +55,11 @@ const AdminEnquiries: React.FC = () => {
     }
   };
 
-  const columns = AdminEnquiryTableColumns(handleViewEnquiry, handleDeleteEnquiry);
+  const handleUpdateStatus = (enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => {
+    updateStatusMutation.mutate({ enquiryId, status });
+  };
+
+  const columns = AdminEnquiryTableColumns(handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus);
 
   return (
     <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">

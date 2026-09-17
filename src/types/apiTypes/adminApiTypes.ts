@@ -367,7 +367,18 @@ export interface AdminFetchAllEnquiriesResponse {
   phone: string;
   subject: string;
   message: string;
-  status: "unread" | "read";
+  status: "pending" | "contacted" | "under_processing" | "delivered";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminFetchAllWhatsappEnquiriesResponse {
+  _id: string;
+  name: string;
+  contactNumber: string;
+  subject: string;
+  status: "pending" | "contacted" | "under_processing" | "delivered";
+  date: string;
   createdAt: string;
   updatedAt: string;
 }

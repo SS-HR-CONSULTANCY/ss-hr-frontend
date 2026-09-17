@@ -1,7 +1,15 @@
 import React from "react";
 import FormLoading from "../../form/FormLoading";
 import { Button } from "@/components/ui/button";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
 import { closeViewEnquiryDetails } from "@/store/slices/enquirySlice";
@@ -28,15 +36,22 @@ const EnquiryDetailsModal: React.FC = () => {
 
   const selectedEnquiry = enquiriesData?.data?.find(e => e._id === selectedEnquiryId);
 
-  const markAsRead = async () => {
-    if (!selectedEnquiryId) return;
-    try {
-      await adminUpdateEnquiryStatus({ enquiryId: selectedEnquiryId, status: "read" });
-      queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
-      handleClose();
-    } catch (e) {
-      console.error(e);
-    }
+  const updateStatusMutation = useMutation({
+    mutationFn: (status: "pending" | "contacted" | "under_processing" | "delivered") => 
+      adminUpdateEnquiryStatus({ enquiryId: selectedEnquiryId!, status }),
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success("Enquiry status updated successfully");
+        queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to update status");
+    },
+  });
+
+  const handleStatusChange = (value: string) => {
+    updateStatusMutation.mutate(value as any);
   };
 
   if (!selectedEnquiryId) return null;
@@ -61,15 +76,20 @@ const EnquiryDetailsModal: React.FC = () => {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold dark:text-gray-200">Enquiry Details</h2>
             <div className="flex items-center gap-2">
-               <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  selectedEnquiry.status === "unread"
-                    ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200"
-                    : "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
-                }`}
+               <Select
+                defaultValue={selectedEnquiry.status}
+                onValueChange={handleStatusChange}
               >
-                {selectedEnquiry.status.toUpperCase()}
-              </span>
+                <SelectTrigger className="w-[150px] h-8 text-xs font-semibold">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="contacted">Contacted</SelectItem>
+                  <SelectItem value="under_processing">Under Processing</SelectItem>
+                  <SelectItem value="delivered">Delivered</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -101,9 +121,6 @@ const EnquiryDetailsModal: React.FC = () => {
 
           <div className="flex justify-end gap-3 pt-6 mt-6">
             <Button onClick={handleClose} variant="outline">Close</Button>
-            {selectedEnquiry.status === "unread" && (
-              <Button onClick={markAsRead}>Mark as Read</Button>
-            )}
           </div>
         </div>
       </div>

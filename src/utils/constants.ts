@@ -697,6 +697,11 @@ export const adminApplicationRoutes: Route[] = [
     name: "Enquiries",
     roles: ["admin"],
   },
+  {
+    path: "whatsapp-enquiries",
+    name: "Whatsapp Enquiries",
+    roles: ["admin"],
+  },
 
 
   // {

@@ -7,11 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import type { AdminFetchAllEnquiriesResponse } from "@/types/apiTypes/adminApiTypes";
+import type { AdminFetchAllWhatsappEnquiriesResponse } from "@/types/apiTypes/adminApiTypes";
 import { format } from "date-fns";
 
 const formatWhatsAppNumber = (phone: string) => {
@@ -61,18 +61,18 @@ const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
   );
 };
 
-export const AdminEnquiryTableColumns = (
-  handleViewEnquiry: (enquiryId: string) => void,
+export const AdminWhatsappEnquiryTableColumns = (
+  handleEditEnquiry: (enquiry: AdminFetchAllWhatsappEnquiriesResponse) => void,
   handleDeleteEnquiry: (enquiryId: string) => void,
   handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => void
-): ColumnDef<AdminFetchAllEnquiriesResponse>[] => [
+): ColumnDef<AdminFetchAllWhatsappEnquiriesResponse>[] => [
   {
     accessorKey: "date",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
     cell: ({ row }) => {
-      return format(new Date(row.original.createdAt), "dd MMM yyyy");
+      return format(new Date(row.original.date), "dd MMM yyyy");
     },
   },
   {
@@ -80,18 +80,14 @@ export const AdminEnquiryTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => {
-      const { firstName, lastName } = row.original;
-      return `${firstName} ${lastName}`;
-    },
   },
   {
-    accessorKey: "phone",
+    accessorKey: "contactNumber",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone / WhatsApp" />
+      <DataTableColumnHeader column={column} title="WhatsApp Number" />
     ),
     cell: ({ row }) => {
-      const originalPhone = row.original.phone;
+      const originalPhone = row.original.contactNumber;
       if (!originalPhone) return <span className="text-gray-400 text-sm">N/A</span>;
       
       const formattedPhone = formatWhatsAppNumber(originalPhone);
@@ -133,7 +129,6 @@ export const AdminEnquiryTableColumns = (
       );
     },
   },
-
   {
     accessorKey: "actions",
     header: "Actions",
@@ -145,11 +140,11 @@ export const AdminEnquiryTableColumns = (
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleViewEnquiry(enquiry._id)}
+            onClick={() => handleEditEnquiry(enquiry)}
             className="h-8 w-8 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
-            title="View Details"
+            title="Edit Enquiry"
           >
-            <Eye className="h-4 w-4" />
+            <Edit className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"

@@ -21,13 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Input } from "../ui/input";
+
 import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
@@ -97,40 +91,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter values"
-          value={globalFilter}
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm border border-gray-400 dark:border-gray-300"
-        />
-        <DropdownMenu>
-          <div className="ml-auto">
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Columns</Button>
-            </DropdownMenuTrigger>
-          </div>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+
 
       <div className="rounded-md border border-gray-400 dark:border-gray-300">
         <Table>

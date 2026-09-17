@@ -14,15 +14,16 @@ import {
   Settings,
   User,
   Mail,
-  CreditCard,
   FileText,
   Ticket,
   Plane,
   BriefcaseBusiness,
+  CreditCard,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
 import { NavLink } from "react-router-dom";
+import { IconBrandWhatsapp } from "@tabler/icons-react";
 import useAuthHook from "@/hooks/useAuthHook";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
@@ -43,6 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     packages: <LayoutGrid />,
     applications: <CalendarCheck />,
     enquiries: <Mail />,
+    "whatsapp-enquiries": <IconBrandWhatsapp />,
     payments: <HandCoins />,
     "payment-tracking": <CreditCard />,
     reviews: <Star />,
