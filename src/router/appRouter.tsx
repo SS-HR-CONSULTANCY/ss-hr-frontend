@@ -6,7 +6,7 @@ import {
 } from "@/utils/constants";
 import { lazy } from "react";
 import ProtectedRoute from "./ProtectedRoute";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 const OtpPage = lazy(() => import("@/pages/auth/OtpPage"));
 const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
@@ -204,11 +204,7 @@ const appRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <ProtectedRoute requiredRole={["admin"]}>
-            <AdminOverview />
-          </ProtectedRoute>
-        ),
+        element: <Navigate to="overview" replace />,
       },
       {
         path: "overview",

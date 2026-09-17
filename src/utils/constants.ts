@@ -663,6 +663,11 @@ export const userApplicationRoutes: Route[] = [
 
 export const adminApplicationRoutes: Route[] = [
   {
+    path: "overview",
+    name: "Overview",
+    roles: ["admin"],
+  },
+  {
     path: "enquiries",
     name: "Enquiries",
     roles: ["admin"],
@@ -690,11 +695,6 @@ export const adminApplicationRoutes: Route[] = [
   {
     path: "payments",
     name: "Payment Tracking",
-    roles: ["admin"],
-  },
-  {
-    path: "overview",
-    name: "Overview",
     roles: ["admin"],
   },
   {
