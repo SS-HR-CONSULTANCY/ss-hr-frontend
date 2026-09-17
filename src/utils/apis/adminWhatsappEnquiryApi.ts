@@ -31,7 +31,7 @@ export const adminUpdateWhatsappEnquiry = async (
 
 export const adminUpdateWhatsappEnquiryStatus = async (props: {
   enquiryId: string;
-  status: "pending" | "contacted" | "under_processing" | "delivered";
+  status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
 }): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.patch(`/admin/whatsapp-enquiries/${props.enquiryId}/status`, {
     status: props.status,

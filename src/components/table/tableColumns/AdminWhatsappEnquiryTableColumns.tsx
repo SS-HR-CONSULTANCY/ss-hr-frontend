@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
@@ -26,7 +26,7 @@ const formatWhatsAppNumber = (phone: string) => {
   return clean;
 };
 
-const validStatuses = ["pending", "contacted", "under_processing", "delivered"];
+const validStatuses = ["pending", "contacted", "need_follow_up", "processing_application", "completed"];
 
 const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
   const initialStatus = validStatuses.includes(enquiry.status?.toLowerCase()) 
@@ -50,14 +50,15 @@ const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
         handleUpdateStatus(enquiry._id, value as any);
       }}
     >
-      <SelectTrigger className="w-[140px] h-8 text-xs">
+      <SelectTrigger className="w-[160px] h-8 text-xs">
         <SelectValue placeholder="Status" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="pending">Pending</SelectItem>
         <SelectItem value="contacted">Contacted</SelectItem>
-        <SelectItem value="under_processing">Under Processing</SelectItem>
-        <SelectItem value="delivered">Delivered</SelectItem>
+        <SelectItem value="need_follow_up">Need Follow Up</SelectItem>
+        <SelectItem value="processing_application">Processing Application</SelectItem>
+        <SelectItem value="completed">Completed</SelectItem>
       </SelectContent>
     </Select>
   );
@@ -100,7 +101,7 @@ const AccountSelectCell = ({ enquiry, handleUpdateAccount }: { enquiry: AdminFet
 export const AdminWhatsappEnquiryTableColumns = (
   handleEditEnquiry: (enquiry: AdminFetchAllWhatsappEnquiriesResponse) => void,
   handleDeleteEnquiry: (enquiryId: string) => void,
-  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => void,
+  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => void,
   handleUpdateAccount: (enquiryId: string, account: string | null) => void
 ): ColumnDef<AdminFetchAllWhatsappEnquiriesResponse>[] => [
   {
@@ -132,11 +133,16 @@ export const AdminWhatsappEnquiryTableColumns = (
       const message = encodeURIComponent("Hi, we are SS HR Consultancy. How can I help you?");
       const waLink = `https://wa.me/${waNumber}?text=${message}`;
 
+      const handleClick = () => {
+        handleUpdateStatus(row.original._id, "contacted");
+      };
+
       return (
         <a 
           href={waLink} 
           target="_blank" 
           rel="noopener noreferrer"
+          onClick={handleClick}
           className="text-green-600 hover:text-green-700 visited:text-[#4682B4] dark:text-green-400 dark:hover:text-green-300 dark:visited:text-[#5c98ca] font-medium hover:underline flex items-center gap-1.5"
           title="Message on WhatsApp"
         >

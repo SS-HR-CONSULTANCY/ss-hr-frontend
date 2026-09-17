@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminWhatsappEnquiryTableColumns } from "@/components/table/tableColumns/AdminWhatsappEnquiryTableColumns";
 import { adminFetchAllWhatsappEnquiries, adminDeleteWhatsappEnquiry, adminUpdateWhatsappEnquiryStatus, adminUpdateWhatsappEnquiry } from "@/utils/apis/adminWhatsappEnquiryApi";
@@ -28,18 +28,19 @@ const AdminWhatsappEnquiries: React.FC = () => {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "under_processing" | "delivered" }) => 
+    mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed" }) => 
       adminUpdateWhatsappEnquiryStatus(data),
-    onSuccess: (data) => {
-      if (data.success) {
-        toast.success("Enquiry status updated successfully");
-        queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Failed to update status");
     },
   });
+
+  // Keep a stable ref so memoized column cells never hold a stale mutate closure.
+  const updateStatusMutateRef = useRef(updateStatusMutation.mutate);
+  updateStatusMutateRef.current = updateStatusMutation.mutate;
 
   const fetchEnquiries = async (params?: any) => {
     return await adminFetchAllWhatsappEnquiries(params);
@@ -61,9 +62,11 @@ const AdminWhatsappEnquiries: React.FC = () => {
     }
   }, [deleteMutation]);
 
-  const handleUpdateStatus = useCallback((enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => {
-    updateStatusMutation.mutate({ enquiryId, status });
-  }, [updateStatusMutation]);
+  // Stable – always calls via ref, never stale inside useMemo columns.
+  const handleUpdateStatus = useCallback((enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => {
+    updateStatusMutateRef.current({ enquiryId, status });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally empty dep array
 
   const updateAccountMutation = useMutation({
     mutationFn: (data: { enquiryId: string; account: string | null }) =>

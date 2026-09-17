@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useRef } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminEnquiryTableColumns } from "@/components/table/tableColumns/AdminEnquiryTableColumns";
 import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus, adminUpdateEnquiryAccount } from "@/utils/apis/adminEnquiryApi";
@@ -28,18 +28,20 @@ const AdminEnquiries: React.FC = () => {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "under_processing" | "delivered" }) => 
+    mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed" }) => 
       adminUpdateEnquiryStatus(data),
-    onSuccess: (data) => {
-      if (data.success) {
-        toast.success("Enquiry status updated successfully");
-        queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Failed to update status");
     },
   });
+
+  // Keep a ref always pointing at the latest mutate function so
+  // cells captured in useMemo never hold a stale closure.
+  const updateStatusMutateRef = useRef(updateStatusMutation.mutate);
+  updateStatusMutateRef.current = updateStatusMutation.mutate;
 
   const fetchEnquiries = async (params?: any) => {
     return await adminFetchAllEnquiries(params);
@@ -55,9 +57,11 @@ const AdminEnquiries: React.FC = () => {
     }
   }, [deleteMutation]);
 
-  const handleUpdateStatus = useCallback((enquiryId: string, status: "pending" | "contacted" | "under_processing" | "delivered") => {
-    updateStatusMutation.mutate({ enquiryId, status });
-  }, [updateStatusMutation]);
+  // Stable reference – always dispatches via the ref, so columns never stale.
+  const handleUpdateStatus = useCallback((enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => {
+    updateStatusMutateRef.current({ enquiryId, status });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally empty – ref is always current
 
   const updateAccountMutation = useMutation({
     mutationFn: (data: { enquiryId: string; account: string | null }) => adminUpdateEnquiryAccount(data),

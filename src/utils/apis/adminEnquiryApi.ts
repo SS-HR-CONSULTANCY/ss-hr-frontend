@@ -13,7 +13,7 @@ export const adminFetchAllEnquiries = async (
 
 export const adminUpdateEnquiryStatus = async (props: {
   enquiryId: string;
-  status: "pending" | "contacted" | "under_processing" | "delivered";
+  status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
 }): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.patch(`/admin/enquiries/${props.enquiryId}/status`, {
     status: props.status,

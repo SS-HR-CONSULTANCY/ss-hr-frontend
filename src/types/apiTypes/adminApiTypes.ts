@@ -367,7 +367,7 @@ export interface AdminFetchAllEnquiriesResponse {
   phone: string;
   subject: string;
   message: string;
-  status: "pending" | "contacted" | "under_processing" | "delivered";
+  status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
   account?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -378,7 +378,7 @@ export interface AdminFetchAllWhatsappEnquiriesResponse {
   name: string;
   contactNumber: string;
   subject: string;
-  status: "pending" | "contacted" | "under_processing" | "delivered";
+  status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
   date: string;
   account?: string | null;
   createdAt: string;

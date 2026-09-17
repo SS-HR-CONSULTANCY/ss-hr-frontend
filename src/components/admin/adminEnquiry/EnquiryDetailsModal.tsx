@@ -37,7 +37,7 @@ const EnquiryDetailsModal: React.FC = () => {
   const selectedEnquiry = enquiriesData?.data?.find(e => e._id === selectedEnquiryId);
 
   const updateStatusMutation = useMutation({
-    mutationFn: (status: "pending" | "contacted" | "under_processing" | "delivered") => 
+    mutationFn: (status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => 
       adminUpdateEnquiryStatus({ enquiryId: selectedEnquiryId!, status }),
     onSuccess: (data) => {
       if (data.success) {
@@ -86,8 +86,9 @@ const EnquiryDetailsModal: React.FC = () => {
                 <SelectContent>
                   <SelectItem value="pending">Pending</SelectItem>
                   <SelectItem value="contacted">Contacted</SelectItem>
-                  <SelectItem value="under_processing">Under Processing</SelectItem>
-                  <SelectItem value="delivered">Delivered</SelectItem>
+                  <SelectItem value="need_follow_up">Need Follow Up</SelectItem>
+                  <SelectItem value="processing_application">Processing Application</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
                 </SelectContent>
               </Select>
             </div>
