@@ -109,11 +109,11 @@ const Footer = ({
         <FooterBottom className="border-t">
           <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-sm text-muted-foreground py-1">
             <a
-              href="mailto:hello@sshrconsultancy.com"
+              href="mailto:hr@sshrconsultancy.com"
               className="flex items-center gap-1.5 hover:text-black dark:hover:text-white"
             >
               <Mail className="size-3.5" />
-              hello@sshrconsultancy.com
+              hr@sshrconsultancy.com
             </a>
             <span className="hidden md:inline">•</span>
             <span>{copyrightText}</span>

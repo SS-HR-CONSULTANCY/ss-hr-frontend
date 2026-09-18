@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
+import { adminFetchAllCategories, adminCreateCategory } from "@/utils/apis/adminCategoryApi";
 import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
 
 interface WhatsappEnquiryModalProps {
@@ -27,7 +28,11 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
     status: "pending",
     date: format(new Date(), "yyyy-MM-dd"),
     account: "none",
+    category: "none",
   });
+
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   useEffect(() => {
     if (enquiry) {
@@ -38,6 +43,7 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
         status: enquiry.status,
         date: format(new Date(enquiry.date), "yyyy-MM-dd"),
         account: enquiry.account || "none",
+        category: (enquiry as any).category || "none",
       });
     }
   }, [enquiry]);
@@ -103,6 +109,7 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
       ...formData,
       date: new Date(formData.date).toISOString(),
       account: formData.account === "none" ? null : formData.account,
+      category: formData.category === "none" ? null : formData.category,
     };
 
     if (isEditing) {
@@ -119,6 +126,32 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
     queryFn: adminFetchAllAccounts,
   });
   const accounts = accountsData?.data ?? [];
+
+  const { data: categoriesData } = useQuery({
+    queryKey: ["adminCategories"],
+    queryFn: adminFetchAllCategories,
+  });
+  const categories = categoriesData?.data ?? [];
+
+  const createCategoryMutation = useMutation({
+    mutationFn: (name: string) => adminCreateCategory(name),
+    onSuccess: (data) => {
+      if (data.success) {
+        queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
+        setFormData(prev => ({ ...prev, category: data.data.name }));
+        setIsAddingCategory(false);
+        setNewCategoryName("");
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to add category");
+    }
+  });
+
+  const handleAddCategory = () => {
+    if (!newCategoryName.trim()) return;
+    createCategoryMutation.mutate(newCategoryName.trim());
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -212,6 +245,43 @@ const WhatsappEnquiryModal: React.FC<WhatsappEnquiryModalProps> = ({ enquiry, on
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <div className="flex items-center gap-2">
+                {isAddingCategory ? (
+                  <div className="flex items-center gap-2 w-full">
+                    <Input 
+                      value={newCategoryName} 
+                      onChange={e => setNewCategoryName(e.target.value)}
+                      placeholder="New category name"
+                    />
+                    <Button type="button" size="sm" onClick={handleAddCategory} disabled={createCategoryMutation.isPending}>Save</Button>
+                    <Button type="button" size="sm" variant="outline" onClick={() => setIsAddingCategory(false)}>Cancel</Button>
+                  </div>
+                ) : (
+                  <>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
+                    >
+                      <SelectTrigger className="flex-1">
+                        <SelectValue placeholder="Select category..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none"><span className="text-slate-400">— None —</span></SelectItem>
+                        {categories.map((c: any) => (
+                          <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button type="button" size="icon" variant="outline" onClick={() => setIsAddingCategory(true)} title="Add new category">
+                      +
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-4">

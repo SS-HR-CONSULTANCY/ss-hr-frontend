@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useRef } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminEnquiryTableColumns } from "@/components/table/tableColumns/AdminEnquiryTableColumns";
-import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus, adminUpdateEnquiryAccount } from "@/utils/apis/adminEnquiryApi";
+import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus, adminUpdateEnquiryAccount, adminUpdateEnquiryCategory } from "@/utils/apis/adminEnquiryApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -74,16 +74,37 @@ const AdminEnquiries: React.FC = () => {
     },
   });
 
+  const updateAccountMutateRef = useRef(updateAccountMutation.mutate);
+  updateAccountMutateRef.current = updateAccountMutation.mutate;
+
   const handleUpdateAccount = useCallback((enquiryId: string, account: string | null) => {
-    updateAccountMutation.mutate({ enquiryId, account });
-  }, [updateAccountMutation]);
+    updateAccountMutateRef.current({ enquiryId, account });
+  }, []);
+
+  const updateCategoryMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; category: string | null }) => adminUpdateEnquiryCategory(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to update category");
+    },
+  });
+
+  const updateCategoryMutateRef = useRef(updateCategoryMutation.mutate);
+  updateCategoryMutateRef.current = updateCategoryMutation.mutate;
+
+  const handleUpdateCategory = useCallback((enquiryId: string, category: string | null) => {
+    updateCategoryMutateRef.current({ enquiryId, category });
+  }, []);
 
   const columns = useMemo(() => AdminEnquiryTableColumns(
     handleViewEnquiry,
     handleDeleteEnquiry,
     handleUpdateStatus,
-    handleUpdateAccount
-  ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount]);
+    handleUpdateAccount,
+    handleUpdateCategory
+  ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory]);
 
   return (
     <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">

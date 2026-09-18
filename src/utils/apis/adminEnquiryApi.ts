@@ -38,4 +38,12 @@ export const adminUpdateEnquiryAccount = async (props: {
   });
   return response.data;
 };
-
+export const adminUpdateEnquiryCategory = async (props: {
+  enquiryId: string;
+  category: string | null;
+}): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.patch(`/admin/enquiries/${props.enquiryId}/category`, {
+    category: props.category,
+  });
+  return response.data;
+};

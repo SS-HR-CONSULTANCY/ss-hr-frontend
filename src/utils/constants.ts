@@ -612,8 +612,8 @@ export const contactData: ContactItem[] = [
   {
     icon: Mail,
     label: "Email",
-    value: "hello@sshrconsultancy.com",
-    href: "hello@sshrconsultancy.com",
+    value: "hr@sshrconsultancy.com",
+    href: "hr@sshrconsultancy.com",
   },
   {
     icon: MapPin,

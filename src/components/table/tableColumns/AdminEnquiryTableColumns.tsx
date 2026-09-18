@@ -13,9 +13,18 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { AdminFetchAllEnquiriesResponse, AccountResponse } from "@/types/apiTypes/adminApiTypes";
 import { format } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
+import { adminFetchAllCategories, adminCreateCategory } from "@/utils/apis/adminCategoryApi";
 import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
+import { Input } from "@/components/ui/input";
+
+const toTitleCase = (str: string) => {
+  if (!str) return "";
+  return str.split(" ").map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join(" ");
+};
 
 const formatWhatsAppNumber = (phone: string) => {
   if (!phone) return "";
@@ -104,11 +113,87 @@ const AccountSelectCell = ({ enquiry, handleUpdateAccount }: { enquiry: AdminFet
   );
 };
 
+export const CategorySelectCell = ({ enquiry, handleUpdateCategory }: { enquiry: any; handleUpdateCategory: (id: string, category: string | null) => void }) => {
+  const [category, setCategory] = useState<string>((enquiry as any).category || "none");
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setCategory((enquiry as any).category || "none");
+  }, [(enquiry as any).category]);
+
+  const { data: categoriesData } = useQuery({
+    queryKey: ["adminCategories"],
+    queryFn: adminFetchAllCategories,
+  });
+  const categories = categoriesData?.data ?? [];
+
+  const createCategoryMutation = useMutation({
+    mutationFn: (name: string) => adminCreateCategory(name),
+    onSuccess: (data) => {
+      if (data.success) {
+        queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
+        setCategory(data.data.name);
+        handleUpdateCategory(enquiry._id, data.data.name);
+        setIsAddingCategory(false);
+        setNewCategoryName("");
+      }
+    }
+  });
+
+  const handleAddCategory = () => {
+    if (!newCategoryName.trim()) return;
+    createCategoryMutation.mutate(newCategoryName.trim());
+  };
+
+  if (isAddingCategory) {
+    return (
+      <div className="flex items-center gap-1 w-[180px]">
+        <Input 
+          value={newCategoryName} 
+          onChange={e => setNewCategoryName(e.target.value)}
+          placeholder="New category..."
+          className="h-8 text-xs px-2"
+        />
+        <Button type="button" size="sm" onClick={handleAddCategory} disabled={createCategoryMutation.isPending} className="h-8 px-2">Save</Button>
+        <Button type="button" size="sm" variant="outline" onClick={() => setIsAddingCategory(false)} className="h-8 px-2">X</Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <Select
+        value={category}
+        onValueChange={(value) => {
+          setCategory(value);
+          handleUpdateCategory(enquiry._id, value === "none" ? null : value);
+        }}
+      >
+        <SelectTrigger className="w-[130px] h-8 text-xs">
+          <SelectValue placeholder="Assign..." />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none"><span className="text-slate-400">— None —</span></SelectItem>
+          {categories.map((c: any) => (
+            <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Button type="button" size="icon" variant="outline" onClick={() => setIsAddingCategory(true)} title="Add new category" className="h-8 w-8">
+        +
+      </Button>
+    </div>
+  );
+};
+
 export const AdminEnquiryTableColumns = (
   handleViewEnquiry: (enquiryId: string) => void,
   handleDeleteEnquiry: (enquiryId: string) => void,
   handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "not_interested" | "processing_application" | "completed" | "rejected_application") => void,
-  handleUpdateAccount: (enquiryId: string, account: string | null) => void
+  handleUpdateAccount: (enquiryId: string, account: string | null) => void,
+  handleUpdateCategory: (enquiryId: string, category: string | null) => void
 ): ColumnDef<AdminFetchAllEnquiriesResponse>[] => [
   {
     accessorKey: "date",
@@ -126,7 +211,8 @@ export const AdminEnquiryTableColumns = (
     ),
     cell: ({ row }) => {
       const { firstName, lastName } = row.original;
-      return `${firstName} ${lastName}`;
+      const fullName = `${firstName || ""} ${lastName || ""}`.trim();
+      return toTitleCase(fullName);
     },
   },
   {
@@ -167,6 +253,23 @@ export const AdminEnquiryTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Subject" />
     ),
+    cell: ({ row }) => {
+      const subject = row.original.subject || "";
+      return (
+        <span title={subject}>
+          {subject.length > 20 ? subject.substring(0, 20) + "....." : subject}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "category",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Category" />
+    ),
+    cell: ({ row }) => {
+      return <CategorySelectCell enquiry={row.original} handleUpdateCategory={handleUpdateCategory} />;
+    },
   },
   {
     accessorKey: "status",

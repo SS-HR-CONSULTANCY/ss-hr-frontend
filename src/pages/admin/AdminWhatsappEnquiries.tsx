@@ -80,16 +80,38 @@ const AdminWhatsappEnquiries: React.FC = () => {
     },
   });
 
+  const updateAccountMutateRef = useRef(updateAccountMutation.mutate);
+  updateAccountMutateRef.current = updateAccountMutation.mutate;
+
   const handleUpdateAccount = useCallback((enquiryId: string, account: string | null) => {
-    updateAccountMutation.mutate({ enquiryId, account });
-  }, [updateAccountMutation]);
+    updateAccountMutateRef.current({ enquiryId, account });
+  }, []);
+
+  const updateCategoryMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; category: string | null }) =>
+      adminUpdateWhatsappEnquiry(data.enquiryId, { category: data.category }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to update category");
+    },
+  });
+
+  const updateCategoryMutateRef = useRef(updateCategoryMutation.mutate);
+  updateCategoryMutateRef.current = updateCategoryMutation.mutate;
+
+  const handleUpdateCategory = useCallback((enquiryId: string, category: string | null) => {
+    updateCategoryMutateRef.current({ enquiryId, category });
+  }, []);
 
   const columns = useMemo(() => AdminWhatsappEnquiryTableColumns(
     handleEditEnquiry,
     handleDeleteEnquiry,
     handleUpdateStatus,
-    handleUpdateAccount
-  ), [handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount]);
+    handleUpdateAccount,
+    handleUpdateCategory
+  ), [handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory]);
 
   return (
     <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">

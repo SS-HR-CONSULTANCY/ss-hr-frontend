@@ -13,7 +13,7 @@ const CLIENT = {
     "Al Kazim Building, Entrance B",
     "Dubai, UAE",
   ],
-  email: "hello@sshrconsultancy.com",
+  email: "hr@sshrconsultancy.com",
   phone: "+971 52 366 4492",
 };
 

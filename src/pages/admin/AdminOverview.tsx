@@ -10,7 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Select,
@@ -19,6 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#F4A460', '#DDA0DD'];
 
 const AdminOverview: React.FC = () => {
   const [period, setPeriod] = useState<string>("weekly");
@@ -125,7 +127,7 @@ const AdminOverview: React.FC = () => {
 
                 return (
                   <ChartContainer config={chartConfig} className="aspect-auto h-[300px] w-full mt-4">
-                    <LineChart
+                    <BarChart
                       accessibilityLayer
                       data={displayData}
                   margin={{
@@ -149,15 +151,17 @@ const AdminOverview: React.FC = () => {
                     allowDecimals={false}
                   />
                   <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                  <Line
-                    type="monotone"
+                  <Bar
                     dataKey="count"
-                    stroke="var(--color-count)"
-                    strokeWidth={3}
-                    dot={{ r: 4, fill: "var(--color-count)" }}
-                    activeDot={{ r: 6 }}
-                  />
-                </LineChart>
+                    radius={[4, 4, 0, 0]}
+                  >
+                    {
+                      displayData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))
+                    }
+                  </Bar>
+                </BarChart>
               </ChartContainer>
             );
             })()

@@ -16,6 +16,14 @@ import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
 import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
+import { CategorySelectCell } from "./AdminEnquiryTableColumns";
+
+const toTitleCase = (str: string) => {
+  if (!str) return "";
+  return str.split(" ").map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  ).join(" ");
+};
 
 const formatWhatsAppNumber = (phone: string) => {
   if (!phone) return "";
@@ -108,7 +116,8 @@ export const AdminWhatsappEnquiryTableColumns = (
   handleEditEnquiry: (enquiry: AdminFetchAllWhatsappEnquiriesResponse) => void,
   handleDeleteEnquiry: (enquiryId: string) => void,
   handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "not_interested" | "processing_application" | "completed" | "rejected_application") => void,
-  handleUpdateAccount: (enquiryId: string, account: string | null) => void
+  handleUpdateAccount: (enquiryId: string, account: string | null) => void,
+  handleUpdateCategory: (enquiryId: string, category: string | null) => void
 ): ColumnDef<AdminFetchAllWhatsappEnquiriesResponse>[] => [
   {
     accessorKey: "date",
@@ -124,6 +133,9 @@ export const AdminWhatsappEnquiryTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
+    cell: ({ row }) => {
+      return toTitleCase(row.original.name || "");
+    }
   },
   {
     accessorKey: "contactNumber",
@@ -163,6 +175,23 @@ export const AdminWhatsappEnquiryTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Subject" />
     ),
+    cell: ({ row }) => {
+      const subject = row.original.subject || "";
+      return (
+        <span title={subject}>
+          {subject.length > 20 ? subject.substring(0, 20) + "....." : subject}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "category",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Category" />
+    ),
+    cell: ({ row }) => {
+      return <CategorySelectCell enquiry={row.original} handleUpdateCategory={handleUpdateCategory} />;
+    },
   },
   {
     accessorKey: "status",
