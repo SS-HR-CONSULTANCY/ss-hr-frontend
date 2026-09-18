@@ -305,24 +305,24 @@ export const AdminEnquiryTableColumns = (
     cell: ({ row }) => {
       const enquiry = row.original;
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-center gap-1 py-1">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => handleViewEnquiry(enquiry._id)}
-            className="h-8 w-8 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
+            className="h-5 w-5 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
             title="View Details"
           >
-            <Eye className="h-4 w-4" />
+            <Eye className="h-2.5 w-2.5" />
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => handleDeleteEnquiry(enquiry._id)}
-            className="h-8 w-8 p-0 text-red-500 cursor-pointer hover:bg-red-500/20 hover:text-red-500"
+            className="h-5 w-5 p-0 text-red-500 cursor-pointer hover:bg-red-500/20 hover:text-red-500"
             title="Delete Enquiry"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-2.5 w-2.5" />
           </Button>
         </div>
       );
