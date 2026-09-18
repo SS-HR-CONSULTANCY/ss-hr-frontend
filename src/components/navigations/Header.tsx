@@ -51,12 +51,12 @@ const Header: React.FC = () => {
               className="w-10 h-10 object-contain"
             />
             <span className="hidden sm:block font-black text-[#0C0C0C] tracking-tight text-sm whitespace-nowrap">
-              SS HR CONSULTANCY
+              SS HR Consultancy
             </span>
           </Link>
 
           {/* ─── DESKTOP NAV ─── */}
-          <nav className="hidden md:flex items-center gap-10 lg:gap-14">
+          <nav className="hidden md:flex items-center gap-16 lg:gap-28">
             {desktopLinks
               .filter((l) => l.text !== "Services" || l.isForDesk)
               .filter((l, i, arr) => arr.findIndex((x) => x.text === l.text) === i)
@@ -66,7 +66,7 @@ const Header: React.FC = () => {
                   to={link.href}
                   className="text-[14px] font-semibold transition-colors duration-200 py-1 relative"
                   style={{
-                    color: isActive(link.href) ? "#D4820A" : "#4B4B4B",
+                    color: isActive(link.href) ? "#D4820A" : "#4682B4",
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.color = "#D4820A";
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLElement).style.color = isActive(link.href)
                       ? "#D4820A"
-                      : "#4B4B4B";
+                      : "#4682B4";
                   }}
                 >
                   {link.text}
@@ -184,7 +184,7 @@ const Header: React.FC = () => {
                 <Link
                   key={link.text}
                   to={link.href}
-                  className="text-base font-semibold text-neutral-700 hover:text-[#D4820A] transition-colors py-1"
+                  className="text-base font-semibold text-[#4682B4] hover:text-[#D4820A] transition-colors py-1"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.text}

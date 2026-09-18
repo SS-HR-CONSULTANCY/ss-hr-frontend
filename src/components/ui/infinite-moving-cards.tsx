@@ -121,18 +121,30 @@ export const InfiniteMovingCards = ({
                 </span>
 
                 {/* Footer at bottom */}
-                <div className="relative z-20 mt-auto flex flex-row items-center gap-3 pt-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-300 text-slate-700 font-bold text-sm shrink-0">
-                    {item.clientName?.charAt(0)?.toUpperCase() || "C"}
+                <div className="relative z-20 mt-auto flex flex-row items-center justify-between pt-4">
+                  <div className="flex flex-row items-center gap-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-300 text-slate-700 font-bold text-sm shrink-0">
+                      {item.clientName?.charAt(0)?.toUpperCase() || "C"}
+                    </div>
+                    <span className="flex flex-col">
+                      <span className="text-xs leading-[1.5] font-semibold text-black dark:text-white">
+                        {item.clientName}
+                      </span>
+                      <span className="text-[10px] leading-[1.5] font-normal text-gray-500 dark:text-gray-300">
+                        {item.designation}
+                      </span>
+                    </span>
                   </div>
-                  <span className="flex flex-col">
-                    <span className="text-xs leading-[1.5] font-semibold text-black dark:text-white">
-                      {item.clientName}
-                    </span>
-                    <span className="text-[10px] leading-[1.5] font-normal text-gray-500 dark:text-gray-300">
-                      {item.designation}
-                    </span>
-                  </span>
+                  {/* Google Icon */}
+                  <span
+                    className="w-5 h-5 shrink-0"
+                    title="Google Review"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJubm96ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=")`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                    }}
+                  />
                 </div>
               </blockquote>
             </CardContent>
