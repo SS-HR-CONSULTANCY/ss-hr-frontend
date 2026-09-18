@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Heading from "@/components/common/Heading";
+
 import DataFetchingError from "@/components/common/DataFetchingError";
 import GraphShimmer from "@/components/shimmer/GraphShimmer";
-import { adminFetchEnquiryAnalyticsData } from "@/utils/apis/adminApi";
+import { adminFetchEnquiryAnalyticsData, adminFetchEnquiryStatusDistribution } from "@/utils/apis/adminApi";
 import { ENQUIRY_STATUS_CONFIG } from "@/utils/enquiryStatusConfig";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell, PieChart, Pie, Legend, Tooltip as RechartsTooltip, LabelList } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -37,6 +37,39 @@ const AdminOverview: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
+  const {
+    data: statusDistributionData,
+    isLoading: isStatusLoading,
+  } = useQuery({
+    queryKey: ["enquiryStatusDistribution", period],
+    queryFn: () => adminFetchEnquiryStatusDistribution(period),
+    refetchOnWindowFocus: false,
+  });
+
+  const pieData = React.useMemo(() => {
+    if (!statusDistributionData) return [];
+    
+    let pendingCount = 0;
+    let completedCount = 0;
+    let otherCount = 0;
+    
+    statusDistributionData.forEach(item => {
+      if (item.status === 'pending') {
+        pendingCount += item.count;
+      } else if (item.status === 'completed') {
+        completedCount += item.count;
+      } else {
+        otherCount += item.count;
+      }
+    });
+    
+    return [
+      { name: 'Pending', value: pendingCount, color: '#ef4444' },
+      { name: 'Completed', value: completedCount, color: '#22c55e' },
+      { name: 'Other', value: otherCount, color: '#eab308' },
+    ].filter(item => item.value > 0);
+  }, [statusDistributionData]);
+
   const chartConfig = {
     count: {
       label: "Enquiries",
@@ -46,8 +79,8 @@ const AdminOverview: React.FC = () => {
 
   return (
     <div className="space-y-8 text-black dark:text-white mt-4 w-full pb-10">
-      <div className="w-full mt-2">
-        <Card className="w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-2">
+        <Card className="w-full lg:col-span-2">
           <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <CardTitle className="text-lg font-medium">Enquiry Trends</CardTitle>
@@ -155,6 +188,7 @@ const AdminOverview: React.FC = () => {
                     dataKey="count"
                     radius={[4, 4, 0, 0]}
                   >
+                    <LabelList dataKey="count" position="top" fill="currentColor" offset={10} fontSize={12} />
                     {
                       displayData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -168,6 +202,45 @@ const AdminOverview: React.FC = () => {
           ) : (
               <div className="flex items-center justify-center min-h-[300px]">
                 <p className="text-slate-500">No analytics data available for the selected filters.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="w-full lg:col-span-1">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium">Lead Follow Up Status</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isStatusLoading ? (
+              <div className="w-full mt-4 flex items-center justify-center min-h-[300px]">
+                <p>Loading...</p>
+              </div>
+            ) : pieData.length > 0 ? (
+              <div className="h-[300px] w-full flex items-center justify-center mt-4">
+                <PieChart width={300} height={300}>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip 
+                    formatter={(value: number) => [`${value} Enquiries`, 'Count']}
+                  />
+                  <Legend verticalAlign="bottom" height={36}/>
+                </PieChart>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center min-h-[300px]">
+                <p className="text-slate-500">No status data available.</p>
               </div>
             )}
           </CardContent>

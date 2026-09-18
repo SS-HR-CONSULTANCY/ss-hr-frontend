@@ -38,6 +38,13 @@ export const adminFetchEnquiryAnalyticsData =
     return response.data.data;
   };
 
+export const adminFetchEnquiryStatusDistribution =
+  async (period: string): Promise<Array<{ status: string; count: number }>> => {
+    const query = new URLSearchParams({ period });
+    const response = await axiosInstance.get(`/admin/enquiries/status-distribution?${query.toString()}`);
+    return response.data.data;
+  };
+
 export const adminFetchReportPaymentsGraphData =
   async (): Promise<AdminFetchReportPaymentsGraphsDataResponse> => {
     const response = await axiosInstance.get("/admin/payments/graph-data");
