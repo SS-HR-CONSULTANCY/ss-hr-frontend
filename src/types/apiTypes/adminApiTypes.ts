@@ -205,6 +205,14 @@ export interface AdminFetchEnquiryAnalyticsResponse {
   count: number;
 }
 
+export interface AdminFetchEnquirySummaryStatsResponse {
+  total: number;
+  visitingPackage: number;
+  inProgress: number;
+  pending: number;
+  completed: number;
+}
+
 // ✅ Admin report page user graph data Response Type
 export interface AdminFetchReportUserswGraphsDataResponse {
   usersRadialGragphData: Array<{

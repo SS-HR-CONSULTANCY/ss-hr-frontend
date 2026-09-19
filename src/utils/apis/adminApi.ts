@@ -11,7 +11,8 @@ import type {
   AdminFetchOverviewStatsDataResponse,
   AdminFetchReportPaymentsGraphsDataResponse,
   AdminFetchComprehensiveOverviewResponse,
-  AdminFetchEnquiryAnalyticsResponse
+  AdminFetchEnquiryAnalyticsResponse,
+  AdminFetchEnquirySummaryStatsResponse
 } from "@/types/apiTypes/adminApiTypes";
 import { axiosInstance } from "@/lib/axios";
 
@@ -29,12 +30,21 @@ export const adminFetchComprehensiveOverviewData =
   };
 
 export const adminFetchEnquiryAnalyticsData =
-  async (period: string, status: string): Promise<AdminFetchEnquiryAnalyticsResponse[]> => {
+  async (period: string, status: string, category: string): Promise<AdminFetchEnquiryAnalyticsResponse[]> => {
     const query = new URLSearchParams({ period });
     if (status && status !== 'all') {
       query.append('status', status);
     }
+    if (category && category !== 'all') {
+      query.append('category', category);
+    }
     const response = await axiosInstance.get(`/admin/enquiries/analytics?${query.toString()}`);
+    return response.data.data;
+  };
+
+export const adminFetchEnquirySummaryStats =
+  async (): Promise<AdminFetchEnquirySummaryStatsResponse> => {
+    const response = await axiosInstance.get("/admin/enquiries/summary-stats");
     return response.data.data;
   };
 

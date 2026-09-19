@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Users, Briefcase, Activity, Clock, CheckCircle } from "lucide-react";
 
 import DataFetchingError from "@/components/common/DataFetchingError";
 import GraphShimmer from "@/components/shimmer/GraphShimmer";
-import { adminFetchEnquiryAnalyticsData, adminFetchEnquiryStatusDistribution } from "@/utils/apis/adminApi";
+import { adminFetchEnquiryAnalyticsData, adminFetchEnquiryStatusDistribution, adminFetchEnquirySummaryStats } from "@/utils/apis/adminApi";
+import { adminFetchAllCategories } from "@/utils/apis/adminCategoryApi";
 import { ENQUIRY_STATUS_CONFIG } from "@/utils/enquiryStatusConfig";
 import {
   ChartContainer,
@@ -25,6 +27,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'
 const AdminOverview: React.FC = () => {
   const [period, setPeriod] = useState<string>("weekly");
   const [status, setStatus] = useState<string>("all");
+  const [category, setCategory] = useState<string>("all");
 
   const {
     data: analyticsData,
@@ -32,10 +35,16 @@ const AdminOverview: React.FC = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["enquiryAnalytics", period, status],
-    queryFn: () => adminFetchEnquiryAnalyticsData(period, status),
+    queryKey: ["enquiryAnalytics", period, status, category],
+    queryFn: () => adminFetchEnquiryAnalyticsData(period, status, category),
     refetchOnWindowFocus: false,
   });
+
+  const { data: categoriesData } = useQuery({
+    queryKey: ["adminCategories"],
+    queryFn: adminFetchAllCategories,
+  });
+  const categories = categoriesData?.data ?? [];
 
   const {
     data: statusDistributionData,
@@ -43,6 +52,15 @@ const AdminOverview: React.FC = () => {
   } = useQuery({
     queryKey: ["enquiryStatusDistribution", period],
     queryFn: () => adminFetchEnquiryStatusDistribution(period),
+    refetchOnWindowFocus: false,
+  });
+
+  const {
+    data: summaryStatsData,
+    isLoading: isSummaryStatsLoading,
+  } = useQuery({
+    queryKey: ["enquirySummaryStats"],
+    queryFn: adminFetchEnquirySummaryStats,
     refetchOnWindowFocus: false,
   });
 
@@ -66,7 +84,7 @@ const AdminOverview: React.FC = () => {
     return [
       { name: 'Pending', value: pendingCount, color: '#ef4444' },
       { name: 'Completed', value: completedCount, color: '#22c55e' },
-      { name: 'Other', value: otherCount, color: '#eab308' },
+      { name: 'In Progress', value: otherCount, color: '#eab308' },
     ].filter(item => item.value > 0);
   }, [statusDistributionData]);
 
@@ -78,7 +96,67 @@ const AdminOverview: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 text-black dark:text-white mt-4 w-full pb-10">
+    <div className="space-y-8 text-black dark:text-white mt-6 w-full pb-10">
+      
+      {/* Stats Cards Row */}
+      {isSummaryStatsLoading ? (
+        <div className="w-full">
+          <GraphShimmer count={1} />
+        </div>
+      ) : summaryStatsData ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
+          <Card className="bg-blue-50/50 dark:bg-blue-950/20 border-blue-100 dark:border-blue-900 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Enquiries</CardTitle>
+              <Users className="h-4 w-4 text-blue-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">{summaryStatsData.total}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-purple-50/50 dark:bg-purple-950/20 border-purple-100 dark:border-purple-900 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Visiting Package</CardTitle>
+              <Briefcase className="h-4 w-4 text-purple-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-purple-700 dark:text-purple-400">{summaryStatsData.visitingPackage}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-yellow-50/50 dark:bg-yellow-950/20 border-yellow-100 dark:border-yellow-900 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">In Progress</CardTitle>
+              <Activity className="h-4 w-4 text-yellow-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-500">{summaryStatsData.inProgress}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-red-50/50 dark:bg-red-950/20 border-red-100 dark:border-red-900 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Pending</CardTitle>
+              <Clock className="h-4 w-4 text-red-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-red-600 dark:text-red-400">{summaryStatsData.pending}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-green-50/50 dark:bg-green-950/20 border-green-100 dark:border-green-900 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Completed</CardTitle>
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">{summaryStatsData.completed}</div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-2">
         <Card className="w-full lg:col-span-2">
           <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -107,6 +185,18 @@ const AdminOverview: React.FC = () => {
                     <SelectItem key={key} value={key}>
                       {config.label}
                     </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <Select value={category} onValueChange={setCategory}>
+                <SelectTrigger className="w-[180px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+                  <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories.map((c: any) => (
+                    <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

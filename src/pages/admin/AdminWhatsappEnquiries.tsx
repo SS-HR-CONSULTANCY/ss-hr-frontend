@@ -30,11 +30,28 @@ const AdminWhatsappEnquiries: React.FC = () => {
   const updateStatusMutation = useMutation({
     mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed" }) => 
       adminUpdateWhatsappEnquiryStatus(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
+    onMutate: async (newStatus) => {
+      await queryClient.cancelQueries({ queryKey: ["adminWhatsappEnquiries"] });
+      const previousEnquiries = queryClient.getQueryData(["adminWhatsappEnquiries"]);
+      queryClient.setQueryData(["adminWhatsappEnquiries"], (old: any) => {
+        if (!old || !old.data) return old;
+        return {
+          ...old,
+          data: old.data.map((enq: any) =>
+            enq._id === newStatus.enquiryId ? { ...enq, status: newStatus.status } : enq
+          ),
+        };
+      });
+      return { previousEnquiries };
     },
-    onError: (error: any) => {
+    onError: (error: any, _newStatus, context: any) => {
+      if (context?.previousEnquiries) {
+        queryClient.setQueryData(["adminWhatsappEnquiries"], context.previousEnquiries);
+      }
       toast.error(error?.response?.data?.message || "Failed to update status");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
     },
   });
 
@@ -71,12 +88,31 @@ const AdminWhatsappEnquiries: React.FC = () => {
   const updateAccountMutation = useMutation({
     mutationFn: (data: { enquiryId: string; account: string | null }) =>
       adminUpdateWhatsappEnquiry(data.enquiryId, { account: data.account }),
+    onMutate: async (newAccount) => {
+      await queryClient.cancelQueries({ queryKey: ["adminWhatsappEnquiries"] });
+      const previousEnquiries = queryClient.getQueryData(["adminWhatsappEnquiries"]);
+      queryClient.setQueryData(["adminWhatsappEnquiries"], (old: any) => {
+        if (!old || !old.data) return old;
+        return {
+          ...old,
+          data: old.data.map((enq: any) =>
+            enq._id === newAccount.enquiryId ? { ...enq, account: newAccount.account } : enq
+          ),
+        };
+      });
+      return { previousEnquiries };
+    },
     onSuccess: () => {
       toast.success("Account updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
     },
-    onError: (error: any) => {
+    onError: (error: any, _newAccount, context: any) => {
+      if (context?.previousEnquiries) {
+        queryClient.setQueryData(["adminWhatsappEnquiries"], context.previousEnquiries);
+      }
       toast.error(error?.response?.data?.message || "Failed to update account");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
     },
   });
 
@@ -90,11 +126,28 @@ const AdminWhatsappEnquiries: React.FC = () => {
   const updateCategoryMutation = useMutation({
     mutationFn: (data: { enquiryId: string; category: string | null }) =>
       adminUpdateWhatsappEnquiry(data.enquiryId, { category: data.category }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
+    onMutate: async (newCategory) => {
+      await queryClient.cancelQueries({ queryKey: ["adminWhatsappEnquiries"] });
+      const previousEnquiries = queryClient.getQueryData(["adminWhatsappEnquiries"]);
+      queryClient.setQueryData(["adminWhatsappEnquiries"], (old: any) => {
+        if (!old || !old.data) return old;
+        return {
+          ...old,
+          data: old.data.map((enq: any) =>
+            enq._id === newCategory.enquiryId ? { ...enq, category: newCategory.category } : enq
+          ),
+        };
+      });
+      return { previousEnquiries };
     },
-    onError: (error: any) => {
+    onError: (error: any, _newCategory, context: any) => {
+      if (context?.previousEnquiries) {
+        queryClient.setQueryData(["adminWhatsappEnquiries"], context.previousEnquiries);
+      }
       toast.error(error?.response?.data?.message || "Failed to update category");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
     },
   });
 
