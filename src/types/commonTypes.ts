@@ -34,6 +34,7 @@ export interface FetchFunctionParams<T = string> {
     fromDate?: string;
     toDate?: string;
     category?: string;
+    searchQuery?: string;
   };
 }
 

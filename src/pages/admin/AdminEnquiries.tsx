@@ -160,13 +160,15 @@ const AdminEnquiries: React.FC = () => {
   ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory]);
 
   return (
-    <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">
+    <div className="px-2 sm:px-6 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">
 
       <CommonTable
         column={columns}
         columnsCount={columns.length}
         queryKey="adminEnquiries"
         fetchApiFunction={fetchEnquiries}
+        showSearchInput={true}
+        searchPlaceholder="Search name, email, phone..."
       />
 
       {isViewEnquiryDetailsOpen && <EnquiryDetailsModal />}

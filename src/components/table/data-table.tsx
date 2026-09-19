@@ -151,38 +151,47 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Use built-in pagination controls */}
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="text-sm text-muted-foreground">
-          {pageCount ? (
-            <>
-              Page {paginationState.pageIndex + 1} of {pageCount}(
-              {table.getFilteredRowModel().rows.length} items)
-            </>
-          ) : (
-            <>
-              Showing{" "}
-              {table.getState().pagination.pageIndex *
-                table.getState().pagination.pageSize +
-                1}{" "}
-              to{" "}
-              {Math.min(
-                (table.getState().pagination.pageIndex + 1) *
-                  table.getState().pagination.pageSize,
-                table.getFilteredRowModel().rows.length,
-              )}{" "}
-              of {table.getFilteredRowModel().rows.length} entries
-            </>
-          )}
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
+      <div className="flex justify-center items-center space-x-1 py-4">
+        <Button
+          variant="outline"
+          size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
           </Button>
+
+          {(() => {
+            const total = pageCount || table.getPageCount();
+            const current = paginationState.pageIndex + 1;
+            const pages: (number | string)[] = [];
+
+            if (total <= 7) {
+              for (let i = 1; i <= total; i++) pages.push(i);
+            } else {
+              if (current <= 4) {
+                pages.push(1, 2, 3, 4, 5, "...", total);
+              } else if (current >= total - 3) {
+                pages.push(1, "...", total - 4, total - 3, total - 2, total - 1, total);
+              } else {
+                pages.push(1, "...", current - 1, current, current + 1, "...", total);
+              }
+            }
+
+            return pages.map((p, idx) => (
+              <Button
+                key={idx}
+                variant={p === current ? "default" : "outline"}
+                size="sm"
+                onClick={() => typeof p === "number" && table.setPageIndex(p - 1)}
+                disabled={typeof p !== "number"}
+                className={typeof p !== "number" ? "border-transparent px-1" : ""}
+              >
+                {p}
+              </Button>
+            ));
+          })()}
+
           <Button
             variant="outline"
             size="sm"
@@ -191,7 +200,6 @@ export function DataTable<TData, TValue>({
           >
             Next
           </Button>
-        </div>
       </div>
     </div>
   );

@@ -167,18 +167,19 @@ const AdminWhatsappEnquiries: React.FC = () => {
   ), [handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory]);
 
   return (
-    <div className="p-2 sm:p-6 w-full max-w-[100vw] overflow-hidden">
-      <div className="flex justify-end mb-4">
-        <Button onClick={handleAddEnquiry} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" /> Add Whatsapp Enquiry
-        </Button>
-      </div>
-
+    <div className="px-2 sm:px-6 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">
       <CommonTable
         column={columns}
         columnsCount={columns.length}
         queryKey="adminWhatsappEnquiries"
         fetchApiFunction={fetchEnquiries}
+        showSearchInput={true}
+        searchPlaceholder="Search name, phone, subject..."
+        headerAction={
+          <Button onClick={handleAddEnquiry} className="flex items-center gap-2">
+            <Plus className="w-4 h-4" /> Add Whatsapp Enquiry
+          </Button>
+        }
       />
 
       {isModalOpen && (
