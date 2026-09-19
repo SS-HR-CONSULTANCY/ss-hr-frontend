@@ -18,7 +18,6 @@ import { HomeIcon, LoaderCircle, UserPlus } from "lucide-react";
 import RememberMeWithFP from "@/components/form/RememberMeWithFP";
 import { loginSchema, type LoginForm } from "@/utils/zod/authZod";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 interface LoginProps {
   role: RoleType;
@@ -88,8 +87,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
   return (
     <>
       <SEO data={SEO_DATA.LOGIN} />
-      <div className="min-h-screen flex items-center justify-center">
-        <BackgroundBeamsWithCollision>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
           <Card className="w-full max-w-md border border-slate-200 dark:border-slate-700/50 shadow-xl z-20 mx-4 md:mx-0 bg-white/95 dark:bg-card/95 backdrop-blur-md">
             <FormHeader
               title={
@@ -99,7 +97,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
                     ? "Admin Login"
                     : "System Admin Login"
               }
-              description="Enter your credentials to access your account"
+              description={role === roleValues[0] ? "Enter your credentials to access your account" : undefined}
             />
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -124,7 +122,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
                   showTogglePassword
                 />
 
-                <RememberMeWithFP />
+                {role === roleValues[0] && <RememberMeWithFP />}
 
                 <Button
                   type="submit"
@@ -177,16 +175,17 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
 
             <CardFooter className="flex flex-col space-y-4 w-full">
               {role === roleValues[0] && (
-                <CustomLink
-                  href="/register"
-                  text="Create your account"
-                  icon={UserPlus}
-                />
+                <>
+                  <CustomLink
+                    href="/register"
+                    text="Create your account"
+                    icon={UserPlus}
+                  />
+                  <CustomLink href="/" text="Back to home" icon={HomeIcon} />
+                </>
               )}
-              <CustomLink href="/" text="Back to home" icon={HomeIcon} />
             </CardFooter>
           </Card>
-        </BackgroundBeamsWithCollision>
       </div>
     </>
   );

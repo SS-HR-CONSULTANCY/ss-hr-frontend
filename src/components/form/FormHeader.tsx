@@ -4,7 +4,7 @@ import logoImage from "../../assets/logos/brand-icon.png";
 
 interface FormHeader {
   title: string;
-  description: string;
+  description?: string;
 }
 
 const FormHeader: React.FC<FormHeader> = ({ title, description }) => {
@@ -14,7 +14,7 @@ const FormHeader: React.FC<FormHeader> = ({ title, description }) => {
         <img src={logoImage} className="size-16" />
       </div>
       <CardTitle className="text-center">{title}</CardTitle>
-      <CardDescription className="text-center">{description}</CardDescription>
+      {description && <CardDescription className="text-center">{description}</CardDescription>}
     </CardHeader>
   );
 };
