@@ -198,6 +198,7 @@ const appRouter = createBrowserRouter([
       <DashboardLayout
         showMobileScreenWarning={true}
         routes={adminApplicationRoutes}
+        showHeader={false}
       />
     ),
     errorElement: <RouteErrorBoundary />,

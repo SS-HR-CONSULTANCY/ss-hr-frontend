@@ -12,6 +12,7 @@ import type { DashboardLayoutProps } from "@/types/componentTypes/dashboardLayou
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   showMobileScreenWarning,
   routes,
+  showHeader = true,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { user, isAuthenticated } = useSelector(
@@ -46,11 +47,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <div className="h-screen bg-white text-sm text-[#00838f] flex">
         <Sidebar routes={routes} />
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="shrink-0">
-            <DashboardHeader user={user} />
-          </div>
+          {showHeader && (
+            <div className="shrink-0">
+              <DashboardHeader user={user} />
+            </div>
+          )}
 
-          <div className="flex-1 overflow-y-auto px-2 pt-1 pb-2 md:px-4 md:pt-2 md:pb-4 bg-[#f0fbfc]">
+          <div className={`flex-1 overflow-y-auto px-2 pb-2 md:px-4 md:pb-4 bg-[#f0fbfc] ${!showHeader ? 'pt-6 md:pt-10' : 'pt-1 md:pt-2'}`}>
             <Outlet />
           </div>
         </div>

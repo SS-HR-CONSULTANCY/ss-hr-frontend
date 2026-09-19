@@ -151,7 +151,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Use built-in pagination controls */}
-      <div className="flex justify-center items-center space-x-1 py-4">
+      <div className="flex justify-center items-center space-x-3 py-4">
         <Button
           variant="outline"
           size="sm"
