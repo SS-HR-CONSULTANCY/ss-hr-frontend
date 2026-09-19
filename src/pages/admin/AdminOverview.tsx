@@ -117,7 +117,7 @@ const AdminOverview: React.FC = () => {
           
           <Card className="bg-purple-50/50 dark:bg-purple-950/20 border-purple-100 dark:border-purple-900 shadow-sm transition-all hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Visiting Package</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Visiting Package Enquiries</CardTitle>
               <Briefcase className="h-4 w-4 text-purple-500" />
             </CardHeader>
             <CardContent>
@@ -137,7 +137,7 @@ const AdminOverview: React.FC = () => {
           
           <Card className="bg-red-50/50 dark:bg-red-950/20 border-red-100 dark:border-red-900 shadow-sm transition-all hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Pending</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Pending to contact</CardTitle>
               <Clock className="h-4 w-4 text-red-500" />
             </CardHeader>
             <CardContent>
