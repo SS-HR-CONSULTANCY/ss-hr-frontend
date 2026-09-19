@@ -675,13 +675,13 @@ export const adminApplicationRoutes: Route[] = [
     roles: ["admin"],
   },
   {
-    path: "accounts",
-    name: "Leads",
+    path: "follow-ups",
+    name: "Follow Ups",
     roles: ["admin"],
   },
   {
-    path: "follow-ups",
-    name: "Follow Ups",
+    path: "accounts",
+    name: "Leads Accounts",
     roles: ["admin"],
   },
   {
