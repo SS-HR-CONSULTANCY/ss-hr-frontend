@@ -10,9 +10,9 @@ import type {
   AdminFetchReportTableDataResponse,
   AdminFetchOverviewStatsDataResponse,
   AdminFetchReportPaymentsGraphsDataResponse,
-  AdminFetchComprehensiveOverviewResponse,
   AdminFetchEnquiryAnalyticsResponse,
-  AdminFetchEnquirySummaryStatsResponse
+  AdminFetchEnquirySummaryStatsResponse,
+  AdminFetchAccountLeadsResponse
 } from "@/types/apiTypes/adminApiTypes";
 import { axiosInstance } from "@/lib/axios";
 
@@ -71,4 +71,13 @@ export const AdminFetchReportTableData = async (
   return parseNewCommonResponse<AdminFetchReportTableDataResponse>(
     response.data,
   );
+};
+
+export const adminFetchAccountLeads = async (
+  accountName: string,
+): Promise<AdminFetchAccountLeadsResponse[]> => {
+  const response = await axiosInstance.get(
+    `/admin/enquiries/account/${encodeURIComponent(accountName)}`,
+  );
+  return response.data.data;
 };

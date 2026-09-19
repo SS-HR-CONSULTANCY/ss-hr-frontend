@@ -410,5 +410,17 @@ export interface AccountResponse {
   name: string;
   createdAt?: string;
   updatedAt?: string;
+  leadsCount?: number;
+}
+
+export interface AdminFetchAccountLeadsResponse {
+  _id: string;
+  name: string;
+  contactInfo: string;
+  subject: string;
+  status: string;
+  category: string;
+  source: "Website" | "WhatsApp";
+  createdAt: string;
 }
 

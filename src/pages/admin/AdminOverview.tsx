@@ -76,7 +76,7 @@ const AdminOverview: React.FC = () => {
         pendingCount += item.count;
       } else if (item.status === 'completed') {
         completedCount += item.count;
-      } else {
+      } else if (item.status !== 'not_interested' && item.status !== 'rejected_application') {
         otherCount += item.count;
       }
     });
