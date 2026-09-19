@@ -24,6 +24,9 @@ export const buildQueryParams = (
     if (params.pagination.searchQuery) {
       query.append("search", params.pagination.searchQuery);
     }
+    if (params.pagination.status && params.pagination.status !== "all") {
+      query.append("status", params.pagination.status);
+    }
   }
 
   return query.toString();

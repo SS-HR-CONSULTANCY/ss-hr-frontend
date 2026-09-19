@@ -16,7 +16,7 @@ import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
 import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
-import { CategorySelectCell } from "./AdminEnquiryTableColumns";
+import { CategorySelectCell, CommentCell } from "./AdminEnquiryTableColumns";
 
 const toTitleCase = (str: string) => {
   if (!str) return "";
@@ -115,138 +115,145 @@ const AccountSelectCell = ({ enquiry, handleUpdateAccount }: { enquiry: AdminFet
 export const AdminWhatsappEnquiryTableColumns = (
   handleEditEnquiry: (enquiry: AdminFetchAllWhatsappEnquiriesResponse) => void,
   handleDeleteEnquiry: (enquiryId: string) => void,
-  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "not_interested" | "processing_application" | "completed" | "rejected_application") => void,
+  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => void,
   handleUpdateAccount: (enquiryId: string, account: string | null) => void,
-  handleUpdateCategory: (enquiryId: string, category: string | null) => void
-): ColumnDef<AdminFetchAllWhatsappEnquiriesResponse>[] => [
-  {
-    accessorKey: "date",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
-    ),
-    cell: ({ row }) => {
-      return format(new Date(row.original.date), "dd MMM yyyy");
+  handleUpdateCategory: (enquiryId: string, category: string | null) => void,
+  handleUpdateComment: (enquiryId: string, comment: string | null) => void,
+  columnsType: "default" | "follow-up" = "default"
+): ColumnDef<AdminFetchAllWhatsappEnquiriesResponse>[] => {
+  const allColumns: ColumnDef<AdminFetchAllWhatsappEnquiriesResponse>[] = [
+    {
+      accessorKey: "date",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Date" />
+      ),
+      cell: ({ row }) => {
+        return format(new Date(row.original.date), "dd MMM yyyy");
+      },
     },
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-    cell: ({ row }) => {
-      return toTitleCase(row.original.name || "");
-    }
-  },
-  {
-    accessorKey: "contactNumber",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="WhatsApp Number" />
-    ),
-    cell: ({ row }) => {
-      const originalPhone = row.original.contactNumber;
-      if (!originalPhone) return <span className="text-gray-400 text-sm">N/A</span>;
-      
-      const formattedPhone = formatWhatsAppNumber(originalPhone);
-      const waNumber = formattedPhone.replace('+', '');
-      const message = encodeURIComponent("Hi, we are SS HR Consultancy. How can I help you?");
-      const waLink = `https://wa.me/${waNumber}?text=${message}`;
+    {
+      accessorKey: "name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Name" />
+      ),
+      cell: ({ row }) => {
+        const name = row.original.name || "";
+        return toTitleCase(name);
+      },
+    },
+    {
+      accessorKey: "contactNumber",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Phone / WhatsApp" />
+      ),
+      cell: ({ row }) => {
+        const originalPhone = row.original.contactNumber;
+        if (!originalPhone) return <span className="text-gray-400 text-sm">N/A</span>;
+        
+        const formattedPhone = formatWhatsAppNumber(originalPhone);
+        const waNumber = formattedPhone.replace('+', '');
+        const message = encodeURIComponent("Hi, we are SS HR Consultancy. How can I help you?");
+        const waLink = `https://wa.me/${waNumber}?text=${message}`;
 
-      const handleClick = () => {
-        handleUpdateStatus(row.original._id, "contacted");
-      };
+        const handleClick = () => {
+          handleUpdateStatus(row.original._id, "contacted");
+        };
 
-      return (
-        <a 
-          href={waLink} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          onClick={handleClick}
-          className="text-green-600 hover:text-green-700 visited:text-[#4682B4] dark:text-green-400 dark:hover:text-green-300 dark:visited:text-[#5c98ca] font-medium hover:underline flex items-center gap-1.5"
-          title="Message on WhatsApp"
-        >
-          <IconBrandWhatsapp size={16} />
-          {formattedPhone}
-        </a>
-      );
+        return (
+          <a 
+            href={waLink} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            onClick={handleClick}
+            className="text-green-600 hover:text-green-700 visited:text-[#4682B4] dark:text-green-400 dark:hover:text-green-300 dark:visited:text-[#5c98ca] font-medium hover:underline flex items-center gap-1.5"
+            title="Message on WhatsApp"
+          >
+            <IconBrandWhatsapp size={16} />
+            {formattedPhone}
+          </a>
+        );
+      },
     },
-  },
-  {
-    accessorKey: "subject",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Subject" />
-    ),
-    cell: ({ row }) => {
-      const subject = row.original.subject || "";
-      return (
-        <span title={subject}>
-          {subject.length > 20 ? subject.substring(0, 20) + "....." : subject}
-        </span>
-      );
+    {
+      accessorKey: "subject",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Subject" />
+      ),
+      cell: ({ row }) => {
+        const subject = row.original.subject || "";
+        return (
+          <span title={subject}>
+            {subject.length > 20 ? subject.substring(0, 20) + "....." : subject}
+          </span>
+        );
+      },
     },
-  },
-  {
-    accessorKey: "category",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Category" />
-    ),
-    cell: ({ row }) => {
-      return <CategorySelectCell enquiry={row.original} handleUpdateCategory={handleUpdateCategory} />;
+    {
+      accessorKey: "category",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Category" />
+      ),
+      cell: ({ row }) => {
+        return <CategorySelectCell enquiry={row.original} handleUpdateCategory={handleUpdateCategory} />;
+      },
     },
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <StatusSelectCell 
-          enquiry={row.original} 
-          handleUpdateStatus={handleUpdateStatus} 
+    {
+      accessorKey: "status",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Status" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <StatusSelectCell 
+            enquiry={row.original} 
+            handleUpdateStatus={handleUpdateStatus} 
+          />
+        );
+      },
+    },
+    {
+      accessorKey: "account",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Account" />
+      ),
+      cell: ({ row }) => (
+        <AccountSelectCell
+          enquiry={row.original}
+          handleUpdateAccount={handleUpdateAccount}
         />
-      );
+      ),
     },
-  },
-  {
-    accessorKey: "account",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Account" />
-    ),
-    cell: ({ row }) => (
-      <AccountSelectCell
-        enquiry={row.original}
-        handleUpdateAccount={handleUpdateAccount}
-      />
-    ),
-  },
-  {
-    accessorKey: "actions",
-    header: "Actions",
-    id: "actions",
-    cell: ({ row }) => {
-      const enquiry = row.original;
-      return (
-        <div className="flex flex-col items-center gap-1 py-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleEditEnquiry(enquiry)}
-            className="h-5 w-5 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
-            title="Edit Enquiry"
-          >
-            <Pencil className="h-2.5 w-2.5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleDeleteEnquiry(enquiry._id)}
-            className="h-5 w-5 p-0 text-red-500 cursor-pointer hover:bg-red-500/20 hover:text-red-500"
-            title="Delete Enquiry"
-          >
-            <Trash2 className="h-2.5 w-2.5" />
-          </Button>
-        </div>
-      );
+    {
+      accessorKey: "actions",
+      header: "Actions",
+      id: "actions",
+      cell: ({ row }) => {
+        const enquiry = row.original;
+        return (
+          <div className="flex flex-col items-center gap-1 py-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleEditEnquiry(enquiry)}
+              className="h-5 w-5 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
+              title="Edit Enquiry"
+            >
+              <Pencil className="h-2.5 w-2.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDeleteEnquiry(enquiry._id)}
+              className="h-5 w-5 p-0 text-red-500 cursor-pointer hover:bg-red-500/20 hover:text-red-500"
+              title="Delete Enquiry"
+            >
+              <Trash2 className="h-2.5 w-2.5" />
+            </Button>
+          </div>
+        );
+      },
     },
-  },
-];
+  ];
+
+  return allColumns;
+};

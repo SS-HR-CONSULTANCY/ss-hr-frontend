@@ -7,17 +7,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Eye, CalendarIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { StatusTimelinePopover } from "@/components/admin/adminEnquiry/StatusTimelinePopover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import type { AdminFetchAllEnquiriesResponse, AccountResponse } from "@/types/apiTypes/adminApiTypes";
 import { format } from "date-fns";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { adminFetchAllAccounts } from "@/utils/apis/adminAccountApi";
-import { adminFetchAllCategories, adminCreateCategory } from "@/utils/apis/adminCategoryApi";
 import { ENQUIRY_STATUS_CONFIG, getStatusConfig } from "@/utils/enquiryStatusConfig";
 import { Input } from "@/components/ui/input";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { adminFetchAllCategories, adminCreateCategory } from "@/utils/apis/adminCategoryApi";
 
 const toTitleCase = (str: string) => {
   if (!str) return "";
@@ -38,82 +40,7 @@ const formatWhatsAppNumber = (phone: string) => {
 
 const validStatuses = ["pending", "contacted", "need_follow_up", "not_interested", "processing_application", "completed", "rejected_application"];
 
-const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
-  const initialStatus = validStatuses.includes(enquiry.status?.toLowerCase()) 
-    ? enquiry.status.toLowerCase() 
-    : "pending";
-    
-  const [status, setStatus] = useState(initialStatus);
-
-  useEffect(() => {
-    const newStatus = validStatuses.includes(enquiry.status?.toLowerCase()) 
-      ? enquiry.status.toLowerCase() 
-      : "pending";
-    setStatus(newStatus);
-  }, [enquiry.status]);
-
-  const cfg = getStatusConfig(status);
-
-  return (
-    <Select
-      value={status}
-      onValueChange={(value) => {
-        setStatus(value);
-        handleUpdateStatus(enquiry._id, value as any);
-      }}
-    >
-      <SelectTrigger className={`w-[185px] h-8 text-xs font-semibold border ${cfg.triggerClass}`}>
-        <SelectValue placeholder="Status" />
-      </SelectTrigger>
-      <SelectContent>
-        {Object.entries(ENQUIRY_STATUS_CONFIG).map(([value, c]) => (
-          <SelectItem key={value} value={value}>
-            <span className="flex items-center gap-2">
-              <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${c.dotClass}`} />
-              {c.label}
-            </span>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-};
-
-const AccountSelectCell = ({ enquiry, handleUpdateAccount }: { enquiry: AdminFetchAllEnquiriesResponse; handleUpdateAccount: (id: string, account: string | null) => void }) => {
-  const [account, setAccount] = useState<string>(enquiry.account || "none");
-
-  useEffect(() => {
-    setAccount(enquiry.account || "none");
-  }, [enquiry.account]);
-
-  const { data: accountsData } = useQuery({
-    queryKey: ["adminAccounts"],
-    queryFn: adminFetchAllAccounts,
-  });
-  const accounts: AccountResponse[] = accountsData?.data ?? [];
-
-  return (
-    <Select
-      value={account}
-      onValueChange={(value) => {
-        setAccount(value);
-        handleUpdateAccount(enquiry._id, value === "none" ? null : value);
-      }}
-    >
-      <SelectTrigger className="w-[130px] h-8 text-xs">
-        <SelectValue placeholder="Assign..." />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="none"><span className="text-slate-400">— None —</span></SelectItem>
-        {accounts.map((a) => (
-          <SelectItem key={a._id} value={a.name}>{a.name}</SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-};
-
-export const CategorySelectCell = ({ enquiry, handleUpdateCategory }: { enquiry: any; handleUpdateCategory: (id: string, category: string | null) => void }) => {
+export const CategorySelectCell = ({ enquiry, handleUpdateCategory }: any) => {
   const [category, setCategory] = useState<string>((enquiry as any).category || "none");
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
@@ -135,7 +62,7 @@ export const CategorySelectCell = ({ enquiry, handleUpdateCategory }: { enquiry:
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
         setCategory(data.data.name);
-        handleUpdateCategory(enquiry._id, data.data.name);
+        handleUpdateCategory(enquiry, data.data.name);
         setIsAddingCategory(false);
         setNewCategoryName("");
       }
@@ -168,7 +95,7 @@ export const CategorySelectCell = ({ enquiry, handleUpdateCategory }: { enquiry:
         value={category}
         onValueChange={(value) => {
           setCategory(value);
-          handleUpdateCategory(enquiry._id, value === "none" ? null : value);
+          handleUpdateCategory(enquiry, value === "none" ? null : value);
         }}
       >
         <SelectTrigger className="w-[130px] h-8 text-xs">
@@ -188,12 +115,55 @@ export const CategorySelectCell = ({ enquiry, handleUpdateCategory }: { enquiry:
   );
 };
 
-export const CommentCell = ({ enquiry, handleUpdateComment }: { enquiry: any; handleUpdateComment: (id: string, comment: string | null) => void }) => {
+const StatusSelectCell = ({ enquiry, handleUpdateStatus }: any) => {
+  const initialStatus = validStatuses.includes(enquiry.status?.toLowerCase()) 
+    ? enquiry.status.toLowerCase() 
+    : "need_follow_up";
+    
+  const [status, setStatus] = useState(initialStatus);
+
+  useEffect(() => {
+    const newStatus = validStatuses.includes(enquiry.status?.toLowerCase()) 
+      ? enquiry.status.toLowerCase() 
+      : "need_follow_up";
+    setStatus(newStatus);
+  }, [enquiry.status]);
+
+  const cfg = getStatusConfig(status);
+
+  return (
+    <Select
+      value={status}
+      onValueChange={(value) => {
+        setStatus(value);
+        handleUpdateStatus(enquiry, value as any);
+      }}
+    >
+      <SelectTrigger className={`w-[185px] h-8 text-xs font-semibold border ${cfg.triggerClass}`}>
+        <SelectValue placeholder="Status" />
+      </SelectTrigger>
+      <SelectContent>
+        {Object.entries(ENQUIRY_STATUS_CONFIG)
+          .filter(([value]) => !['pending', 'contacted'].includes(value))
+          .map(([value, c]) => (
+          <SelectItem key={value} value={value}>
+            <span className="flex items-center gap-2">
+              <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${c.dotClass}`} />
+              {c.label}
+            </span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
+export const CommentCell = ({ enquiry, handleUpdateComment }: any) => {
   const [comment, setComment] = useState(enquiry.comment || "");
   const [isEditing, setIsEditing] = useState(false);
 
   const handleSave = () => {
-    handleUpdateComment(enquiry._id, comment);
+    handleUpdateComment(enquiry, comment);
     setIsEditing(false);
   };
 
@@ -224,16 +194,54 @@ export const CommentCell = ({ enquiry, handleUpdateComment }: { enquiry: any; ha
   );
 };
 
-export const AdminEnquiryTableColumns = (
-  handleViewEnquiry: (enquiryId: string) => void,
-  handleDeleteEnquiry: (enquiryId: string) => void,
-  handleUpdateStatus: (enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "not_interested" | "processing_application" | "completed" | "rejected_application") => void,
-  handleUpdateAccount: (enquiryId: string, account: string | null) => void,
-  handleUpdateCategory: (enquiryId: string, category: string | null) => void,
-  handleUpdateComment: (enquiryId: string, comment: string | null) => void,
-  columnsType: "default" | "follow-up" = "default"
-): ColumnDef<AdminFetchAllEnquiriesResponse>[] => {
-  const allColumns: ColumnDef<AdminFetchAllEnquiriesResponse>[] = [
+export const ReminderCell = ({ enquiry, handleUpdateReminder }: any) => {
+  const [date, setDate] = useState<Date | undefined>(
+    enquiry.reminder ? new Date(enquiry.reminder) : undefined
+  );
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    handleUpdateReminder(enquiry, selectedDate ? selectedDate.toISOString() : null);
+    setIsOpen(false);
+  };
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-[130px] justify-start text-left font-normal h-8 text-xs px-2",
+            !date && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-3.5 w-3.5" />
+          {date ? format(date, "dd-MM-yy") : <span>Set reminder</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={handleSelect}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+export const AdminMixedFollowUpTableColumns = (
+  handleViewWebEnquiry: (enquiryId: string) => void,
+  handleEditWhatsappEnquiry: (enquiry: any) => void,
+  handleDeleteEnquiry: (enquiry: any) => void,
+  handleUpdateStatus: (enquiry: any, status: any) => void,
+  handleUpdateCategory: (enquiry: any, category: string | null) => void,
+  handleUpdateComment: (enquiry: any, comment: string | null) => void,
+  handleUpdateReminder: (enquiry: any, reminder: string | null) => void
+): ColumnDef<any>[] => {
+  return [
     {
       accessorKey: "date",
       header: ({ column }) => (
@@ -249,9 +257,10 @@ export const AdminEnquiryTableColumns = (
         <DataTableColumnHeader column={column} title="Name" />
       ),
       cell: ({ row }) => {
-        const { firstName, lastName } = row.original;
-        const fullName = `${firstName || ""} ${lastName || ""}`.trim();
-        return toTitleCase(fullName);
+        const name = row.original.enquiryType === 'Website' 
+          ? `${row.original.firstName || ""} ${row.original.lastName || ""}`.trim()
+          : row.original.name;
+        return toTitleCase(name || "");
       },
     },
     {
@@ -260,7 +269,7 @@ export const AdminEnquiryTableColumns = (
         <DataTableColumnHeader column={column} title="Phone / WhatsApp" />
       ),
       cell: ({ row }) => {
-        const originalPhone = row.original.phone;
+        const originalPhone = row.original.enquiryType === 'Website' ? row.original.phone : row.original.contactNumber;
         if (!originalPhone) return <span className="text-gray-400 text-sm">N/A</span>;
         
         const formattedPhone = formatWhatsAppNumber(originalPhone);
@@ -269,7 +278,7 @@ export const AdminEnquiryTableColumns = (
         const waLink = `https://wa.me/${waNumber}?text=${message}`;
 
         const handleClick = () => {
-          handleUpdateStatus(row.original._id, "contacted");
+          handleUpdateStatus(row.original, "contacted");
         };
 
         return (
@@ -288,26 +297,17 @@ export const AdminEnquiryTableColumns = (
       },
     },
     {
-      accessorKey: "subject",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Subject" />
-      ),
-      cell: ({ row }) => {
-        const subject = row.original.subject || "";
-        return (
-          <span title={subject}>
-            {subject.length > 20 ? subject.substring(0, 20) + "....." : subject}
-          </span>
-        );
-      },
-    },
-    {
       accessorKey: "category",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Category" />
       ),
       cell: ({ row }) => {
-        return <CategorySelectCell enquiry={row.original} handleUpdateCategory={handleUpdateCategory} />;
+        const category = row.original.category;
+        return (
+          <span className={category ? "font-medium" : "text-slate-400 italic"}>
+            {category || "— None —"}
+          </span>
+        );
       },
     },
     {
@@ -324,16 +324,38 @@ export const AdminEnquiryTableColumns = (
         );
       },
     },
+
     {
-      accessorKey: "account",
+      accessorKey: "comment",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Account" />
+        <DataTableColumnHeader column={column} title="Comment" />
       ),
       cell: ({ row }) => (
-        <AccountSelectCell
+        <CommentCell
           enquiry={row.original}
-          handleUpdateAccount={handleUpdateAccount}
+          handleUpdateComment={handleUpdateComment}
         />
+      ),
+    },
+    {
+      accessorKey: "reminder",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Reminder" />
+      ),
+      cell: ({ row }) => (
+        <ReminderCell
+          enquiry={row.original}
+          handleUpdateReminder={handleUpdateReminder}
+        />
+      ),
+    },
+    {
+      accessorKey: "timeline",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Timeline" />
+      ),
+      cell: ({ row }) => (
+        <StatusTimelinePopover statusHistory={row.original.statusHistory} />
       ),
     },
     {
@@ -344,19 +366,31 @@ export const AdminEnquiryTableColumns = (
         const enquiry = row.original;
         return (
           <div className="flex flex-col items-center gap-1 py-1">
+            {enquiry.enquiryType === 'Website' ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleViewWebEnquiry(enquiry._id)}
+                className="h-5 w-5 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
+                title="View Details"
+              >
+                <Eye className="h-2.5 w-2.5" />
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleEditWhatsappEnquiry(enquiry)}
+                className="h-5 w-5 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
+                title="Edit Enquiry"
+              >
+                <Pencil className="h-2.5 w-2.5" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleViewEnquiry(enquiry._id)}
-              className="h-5 w-5 p-0 text-blue-500 cursor-pointer hover:bg-blue-500/20 hover:text-blue-500"
-              title="View Details"
-            >
-              <Eye className="h-2.5 w-2.5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleDeleteEnquiry(enquiry._id)}
+              onClick={() => handleDeleteEnquiry(enquiry)}
               className="h-5 w-5 p-0 text-red-500 cursor-pointer hover:bg-red-500/20 hover:text-red-500"
               title="Delete Enquiry"
             >
@@ -367,6 +401,4 @@ export const AdminEnquiryTableColumns = (
       },
     },
   ];
-
-  return allColumns;
 };

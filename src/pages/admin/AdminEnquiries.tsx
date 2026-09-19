@@ -1,7 +1,10 @@
 import React, { useMemo, useCallback, useRef } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminEnquiryTableColumns } from "@/components/table/tableColumns/AdminEnquiryTableColumns";
-import { adminFetchAllEnquiries, adminDeleteEnquiry, adminUpdateEnquiryStatus, adminUpdateEnquiryAccount, adminUpdateEnquiryCategory } from "@/utils/apis/adminEnquiryApi";
+import { adminFetchAllEnquiries, adminDeleteEnquiry,  adminUpdateEnquiryStatus,
+  adminUpdateEnquiryAccount,
+  adminUpdateEnquiryCategory
+} from "@/utils/apis/adminEnquiryApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +12,12 @@ import type { AppDispatch, RootState } from "@/store/store";
 import { openViewEnquiryDetails } from "@/store/slices/enquirySlice";
 import EnquiryDetailsModal from "@/components/admin/adminEnquiry/EnquiryDetailsModal";
 
-const AdminEnquiries: React.FC = () => {
+interface AdminEnquiriesProps {
+  defaultStatus?: "need_follow_up";
+  columnsType?: "default" | "follow-up";
+}
+
+const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsType = "default" }) => {
   const dispatch = useDispatch<AppDispatch>();
   const isViewEnquiryDetailsOpen = useSelector((state: RootState) => state.enquiry.isViewEnquiryDetailsOpen);
   const queryClient = useQueryClient();
@@ -61,7 +69,7 @@ const AdminEnquiries: React.FC = () => {
   updateStatusMutateRef.current = updateStatusMutation.mutate;
 
   const fetchEnquiries = async (params?: any) => {
-    return await adminFetchAllEnquiries(params);
+    return await adminFetchAllEnquiries({ ...params, pagination: { ...params?.pagination, status: defaultStatus } });
   };
 
   const handleViewEnquiry = useCallback((enquiryId: string) => {
@@ -151,13 +159,15 @@ const AdminEnquiries: React.FC = () => {
     updateCategoryMutateRef.current({ enquiryId, category });
   }, []);
 
+
   const columns = useMemo(() => AdminEnquiryTableColumns(
     handleViewEnquiry,
     handleDeleteEnquiry,
     handleUpdateStatus,
     handleUpdateAccount,
-    handleUpdateCategory
-  ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory]);
+    handleUpdateCategory,
+    columnsType
+  ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory, columnsType]);
 
   return (
     <div className="px-2 sm:px-6 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">

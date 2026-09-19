@@ -389,6 +389,8 @@ export interface AdminFetchAllEnquiriesResponse {
   message: string;
   status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
   account?: string | null;
+  reminder?: string | null;
+  statusHistory?: { status: string; date: string }[];
   createdAt: string;
   updatedAt: string;
 }
@@ -401,6 +403,8 @@ export interface AdminFetchAllWhatsappEnquiriesResponse {
   status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
   date: string;
   account?: string | null;
+  reminder?: string | null;
+  statusHistory?: { status: string; date: string }[];
   createdAt: string;
   updatedAt: string;
 }
@@ -421,6 +425,7 @@ export interface AdminFetchAccountLeadsResponse {
   status: string;
   category: string;
   source: "Website" | "WhatsApp";
+  reminder?: string | null;
   createdAt: string;
 }
 

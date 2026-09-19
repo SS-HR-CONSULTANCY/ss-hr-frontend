@@ -680,8 +680,8 @@ export const adminApplicationRoutes: Route[] = [
     roles: ["admin"],
   },
   {
-    path: "packages",
-    name: "Packages",
+    path: "follow-ups",
+    name: "Follow Ups",
     roles: ["admin"],
   },
   {

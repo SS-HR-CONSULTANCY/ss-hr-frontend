@@ -20,6 +20,7 @@ import {
   BriefcaseBusiness,
   CreditCard,
   UserCog,
+  PhoneCall,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -59,6 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "ticket-status": <Ticket />,
     "tour-package-status": <Plane />,
     "job-hunting-package-status": <BriefcaseBusiness />,
+    "follow-ups": <PhoneCall />,
   };
 
   const getIcon = (name: string): React.ReactNode => {

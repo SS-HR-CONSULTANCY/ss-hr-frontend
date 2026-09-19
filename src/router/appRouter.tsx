@@ -24,7 +24,7 @@ const AboutUsPage = lazy(() => import("@/pages/common/AboutUsPage"));
 const ContactPage = lazy(() => import("@/pages/common/ContactPage"));
 const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
-const AdminPackages = lazy(() => import("@/pages/admin/AdminPackages"));
+const AdminFollowUps = lazy(() => import("@/pages/admin/AdminFollowUps"));
 const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
 const LandingLayout = lazy(() => import("@/pages/common/LandingLayout"));
 const EmailVerifyPage = lazy(() => import("@/pages/auth/EmailVerifyPage"));
@@ -248,10 +248,10 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: "packages",
+        path: "follow-ups",
         element: (
           <ProtectedRoute requiredRole={["admin"]}>
-            <AdminPackages showButton />
+            <AdminFollowUps />
           </ProtectedRoute>
         ),
       },

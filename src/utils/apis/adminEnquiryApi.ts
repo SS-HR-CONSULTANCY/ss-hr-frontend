@@ -38,6 +38,27 @@ export const adminUpdateEnquiryAccount = async (props: {
   });
   return response.data;
 };
+
+export const adminUpdateEnquiryComment = async (props: {
+  enquiryId: string;
+  comment: string | null;
+}): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.patch(`/admin/enquiries/${props.enquiryId}/comment`, {
+    comment: props.comment,
+  });
+  return response.data;
+};
+
+export const adminUpdateEnquiryReminder = async (props: {
+  enquiryId: string;
+  reminder: string | null;
+}): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.patch(`/admin/enquiries/${props.enquiryId}/reminder`, {
+    reminder: props.reminder,
+  });
+  return response.data;
+};
+
 export const adminUpdateEnquiryCategory = async (props: {
   enquiryId: string;
   category: string | null;

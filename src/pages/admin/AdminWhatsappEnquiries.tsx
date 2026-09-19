@@ -9,7 +9,12 @@ import type { AdminFetchAllWhatsappEnquiriesResponse } from "@/types/apiTypes/ad
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-const AdminWhatsappEnquiries: React.FC = () => {
+interface AdminWhatsappEnquiriesProps {
+  defaultStatus?: "need_follow_up";
+  columnsType?: "default" | "follow-up";
+}
+
+const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ defaultStatus, columnsType = "default" }) => {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEnquiry, setSelectedEnquiry] = useState<AdminFetchAllWhatsappEnquiriesResponse | null>(null);
@@ -60,7 +65,7 @@ const AdminWhatsappEnquiries: React.FC = () => {
   updateStatusMutateRef.current = updateStatusMutation.mutate;
 
   const fetchEnquiries = async (params?: any) => {
-    return await adminFetchAllWhatsappEnquiries(params);
+    return await adminFetchAllWhatsappEnquiries({ ...params, pagination: { ...params?.pagination, status: defaultStatus } });
   };
 
   const handleEditEnquiry = useCallback((enquiry: AdminFetchAllWhatsappEnquiriesResponse) => {
@@ -163,8 +168,9 @@ const AdminWhatsappEnquiries: React.FC = () => {
     handleDeleteEnquiry,
     handleUpdateStatus,
     handleUpdateAccount,
-    handleUpdateCategory
-  ), [handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory]);
+    handleUpdateCategory,
+    columnsType
+  ), [handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory, columnsType]);
 
   return (
     <div className="px-2 sm:px-6 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">
