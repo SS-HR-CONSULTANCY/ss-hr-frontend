@@ -162,6 +162,32 @@ const AdminMixedFollowUps: React.FC = () => {
     onError: (error: any) => toast.error(error?.response?.data?.message || "Failed to update reminder"),
   });
 
+  // Stable refs for mutations to avoid memoized columns going stale
+  const deleteWebMutateRef = useRef(deleteWebMutation.mutate);
+  deleteWebMutateRef.current = deleteWebMutation.mutate;
+  const deleteWaMutateRef = useRef(deleteWaMutation.mutate);
+  deleteWaMutateRef.current = deleteWaMutation.mutate;
+
+  const updateWebStatusMutateRef = useRef(updateWebStatusMutation.mutate);
+  updateWebStatusMutateRef.current = updateWebStatusMutation.mutate;
+  const updateWaStatusMutateRef = useRef(updateWaStatusMutation.mutate);
+  updateWaStatusMutateRef.current = updateWaStatusMutation.mutate;
+
+  const updateWebCategoryMutateRef = useRef(updateWebCategoryMutation.mutate);
+  updateWebCategoryMutateRef.current = updateWebCategoryMutation.mutate;
+  const updateWaCategoryMutateRef = useRef(updateWaCategoryMutation.mutate);
+  updateWaCategoryMutateRef.current = updateWaCategoryMutation.mutate;
+
+  const updateWebCommentMutateRef = useRef(updateWebCommentMutation.mutate);
+  updateWebCommentMutateRef.current = updateWebCommentMutation.mutate;
+  const updateWaCommentMutateRef = useRef(updateWaCommentMutation.mutate);
+  updateWaCommentMutateRef.current = updateWaCommentMutation.mutate;
+
+  const updateWebReminderMutateRef = useRef(updateWebReminderMutation.mutate);
+  updateWebReminderMutateRef.current = updateWebReminderMutation.mutate;
+  const updateWaReminderMutateRef = useRef(updateWaReminderMutation.mutate);
+  updateWaReminderMutateRef.current = updateWaReminderMutation.mutate;
+
   // Handlers
   const handleViewWebEnquiry = useCallback((enquiryId: string) => {
     dispatch(openViewEnquiryDetails(enquiryId));
@@ -174,30 +200,30 @@ const AdminMixedFollowUps: React.FC = () => {
 
   const handleDeleteEnquiry = useCallback((enquiry: any) => {
     if (window.confirm("Are you sure you want to delete this enquiry?")) {
-      if (enquiry.enquiryType === 'Website') deleteWebMutation.mutate(enquiry._id);
-      else deleteWaMutation.mutate(enquiry._id);
+      if (enquiry.enquiryType === 'Website') deleteWebMutateRef.current(enquiry._id);
+      else deleteWaMutateRef.current(enquiry._id);
     }
-  }, [deleteWebMutation, deleteWaMutation]);
+  }, []);
 
   const handleUpdateStatus = useCallback((enquiry: any, status: any) => {
-    if (enquiry.enquiryType === 'Website') updateWebStatusMutation.mutate({ enquiryId: enquiry._id, status });
-    else updateWaStatusMutation.mutate({ enquiryId: enquiry._id, status });
-  }, [updateWebStatusMutation, updateWaStatusMutation]);
+    if (enquiry.enquiryType === 'Website') updateWebStatusMutateRef.current({ enquiryId: enquiry._id, status });
+    else updateWaStatusMutateRef.current({ enquiryId: enquiry._id, status });
+  }, []);
 
   const handleUpdateCategory = useCallback((enquiry: any, category: string | null) => {
-    if (enquiry.enquiryType === 'Website') updateWebCategoryMutation.mutate({ enquiryId: enquiry._id, category });
-    else updateWaCategoryMutation.mutate({ enquiryId: enquiry._id, category });
-  }, [updateWebCategoryMutation, updateWaCategoryMutation]);
+    if (enquiry.enquiryType === 'Website') updateWebCategoryMutateRef.current({ enquiryId: enquiry._id, category });
+    else updateWaCategoryMutateRef.current({ enquiryId: enquiry._id, category });
+  }, []);
 
   const handleUpdateComment = useCallback((enquiry: any, comment: string | null) => {
-    if (enquiry.enquiryType === 'Website') updateWebCommentMutation.mutate({ enquiryId: enquiry._id, comment });
-    else updateWaCommentMutation.mutate({ enquiryId: enquiry._id, comment });
-  }, [updateWebCommentMutation, updateWaCommentMutation]);
+    if (enquiry.enquiryType === 'Website') updateWebCommentMutateRef.current({ enquiryId: enquiry._id, comment });
+    else updateWaCommentMutateRef.current({ enquiryId: enquiry._id, comment });
+  }, []);
 
   const handleUpdateReminder = useCallback((enquiry: any, reminder: string | null) => {
-    if (enquiry.enquiryType === 'Website') updateWebReminderMutation.mutate({ enquiryId: enquiry._id, reminder });
-    else updateWaReminderMutation.mutate({ enquiryId: enquiry._id, reminder });
-  }, [updateWebReminderMutation, updateWaReminderMutation]);
+    if (enquiry.enquiryType === 'Website') updateWebReminderMutateRef.current({ enquiryId: enquiry._id, reminder });
+    else updateWaReminderMutateRef.current({ enquiryId: enquiry._id, reminder });
+  }, []);
 
   const columns = useMemo(() => AdminMixedFollowUpTableColumns(
     handleViewWebEnquiry,
