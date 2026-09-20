@@ -2,6 +2,7 @@ import { axiosInstance } from "@/lib/axios";
 import type { ApiBaseResponse, FetchFunctionParams } from "../../types/commonTypes";
 import type { AdminFetchAllWhatsappEnquiriesResponse } from "../../types/apiTypes/adminApiTypes";
 import { buildQueryParams } from "../helpers/apiHelpers";
+import type { EnquiryStatusKey } from "../enquiryStatusConfig";
 
 export const adminCreateWhatsappEnquiry = async (
   data: Partial<AdminFetchAllWhatsappEnquiriesResponse>
@@ -26,7 +27,7 @@ export const adminUpdateWhatsappEnquiry = async (
 
 export const adminUpdateWhatsappEnquiryStatus = async (props: {
   enquiryId: string;
-  status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed";
+  status: EnquiryStatusKey;
 }): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.patch(`/admin/whatsapp-enquiries/${props.enquiryId}/status`, {
     status: props.status,

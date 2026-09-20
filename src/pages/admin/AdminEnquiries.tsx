@@ -3,7 +3,8 @@ import CommonTable from "@/components/common/CommonTable";
 import { AdminEnquiryTableColumns } from "@/components/table/tableColumns/AdminEnquiryTableColumns";
 import { adminFetchAllEnquiries, adminDeleteEnquiry,  adminUpdateEnquiryStatus,
   adminUpdateEnquiryAccount,
-  adminUpdateEnquiryCategory
+  adminUpdateEnquiryCategory,
+  adminUpdateEnquiryComment
 } from "@/utils/apis/adminEnquiryApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -11,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
 import { openViewEnquiryDetails } from "@/store/slices/enquirySlice";
 import EnquiryDetailsModal from "@/components/admin/adminEnquiry/EnquiryDetailsModal";
+import type { EnquiryStatusKey } from "@/utils/enquiryStatusConfig";
 
 interface AdminEnquiriesProps {
   defaultStatus?: "need_follow_up";
@@ -36,7 +38,7 @@ const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsT
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed" }) => 
+    mutationFn: (data: { enquiryId: string; status: EnquiryStatusKey }) => 
       adminUpdateEnquiryStatus(data),
     onMutate: async (newStatus) => {
       await queryClient.cancelQueries({ queryKey: ["adminEnquiries"] });
@@ -83,7 +85,7 @@ const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsT
   }, [deleteMutation]);
 
   // Stable reference – always dispatches via the ref, so columns never stale.
-  const handleUpdateStatus = useCallback((enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => {
+  const handleUpdateStatus = useCallback((enquiryId: string, status: EnquiryStatusKey) => {
     updateStatusMutateRef.current({ enquiryId, status });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // intentionally empty – ref is always current
@@ -159,6 +161,40 @@ const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsT
     updateCategoryMutateRef.current({ enquiryId, category });
   }, []);
 
+  const updateCommentMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; comment: string | null }) => adminUpdateEnquiryComment(data),
+    onMutate: async (newComment) => {
+      await queryClient.cancelQueries({ queryKey: ["adminEnquiries"] });
+      const previousEnquiries = queryClient.getQueryData(["adminEnquiries"]);
+      queryClient.setQueryData(["adminEnquiries"], (old: any) => {
+        if (!old || !old.data) return old;
+        return {
+          ...old,
+          data: old.data.map((enq: any) =>
+            enq._id === newComment.enquiryId ? { ...enq, comment: newComment.comment } : enq
+          ),
+        };
+      });
+      return { previousEnquiries };
+    },
+    onError: (error: any, _newComment, context: any) => {
+      if (context?.previousEnquiries) {
+        queryClient.setQueryData(["adminEnquiries"], context.previousEnquiries);
+      }
+      toast.error(error?.response?.data?.message || "Failed to update comment");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminEnquiries"] });
+    },
+  });
+
+  const updateCommentMutateRef = useRef(updateCommentMutation.mutate);
+  updateCommentMutateRef.current = updateCommentMutation.mutate;
+
+  const handleUpdateComment = useCallback((enquiryId: string, comment: string | null) => {
+    updateCommentMutateRef.current({ enquiryId, comment });
+  }, []);
+
 
   const columns = useMemo(() => AdminEnquiryTableColumns(
     handleViewEnquiry,
@@ -166,11 +202,12 @@ const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsT
     handleUpdateStatus,
     handleUpdateAccount,
     handleUpdateCategory,
+    handleUpdateComment,
     columnsType
-  ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory, columnsType]);
+  ), [handleViewEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory, handleUpdateComment, columnsType]);
 
   return (
-    <div className="px-2 sm:px-6 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">
+    <div className="px-2 sm:px-6 pb-2 sm:pb-6 -mt-2 w-full max-w-[100vw] overflow-hidden">
 
       <CommonTable
         column={columns}

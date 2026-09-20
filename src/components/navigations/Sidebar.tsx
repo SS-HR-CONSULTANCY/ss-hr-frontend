@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "whatsapp-enquiries": <IconBrandWhatsapp />,
     payments: <HandCoins />,
     "payment-tracking": <CreditCard />,
-    "leads": <UserCog />,
+    "leads-accounts": <UserCog />,
     reviews: <Star />,
     reports: <Notebook />,
     logout: <LogOut />,

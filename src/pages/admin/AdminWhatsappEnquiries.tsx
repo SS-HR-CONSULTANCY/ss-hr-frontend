@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useMemo, useRef } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminWhatsappEnquiryTableColumns } from "@/components/table/tableColumns/AdminWhatsappEnquiryTableColumns";
-import { adminFetchAllWhatsappEnquiries, adminDeleteWhatsappEnquiry, adminUpdateWhatsappEnquiryStatus, adminUpdateWhatsappEnquiry } from "@/utils/apis/adminWhatsappEnquiryApi";
+import { adminFetchAllWhatsappEnquiries, adminDeleteWhatsappEnquiry, adminUpdateWhatsappEnquiryStatus, adminUpdateWhatsappEnquiry, adminUpdateWhatsappEnquiryComment } from "@/utils/apis/adminWhatsappEnquiryApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import WhatsappEnquiryModal from "@/components/admin/whatsappEnquiry/WhatsappEnquiryModal";
 import type { AdminFetchAllWhatsappEnquiriesResponse } from "@/types/apiTypes/adminApiTypes";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import type { EnquiryStatusKey } from "@/utils/enquiryStatusConfig";
 
 interface AdminWhatsappEnquiriesProps {
   defaultStatus?: "need_follow_up";
@@ -33,7 +34,7 @@ const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ default
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: (data: { enquiryId: string; status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed" }) => 
+    mutationFn: (data: { enquiryId: string; status: EnquiryStatusKey }) => 
       adminUpdateWhatsappEnquiryStatus(data),
     onMutate: async (newStatus) => {
       await queryClient.cancelQueries({ queryKey: ["adminWhatsappEnquiries"] });
@@ -85,7 +86,7 @@ const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ default
   }, [deleteMutation]);
 
   // Stable – always calls via ref, never stale inside useMemo columns.
-  const handleUpdateStatus = useCallback((enquiryId: string, status: "pending" | "contacted" | "need_follow_up" | "processing_application" | "completed") => {
+  const handleUpdateStatus = useCallback((enquiryId: string, status: EnquiryStatusKey) => {
     updateStatusMutateRef.current({ enquiryId, status });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // intentionally empty dep array
@@ -163,17 +164,52 @@ const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ default
     updateCategoryMutateRef.current({ enquiryId, category });
   }, []);
 
+  const updateCommentMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; comment: string | null }) => adminUpdateWhatsappEnquiryComment(data),
+    onMutate: async (newComment) => {
+      await queryClient.cancelQueries({ queryKey: ["adminWhatsappEnquiries"] });
+      const previousEnquiries = queryClient.getQueryData(["adminWhatsappEnquiries"]);
+      queryClient.setQueryData(["adminWhatsappEnquiries"], (old: any) => {
+        if (!old || !old.data) return old;
+        return {
+          ...old,
+          data: old.data.map((enq: any) =>
+            enq._id === newComment.enquiryId ? { ...enq, comment: newComment.comment } : enq
+          ),
+        };
+      });
+      return { previousEnquiries };
+    },
+    onError: (error: any, _newComment, context: any) => {
+      if (context?.previousEnquiries) {
+        queryClient.setQueryData(["adminWhatsappEnquiries"], context.previousEnquiries);
+      }
+      toast.error(error?.response?.data?.message || "Failed to update comment");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminWhatsappEnquiries"] });
+    },
+  });
+
+  const updateCommentMutateRef = useRef(updateCommentMutation.mutate);
+  updateCommentMutateRef.current = updateCommentMutation.mutate;
+
+  const handleUpdateComment = useCallback((enquiryId: string, comment: string | null) => {
+    updateCommentMutateRef.current({ enquiryId, comment });
+  }, []);
+
   const columns = useMemo(() => AdminWhatsappEnquiryTableColumns(
     handleEditEnquiry,
     handleDeleteEnquiry,
     handleUpdateStatus,
     handleUpdateAccount,
     handleUpdateCategory,
+    handleUpdateComment,
     columnsType
-  ), [handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory, columnsType]);
+  ), [handleEditEnquiry, handleDeleteEnquiry, handleUpdateStatus, handleUpdateAccount, handleUpdateCategory, handleUpdateComment, columnsType]);
 
   return (
-    <div className="px-2 sm:px-6 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">
+    <div className="px-2 sm:px-6 pb-2 sm:pb-6 -mt-2 w-full max-w-[100vw] overflow-hidden">
       <CommonTable
         column={columns}
         columnsCount={columns.length}
