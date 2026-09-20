@@ -32,11 +32,47 @@ import type { AppDispatch, RootState } from "@/store/store";
 import type { SidebarProps } from "@/types/componentTypes/sidebarTypes";
 import { toggleAdminSidebar } from "@/store/slices/appSlice";
 
+import { useQuery } from "@tanstack/react-query";
+import { adminFetchAllEnquiries } from "@/utils/apis/adminEnquiryApi";
+import { adminFetchAllWhatsappEnquiries } from "@/utils/apis/adminWhatsappEnquiryApi";
+
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
   const dispatch = useDispatch<AppDispatch>();
   const { sidebarOpen } = useSelector((state: RootState) => state.app);
   const { user } = useSelector((state: RootState) => state.auth);
+
+  const { data: todayFollowUpsCount = 0 } = useQuery({
+    queryKey: ["adminMixedFollowUpsTodayCount"],
+    queryFn: async () => {
+      try {
+        const [webRes, waRes] = await Promise.all([
+          adminFetchAllEnquiries({ 
+            pagination: { page: 1, limit: 1000, status: "need_follow_up" } 
+          }),
+          adminFetchAllWhatsappEnquiries({ 
+            pagination: { page: 1, limit: 1000, status: "need_follow_up" } 
+          })
+        ]);
+        const webData = webRes?.data || [];
+        const waData = waRes?.data || [];
+        const merged = [...webData, ...waData];
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        return merged.filter((item: any) => {
+          if (!item.reminder) return false;
+          const reminderDate = new Date(item.reminder);
+          reminderDate.setHours(0, 0, 0, 0);
+          return reminderDate.getTime() === today.getTime();
+        }).length;
+      } catch (e) {
+        return 0;
+      }
+    },
+    refetchInterval: 60000, // Refresh every minute
+  });
 
   const iconMap: Record<string, React.ReactNode> = {
     overview: <LayoutDashboard />,
@@ -85,6 +121,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
           </li>
           
           {routes.map((route) => {
+            const normalizedName = normalizeRouteName(route.name);
+            const badge = normalizedName === "follow-ups" ? todayFollowUpsCount : undefined;
             return (
               <NavLink
                 key={route.path}
@@ -101,6 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                   icon={getIcon(route.name)}
                   text={route.name}
                   sidebarOpen={true}
+                  badge={badge}
                 />
               </NavLink>
             );

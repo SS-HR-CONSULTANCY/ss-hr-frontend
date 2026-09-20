@@ -162,6 +162,10 @@ export const CommentCell = ({ enquiry, handleUpdateComment }: any) => {
   const [comment, setComment] = useState(enquiry.comment || "");
   const [isEditing, setIsEditing] = useState(false);
 
+  useEffect(() => {
+    setComment(enquiry.comment || "");
+  }, [enquiry.comment, enquiry._id]);
+
   const handleSave = () => {
     handleUpdateComment(enquiry, comment);
     setIsEditing(false);
@@ -200,6 +204,10 @@ export const ReminderCell = ({ enquiry, handleUpdateReminder }: any) => {
   );
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    setDate(enquiry.reminder ? new Date(enquiry.reminder) : undefined);
+  }, [enquiry.reminder, enquiry._id]);
+
   const handleSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     handleUpdateReminder(enquiry, selectedDate ? selectedDate.toISOString() : null);
@@ -225,6 +233,7 @@ export const ReminderCell = ({ enquiry, handleUpdateReminder }: any) => {
           mode="single"
           selected={date}
           onSelect={handleSelect}
+          disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
           initialFocus
         />
       </PopoverContent>

@@ -4,4 +4,5 @@ export interface SingleTabProps {
   sidebarOpen: boolean;
   onClick?: () => void;
   className?: string;
+  badge?: number | string;
 }
