@@ -21,6 +21,7 @@ import {
   CreditCard,
   UserCog,
   PhoneCall,
+  Receipt,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -84,7 +85,6 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     enquiries: <Mail />,
     "whatsapp-enquiries": <IconBrandWhatsapp />,
     payments: <HandCoins />,
-    "payment-tracking": <CreditCard />,
     "leads-accounts": <UserCog />,
     reviews: <Star />,
     reports: <Notebook />,
@@ -97,6 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "tour-package-status": <Plane />,
     "job-hunting-package-status": <BriefcaseBusiness />,
     "follow-ups": <PhoneCall />,
+    "bills-&-payments": <Receipt />,
   };
 
   const getIcon = (name: string): React.ReactNode => {

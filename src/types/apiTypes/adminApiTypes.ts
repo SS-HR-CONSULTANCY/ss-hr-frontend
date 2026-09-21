@@ -431,3 +431,18 @@ export interface AdminFetchAccountLeadsResponse {
   createdAt: string;
 }
 
+export interface AdminFetchAllBillsResponse {
+  _id: string; // Enquiry ID
+  enquiryType: string;
+  name: string;
+  phone: string;
+  date: string;
+  billId: string | null;
+  invoiceNumber: string | null;
+  currency: "AED" | "INR";
+  invoiceAmount: number;
+  paymentHistory: Array<{ _id?: string, date: string, amount: number }>;
+  balanceAmount: number;
+  status: "pending" | "partially_paid" | "paid";
+  comment: string;
+}

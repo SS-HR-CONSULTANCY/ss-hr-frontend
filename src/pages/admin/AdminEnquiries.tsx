@@ -214,6 +214,7 @@ const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsT
         columnsCount={columns.length}
         queryKey="adminEnquiries"
         fetchApiFunction={fetchEnquiries}
+        pageSize={8}
         showSearchInput={true}
         searchPlaceholder="Search name, email, phone..."
       />

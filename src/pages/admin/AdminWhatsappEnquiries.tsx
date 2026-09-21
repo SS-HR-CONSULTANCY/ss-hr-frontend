@@ -215,6 +215,7 @@ const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ default
         columnsCount={columns.length}
         queryKey="adminWhatsappEnquiries"
         fetchApiFunction={fetchEnquiries}
+        pageSize={8}
         showSearchInput={true}
         searchPlaceholder="Search name, phone, subject..."
         headerAction={

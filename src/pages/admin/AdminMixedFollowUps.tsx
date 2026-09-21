@@ -55,17 +55,9 @@ const AdminMixedFollowUps: React.FC = () => {
 
       const merged = [...webData, ...waData];
       
-      // Sort by reminder date ascending, then fallback to createdAt descending
+      // Sort by createdAt descending
       merged.sort((a, b) => {
-        if (a.reminder && b.reminder) {
-          return new Date(a.reminder).getTime() - new Date(b.reminder).getTime();
-        } else if (a.reminder) {
-          return -1;
-        } else if (b.reminder) {
-          return 1;
-        } else {
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        }
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
 
       // Local pagination
