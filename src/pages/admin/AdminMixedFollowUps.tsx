@@ -35,10 +35,8 @@ const AdminMixedFollowUps: React.FC = () => {
 
   const FOLLOW_UP_STATUSES = [
     "need_follow_up",
-    "not_interested",
     "processing_application",
     "completed",
-    "rejected_application",
   ];
 
   const fetchMixedEnquiries = async (params?: any) => {
