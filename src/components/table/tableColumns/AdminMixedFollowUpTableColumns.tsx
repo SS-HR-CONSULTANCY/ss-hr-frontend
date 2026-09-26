@@ -333,22 +333,7 @@ export const AdminMixedFollowUpTableColumns = (
         );
       },
     },
-    {
-      accessorKey: "invoiceNumber",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Invoice No" />
-      ),
-      cell: ({ row }) => {
-        const status = row.original.status;
-        const invoiceNumber = row.original.invoiceNumber;
-        if (status === "processing_application" || status === "completed") {
-          return invoiceNumber
-            ? <span className="font-mono text-xs font-semibold text-[#00838f]">{invoiceNumber}</span>
-            : <span className="text-xs text-amber-500 italic">Generating...</span>;
-        }
-        return <span className="text-slate-300 text-xs">—</span>;
-      },
-    },
+
 
     {
       accessorKey: "comment",

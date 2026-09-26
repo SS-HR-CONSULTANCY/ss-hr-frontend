@@ -26,6 +26,7 @@ const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
 const AdminFollowUps = lazy(() => import("@/pages/admin/AdminFollowUps"));
 const AdminBills = lazy(() => import("@/pages/admin/AdminBills"));
+const AdminExpensesAndCosts = lazy(() => import("@/pages/admin/AdminExpensesAndCosts"));
 const AdminPayments = lazy(() => import("@/pages/admin/AdminPayments"));
 const LandingLayout = lazy(() => import("@/pages/common/LandingLayout"));
 const EmailVerifyPage = lazy(() => import("@/pages/auth/EmailVerifyPage"));
@@ -310,6 +311,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin"]}>
             <AdminPayments />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "expenses-and-costs",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <AdminExpensesAndCosts />
           </ProtectedRoute>
         ),
       },

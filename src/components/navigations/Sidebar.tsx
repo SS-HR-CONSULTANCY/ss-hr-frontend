@@ -98,6 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "job-hunting-package-status": <BriefcaseBusiness />,
     "follow-ups": <PhoneCall />,
     "bills-&-payments": <Receipt />,
+    "expenses-and-costs": <CreditCard />,
   };
 
   const getIcon = (name: string): React.ReactNode => {

@@ -53,7 +53,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
           )}
 
-          <div className={`flex-1 overflow-y-auto px-2 pb-2 md:px-4 md:pb-4 bg-[#f0fbfc] ${!showHeader ? 'pt-6 md:pt-10' : 'pt-1 md:pt-2'}`}>
+          <div className={`flex-1 overflow-y-auto px-1 pb-2 md:px-2.5 md:pb-3 bg-[#f0fbfc] ${!showHeader ? 'pt-6 md:pt-10' : 'pt-1 md:pt-2'}`}>
             <Outlet />
           </div>
         </div>
