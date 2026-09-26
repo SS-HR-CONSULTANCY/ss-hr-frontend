@@ -17,6 +17,7 @@ import {
   adminUpdateWhatsappEnquiryComment,
   adminUpdateWhatsappEnquiryReminder
 } from "@/utils/apis/adminWhatsappEnquiryApi";
+import { adminFetchAllBills } from "@/utils/apis/adminBillApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +37,6 @@ const AdminMixedFollowUps: React.FC = () => {
   const FOLLOW_UP_STATUSES = [
     "need_follow_up",
     "processing_application",
-    "completed",
   ];
 
   const fetchMixedEnquiries = async (params?: any) => {
@@ -74,6 +74,18 @@ const AdminMixedFollowUps: React.FC = () => {
       });
 
       const merged = [...webData, ...waData];
+
+      // Fetch bills to attach invoice numbers
+      const billsRes = await adminFetchAllBills({ pagination: { page: 1, limit: 5000 } } as any);
+      const billsMap = new Map<string, string>();
+      (billsRes?.data || []).forEach((b: any) => {
+        if (b.invoiceNumber) billsMap.set(b._id.toString(), b.invoiceNumber);
+      });
+      merged.forEach((item) => {
+        const inv = billsMap.get(item._id?.toString());
+        if (inv) item.invoiceNumber = inv;
+      });
+
       
       // Sort by createdAt descending
       merged.sort((a, b) => {
@@ -278,6 +290,7 @@ const AdminMixedFollowUps: React.FC = () => {
         fetchApiFunction={fetchMixedEnquiries as any}
         showSearchInput={true}
         searchPlaceholder="Search by name, phone, email..."
+        pageSize={8}
       />
 
       {isViewEnquiryDetailsOpen && <EnquiryDetailsModal />}

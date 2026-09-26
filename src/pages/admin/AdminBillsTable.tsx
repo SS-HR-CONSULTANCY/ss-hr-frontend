@@ -53,6 +53,10 @@ const AdminBillsTable: React.FC = () => {
     updateBillMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, comment });
   }, []);
 
+  const handleUpdateDueDate = React.useCallback((enquiry: AdminFetchAllBillsResponse, dueDate: string) => {
+    updateBillMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, dueDate });
+  }, []);
+
   const handleAddPayment = React.useCallback((enquiry: AdminFetchAllBillsResponse, payment: { date: string, amount: number }) => {
     addPaymentMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, ...payment });
   }, []);
@@ -61,12 +65,14 @@ const AdminBillsTable: React.FC = () => {
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
     handleUpdateComment,
-    handleAddPayment
+    handleAddPayment,
+    handleUpdateDueDate
   ), [
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
     handleUpdateComment,
-    handleAddPayment
+    handleAddPayment,
+    handleUpdateDueDate
   ]);
 
   return (

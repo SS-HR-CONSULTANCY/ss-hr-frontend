@@ -445,4 +445,5 @@ export interface AdminFetchAllBillsResponse {
   balanceAmount: number;
   status: "pending" | "partially_paid" | "paid";
   comment: string;
+  dueDate: string | null;
 }

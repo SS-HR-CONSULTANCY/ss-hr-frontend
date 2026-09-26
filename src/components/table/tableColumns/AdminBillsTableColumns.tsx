@@ -101,13 +101,59 @@ const InlineCommentCell = ({ value, onSave }: { value: string, onSave: (val: str
   );
 };
 
+const InlineDueDateCell = ({ value, isFullyPaid, onSave }: { value: string | null, isFullyPaid: boolean, onSave: (val: string) => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(value ? new Date(value) : undefined);
+
+  useEffect(() => {
+    setDate(value ? new Date(value) : undefined);
+  }, [value]);
+
+  const handleSelect = (d: Date | undefined) => {
+    setDate(d);
+    setIsOpen(false);
+    if (d) {
+      onSave(d.toISOString());
+    }
+  };
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          disabled={isFullyPaid}
+          className={cn(
+            "w-[110px] justify-start text-left font-normal h-8 text-xs px-2",
+            !date && "text-muted-foreground border-dashed",
+            isFullyPaid && "opacity-40"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+          {date ? format(date, "dd-MM-yy") : <span>Set due date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={handleSelect}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 const PaymentHistoryPopover = ({ 
   history, 
   currency,
+  invoiceAmount,
   onAddPayment 
 }: { 
   history: Array<{ _id?: string, date: string, amount: number }>, 
   currency: string,
+  invoiceAmount: number,
   onAddPayment: (date: string, amount: number) => void 
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -124,11 +170,21 @@ const PaymentHistoryPopover = ({
   };
 
   const totalPaid = history.reduce((sum, p) => sum + p.amount, 0);
+  const isFullyPaid = invoiceAmount > 0 && totalPaid >= invoiceAmount;
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className={cn("h-8 text-xs font-medium", totalPaid > 0 && "text-blue-600 dark:text-blue-400")}>
+        <Button 
+          variant="outline" 
+          size="sm"
+          disabled={isFullyPaid}
+          className={cn(
+            "h-8 text-xs font-medium", 
+            totalPaid > 0 && "text-blue-600 dark:text-blue-400",
+            isFullyPaid && "opacity-40"
+          )}
+        >
           {totalPaid > 0 ? `${currency} ${totalPaid} +` : "Add Payment +"}
         </Button>
       </PopoverTrigger>
@@ -198,7 +254,8 @@ export const AdminBillsTableColumns = (
   handleUpdateInvoiceAmount: (enquiry: AdminFetchAllBillsResponse, amount: number, currency: string) => void,
   handleUpdateStatus: (enquiry: AdminFetchAllBillsResponse, status: string) => void,
   handleUpdateComment: (enquiry: AdminFetchAllBillsResponse, comment: string) => void,
-  handleAddPayment: (enquiry: AdminFetchAllBillsResponse, payment: { date: string, amount: number }) => void
+  handleAddPayment: (enquiry: AdminFetchAllBillsResponse, payment: { date: string, amount: number }) => void,
+  handleUpdateDueDate: (enquiry: AdminFetchAllBillsResponse, dueDate: string) => void
 ): ColumnDef<AdminFetchAllBillsResponse>[] => {
   return [
     {
@@ -243,6 +300,7 @@ export const AdminBillsTableColumns = (
         <PaymentHistoryPopover 
           history={row.original.paymentHistory || []} 
           currency={row.original.currency}
+          invoiceAmount={row.original.invoiceAmount || 0}
           onAddPayment={(date, amount) => handleAddPayment(row.original, { date, amount })} 
         />
       ),
@@ -251,9 +309,27 @@ export const AdminBillsTableColumns = (
       accessorKey: "balanceAmount",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Balance" />,
       cell: ({ row }) => {
-        const bal = row.original.balanceAmount || 0;
+        const invoiceAmt = row.original.invoiceAmount || 0;
+        const totalPaid = (row.original.paymentHistory || []).reduce((sum, p) => sum + p.amount, 0);
+        const bal = invoiceAmt - totalPaid;
         const cur = row.original.currency || "AED";
         return <span className={cn("font-medium text-xs", bal > 0 ? "text-red-500" : "text-green-500")}>{cur} {bal}</span>;
+      },
+    },
+    {
+      accessorKey: "dueDate",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Due Date" />,
+      cell: ({ row }) => {
+        const invoiceAmt = row.original.invoiceAmount || 0;
+        const totalPaid = (row.original.paymentHistory || []).reduce((sum, p) => sum + p.amount, 0);
+        const isFullyPaid = invoiceAmt > 0 && totalPaid >= invoiceAmt;
+        return (
+          <InlineDueDateCell
+            value={row.original.dueDate}
+            isFullyPaid={isFullyPaid}
+            onSave={(val) => handleUpdateDueDate(row.original, val)}
+          />
+        );
       },
     },
     {

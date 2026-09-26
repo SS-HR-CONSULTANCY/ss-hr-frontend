@@ -18,6 +18,7 @@ export const adminUpdateBill = async (props: {
   currency?: string;
   status?: string;
   comment?: string;
+  dueDate?: string;
 }): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.patch(`/admin/bills/${props.enquiryId}`, {
     enquiryType: props.enquiryType,
@@ -25,6 +26,7 @@ export const adminUpdateBill = async (props: {
     currency: props.currency,
     status: props.status,
     comment: props.comment,
+    dueDate: props.dueDate,
   });
   return response.data;
 };
