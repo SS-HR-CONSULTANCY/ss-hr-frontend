@@ -66,7 +66,7 @@ const InlineTextCell = ({
 
   return (
     <div
-      className="cursor-pointer text-[11px] px-1 py-0.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded flex items-center min-h-[24px] truncate"
+      className="cursor-pointer text-[11px] px-1 py-0.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded flex items-center min-h-[24px] truncate text-slate-700 dark:text-slate-200 font-medium"
       onClick={() => setIsEditing(true)}
     >
       {value ? (
@@ -139,7 +139,7 @@ const InlineAmountCell = ({
 
   return (
     <div
-      className="cursor-pointer px-1 py-0.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded font-medium text-[11px] whitespace-nowrap"
+      className="cursor-pointer px-1 py-0.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded font-medium text-[11px] whitespace-nowrap text-slate-700 dark:text-slate-200"
       onClick={() => setIsEditing(true)}
     >
       {value > 0 ? (
@@ -370,7 +370,7 @@ export const AdminExpenseTableColumns = (
             formattedDate = "-";
           }
         }
-        return <span className="text-[11px] whitespace-nowrap font-medium">{formattedDate}</span>;
+        return <span className="text-[11px] whitespace-nowrap font-medium text-slate-700 dark:text-slate-200">{formattedDate}</span>;
       },
     },
     {

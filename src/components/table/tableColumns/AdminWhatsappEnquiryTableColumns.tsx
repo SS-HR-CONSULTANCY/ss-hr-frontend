@@ -128,7 +128,7 @@ export const AdminWhatsappEnquiryTableColumns = (
         <DataTableColumnHeader column={column} title="Date" />
       ),
       cell: ({ row }) => {
-        return format(new Date(row.original.date), "dd MMM yyyy");
+        return <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">{format(new Date(row.original.date), "dd MMM yyyy")}</span>;
       },
     },
     {
@@ -138,7 +138,7 @@ export const AdminWhatsappEnquiryTableColumns = (
       ),
       cell: ({ row }) => {
         const name = row.original.name || "";
-        return toTitleCase(name);
+        return <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">{toTitleCase(name)}</span>;
       },
     },
     {
@@ -165,10 +165,10 @@ export const AdminWhatsappEnquiryTableColumns = (
             target="_blank" 
             rel="noopener noreferrer"
             onClick={handleClick}
-            className="text-green-600 hover:text-green-700 visited:text-[#4682B4] dark:text-green-400 dark:hover:text-green-300 dark:visited:text-[#5c98ca] font-medium hover:underline flex items-center gap-1.5"
+            className="text-slate-700 dark:text-slate-200 font-medium hover:underline flex items-center gap-1.5 whitespace-nowrap"
             title="Message on WhatsApp"
           >
-            <IconBrandWhatsapp size={16} />
+            <IconBrandWhatsapp size={16} className="text-green-600 shrink-0" />
             {formattedPhone}
           </a>
         );
@@ -182,7 +182,7 @@ export const AdminWhatsappEnquiryTableColumns = (
       cell: ({ row }) => {
         const subject = row.original.subject || "";
         return (
-          <span title={subject}>
+          <span title={subject} className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
             {subject.length > 20 ? subject.substring(0, 20) + "....." : subject}
           </span>
         );

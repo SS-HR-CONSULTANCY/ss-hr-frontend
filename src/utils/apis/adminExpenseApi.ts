@@ -18,6 +18,7 @@ export interface ExpenseItem {
     note?: string;
   }>;
   status: "pending" | "partially_paid" | "paid";
+  date?: string;
   dueDate?: string;
   comment?: string;
   createdAt: string;

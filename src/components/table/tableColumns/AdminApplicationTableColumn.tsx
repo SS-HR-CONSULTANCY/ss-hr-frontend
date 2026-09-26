@@ -13,11 +13,21 @@ export const AdminApplicationsTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Application ID" />
     ),
+    cell: ({ row }) => (
+      <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+        {row.original.applicationUniqueId || "-"}
+      </span>
+    ),
   },
   {
     accessorKey: "userName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Applicant Name" />
+    ),
+    cell: ({ row }) => (
+      <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+        {row.original.userName || "-"}
+      </span>
     ),
   },
   {
@@ -25,17 +35,32 @@ export const AdminApplicationsTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Job ID" />
     ),
+    cell: ({ row }) => (
+      <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+        {row.original.jobUniqueId || "-"}
+      </span>
+    ),
   },
   {
     accessorKey: "companyName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Company" />
     ),
+    cell: ({ row }) => (
+      <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+        {row.original.companyName || "-"}
+      </span>
+    ),
   },
   {
     accessorKey: "designation",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Designation" />
+    ),
+    cell: ({ row }) => (
+      <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+        {row.original.designation || "-"}
+      </span>
     ),
   },
   {
@@ -73,7 +98,7 @@ export const AdminApplicationsTableColumns = (
         : { label: "—", color: "" };
 
       return (
-        <span className={`font-semibold capitalize ${style.color}`}>
+        <span className={`font-semibold capitalize text-xs whitespace-nowrap ${style.color}`}>
           {style.label}
         </span>
       );
@@ -86,7 +111,7 @@ export const AdminApplicationsTableColumns = (
     ),
     cell: ({ row }) => {
       const date = dayjs(row.original.updatedAt).format("DD MMM YYYY");
-      return <span>{date}</span>;
+      return <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">{date}</span>;
     },
   },
   {

@@ -36,9 +36,9 @@ const InlineAmountCell = ({ value, currency, onSave }: { value: number, currency
 
   if (isEditing) {
     return (
-      <div className="flex items-center gap-1 min-w-[200px]">
+      <div className="flex items-center gap-1 min-w-[160px]">
         <Select value={cur} onValueChange={setCur}>
-          <SelectTrigger className="w-[70px] h-8 text-xs px-1">
+          <SelectTrigger className="w-[60px] h-7 text-[11px] px-1">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -50,53 +50,21 @@ const InlineAmountCell = ({ value, currency, onSave }: { value: number, currency
           type="number"
           value={val} 
           onChange={e => setVal(e.target.value)}
-          className="h-8 text-xs px-2 w-[80px]"
+          className="h-7 text-[11px] px-1.5 w-[65px]"
           autoFocus
         />
-        <Button size="sm" className="h-8 px-2" onClick={() => { onSave(Number(val), cur); setIsEditing(false); }}>✓</Button>
-        <Button size="sm" variant="outline" className="h-8 px-2" onClick={() => setIsEditing(false)}>✕</Button>
+        <Button size="sm" className="h-7 px-1.5 text-[10px]" onClick={() => { onSave(Number(val), cur); setIsEditing(false); }}>✓</Button>
+        <Button size="sm" variant="outline" className="h-7 px-1.5 text-[10px]" onClick={() => setIsEditing(false)}>✕</Button>
       </div>
     );
   }
 
   return (
     <div 
-      className="cursor-pointer min-w-[100px] p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded font-medium"
+      className="cursor-pointer whitespace-nowrap px-1 py-0.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded font-semibold text-[11px] text-slate-700"
       onClick={() => setIsEditing(true)}
     >
-      {value > 0 ? `${currency} ${value}` : <span className="text-slate-400 italic text-xs">Enter amount</span>}
-    </div>
-  );
-};
-
-const InlineCommentCell = ({ value, onSave }: { value: string, onSave: (val: string) => void }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [val, setVal] = useState(value || "");
-
-  useEffect(() => { setVal(value || ""); }, [value]);
-
-  if (isEditing) {
-    return (
-      <div className="flex items-center gap-1 min-w-[150px]">
-        <Input 
-          value={val} 
-          onChange={e => setVal(e.target.value)}
-          className="h-8 text-xs px-2"
-          placeholder="Add comment..."
-          autoFocus
-        />
-        <Button size="sm" className="h-8 px-2" onClick={() => { onSave(val); setIsEditing(false); }}>✓</Button>
-        <Button size="sm" variant="outline" className="h-8 px-2" onClick={() => setIsEditing(false)}>✕</Button>
-      </div>
-    );
-  }
-
-  return (
-    <div 
-      className="cursor-pointer min-w-[120px] text-xs p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded flex items-center min-h-[32px]"
-      onClick={() => setIsEditing(true)}
-    >
-      {value ? value : <span className="text-slate-400 italic">No comment...</span>}
+      {value > 0 ? `${currency} ${value}` : <span className="text-slate-400 italic text-[10px]">Enter amount</span>}
     </div>
   );
 };
@@ -124,13 +92,13 @@ const InlineDueDateCell = ({ value, isFullyPaid, onSave }: { value: string | nul
           variant="outline"
           disabled={isFullyPaid}
           className={cn(
-            "w-[110px] justify-start text-left font-normal h-8 text-xs px-2",
-            !date && "text-muted-foreground border-dashed",
+            "w-[85px] justify-start text-left font-normal h-7 text-[10px] px-1 whitespace-nowrap text-slate-700",
+            !date && "text-slate-500 border-dashed",
             isFullyPaid && "opacity-40"
           )}
         >
-          <CalendarIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
-          {date ? format(date, "dd-MM-yy") : <span>Set due date</span>}
+          <CalendarIcon className="mr-1 h-3 w-3 opacity-70 shrink-0 text-slate-500" />
+          {date ? format(date, "dd-MM-yy") : <span>Set due</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
@@ -180,7 +148,7 @@ const PaymentHistoryPopover = ({
           size="sm"
           disabled={isFullyPaid}
           className={cn(
-            "h-8 text-xs font-medium", 
+            "h-7 text-[10px] font-medium px-1.5 whitespace-nowrap", 
             totalPaid > 0 && "text-blue-600 dark:text-blue-400",
             isFullyPaid && "opacity-40"
           )}
@@ -253,31 +221,39 @@ const PaymentHistoryPopover = ({
 export const AdminBillsTableColumns = (
   handleUpdateInvoiceAmount: (enquiry: AdminFetchAllBillsResponse, amount: number, currency: string) => void,
   handleUpdateStatus: (enquiry: AdminFetchAllBillsResponse, status: string) => void,
-  handleUpdateComment: (enquiry: AdminFetchAllBillsResponse, comment: string) => void,
   handleAddPayment: (enquiry: AdminFetchAllBillsResponse, payment: { date: string, amount: number }) => void,
-  handleUpdateDueDate: (enquiry: AdminFetchAllBillsResponse, dueDate: string) => void
+  handleUpdateDueDate: (enquiry: AdminFetchAllBillsResponse, dueDate: string) => void,
+  handleUpdateServiceStatus?: (enquiry: AdminFetchAllBillsResponse, serviceStatus: string) => void
 ): ColumnDef<AdminFetchAllBillsResponse>[] => {
   return [
     {
       accessorKey: "date",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
-      cell: ({ row }) => <span className="text-xs">{format(new Date(row.original.date), "dd MMM yyyy")}</span>,
+      cell: ({ row }) => <span className="text-[11px] whitespace-nowrap text-slate-700 font-medium">{format(new Date(row.original.date), "dd MMM yyyy")}</span>,
     },
     {
       accessorKey: "name",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
-      cell: ({ row }) => <span className="font-medium text-xs">{toTitleCase(row.original.name)}</span>,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" className="justify-start pl-1" />,
+      cell: ({ row }) => (
+        <div className="flex items-center justify-start w-full pl-1">
+          <span className="font-semibold text-[11px] whitespace-nowrap text-left text-slate-800">{toTitleCase(row.original.name)}</span>
+        </div>
+      ),
     },
     {
       accessorKey: "phone",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Phone" />,
-      cell: ({ row }) => <span className="text-xs">{row.original.phone || "N/A"}</span>,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Phone" className="justify-start pl-1" />,
+      cell: ({ row }) => (
+        <div className="flex items-center justify-start w-full pl-1">
+          <span className="text-[11px] whitespace-nowrap text-left text-slate-700 font-medium">{row.original.phone || "N/A"}</span>
+        </div>
+      ),
     },
     {
       accessorKey: "invoiceNumber",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Invoice No" />,
       cell: ({ row }) => (
-        <span className="font-semibold text-xs text-blue-600 dark:text-blue-400">
+        <span className="font-semibold text-[11px] whitespace-nowrap text-slate-700 dark:text-slate-200">
           {row.original.invoiceNumber || <span className="text-slate-400 font-normal">Pending</span>}
         </span>
       ),
@@ -313,7 +289,7 @@ export const AdminBillsTableColumns = (
         const totalPaid = (row.original.paymentHistory || []).reduce((sum, p) => sum + p.amount, 0);
         const bal = invoiceAmt - totalPaid;
         const cur = row.original.currency || "AED";
-        return <span className={cn("font-medium text-xs", bal > 0 ? "text-red-500" : "text-green-500")}>{cur} {bal}</span>;
+        return <span className={cn("font-medium text-[11px] whitespace-nowrap", bal > 0 ? "text-red-500" : "text-green-500")}>{cur} {bal}</span>;
       },
     },
     {
@@ -334,13 +310,13 @@ export const AdminBillsTableColumns = (
     },
     {
       accessorKey: "status",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Payment Status" />,
       cell: ({ row }) => (
         <Select
           value={row.original.status || "pending"}
           onValueChange={(value) => handleUpdateStatus(row.original, value)}
         >
-          <SelectTrigger className="w-[120px] h-8 text-xs font-semibold">
+          <SelectTrigger className="w-[85px] h-7 text-[10px] font-semibold px-1 whitespace-nowrap">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -352,13 +328,25 @@ export const AdminBillsTableColumns = (
       ),
     },
     {
-      accessorKey: "comment",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Comment" />,
+      accessorKey: "serviceStatus",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Service Status" />,
       cell: ({ row }) => (
-        <InlineCommentCell 
-          value={row.original.comment} 
-          onSave={(val) => handleUpdateComment(row.original, val)} 
-        />
+        <Select
+          value={row.original.serviceStatus || "processing_application"}
+          onValueChange={(value) => handleUpdateServiceStatus && handleUpdateServiceStatus(row.original, value)}
+        >
+          <SelectTrigger className="w-[125px] h-7 text-[10px] font-semibold px-1 whitespace-nowrap">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="processing_application">
+              <span className="text-blue-600 dark:text-blue-400">Processing Application</span>
+            </SelectItem>
+            <SelectItem value="completed">
+              <span className="text-green-600 dark:text-green-400">Completed</span>
+            </SelectItem>
+          </SelectContent>
+        </Select>
       ),
     },
   ];

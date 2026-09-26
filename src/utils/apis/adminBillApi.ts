@@ -17,6 +17,7 @@ export const adminUpdateBill = async (props: {
   invoiceAmount?: number;
   currency?: string;
   status?: string;
+  serviceStatus?: string;
   comment?: string;
   dueDate?: string;
 }): Promise<ApiBaseResponse> => {
@@ -25,6 +26,7 @@ export const adminUpdateBill = async (props: {
     invoiceAmount: props.invoiceAmount,
     currency: props.currency,
     status: props.status,
+    serviceStatus: props.serviceStatus,
     comment: props.comment,
     dueDate: props.dueDate,
   });

@@ -49,8 +49,8 @@ const AdminBillsTable: React.FC = () => {
     updateBillMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, status });
   }, []);
 
-  const handleUpdateComment = React.useCallback((enquiry: AdminFetchAllBillsResponse, comment: string) => {
-    updateBillMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, comment });
+  const handleUpdateServiceStatus = React.useCallback((enquiry: AdminFetchAllBillsResponse, serviceStatus: string) => {
+    updateBillMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, serviceStatus });
   }, []);
 
   const handleUpdateDueDate = React.useCallback((enquiry: AdminFetchAllBillsResponse, dueDate: string) => {
@@ -64,15 +64,15 @@ const AdminBillsTable: React.FC = () => {
   const columns = useMemo(() => AdminBillsTableColumns(
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
-    handleUpdateComment,
     handleAddPayment,
-    handleUpdateDueDate
+    handleUpdateDueDate,
+    handleUpdateServiceStatus
   ), [
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
-    handleUpdateComment,
     handleAddPayment,
-    handleUpdateDueDate
+    handleUpdateDueDate,
+    handleUpdateServiceStatus
   ]);
 
   return (

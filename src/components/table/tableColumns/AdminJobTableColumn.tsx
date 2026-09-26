@@ -14,11 +14,21 @@ export const AdminJobsTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Company Name" />
     ),
+    cell: ({ row }) => (
+      <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+        {row.original.companyName || "-"}
+      </span>
+    ),
   },
   {
     accessorKey: "designation",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Position" />
+    ),
+    cell: ({ row }) => (
+      <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+        {row.original.designation || "-"}
+      </span>
     ),
   },
   {
@@ -28,7 +38,11 @@ export const AdminJobsTableColumns = (
     ),
     cell: ({ row }) => {
       const vacancy = row.original.vacancy;
-      return <span>{vacancy !== undefined && vacancy !== null ? vacancy : "N/A"}</span>;
+      return (
+        <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+          {vacancy !== undefined && vacancy !== null ? vacancy : "N/A"}
+        </span>
+      );
     },
   },
   {
@@ -39,7 +53,11 @@ export const AdminJobsTableColumns = (
     cell: ({ row }) => {
       const salary = row.original.salary;
       const currency = row.original.currency || "";
-      return <span>{salary ? `${currency} ${salary}` : "N/A"}</span>;
+      return (
+        <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
+          {salary ? `${currency} ${salary}` : "N/A"}
+        </span>
+      );
     },
   },
   {

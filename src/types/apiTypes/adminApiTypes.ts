@@ -437,6 +437,7 @@ export interface AdminFetchAllBillsResponse {
   name: string;
   phone: string;
   date: string;
+  serviceStatus?: "processing_application" | "completed";
   billId: string | null;
   invoiceNumber: string | null;
   currency: "AED" | "INR";
@@ -444,6 +445,6 @@ export interface AdminFetchAllBillsResponse {
   paymentHistory: Array<{ _id?: string, date: string, amount: number }>;
   balanceAmount: number;
   status: "pending" | "partially_paid" | "paid";
-  comment: string;
+  comment?: string;
   dueDate: string | null;
 }

@@ -215,7 +215,7 @@ export const CommentCell = ({ enquiry, handleUpdateComment }: { enquiry: any; ha
 
   return (
     <div 
-      className="cursor-pointer min-w-[150px] text-xs p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded flex items-center min-h-[32px]"
+      className="cursor-pointer min-w-[150px] text-xs p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded flex items-center min-h-[32px] text-slate-700 dark:text-slate-200 font-medium"
       onClick={() => setIsEditing(true)}
       title="Click to edit comment"
     >
@@ -240,7 +240,7 @@ export const AdminEnquiryTableColumns = (
         <DataTableColumnHeader column={column} title="Date" />
       ),
       cell: ({ row }) => {
-        return format(new Date(row.original.createdAt), "dd MMM yyyy");
+        return <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">{format(new Date(row.original.createdAt), "dd MMM yyyy")}</span>;
       },
     },
     {
@@ -251,7 +251,7 @@ export const AdminEnquiryTableColumns = (
       cell: ({ row }) => {
         const { firstName, lastName } = row.original;
         const fullName = `${firstName || ""} ${lastName || ""}`.trim();
-        return toTitleCase(fullName);
+        return <span className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">{toTitleCase(fullName)}</span>;
       },
     },
     {
@@ -278,10 +278,10 @@ export const AdminEnquiryTableColumns = (
             target="_blank" 
             rel="noopener noreferrer"
             onClick={handleClick}
-            className="text-green-600 hover:text-green-700 visited:text-[#4682B4] dark:text-green-400 dark:hover:text-green-300 dark:visited:text-[#5c98ca] font-medium hover:underline flex items-center gap-1.5"
+            className="text-slate-700 dark:text-slate-200 font-medium hover:underline flex items-center gap-1.5 whitespace-nowrap"
             title="Message on WhatsApp"
           >
-            <IconBrandWhatsapp size={16} />
+            <IconBrandWhatsapp size={16} className="text-green-600 shrink-0" />
             {formattedPhone}
           </a>
         );
@@ -295,7 +295,7 @@ export const AdminEnquiryTableColumns = (
       cell: ({ row }) => {
         const subject = row.original.subject || "";
         return (
-          <span title={subject}>
+          <span title={subject} className="text-slate-700 dark:text-slate-200 font-medium text-xs whitespace-nowrap">
             {subject.length > 20 ? subject.substring(0, 20) + "....." : subject}
           </span>
         );
