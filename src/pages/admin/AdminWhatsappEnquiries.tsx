@@ -66,7 +66,13 @@ const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ default
   updateStatusMutateRef.current = updateStatusMutation.mutate;
 
   const fetchEnquiries = async (params?: any) => {
-    return await adminFetchAllWhatsappEnquiries({ ...params, pagination: { ...params?.pagination, status: defaultStatus } });
+    return await adminFetchAllWhatsappEnquiries({
+      ...params,
+      pagination: {
+        ...params?.pagination,
+        ...(defaultStatus ? { status: defaultStatus } : {}),
+      },
+    });
   };
 
   const handleEditEnquiry = useCallback((enquiry: AdminFetchAllWhatsappEnquiriesResponse) => {
@@ -218,6 +224,7 @@ const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ default
         pageSize={8}
         showSearchInput={true}
         searchPlaceholder="Search name, phone, subject..."
+        showStatusFilter={!defaultStatus}
         headerAction={
           <Button onClick={handleAddEnquiry} className="flex items-center gap-2">
             <Plus className="w-4 h-4" /> Add Whatsapp Enquiry

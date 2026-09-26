@@ -1,13 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Search, Filter } from "lucide-react";
+import { ENQUIRY_STATUS_CONFIG } from "@/utils/enquiryStatusConfig";
 import { DataTable } from "../table/data-table";
 import { useQuery } from "@tanstack/react-query";
 import type { AppDispatch } from "@/store/store";
@@ -31,6 +25,7 @@ const CommonTable = <T,>({
   categoryOptions = [],
   showSearchInput,
   searchPlaceholder = "Search...",
+  showStatusFilter,
   headerAction,
 }: CommonTableComponentProps<T>) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,6 +34,7 @@ const CommonTable = <T,>({
   const [category, setCategory] = useState("all");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -70,6 +66,7 @@ const CommonTable = <T,>({
           toDate,
           category,
           searchQuery,
+          status: statusFilter === "all" ? undefined : statusFilter,
         },
       }),
     queryKey: [
@@ -81,6 +78,7 @@ const CommonTable = <T,>({
       toDate,
       category,
       searchQuery,
+      statusFilter,
     ],
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -122,23 +120,18 @@ const CommonTable = <T,>({
           )}
           
           {showCategoryFilter && (
-            <div className="mt-2">
-              <h2 className={`text-lg font-normal mb-1`}>
-                Filter by Category
-              </h2>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="w-[180px] bg-background">
-                  <SelectValue placeholder="All Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {categoryOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="mt-2 relative flex items-center border-b border-gray-300 dark:border-gray-600 focus-within:border-[#00838f] transition-colors">
+              <Filter className="w-4 h-4 text-gray-400 absolute left-0 pointer-events-none" />
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="pl-6 pr-2 py-2 h-10 w-44 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground text-sm appearance-none cursor-pointer"
+              >
+                <option value="all">All Categories</option>
+                {categoryOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
             </div>
           )}
           
@@ -152,6 +145,27 @@ const CommonTable = <T,>({
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="pl-8 pr-2 py-2 h-10 w-64 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground placeholder-gray-400"
               />
+            </div>
+          )}
+
+          {showStatusFilter && (
+            <div className="mt-2 relative flex items-center border-b border-gray-300 dark:border-gray-600 focus-within:border-[#00838f] transition-colors">
+              <Filter className="w-4 h-4 text-gray-400 absolute left-0 pointer-events-none" />
+              <select
+                value={statusFilter}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                  setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+                }}
+                className="pl-6 pr-2 py-2 h-10 w-44 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground text-sm appearance-none cursor-pointer"
+              >
+                <option value="all">All Statuses</option>
+                {(Object.entries(ENQUIRY_STATUS_CONFIG) as [string, { label: string }][]).map(
+                  ([key, cfg]) => (
+                    <option key={key} value={key}>{cfg.label}</option>
+                  )
+                )}
+              </select>
             </div>
           )}
         </div>

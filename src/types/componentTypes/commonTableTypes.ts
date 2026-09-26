@@ -19,5 +19,6 @@ export interface CommonTableComponentProps<T> {
   categoryOptions?: { label: string; value: string }[];
   showSearchInput?: boolean;
   searchPlaceholder?: string;
+  showStatusFilter?: boolean;
   headerAction?: React.ReactNode;
 }

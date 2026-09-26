@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Pencil, Trash2, Plus, X, Check, Users, ChevronDown, ChevronRight, MessageCircle, Globe, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getStatusConfig } from "@/utils/enquiryStatusConfig";
 import {
   adminFetchAllAccounts,
   adminCreateAccount,
@@ -70,10 +71,10 @@ const AdminAccounts: React.FC = () => {
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => adminDeleteAccount(id),
-    onSuccess: (res) => {
+    onSuccess: (res, variables) => {
       if (res.success) {
         toast.success("Account deleted successfully");
-        if (expandedAccountId === id) setExpandedAccountId(null);
+        if (expandedAccountId === variables) setExpandedAccountId(null);
         queryClient.invalidateQueries({ queryKey: ["adminAccounts"] });
       }
     },
@@ -245,6 +246,7 @@ const AdminAccounts: React.FC = () => {
                                 <th className="px-4 py-3 font-medium">Name</th>
                                 <th className="px-4 py-3 font-medium">Source</th>
                                 <th className="px-4 py-3 font-medium">Category</th>
+                                <th className="px-4 py-3 font-medium">Status</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -276,6 +278,17 @@ const AdminAccounts: React.FC = () => {
                                       <div className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                                         {lead.category}
                                       </div>
+                                    </td>
+                                    <td className="px-4 py-3">
+                                      {(() => {
+                                        const cfg = getStatusConfig(lead.status);
+                                        return (
+                                          <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium border ${cfg.triggerClass}`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${cfg.dotClass}`} />
+                                            {cfg.label}
+                                          </span>
+                                        );
+                                      })()}
                                     </td>
                                   </tr>
                                 );

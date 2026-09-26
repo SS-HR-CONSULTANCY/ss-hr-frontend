@@ -71,7 +71,13 @@ const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsT
   updateStatusMutateRef.current = updateStatusMutation.mutate;
 
   const fetchEnquiries = async (params?: any) => {
-    return await adminFetchAllEnquiries({ ...params, pagination: { ...params?.pagination, status: defaultStatus } });
+    return await adminFetchAllEnquiries({
+      ...params,
+      pagination: {
+        ...params?.pagination,
+        ...(defaultStatus ? { status: defaultStatus } : {}),
+      },
+    });
   };
 
   const handleViewEnquiry = useCallback((enquiryId: string) => {
@@ -217,6 +223,7 @@ const AdminEnquiries: React.FC<AdminEnquiriesProps> = ({ defaultStatus, columnsT
         pageSize={8}
         showSearchInput={true}
         searchPlaceholder="Search name, email, phone..."
+        showStatusFilter={!defaultStatus}
       />
 
       {isViewEnquiryDetailsOpen && <EnquiryDetailsModal />}

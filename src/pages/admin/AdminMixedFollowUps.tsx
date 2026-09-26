@@ -33,25 +33,47 @@ const AdminMixedFollowUps: React.FC = () => {
   const [isWaModalOpen, setIsWaModalOpen] = useState(false);
   const [selectedWaEnquiry, setSelectedWaEnquiry] = useState<any | null>(null);
 
+  const FOLLOW_UP_STATUSES = [
+    "need_follow_up",
+    "not_interested",
+    "processing_application",
+    "completed",
+    "rejected_application",
+  ];
+
   const fetchMixedEnquiries = async (params?: any) => {
     try {
-      const [webRes, waRes] = await Promise.all([
-        adminFetchAllEnquiries({ 
-          ...params, 
-          pagination: { ...params?.pagination, page: 1, limit: 1000, status: "need_follow_up" } 
+      const fetchesPerStatus = FOLLOW_UP_STATUSES.flatMap((status) => [
+        adminFetchAllEnquiries({
+          ...params,
+          pagination: { ...params?.pagination, page: 1, limit: 1000, status },
         }),
-        adminFetchAllWhatsappEnquiries({ 
-          ...params, 
-          pagination: { ...params?.pagination, page: 1, limit: 1000, status: "need_follow_up" } 
-        })
+        adminFetchAllWhatsappEnquiries({
+          ...params,
+          pagination: { ...params?.pagination, page: 1, limit: 1000, status },
+        }),
       ]);
 
-      const webData = (webRes?.data || []).map(item => ({ ...item, enquiryType: 'Website', _id: item._id }));
-      const waData = (waRes?.data || []).map((item: any) => ({ 
-        ...item, 
-        enquiryType: 'WhatsApp',
-        createdAt: item.date || item.createdAt // Normalize date
-      }));
+      const results = await Promise.all(fetchesPerStatus);
+
+      // Odd indices = WhatsApp, even indices = Website
+      const webData: any[] = [];
+      const waData: any[] = [];
+      results.forEach((res, idx) => {
+        if (idx % 2 === 0) {
+          (res?.data || []).forEach((item: any) =>
+            webData.push({ ...item, enquiryType: "Website", _id: item._id })
+          );
+        } else {
+          (res?.data || []).forEach((item: any) =>
+            waData.push({
+              ...item,
+              enquiryType: "WhatsApp",
+              createdAt: item.date || item.createdAt,
+            })
+          );
+        }
+      });
 
       const merged = [...webData, ...waData];
       
@@ -60,17 +82,31 @@ const AdminMixedFollowUps: React.FC = () => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
 
+      // Client-side search filtering
+      const searchQuery = params?.pagination?.searchQuery?.trim().toLowerCase();
+      const filtered = searchQuery
+        ? merged.filter((item) => {
+            return (
+              item.name?.toLowerCase().includes(searchQuery) ||
+              item.phone?.toLowerCase().includes(searchQuery) ||
+              item.email?.toLowerCase().includes(searchQuery) ||
+              item.message?.toLowerCase().includes(searchQuery) ||
+              item.enquiryType?.toLowerCase().includes(searchQuery)
+            );
+          })
+        : merged;
+
       // Local pagination
       const page = params?.pagination?.page || 1;
       const limit = params?.pagination?.limit || 10;
       const startIndex = (page - 1) * limit;
-      const paginatedItems = merged.slice(startIndex, startIndex + limit);
+      const paginatedItems = filtered.slice(startIndex, startIndex + limit);
 
       return {
         success: true,
         data: paginatedItems,
-        totalPages: Math.ceil(merged.length / limit),
-        total: merged.length,
+        totalPages: Math.ceil(filtered.length / limit),
+        total: filtered.length,
         page,
         limit
       };
@@ -242,7 +278,8 @@ const AdminMixedFollowUps: React.FC = () => {
         columnsCount={columns.length}
         queryKey="adminMixedFollowUps"
         fetchApiFunction={fetchMixedEnquiries as any}
-        showSearchInput={false}
+        showSearchInput={true}
+        searchPlaceholder="Search by name, phone, email..."
       />
 
       {isViewEnquiryDetailsOpen && <EnquiryDetailsModal />}
