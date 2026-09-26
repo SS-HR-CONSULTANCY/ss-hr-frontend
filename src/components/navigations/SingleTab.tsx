@@ -12,7 +12,7 @@ export const SingleTab: React.FC<SingleTabProps> = ({
     <li
       title={text}
       onClick={onClick}
-      className={`p-1 my-2 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white cursor-pointer rounded-md transition-colors ${!sidebarOpen && "flex justify-center"} ${className}`}
+      className={`px-3 py-2.5 my-1 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white cursor-pointer rounded-lg transition-all ${!sidebarOpen && "flex justify-center"} ${className}`}
     >
       {sidebarOpen ? (
         <div className="flex items-center justify-between w-full">

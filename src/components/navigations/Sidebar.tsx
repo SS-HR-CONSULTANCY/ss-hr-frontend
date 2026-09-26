@@ -115,8 +115,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
       className="w-64 bg-white text-slate-700 border-r border-[#b2ebf2] shadow-sm overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col"
     >
       <div className="p-4 flex-1">
-        <ul className="space-y-5">
-          <li className="px-3 pb-5 pt-2">
+        <ul className="space-y-3">
+          <li className="px-3 pb-3 pt-2">
             <span className="text-2xl font-bold tracking-tight" style={{ color: "#00b5cc" }}>
               Dashboard
             </span>
