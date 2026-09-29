@@ -87,6 +87,20 @@ export const adminAddExpensePayment = async (
   return response.data;
 };
 
+export const adminUpdateExpensePayment = async (
+  id: string,
+  paymentId: string,
+  data: { date: string; amount: number; paymentMethod?: string; note?: string }
+) => {
+  const response = await axiosInstance.patch(`/admin/expenses/${id}/payments/${paymentId}`, data);
+  return response.data;
+};
+
+export const adminDeleteExpensePayment = async (id: string, paymentId: string) => {
+  const response = await axiosInstance.delete(`/admin/expenses/${id}/payments/${paymentId}`);
+  return response.data;
+};
+
 export const adminFetchExpenseCategories = async () => {
   const response = await axiosInstance.get("/admin/expenses/categories");
   return response.data as { success: boolean; data: Array<{ _id: string; name: string }> };

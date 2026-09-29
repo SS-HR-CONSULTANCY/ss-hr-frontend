@@ -22,6 +22,7 @@ import {
   UserCog,
   PhoneCall,
   Receipt,
+  ClipboardList,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -99,6 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "follow-ups": <PhoneCall />,
     "bills-&-payments": <Receipt />,
     "expenses-and-costs": <CreditCard />,
+    logs: <ClipboardList />,
   };
 
   const getIcon = (name: string): React.ReactNode => {

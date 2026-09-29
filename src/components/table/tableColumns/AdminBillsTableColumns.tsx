@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, PlusCircle } from "lucide-react";
+import { CalendarIcon, PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const toTitleCase = (str: string) => {
@@ -117,23 +117,46 @@ const PaymentHistoryPopover = ({
   history, 
   currency,
   invoiceAmount,
-  onAddPayment 
+  onAddPayment,
+  onUpdatePayment,
+  onDeletePayment,
 }: { 
   history: Array<{ _id?: string, date: string, amount: number }>, 
   currency: string,
   invoiceAmount: number,
-  onAddPayment: (date: string, amount: number) => void 
+  onAddPayment: (date: string, amount: number) => void,
+  onUpdatePayment?: (paymentId: string, date: string, amount: number) => void,
+  onDeletePayment?: (paymentId: string) => void,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [isCalOpen, setIsCalOpen] = useState(false);
 
+  // Edit state for existing payments
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editAmount, setEditAmount] = useState("");
+  const [editDate, setEditDate] = useState<Date | undefined>(new Date());
+  const [isEditCalOpen, setIsEditCalOpen] = useState(false);
+
   const handleAdd = () => {
     if (amount && date) {
       onAddPayment(date.toISOString(), Number(amount));
       setAmount("");
       setDate(new Date());
+    }
+  };
+
+  const handleStartEdit = (p: { _id?: string; date: string; amount: number }, id: string) => {
+    setEditingId(id);
+    setEditAmount(p.amount.toString());
+    setEditDate(p.date ? new Date(p.date) : new Date());
+  };
+
+  const handleSaveEdit = (id: string) => {
+    if (editAmount && editDate && onUpdatePayment) {
+      onUpdatePayment(id, editDate.toISOString(), Number(editAmount));
+      setEditingId(null);
     }
   };
 
@@ -160,16 +183,109 @@ const PaymentHistoryPopover = ({
         <div className="space-y-4">
           <h4 className="font-semibold text-sm">Payment History</h4>
           
-          <div className="max-h-[150px] overflow-y-auto space-y-2">
+          <div className="max-h-[180px] overflow-y-auto space-y-2 pr-1">
             {history.length === 0 ? (
               <p className="text-xs text-slate-500">No payments recorded.</p>
             ) : (
-              history.map((p, idx) => (
-                <div key={p._id || idx} className="flex justify-between items-center text-xs border-b pb-1">
-                  <span>{format(new Date(p.date), "dd MMM yyyy")}</span>
-                  <span className="font-medium text-green-600">{currency} {p.amount}</span>
-                </div>
-              ))
+              history.map((p, idx) => {
+                const itemId = p._id || idx.toString();
+                const isEditing = editingId === itemId;
+
+                if (isEditing) {
+                  return (
+                    <div key={itemId} className="p-2 border rounded bg-slate-50 dark:bg-slate-800 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-medium text-slate-600 dark:text-slate-300">
+                        <span>Edit Payment</span>
+                        <span className="text-[10px] text-slate-400">#{idx + 1}</span>
+                      </div>
+                      <Popover open={isEditCalOpen} onOpenChange={setIsEditCalOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal h-7 text-xs px-2",
+                              !editDate && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-1.5 h-3 w-3" />
+                            {editDate ? format(editDate, "dd-MM-yy") : <span>Pick date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={editDate}
+                            onSelect={(d) => { setEditDate(d); setIsEditCalOpen(false); }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+
+                      <div className="flex items-center gap-1.5">
+                        <Input
+                          type="number"
+                          value={editAmount}
+                          onChange={(e) => setEditAmount(e.target.value)}
+                          placeholder={`Amount (${currency})`}
+                          className="h-7 text-xs flex-1"
+                          autoFocus
+                        />
+                        <Button
+                          size="sm"
+                          onClick={() => handleSaveEdit(itemId)}
+                          className="h-7 px-2 text-xs bg-green-600 hover:bg-green-700 text-white"
+                          disabled={!editAmount || !editDate}
+                        >
+                          ✓
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setEditingId(null)}
+                          className="h-7 px-2 text-xs"
+                        >
+                          ✕
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={itemId} className="flex justify-between items-center text-xs border-b pb-1.5">
+                    <div className="flex flex-col">
+                      <span className="font-medium text-slate-700 dark:text-slate-200">
+                        {p.date ? format(new Date(p.date), "dd MMM yyyy") : "-"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-green-600 dark:text-green-400">
+                        {currency} {p.amount}
+                      </span>
+                      {onUpdatePayment && (
+                        <button
+                          type="button"
+                          onClick={() => handleStartEdit(p, itemId)}
+                          className="p-1 text-slate-400 hover:text-blue-600 transition-colors"
+                          title="Edit payment"
+                        >
+                          <Pencil className="h-3 w-3" />
+                        </button>
+                      )}
+                      {onDeletePayment && (
+                        <button
+                          type="button"
+                          onClick={() => onDeletePayment(itemId)}
+                          className="p-1 text-slate-400 hover:text-red-600 transition-colors"
+                          title="Delete payment"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
             )}
           </div>
 
@@ -223,7 +339,9 @@ export const AdminBillsTableColumns = (
   handleUpdateStatus: (enquiry: AdminFetchAllBillsResponse, status: string) => void,
   handleAddPayment: (enquiry: AdminFetchAllBillsResponse, payment: { date: string, amount: number }) => void,
   handleUpdateDueDate: (enquiry: AdminFetchAllBillsResponse, dueDate: string) => void,
-  handleUpdateServiceStatus?: (enquiry: AdminFetchAllBillsResponse, serviceStatus: string) => void
+  handleUpdateServiceStatus?: (enquiry: AdminFetchAllBillsResponse, serviceStatus: string) => void,
+  handleUpdatePayment?: (enquiry: AdminFetchAllBillsResponse, paymentId: string, payment: { date: string, amount: number }) => void,
+  handleDeletePayment?: (enquiry: AdminFetchAllBillsResponse, paymentId: string) => void
 ): ColumnDef<AdminFetchAllBillsResponse>[] => {
   return [
     {
@@ -278,6 +396,8 @@ export const AdminBillsTableColumns = (
           currency={row.original.currency}
           invoiceAmount={row.original.invoiceAmount || 0}
           onAddPayment={(date, amount) => handleAddPayment(row.original, { date, amount })} 
+          onUpdatePayment={(paymentId, date, amount) => handleUpdatePayment && handleUpdatePayment(row.original, paymentId, { date, amount })}
+          onDeletePayment={(paymentId) => handleDeletePayment && handleDeletePayment(row.original, paymentId)}
         />
       ),
     },

@@ -46,3 +46,30 @@ export const adminAddBillPayment = async (props: {
   });
   return response.data;
 };
+
+export const adminUpdateBillPayment = async (props: {
+  enquiryId: string;
+  enquiryType: string;
+  paymentId: string;
+  date: string;
+  amount: number;
+}): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.patch(`/admin/bills/${props.enquiryId}/payments/${props.paymentId}`, {
+    enquiryType: props.enquiryType,
+    date: props.date,
+    amount: props.amount,
+  });
+  return response.data;
+};
+
+export const adminDeleteBillPayment = async (props: {
+  enquiryId: string;
+  enquiryType: string;
+  paymentId: string;
+}): Promise<ApiBaseResponse> => {
+  const response = await axiosInstance.delete(`/admin/bills/${props.enquiryId}/payments/${props.paymentId}`, {
+    data: { enquiryType: props.enquiryType },
+    params: { enquiryType: props.enquiryType },
+  });
+  return response.data;
+};

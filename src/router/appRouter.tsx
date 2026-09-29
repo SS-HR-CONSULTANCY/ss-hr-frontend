@@ -39,6 +39,7 @@ const AdminEnquiries = lazy(() => import("@/pages/admin/AdminEnquiries"));
 const AdminWhatsappEnquiries = lazy(() => import("@/pages/admin/AdminWhatsappEnquiries"));
 const AdminAccounts = lazy(() => import("@/pages/admin/AdminAccounts"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
+const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"));
 const UpdatePasswordPage = lazy(
   () => import("@/pages/auth/UpdatePasswordPage"),
 );
@@ -319,6 +320,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin"]}>
             <AdminExpensesAndCosts />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "logs",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <AdminLogsPage />
           </ProtectedRoute>
         ),
       },

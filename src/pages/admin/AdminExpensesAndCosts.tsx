@@ -6,6 +6,8 @@ import {
   adminCreateExpense,
   adminUpdateExpense,
   adminAddExpensePayment,
+  adminUpdateExpensePayment,
+  adminDeleteExpensePayment,
   adminDeleteExpense,
   adminFetchExpenseCategories,
   adminCreateExpenseCategory,
@@ -151,6 +153,30 @@ const AdminExpensesAndCosts: React.FC = () => {
     },
   });
 
+  const updateExpensePaymentMutation = useMutation({
+    mutationFn: ({ id, paymentId, payment }: { id: string; paymentId: string; payment: any }) =>
+      adminUpdateExpensePayment(id, paymentId, payment),
+    onSuccess: () => {
+      toast.success("Payment updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["adminExpenses"] });
+    },
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message || "Failed to update payment");
+    },
+  });
+
+  const deleteExpensePaymentMutation = useMutation({
+    mutationFn: ({ id, paymentId }: { id: string; paymentId: string }) =>
+      adminDeleteExpensePayment(id, paymentId),
+    onSuccess: () => {
+      toast.success("Payment deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["adminExpenses"] });
+    },
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message || "Failed to delete payment");
+    },
+  });
+
   const deleteExpenseMutation = useMutation({
     mutationFn: adminDeleteExpense,
     onSuccess: () => {
@@ -188,6 +214,14 @@ const AdminExpensesAndCosts: React.FC = () => {
     addPaymentMutation.mutate({ id: expense._id, payment });
   };
 
+  const handleUpdatePayment = (expense: ExpenseItem, paymentId: string, payment: any) => {
+    updateExpensePaymentMutation.mutate({ id: expense._id, paymentId, payment });
+  };
+
+  const handleDeletePayment = (expense: ExpenseItem, paymentId: string) => {
+    deleteExpensePaymentMutation.mutate({ id: expense._id, paymentId });
+  };
+
   const handleDelete = (expense: ExpenseItem) => {
     if (window.confirm(`Are you sure you want to delete "${expense.title}"?`)) {
       deleteExpenseMutation.mutate(expense._id);
@@ -195,7 +229,7 @@ const AdminExpensesAndCosts: React.FC = () => {
   };
 
   const columns = useMemo(
-    () => AdminExpenseTableColumns(handleUpdateField, handleAddPayment, handleDelete),
+    () => AdminExpenseTableColumns(handleUpdateField, handleAddPayment, handleDelete, handleUpdatePayment, handleDeletePayment),
     []
   );
 

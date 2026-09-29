@@ -1,7 +1,13 @@
 import React, { useMemo, useRef } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { AdminBillsTableColumns } from "@/components/table/tableColumns/AdminBillsTableColumns";
-import { adminFetchAllBills, adminUpdateBill, adminAddBillPayment } from "@/utils/apis/adminBillApi";
+import { 
+  adminFetchAllBills, 
+  adminUpdateBill, 
+  adminAddBillPayment,
+  adminUpdateBillPayment,
+  adminDeleteBillPayment 
+} from "@/utils/apis/adminBillApi";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import type { AdminFetchAllBillsResponse } from "@/types/apiTypes/adminApiTypes";
@@ -10,7 +16,7 @@ const AdminBillsTable: React.FC = () => {
   const queryClient = useQueryClient();
 
   const updateBillMutation = useMutation({
-    mutationFn: (data: { enquiryId: string; enquiryType: string; invoiceAmount?: number; currency?: string; status?: string; comment?: string }) => 
+    mutationFn: (data: { enquiryId: string; enquiryType: string; invoiceAmount?: number; currency?: string; status?: string; comment?: string; serviceStatus?: string; dueDate?: string }) => 
       adminUpdateBill(data),
     onSuccess: (data) => {
       if (data.success) {
@@ -36,10 +42,42 @@ const AdminBillsTable: React.FC = () => {
     },
   });
 
+  const updatePaymentMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; enquiryType: string; paymentId: string; date: string; amount: number }) => 
+      adminUpdateBillPayment(data),
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.message || "Payment updated successfully");
+        queryClient.invalidateQueries({ queryKey: ["adminBills"] });
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to update payment");
+    },
+  });
+
+  const deletePaymentMutation = useMutation({
+    mutationFn: (data: { enquiryId: string; enquiryType: string; paymentId: string }) => 
+      adminDeleteBillPayment(data),
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.message || "Payment deleted successfully");
+        queryClient.invalidateQueries({ queryKey: ["adminBills"] });
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to delete payment");
+    },
+  });
+
   const updateBillMutateRef = useRef(updateBillMutation.mutate);
   updateBillMutateRef.current = updateBillMutation.mutate;
   const addPaymentMutateRef = useRef(addPaymentMutation.mutate);
   addPaymentMutateRef.current = addPaymentMutation.mutate;
+  const updatePaymentMutateRef = useRef(updatePaymentMutation.mutate);
+  updatePaymentMutateRef.current = updatePaymentMutation.mutate;
+  const deletePaymentMutateRef = useRef(deletePaymentMutation.mutate);
+  deletePaymentMutateRef.current = deletePaymentMutation.mutate;
 
   const handleUpdateInvoiceAmount = React.useCallback((enquiry: AdminFetchAllBillsResponse, amount: number, currency: string) => {
     updateBillMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, invoiceAmount: amount, currency });
@@ -61,18 +99,30 @@ const AdminBillsTable: React.FC = () => {
     addPaymentMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, ...payment });
   }, []);
 
+  const handleUpdatePayment = React.useCallback((enquiry: AdminFetchAllBillsResponse, paymentId: string, payment: { date: string, amount: number }) => {
+    updatePaymentMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, paymentId, ...payment });
+  }, []);
+
+  const handleDeletePayment = React.useCallback((enquiry: AdminFetchAllBillsResponse, paymentId: string) => {
+    deletePaymentMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, paymentId });
+  }, []);
+
   const columns = useMemo(() => AdminBillsTableColumns(
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
     handleAddPayment,
     handleUpdateDueDate,
-    handleUpdateServiceStatus
+    handleUpdateServiceStatus,
+    handleUpdatePayment,
+    handleDeletePayment
   ), [
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
     handleAddPayment,
     handleUpdateDueDate,
-    handleUpdateServiceStatus
+    handleUpdateServiceStatus,
+    handleUpdatePayment,
+    handleDeletePayment
   ]);
 
   return (

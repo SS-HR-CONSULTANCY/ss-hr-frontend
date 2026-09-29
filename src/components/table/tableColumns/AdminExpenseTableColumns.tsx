@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, Trash2 } from "lucide-react";
+import { CalendarIcon, Trash2, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ExpenseItem } from "@/utils/apis/adminExpenseApi";
 
@@ -210,11 +210,15 @@ const ExpensePaymentPopover = ({
   currency,
   totalAmount,
   onAddPayment,
+  onUpdatePayment,
+  onDeletePayment,
 }: {
   history: Array<{ _id?: string; date: string; amount: number; paymentMethod?: string; note?: string }>;
   currency: string;
   totalAmount: number;
   onAddPayment: (date: string, amount: number, paymentMethod?: string, note?: string) => void;
+  onUpdatePayment?: (paymentId: string, date: string, amount: number, paymentMethod?: string, note?: string) => void;
+  onDeletePayment?: (paymentId: string) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [amount, setAmount] = useState("");
@@ -222,6 +226,12 @@ const ExpensePaymentPopover = ({
   const [note, setNote] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [isCalOpen, setIsCalOpen] = useState(false);
+
+  // Edit state for existing expense payments
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editAmount, setEditAmount] = useState("");
+  const [editDate, setEditDate] = useState<Date | undefined>(new Date());
+  const [isEditCalOpen, setIsEditCalOpen] = useState(false);
 
   const totalPaid = history.reduce((sum, p) => sum + p.amount, 0);
   const isFullyPaid = totalAmount > 0 && totalPaid >= totalAmount;
@@ -232,6 +242,19 @@ const ExpensePaymentPopover = ({
       setAmount("");
       setNote("");
       setDate(new Date());
+    }
+  };
+
+  const handleStartEdit = (p: { _id?: string; date: string; amount: number }, id: string) => {
+    setEditingId(id);
+    setEditAmount(p.amount.toString());
+    setEditDate(p.date ? new Date(p.date) : new Date());
+  };
+
+  const handleSaveEdit = (id: string) => {
+    if (editAmount && editDate && onUpdatePayment) {
+      onUpdatePayment(id, editDate.toISOString(), Number(editAmount));
+      setEditingId(null);
     }
   };
 
@@ -255,21 +278,108 @@ const ExpensePaymentPopover = ({
         <div className="space-y-2.5">
           <h4 className="font-semibold text-xs">Payment History</h4>
 
-          <div className="max-h-[130px] overflow-y-auto space-y-1">
+          <div className="max-h-[160px] overflow-y-auto space-y-1 pr-1">
             {history.length === 0 ? (
               <p className="text-[11px] text-slate-500">No payments recorded.</p>
             ) : (
-              history.map((p, idx) => (
-                <div key={p._id || idx} className="flex justify-between items-center text-[11px] border-b pb-1">
-                  <div>
-                    <span className="font-medium">{p.date ? format(new Date(p.date), "dd/MM/yyyy") : "-"}</span>
-                    {p.paymentMethod && <span className="ml-1 text-[10px] text-slate-400">({p.paymentMethod})</span>}
+              history.map((p, idx) => {
+                const itemId = p._id || idx.toString();
+                const isEditing = editingId === itemId;
+
+                if (isEditing) {
+                  return (
+                    <div key={itemId} className="p-2 border rounded bg-slate-50 dark:bg-slate-800 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 dark:text-slate-300">
+                        <span>Edit Payment</span>
+                        <span className="text-[10px] text-slate-400">#{idx + 1}</span>
+                      </div>
+                      <Popover open={isEditCalOpen} onOpenChange={setIsEditCalOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal h-6 text-[11px] px-2",
+                              !editDate && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-1.5 h-3 w-3" />
+                            {editDate ? format(editDate, "dd/MM/yyyy") : <span>Pick date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={editDate}
+                            onSelect={(d) => { setEditDate(d); setIsEditCalOpen(false); }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+
+                      <div className="flex items-center gap-1.5">
+                        <Input
+                          type="number"
+                          value={editAmount}
+                          onChange={(e) => setEditAmount(e.target.value)}
+                          placeholder={`Amount (${currency})`}
+                          className="h-6 text-[11px] flex-1"
+                          autoFocus
+                        />
+                        <Button
+                          size="sm"
+                          onClick={() => handleSaveEdit(itemId)}
+                          className="h-6 px-2 text-[10px] bg-green-600 hover:bg-green-700 text-white"
+                          disabled={!editAmount || !editDate}
+                        >
+                          ✓
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setEditingId(null)}
+                          className="h-6 px-2 text-[10px]"
+                        >
+                          ✕
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={itemId} className="flex justify-between items-center text-[11px] border-b pb-1">
+                    <div>
+                      <span className="font-medium">{p.date ? format(new Date(p.date), "dd/MM/yyyy") : "-"}</span>
+                      {p.paymentMethod && <span className="ml-1 text-[10px] text-slate-400">({p.paymentMethod})</span>}
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-green-600">
+                        {currency} {p.amount}
+                      </span>
+                      {onUpdatePayment && (
+                        <button
+                          type="button"
+                          onClick={() => handleStartEdit(p, itemId)}
+                          className="p-0.5 text-slate-400 hover:text-blue-600 transition-colors"
+                          title="Edit payment"
+                        >
+                          <Pencil className="h-3 w-3" />
+                        </button>
+                      )}
+                      {onDeletePayment && (
+                        <button
+                          type="button"
+                          onClick={() => onDeletePayment(itemId)}
+                          className="p-0.5 text-slate-400 hover:text-red-600 transition-colors"
+                          title="Delete payment"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <span className="font-semibold text-green-600">
-                    {currency} {p.amount}
-                  </span>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -351,7 +461,13 @@ export const AdminExpenseTableColumns = (
     expense: ExpenseItem,
     payment: { date: string; amount: number; paymentMethod?: string; note?: string }
   ) => void,
-  handleDelete: (expense: ExpenseItem) => void
+  handleDelete: (expense: ExpenseItem) => void,
+  handleUpdatePayment?: (
+    expense: ExpenseItem,
+    paymentId: string,
+    payment: { date: string; amount: number; paymentMethod?: string; note?: string }
+  ) => void,
+  handleDeletePayment?: (expense: ExpenseItem, paymentId: string) => void
 ): ColumnDef<ExpenseItem>[] => {
   return [
     {
@@ -438,6 +554,12 @@ export const AdminExpenseTableColumns = (
           totalAmount={row.original.amount || 0}
           onAddPayment={(date, amount, paymentMethod, note) =>
             handleAddPayment(row.original, { date, amount, paymentMethod, note })
+          }
+          onUpdatePayment={(paymentId, date, amount, paymentMethod, note) =>
+            handleUpdatePayment && handleUpdatePayment(row.original, paymentId, { date, amount, paymentMethod, note })
+          }
+          onDeletePayment={(paymentId) =>
+            handleDeletePayment && handleDeletePayment(row.original, paymentId)
           }
         />
       ),
