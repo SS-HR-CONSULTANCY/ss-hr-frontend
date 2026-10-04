@@ -704,6 +704,11 @@ export const adminApplicationRoutes: Route[] = [
     name: "Logs",
     roles: ["admin"],
   },
+  {
+    path: "platform-leads",
+    name: "Platform Leads",
+    roles: ["admin"],
+  },
 ];
 
 // Chat component shimmer constants

@@ -101,6 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "bills-&-payments": <Receipt />,
     "expenses-and-costs": <CreditCard />,
     logs: <ClipboardList />,
+    "platform-leads": <Users />,
   };
 
   const getIcon = (name: string): React.ReactNode => {
