@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const AdminPlatformLeads: React.FC = () => {
+const TelecallerLeads: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   
@@ -21,7 +21,7 @@ const AdminPlatformLeads: React.FC = () => {
     mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string } }) => 
       adminUpdatePlatformLead(data.id, data.payload),
     onSuccess: (updatedCustomer) => {
-      queryClient.invalidateQueries({ queryKey: ["admin-platform-leads"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-telecaller-leads"] });
       setSelectedCustomer(updatedCustomer);
       toast.success("Lead updated successfully!");
       setIsSheetOpen(false);
@@ -56,13 +56,24 @@ const AdminPlatformLeads: React.FC = () => {
 
   const columns = AdminPlatformLeadsTableColumns(handleView, handleInlineStatusUpdate);
 
+  const fetchTodayLeads = (params?: any) => {
+    const today = new Date().toISOString().split('T')[0];
+    return adminFetchAllPlatformLeads({
+      ...params,
+      pagination: {
+        ...params?.pagination,
+        scheduledDate: today
+      }
+    });
+  };
+
   return (
     <div>
       <CommonTable<ImportedCustomer>
-        fetchApiFunction={adminFetchAllPlatformLeads}
-        queryKey="admin-platform-leads"
-        heading="Leads"
-        description=""
+        fetchApiFunction={fetchTodayLeads}
+        queryKey="admin-telecaller-leads"
+        heading="Today's Scheduled Leads"
+        description="Clients scheduled to be contacted today"
         column={columns}
         columnsCount={9}
       />
@@ -211,4 +222,4 @@ const AdminPlatformLeads: React.FC = () => {
   );
 };
 
-export default AdminPlatformLeads;
+export default TelecallerLeads;

@@ -21,6 +21,7 @@ export interface User {
   dob: string;
   professionalStatus: string;
   resume?: File | string;
+  permissions?: string[];
   createdAt: string;
   updatedAt: string;
 }

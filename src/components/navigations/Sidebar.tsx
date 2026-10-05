@@ -102,6 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "expenses-and-costs": <CreditCard />,
     logs: <ClipboardList />,
     "platform-leads": <Users />,
+    "telecaller-leads": <PhoneCall />,
   };
 
   const getIcon = (name: string): React.ReactNode => {
@@ -125,7 +126,14 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
             </span>
           </li>
           
-          {routes.map((route) => {
+          {routes.filter((r) => {
+            if (user?.role === "admin" && user?.email === "tony") return true;
+            if (user?.permissions?.includes("all")) return true;
+            if (user?.permissions && user.permissions.length > 0) {
+              return user.permissions.includes(r.path);
+            }
+            return false;
+          }).map((route) => {
             const normalizedName = normalizeRouteName(route.name);
             const badge = normalizedName === "follow-ups" ? todayFollowUpsCount : undefined;
             return (
@@ -153,6 +161,10 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
       </div>
 
       <ul className="p-4 border-t border-[#b2ebf2]">
+        <div className="px-3 py-2 text-sm font-medium text-slate-500 flex items-center gap-2 mb-2">
+          <User className="h-4 w-4" />
+          <span className="truncate">{user?.fullName || user?.email || "User"}</span>
+        </div>
         <SingleTab
           icon={<LogOut />}
           text="Logout"

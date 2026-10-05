@@ -94,113 +94,127 @@ export function DataTable<TData, TValue>({
     <div>
 
 
-      <div className="rounded-md border border-gray-400 dark:border-gray-300">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="border-b border-gray-400 dark:border-gray-300"
-              >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className="text-center">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm overflow-hidden flex flex-col">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm">
+              {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="border-b border-gray-400 dark:border-gray-300"
+                  key={headerGroup.id}
+                  className="border-b border-gray-200 dark:border-gray-800 hover:bg-transparent"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-center">
-                      <div className="flex justify-center items-center w-full">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </div>
-                    </TableCell>
-                  ))}
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id} className="text-center py-3 font-semibold text-gray-700 dark:text-gray-300">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No Data Found In Database.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="text-center py-3 text-gray-700 dark:text-gray-300">
+                        <div className="flex justify-center items-center w-full">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </div>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-32 text-center text-gray-500 font-medium"
+                  >
+                    No Data Found In Database.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
 
-      {/* Use built-in pagination controls */}
-      <div className="flex justify-center items-center space-x-3 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
+        {/* Use built-in pagination controls */}
+        <div className="flex justify-center items-center py-3 px-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/30 relative">
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-800 h-8"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
 
-          {(() => {
-            const total = pageCount || table.getPageCount();
-            const current = paginationState.pageIndex + 1;
-            const pages: (number | string)[] = [];
+            <div className="flex items-center space-x-1 hidden sm:flex">
+              {(() => {
+                const total = pageCount || table.getPageCount();
+                const current = paginationState.pageIndex + 1;
+                const pages: (number | string)[] = [];
 
-            if (total <= 7) {
-              for (let i = 1; i <= total; i++) pages.push(i);
-            } else {
-              if (current <= 4) {
-                pages.push(1, 2, 3, 4, 5, "...", total);
-              } else if (current >= total - 3) {
-                pages.push(1, "...", total - 4, total - 3, total - 2, total - 1, total);
-              } else {
-                pages.push(1, "...", current - 1, current, current + 1, "...", total);
-              }
-            }
+                let startPage = Math.max(1, current - 4);
+                let endPage = startPage + 9;
 
-            return pages.map((p, idx) => (
-              <Button
-                key={idx}
-                variant={p === current ? "default" : "outline"}
-                size="sm"
-                onClick={() => typeof p === "number" && table.setPageIndex(p - 1)}
-                disabled={typeof p !== "number"}
-                className={typeof p !== "number" ? "border-transparent px-1" : ""}
-              >
-                {p}
-              </Button>
-            ));
-          })()}
+                if (endPage > total) {
+                  endPage = total;
+                  startPage = Math.max(1, endPage - 9);
+                }
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+                for (let i = startPage; i <= endPage; i++) {
+                  pages.push(i);
+                }
+
+                return pages.map((p, idx) => (
+                  <Button
+                    key={idx}
+                    variant={p === current ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => typeof p === "number" && table.setPageIndex(p - 1)}
+                    disabled={typeof p !== "number"}
+                    className={
+                      typeof p !== "number" 
+                        ? "border-transparent px-1 cursor-default hover:bg-transparent h-8 w-8" 
+                        : p === current
+                          ? "bg-primary text-primary-foreground hover:bg-primary/90 h-8 w-8"
+                          : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 h-8 w-8"
+                    }
+                  >
+                    {p}
+                  </Button>
+                ));
+              })()}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-800 h-8"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

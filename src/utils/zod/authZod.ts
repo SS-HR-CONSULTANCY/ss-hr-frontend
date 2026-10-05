@@ -41,9 +41,10 @@ export const otpSchema = z.object({
 });
 export type OtpForm = z.infer<typeof otpSchema>;
 
-// otp form zod schema
+// login form zod schema
 export const loginSchema = z.object({
-  email,
+  email: z.union([email, z.literal("")]).optional(),
+  username: z.string().optional(),
   password: z
     .string()
     .min(4, "Password must be at least 4 characters")

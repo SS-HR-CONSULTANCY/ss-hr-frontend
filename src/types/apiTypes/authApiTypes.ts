@@ -12,8 +12,10 @@ export interface SignupResponse extends ApiBaseResponse {
 export type VerifyOtpRequest = Pick<User, "otp" | "verificationToken" | "role">;
 
 // sign in
-export type SigninRequest = Pick<User, "email" | "role"> & {
+export type SigninRequest = Pick<User, "role"> & {
   password: string;
+  email?: string;
+  username?: string;
 };
 export interface SigninResponse extends ApiBaseResponse {
   user: User;

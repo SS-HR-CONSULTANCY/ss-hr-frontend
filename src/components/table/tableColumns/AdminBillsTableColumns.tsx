@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import { format } from "date-fns";
@@ -85,16 +87,20 @@ const InlineDueDateCell = ({ value, isFullyPaid, onSave }: { value: string | nul
     }
   };
 
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isSuperAdmin = (user?.role === "admin" && user?.email === "tony") || user?.permissions?.includes("all");
+  const isDisabled = isFullyPaid && !isSuperAdmin;
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          disabled={isFullyPaid}
+          disabled={isDisabled}
           className={cn(
             "w-[85px] justify-start text-left font-normal h-7 text-[10px] px-1 whitespace-nowrap text-slate-700",
             !date && "text-slate-500 border-dashed",
-            isFullyPaid && "opacity-40"
+            isDisabled && "opacity-40"
           )}
         >
           <CalendarIcon className="mr-1 h-3 w-3 opacity-70 shrink-0 text-slate-500" />
@@ -160,8 +166,11 @@ const PaymentHistoryPopover = ({
     }
   };
 
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isSuperAdmin = (user?.role === "admin" && user?.email === "tony") || user?.permissions?.includes("all");
   const totalPaid = history.reduce((sum, p) => sum + p.amount, 0);
   const isFullyPaid = invoiceAmount > 0 && totalPaid >= invoiceAmount;
+  const isDisabled = isFullyPaid && !isSuperAdmin;
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -169,11 +178,11 @@ const PaymentHistoryPopover = ({
         <Button 
           variant="outline" 
           size="sm"
-          disabled={isFullyPaid}
+          disabled={isDisabled}
           className={cn(
             "h-7 text-[10px] font-medium px-1.5 whitespace-nowrap", 
             totalPaid > 0 && "text-blue-600 dark:text-blue-400",
-            isFullyPaid && "opacity-40"
+            isDisabled && "opacity-40"
           )}
         >
           {totalPaid > 0 ? `${currency} ${totalPaid} +` : "Add Payment +"}

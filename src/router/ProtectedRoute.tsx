@@ -30,7 +30,23 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requiredRole && user?.role && !requiredRole.includes(user?.role)) {
+  let isAllowed = true;
+  if (requiredRole && user?.role) {
+    isAllowed = requiredRole.includes(user.role);
+    
+    if (location.pathname.startsWith("/ss-hr-admin") && (user.role === "admin" || user.role === "staff")) {
+      const pathParts = location.pathname.split('/');
+      // Get the last part of the path, or handle nested paths if needed
+      const routePath = pathParts[pathParts.length - 1] === "ss-hr-admin" ? "overview" : pathParts[2]; // assuming /ss-hr-admin/route
+      
+      const isSuperAdmin = user.role === "admin" && user.email === "tony";
+      const hasPermission = user.permissions?.includes("all") || (user.permissions && user.permissions.includes(routePath));
+      
+      isAllowed = isSuperAdmin || !!hasPermission;
+    }
+  }
+
+  if (requiredRole && user?.role && !isAllowed) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">

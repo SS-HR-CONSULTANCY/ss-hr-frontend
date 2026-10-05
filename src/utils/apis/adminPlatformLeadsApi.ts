@@ -10,7 +10,11 @@ export interface ImportedCustomer {
   state: string;
   designations: string[];
   cvUrl: string;
+  linkedinUrl?: string;
   source: string;
+  status: string;
+  comment: string;
+  scheduledDate?: string;
   createdAt: string;
 }
 
@@ -29,4 +33,12 @@ export const adminFetchAllPlatformLeads = async (
     currentPage: resData.page,
     totalPages: resData.totalPages,
   };
+};
+
+export const adminUpdatePlatformLead = async (
+  id: string,
+  payload: { status: string; comment: string; scheduledDate?: string; state?: string }
+): Promise<ImportedCustomer> => {
+  const response = await axiosInstance.patch(`/imported-customers/${id}/telecall`, payload);
+  return response.data.data;
 };

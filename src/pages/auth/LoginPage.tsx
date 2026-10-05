@@ -39,6 +39,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
     mode: "onChange",
     defaultValues: {
       email: "",
+      username: "",
       password: "",
       role: role,
     },
@@ -48,7 +49,7 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
     if (isAuthenticated && user) {
       if (user.role === "user") {
         navigate("/", { replace: true });
-      } else if (user.role === "admin") {
+      } else if (user.role === "admin" || user.role === "staff") {
         navigate("/ss-hr-admin", { replace: true });
       } else {
         navigate("/", { replace: true });
@@ -95,21 +96,33 @@ const LoginPage: React.FC<LoginProps> = ({ role }) => {
                   ? "Sign In With your credentials"
                   : role === roleValues[1]
                     ? "Admin Login"
-                    : "System Admin Login"
+                    : "Staff Login"
               }
               description={role === roleValues[0] ? "Enter your credentials to access your account" : undefined}
             />
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <FormField<LoginForm>
-                  id="email"
-                  label="Email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="Enter your email"
-                  error={errors.email?.message}
-                  register={register}
-                />
+                {role === roleValues[0] ? (
+                  <FormField<LoginForm>
+                    id="email"
+                    label="Email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="Enter your email"
+                    error={errors.email?.message}
+                    register={register}
+                  />
+                ) : (
+                  <FormField<LoginForm>
+                    id="username"
+                    label="Username"
+                    type="text"
+                    autoComplete="username"
+                    placeholder="Enter your username"
+                    error={errors.username?.message}
+                    register={register}
+                  />
+                )}
 
                 <FormField<LoginForm>
                   id="password"

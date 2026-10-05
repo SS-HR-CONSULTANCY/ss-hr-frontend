@@ -52,11 +52,11 @@ import type { RoleType } from "./zod/commonZod";
 
 export const companyName = "SS HR Consultancy";
 
-export const roleValues = ["user", "admin"] as const;
+export const roleValues = ["user", "admin", "staff"] as const;
 
-export const adminRoleValues = ["admin"] as const;
+export const adminRoleValues = ["admin", "staff"] as const;
 
-export const limitedroleValues = ["user", "admin"] as const;
+export const limitedroleValues = ["user", "admin", "staff"] as const;
 
 export const genderValues = ["male", "female", "other"] as const;
 
@@ -92,6 +92,7 @@ export const applicationStatusValues = [
 
 export const roleLoginRoutes: Record<RoleType, string> = {
   admin: "/admin/login",
+  staff: "/admin/login",
   user: "/login",
 };
 
@@ -707,6 +708,16 @@ export const adminApplicationRoutes: Route[] = [
   {
     path: "platform-leads",
     name: "Platform Leads",
+    roles: ["admin"],
+  },
+  {
+    path: "telecaller-leads",
+    name: "Telecaller Leads",
+    roles: ["admin", "staff"],
+  },
+  {
+    path: "settings",
+    name: "Settings",
     roles: ["admin"],
   },
 ];

@@ -36,6 +36,7 @@ export interface FetchFunctionParams<T = string> {
     category?: string;
     searchQuery?: string;
     status?: string;
+    scheduledDate?: string;
   };
 }
 

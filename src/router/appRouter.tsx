@@ -41,6 +41,8 @@ const AdminAccounts = lazy(() => import("@/pages/admin/AdminAccounts"));
 const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"));
 const AdminPlatformLeads = lazy(() => import("@/pages/admin/AdminPlatformLeads"));
+const TelecallerLeads = lazy(() => import("@/pages/admin/TelecallerLeads"));
+const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 const UpdatePasswordPage = lazy(
   () => import("@/pages/auth/UpdatePasswordPage"),
 );
@@ -57,6 +59,16 @@ const ApplicationDetailsPage = lazy(
 const ServiceDetailedContent = lazy(
   () => import("@/components/sections/ServiceDetailedContent"),
 );
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+
+const AdminIndexRedirect = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  if (user?.role === "staff") {
+    return <Navigate to="telecaller-leads" replace />;
+  }
+  return <Navigate to="overview" replace />;
+};
 
 const appRouter = createBrowserRouter([
   {
@@ -209,7 +221,7 @@ const appRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="overview" replace />,
+        element: <AdminIndexRedirect />,
       },
       {
         path: "overview",
@@ -340,7 +352,22 @@ const appRouter = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-
+      {
+        path: "telecaller-leads",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "staff"]}>
+            <TelecallerLeads />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <AdminSettings />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);

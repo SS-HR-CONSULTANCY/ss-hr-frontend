@@ -27,6 +27,9 @@ export const buildQueryParams = (
     if (params.pagination.status && params.pagination.status !== "all") {
       query.append("status", params.pagination.status);
     }
+    if (params.pagination.scheduledDate) {
+      query.append("scheduledDate", params.pagination.scheduledDate);
+    }
   }
 
   return query.toString();
