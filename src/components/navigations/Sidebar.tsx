@@ -37,6 +37,7 @@ import { toggleAdminSidebar } from "@/store/slices/appSlice";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetchAllEnquiries } from "@/utils/apis/adminEnquiryApi";
 import { adminFetchAllWhatsappEnquiries } from "@/utils/apis/adminWhatsappEnquiryApi";
+import { adminFetchAllPlatformLeads } from "@/utils/apis/adminPlatformLeadsApi";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
@@ -76,6 +77,22 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     refetchInterval: 60000, // Refresh every minute
   });
 
+  const { data: todayScheduledContactsCount = 0 } = useQuery({
+    queryKey: ["adminTodayScheduledContactsCount"],
+    queryFn: async () => {
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        const res = await adminFetchAllPlatformLeads({
+          pagination: { page: 1, limit: 1, scheduledDate: today },
+        });
+        return res?.totalCount || 0;
+      } catch (e) {
+        return 0;
+      }
+    },
+    refetchInterval: 60000,
+  });
+
   const iconMap: Record<string, React.ReactNode> = {
     overview: <LayoutDashboard />,
     users: <Users />,
@@ -102,7 +119,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "expenses-and-costs": <CreditCard />,
     logs: <ClipboardList />,
     "platform-leads": <Users />,
-    "telecaller-leads": <PhoneCall />,
+    "contact-list": <PhoneCall />,
   };
 
   const getIcon = (name: string): React.ReactNode => {
@@ -135,7 +152,15 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
             return false;
           }).map((route) => {
             const normalizedName = normalizeRouteName(route.name);
-            const badge = normalizedName === "follow-ups" ? todayFollowUpsCount : undefined;
+            const badge =
+              normalizedName === "follow-ups"
+                ? todayFollowUpsCount
+                : normalizedName === "contact-list"
+                ? todayScheduledContactsCount
+                : undefined;
+            const badgeColor =
+              normalizedName === "contact-list" ? "bg-orange-500" : "bg-red-500";
+
             return (
               <NavLink
                 key={route.path}
@@ -153,6 +178,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                   text={route.name}
                   sidebarOpen={true}
                   badge={badge}
+                  badgeColor={badgeColor}
                 />
               </NavLink>
             );

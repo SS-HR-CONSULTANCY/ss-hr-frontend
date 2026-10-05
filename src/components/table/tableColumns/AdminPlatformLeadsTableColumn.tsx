@@ -38,7 +38,7 @@ export const AdminPlatformLeadsTableColumns = (
               className="text-[#3b82f6] hover:text-blue-700 transition-colors shrink-0"
               title="View LinkedIn Profile"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-[14px] w-[14px]">
                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
               </svg>
             </a>
@@ -141,11 +141,11 @@ export const AdminPlatformLeadsTableColumns = (
               status === 'Not Interested' ? 'bg-red-100 text-red-700' :
               'bg-gray-100 text-gray-700'}`}
         >
-          <option value="Pending">Pending</option>
-          <option value="Contacted">Contacted</option>
-          <option value="Interested">Interested</option>
-          <option value="Converted">Converted</option>
-          <option value="Not Interested">Not Interested</option>
+          <option value="Pending" className="bg-blue-50 text-blue-700 font-semibold">Pending</option>
+          <option value="Contacted" className="bg-yellow-50 text-yellow-700 font-semibold">Contacted</option>
+          <option value="Interested" className="bg-purple-50 text-purple-700 font-semibold">Interested</option>
+          <option value="Converted" className="bg-green-50 text-green-700 font-semibold">Converted</option>
+          <option value="Not Interested" className="bg-red-50 text-red-700 font-semibold">Not Interested</option>
         </select>
       );
     },

@@ -7,6 +7,7 @@ export const SingleTab: React.FC<SingleTabProps> = ({
   onClick,
   className = "",
   badge,
+  badgeColor = "bg-red-500",
 }) => {
   return (
     <li
@@ -21,7 +22,7 @@ export const SingleTab: React.FC<SingleTabProps> = ({
             <span className="ml-2">{text}</span>
           </div>
           {!!badge && Number(badge) > 0 && (
-            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full mr-2">
+            <span className={`${badgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-full mr-2`}>
               {badge}
             </span>
           )}
@@ -30,7 +31,7 @@ export const SingleTab: React.FC<SingleTabProps> = ({
         <div className="relative">
           <span className="text-2xl font-bold cursor-pointer">{icon}</span>
           {!!badge && Number(badge) > 0 && (
-            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+            <span className={`absolute -top-1 -right-2 ${badgeColor} text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full`}>
               {badge}
             </span>
           )}

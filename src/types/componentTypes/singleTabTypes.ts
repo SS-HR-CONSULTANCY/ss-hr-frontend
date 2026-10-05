@@ -5,4 +5,5 @@ export interface SingleTabProps {
   onClick?: () => void;
   className?: string;
   badge?: number | string;
+  badgeColor?: string;
 }

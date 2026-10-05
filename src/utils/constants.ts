@@ -712,7 +712,7 @@ export const adminApplicationRoutes: Route[] = [
   },
   {
     path: "telecaller-leads",
-    name: "Telecaller Leads",
+    name: "Contact List",
     roles: ["admin", "staff"],
   },
   {
