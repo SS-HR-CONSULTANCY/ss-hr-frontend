@@ -115,7 +115,6 @@ const AdminWhatsappEnquiries: React.FC<AdminWhatsappEnquiriesProps> = ({ default
       return { previousEnquiries };
     },
     onSuccess: () => {
-      toast.success("Account updated successfully");
     },
     onError: (error: any, _newAccount, context: any) => {
       if (context?.previousEnquiries) {

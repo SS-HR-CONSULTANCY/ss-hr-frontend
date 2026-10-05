@@ -18,12 +18,11 @@ const TelecallerLeads: React.FC = () => {
   const queryClient = useQueryClient();
 
   const updateMutation = useMutation({
-    mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string } }) => 
+    mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string, state?: string } }) => 
       adminUpdatePlatformLead(data.id, data.payload),
     onSuccess: (updatedCustomer) => {
       queryClient.invalidateQueries({ queryKey: ["admin-telecaller-leads"] });
       setSelectedCustomer(updatedCustomer);
-      toast.success("Lead updated successfully!");
       setIsSheetOpen(false);
     },
     onError: () => {

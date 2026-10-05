@@ -87,7 +87,7 @@ export const AdminPlatformLeadsTableColumns = (
       const comment = row.getValue("comment") as string || "";
       const customerId = row.original._id;
       const initialDate = row.original.scheduledDate;
-      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : undefined;
+      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : "";
       const [localState, setLocalState] = React.useState(initialState);
 
       React.useEffect(() => {
@@ -127,7 +127,7 @@ export const AdminPlatformLeadsTableColumns = (
       const comment = row.getValue("comment") as string || "";
       const customerId = row.original._id;
       const initialDate = row.original.scheduledDate;
-      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : undefined;
+      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : "";
 
       return (
         <select
@@ -160,7 +160,7 @@ export const AdminPlatformLeadsTableColumns = (
       const status = row.getValue("status") as string || "Pending";
       const customerId = row.original._id;
       const initialDate = row.original.scheduledDate;
-      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : undefined;
+      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : "";
       const [localComment, setLocalComment] = React.useState(initialComment);
 
       React.useEffect(() => {
