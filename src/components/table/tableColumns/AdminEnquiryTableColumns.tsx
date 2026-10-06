@@ -343,7 +343,7 @@ export const AdminEnquiryTableColumns = (
       cell: ({ row }) => {
         const enquiry = row.original;
         return (
-          <div className="flex flex-col items-center gap-1 py-1">
+          <div className="flex flex-row justify-center items-center gap-2 py-1">
             <Button
               variant="ghost"
               size="sm"

@@ -137,8 +137,8 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
       <div className="p-4 flex-1">
         <ul className="space-y-3">
           <li className="px-3 pb-3 pt-2">
-            <span className="text-2xl font-bold tracking-tight" style={{ color: "#00b5cc" }}>
-              Dashboard
+            <span className="text-2xl font-bold tracking-tight block truncate capitalize" style={{ color: "#00b5cc" }} title={user?.fullName || user?.email || "Dashboard"}>
+              {user?.fullName || user?.email || "Dashboard"}
             </span>
           </li>
           
@@ -186,10 +186,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
       </div>
 
       <ul className="p-4 border-t border-[#b2ebf2]">
-        <div className="px-3 py-2 text-sm font-medium text-slate-500 flex items-center gap-2 mb-2">
-          <User className="h-4 w-4" />
-          <span className="truncate">{user?.fullName || user?.email || "User"}</span>
-        </div>
+
         <SingleTab
           icon={<LogOut />}
           text="Logout"
