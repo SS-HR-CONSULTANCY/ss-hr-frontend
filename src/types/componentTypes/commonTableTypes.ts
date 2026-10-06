@@ -21,4 +21,5 @@ export interface CommonTableComponentProps<T> {
   searchPlaceholder?: string;
   showStatusFilter?: boolean;
   headerAction?: React.ReactNode;
+  onDataFetched?: (data: ApiPaginatedResponse<T>) => void;
 }

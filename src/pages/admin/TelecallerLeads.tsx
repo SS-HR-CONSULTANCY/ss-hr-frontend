@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { adminFetchAllPlatformLeads, adminUpdatePlatformLead, type ImportedCustomer } from "@/utils/apis/adminPlatformLeadsApi";
 import { AdminPlatformLeadsTableColumns } from "@/components/table/tableColumns/AdminPlatformLeadsTableColumn";
@@ -6,9 +6,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
+import { Users, Clock, CheckCircle, PhoneCall } from "lucide-react";
+
 const TelecallerLeads: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0 });
   
   // State for telecalling updates
   const [status, setStatus] = useState<string>("Pending");
@@ -55,26 +58,89 @@ const TelecallerLeads: React.FC = () => {
 
   const columns = AdminPlatformLeadsTableColumns(handleView, handleInlineStatusUpdate);
 
-  const fetchTodayLeads = (params?: any) => {
-    const today = new Date().toISOString().split('T')[0];
+  const fetchAllScheduledLeads = (params?: any) => {
     return adminFetchAllPlatformLeads({
       ...params,
       pagination: {
         ...params?.pagination,
-        scheduledDate: today
+        scheduledDate: 'any'
       }
     });
   };
 
   return (
     <div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-500 font-medium mb-1">Total Contacts</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</h3>
+          </div>
+          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600 dark:text-blue-400">
+            <Users className="w-5 h-5" />
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-500 font-medium mb-1">Pending to contact</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending}</h3>
+          </div>
+          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-full text-yellow-600 dark:text-yellow-400">
+            <Clock className="w-5 h-5" />
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-500 font-medium mb-1">Contacted</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.contacted}</h3>
+          </div>
+          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-full text-green-600 dark:text-green-400">
+            <CheckCircle className="w-5 h-5" />
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-500 font-medium mb-1">Need Follow Up</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.needFollowUp}</h3>
+          </div>
+          <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-full text-orange-600 dark:text-orange-400">
+            <PhoneCall className="w-5 h-5" />
+          </div>
+        </div>
+      </div>
+
       <CommonTable<ImportedCustomer>
-        fetchApiFunction={fetchTodayLeads}
+        fetchApiFunction={fetchAllScheduledLeads}
         queryKey="admin-telecaller-leads"
-        heading="Today's Scheduled Leads"
-        description="Clients scheduled to be contacted today"
+        heading="All Scheduled Leads"
+        description="Clients that have been scheduled for contact"
         column={columns}
         columnsCount={9}
+        pageSize={8}
+        onDataFetched={useCallback((data: any) => {
+          if (data.stats) {
+            setStats(prev => {
+              const newTotal = data.stats.total || 0;
+              const newPending = data.stats.pending || 0;
+              const newContacted = data.stats.contacted || 0;
+              const newNeedFollowUp = data.stats.needFollowUp || 0;
+              if (
+                prev.total === newTotal &&
+                prev.pending === newPending &&
+                prev.contacted === newContacted &&
+                prev.needFollowUp === newNeedFollowUp
+              ) {
+                return prev;
+              }
+              return {
+                total: newTotal,
+                pending: newPending,
+                contacted: newContacted,
+                needFollowUp: newNeedFollowUp,
+              };
+            });
+          }
+        }, [])}
       />
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -134,9 +200,11 @@ const TelecallerLeads: React.FC = () => {
                     >
                       <option value="Pending">Pending</option>
                       <option value="Contacted">Contacted</option>
-                      <option value="Interested">Interested</option>
-                      <option value="Converted">Converted</option>
+                      <option value="Need Follow Up">Need Follow Up</option>
                       <option value="Not Interested">Not Interested</option>
+                      <option value="Processing Application">Processing Application</option>
+                      <option value="Completed">Completed</option>
+                      <option value="Rejected Application">Rejected Application</option>
                     </select>
                   </div>
                   

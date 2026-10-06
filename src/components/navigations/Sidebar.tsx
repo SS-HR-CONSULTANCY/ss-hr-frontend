@@ -77,15 +77,14 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     refetchInterval: 60000, // Refresh every minute
   });
 
-  const { data: todayScheduledContactsCount = 0 } = useQuery({
-    queryKey: ["adminTodayScheduledContactsCount"],
+  const { data: pendingContactsCount = 0 } = useQuery({
+    queryKey: ["adminPendingContactsCount"],
     queryFn: async () => {
       try {
-        const today = new Date().toISOString().split("T")[0];
         const res = await adminFetchAllPlatformLeads({
-          pagination: { page: 1, limit: 1, scheduledDate: today },
+          pagination: { page: 1, limit: 1, scheduledDate: "any" },
         });
-        return res?.totalCount || 0;
+        return res?.stats?.pending || 0;
       } catch (e) {
         return 0;
       }
@@ -156,7 +155,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
               normalizedName === "follow-ups"
                 ? todayFollowUpsCount
                 : normalizedName === "contact-list"
-                ? todayScheduledContactsCount
+                ? pendingContactsCount
                 : undefined;
             const badgeColor =
               normalizedName === "contact-list" ? "bg-orange-500" : "bg-red-500";

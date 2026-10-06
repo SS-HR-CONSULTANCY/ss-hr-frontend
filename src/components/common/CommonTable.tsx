@@ -27,6 +27,7 @@ const CommonTable = <T,>({
   searchPlaceholder = "Search...",
   showStatusFilter,
   headerAction,
+  onDataFetched,
 }: CommonTableComponentProps<T>) => {
   const dispatch = useDispatch<AppDispatch>();
   const [fromDate, setFromDate] = useState("");
@@ -89,11 +90,14 @@ const CommonTable = <T,>({
   const totalPages = data?.totalPages ?? 0;
 
   useEffect(() => {
+    if (data && onDataFetched) {
+      onDataFetched(data as any);
+    }
     if (!saveDataInStore || !data) return;
     dispatch(
       saveReportData(data?.data as Array<AdminFetchReportTableDataResponse>),
     );
-  }, [data, saveDataInStore, dispatch]);
+  }, [data, saveDataInStore, dispatch, onDataFetched]);
 
   return (
     <div>

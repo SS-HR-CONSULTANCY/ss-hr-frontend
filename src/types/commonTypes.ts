@@ -24,6 +24,12 @@ export interface ApiPaginatedResponse<T> extends ApiBaseResponse {
   totalCount?: number;
   currentPage?: number;
   totalPages?: number;
+  stats?: {
+    total: number;
+    pending: number;
+    contacted: number;
+    [key: string]: any;
+  };
 }
 
 export interface FetchFunctionParams<T = string> {

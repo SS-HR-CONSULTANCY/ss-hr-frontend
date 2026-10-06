@@ -32,6 +32,7 @@ export const adminFetchAllPlatformLeads = async (
     totalCount: resData.total,
     currentPage: resData.page,
     totalPages: resData.totalPages,
+    stats: resData.stats,
   };
 };
 

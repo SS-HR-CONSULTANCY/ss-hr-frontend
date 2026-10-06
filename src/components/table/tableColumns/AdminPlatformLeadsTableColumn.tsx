@@ -134,18 +134,22 @@ export const AdminPlatformLeadsTableColumns = (
           value={status}
           onChange={(e) => onUpdateStatus(customerId, e.target.value, comment, formattedInitialDate)}
           className={`px-2 py-1 text-xs font-semibold rounded-full border border-transparent hover:border-gray-300 focus:ring-0 focus:outline-none cursor-pointer outline-none appearance-none
-            ${status === 'Pending' ? 'bg-blue-100 text-blue-700' : 
-              status === 'Contacted' ? 'bg-yellow-100 text-yellow-700' : 
-              status === 'Interested' ? 'bg-purple-100 text-purple-700' :
-              status === 'Converted' ? 'bg-green-100 text-green-700' :
-              status === 'Not Interested' ? 'bg-red-100 text-red-700' :
+            ${status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 
+              status === 'Contacted' ? 'bg-blue-100 text-blue-700' : 
+              status === 'Need Follow Up' ? 'bg-orange-100 text-orange-700' :
+              status === 'Not Interested' ? 'bg-gray-100 text-gray-700' :
+              status === 'Processing Application' ? 'bg-purple-100 text-purple-700' :
+              status === 'Completed' ? 'bg-green-100 text-green-700' :
+              status === 'Rejected Application' ? 'bg-red-100 text-red-700' :
               'bg-gray-100 text-gray-700'}`}
         >
-          <option value="Pending" className="bg-blue-50 text-blue-700 font-semibold">Pending</option>
-          <option value="Contacted" className="bg-yellow-50 text-yellow-700 font-semibold">Contacted</option>
-          <option value="Interested" className="bg-purple-50 text-purple-700 font-semibold">Interested</option>
-          <option value="Converted" className="bg-green-50 text-green-700 font-semibold">Converted</option>
-          <option value="Not Interested" className="bg-red-50 text-red-700 font-semibold">Not Interested</option>
+          <option value="Pending" className="bg-yellow-50 text-yellow-700 font-semibold">Pending</option>
+          <option value="Contacted" className="bg-blue-50 text-blue-700 font-semibold">Contacted</option>
+          <option value="Need Follow Up" className="bg-orange-50 text-orange-700 font-semibold">Need Follow Up</option>
+          <option value="Not Interested" className="bg-gray-50 text-gray-700 font-semibold">Not Interested</option>
+          <option value="Processing Application" className="bg-purple-50 text-purple-700 font-semibold">Processing Application</option>
+          <option value="Completed" className="bg-green-50 text-green-700 font-semibold">Completed</option>
+          <option value="Rejected Application" className="bg-red-50 text-red-700 font-semibold">Rejected Application</option>
         </select>
       );
     },
@@ -208,6 +212,11 @@ export const AdminPlatformLeadsTableColumns = (
         setLocalDate(formattedInitial);
       }, [formattedInitial]);
 
+      // Calculate today's date in YYYY-MM-DD format based on local time, or just use string comparison with UTC format if the app uses UTC dates.
+      // Since formattedInitial uses toISOString (UTC), let's compare with today's UTC toISOString.
+      const today = new Date().toISOString().split('T')[0];
+      const isToday = localDate === today;
+
       return (
         <input 
           type="date"
@@ -216,7 +225,7 @@ export const AdminPlatformLeadsTableColumns = (
             setLocalDate(e.target.value);
             onUpdateStatus(customerId, status, comment, e.target.value);
           }}
-          className="w-full min-w-[130px] px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all text-gray-700"
+          className={`w-full min-w-[130px] px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all ${isToday ? 'text-red-600 font-semibold' : 'text-gray-700'}`}
         />
       );
     }
