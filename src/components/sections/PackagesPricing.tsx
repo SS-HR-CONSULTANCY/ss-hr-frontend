@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Camera,
@@ -43,8 +43,23 @@ const packageIncludes = [
 ];
 
 const PackagesPricing: React.FC = () => {
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
+
+  const handlePlayVideo1 = () => {
+    if (video2Ref.current) {
+      video2Ref.current.pause();
+    }
+  };
+
+  const handlePlayVideo2 = () => {
+    if (video1Ref.current) {
+      video1Ref.current.pause();
+    }
+  };
+
   return (
-    <section id="packages" className="py-20 bg-[#F9F9F9]">
+    <section id="packages" className="pt-8 pb-20 bg-[#F9F9F9]">
       <div className="max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-20">
         {/* Section header */}
         <div className="text-center mb-14">
@@ -64,15 +79,108 @@ const PackagesPricing: React.FC = () => {
               Visa
             </span>
           </h1>
-          <p className="text-neutral-600 text-base max-w-2xl mx-auto leading-relaxed">
-            We are pleased to announce that we have started offering{" "}
-            <strong className="text-[#0C0C0C]">Job Seekers Visas</strong>. A full-support package
-            to help you land your dream career in the UAE.
+          <style>
+            {`
+              @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap');
+            `}
+          </style>
+          <p 
+            className="text-2xl md:text-3xl mx-auto leading-relaxed whitespace-normal xl:whitespace-nowrap font-black"
+            style={{ 
+              fontFamily: "'Caveat', cursive",
+              background: "linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text"
+            }}
+          >
+            We are pleased to announce that we have started offering Job Seekers Visas. A full-support package to help you land your dream career in the UAE.
           </p>
         </div>
 
+        {/* ── Videos Section ── */}
+        <div className="mb-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-4xl mx-auto">
+            <div 
+              className="rounded-2xl overflow-hidden relative mx-auto w-full max-w-sm" 
+              style={{ boxShadow: "0 8px 30px rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.05)", background: "#000" }}
+            >
+              <video 
+                ref={video1Ref}
+                onPlay={handlePlayVideo1}
+                className="w-full h-auto max-h-[550px] object-contain"
+                controls 
+                playsInline
+                preload="metadata"
+                poster="/videos/thumbnail1.png"
+              >
+                <source src="/videos/mala_parvathy.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div 
+              className="rounded-2xl overflow-hidden relative mx-auto w-full max-w-sm" 
+              style={{ boxShadow: "0 8px 30px rgba(0,0,0,0.08)", border: "1px solid rgba(0,0,0,0.05)", background: "#000" }}
+            >
+              <video 
+                ref={video2Ref}
+                onPlay={handlePlayVideo2}
+                className="w-full h-auto max-h-[550px] object-contain"
+                controls 
+                playsInline
+                preload="metadata"
+                poster="/videos/thumbnail2.png"
+              >
+                <source src="/videos/sarayu.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Full Package Single Row ── */}
+        <div
+          className="mb-14 rounded-2xl p-8"
+          style={{
+            background: "#0C0C0C",
+            border: "1px solid rgba(254,188,4,0.2)",
+          }}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ background: "rgba(254,188,4,0.2)" }}
+            >
+              <Briefcase className="w-5 h-5" style={{ color: "#febc04" }} />
+            </div>
+            <h2 className="text-xl font-black text-white">Full Package Available</h2>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {packageIncludes.map(({ icon: Icon, label }) => (
+              <div
+                key={label}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl text-center"
+                style={{ background: "rgba(255,255,255,0.06)" }}
+              >
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center"
+                  style={{
+                    background: "rgba(254,188,4,0.2)",
+                  }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: "#febc04" }} />
+                </div>
+                <span className="text-xs font-bold text-neutral-300 leading-snug">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Main content grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div className="flex flex-col gap-8">
           {/* ── LEFT: Requirements ── */}
           <div
             className="rounded-2xl p-8"
@@ -92,7 +200,7 @@ const PackagesPricing: React.FC = () => {
               <h2 className="text-xl font-black text-[#0C0C0C]">Requirements</h2>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {requirements.map(({ icon: Icon, label }) => (
                 <div
                   key={label}
@@ -148,7 +256,7 @@ const PackagesPricing: React.FC = () => {
                 <h2 className="text-xl font-black text-[#0C0C0C]">Visa Duration</h2>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {visaDurations.map(({ days, color, bg }) => (
                   <div
                     key={days}
@@ -172,46 +280,7 @@ const PackagesPricing: React.FC = () => {
               </div>
             </div>
 
-            {/* Full Package */}
-            <div
-              className="rounded-2xl p-8"
-              style={{
-                background: "#0C0C0C",
-                border: "1px solid rgba(254,188,4,0.2)",
-              }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: "rgba(254,188,4,0.2)" }}
-                >
-                  <Briefcase className="w-5 h-5" style={{ color: "#febc04" }} />
-                </div>
-                <h2 className="text-xl font-black text-white">Full Package Available</h2>
-              </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                {packageIncludes.map(({ icon: Icon, label }) => (
-                  <div
-                    key={label}
-                    className="flex flex-col items-center gap-2 p-4 rounded-xl text-center"
-                    style={{ background: "rgba(255,255,255,0.06)" }}
-                  >
-                    <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center"
-                      style={{
-                        background: "rgba(254,188,4,0.2)",
-                      }}
-                    >
-                      <Icon className="w-5 h-5" style={{ color: "#febc04" }} />
-                    </div>
-                    <span className="text-xs font-bold text-neutral-300 leading-snug">
-                      {label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
