@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+
 import Heading from "../common/Heading";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
@@ -31,22 +31,12 @@ const Reviews: React.FC = () => {
     <section id="reviews" className="pt-16">
       <Heading
         heading="Reviews"
-        dataaos="fade-up"
         headingDescription="See what our customers are saying about us."
         mainDivClassName="text-center mx-auto max-w-2xl"
       />
       <AuroraBackground>
 
-        <motion.div
-          initial={{ opacity: 0.0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{
-            delay: 0.3,
-            duration: 0.8,
-            ease: "easeInOut",
-          }}
-          className="relative flex flex-col gap-4 items-center justify-center px-4"
-        >
+        <div className="relative flex flex-col gap-4 items-center justify-center px-4">
           <div className="relative w-full max-w-screen overflow-hidden">
             <InfiniteMovingCards
               items={testmonials || []}
@@ -54,8 +44,7 @@ const Reviews: React.FC = () => {
               speed="slow"
             />
           </div>
-
-        </motion.div>
+        </div>
 
       </AuroraBackground>
     </section>
