@@ -1,18 +1,13 @@
 import md1 from "../assets/aboutImages/md1.jpg";
 import md2 from "../assets/aboutImages/md2.jpg";
-import webDev from "../assets/svgs/serviceSvg/webDev.svg";
 import visaService from "../assets/svgs/serviceSvg/visa.svg";
-import cvWriting from "../assets/svgs/serviceSvg/cvWriting.svg";
 import ticketService from "../assets/svgs/serviceSvg/ticket.svg";
 import jobRecruitment from "../assets/svgs/serviceSvg/hiring.svg";
-import webDevBanner from "../assets/serviceBanners/webDevBanner.jpg";
 import type { mdDataProps } from "@/types/componentTypes/aboutTypes";
-import labourSupply from "../assets/svgs/serviceSvg/labourSupply.svg";
 import type { ContactItem } from "@/types/componentTypes/contactTypes";
 import medicalRecruitment from "../assets/svgs/serviceSvg/medical.svg";
 import type { PackageProps } from "@/types/componentTypes/packageTypes";
 import type { ServiceProps } from "@/types/componentTypes/servicesTypes";
-import cvWritingBanner from "../assets/serviceBanners/cvWritingBanner.jpg";
 import toursAndTravels from "../assets/svgs/serviceSvg/toursAndTravels.svg";
 import medicalRecBanner from "../assets/serviceBanners/medicalRecBanner.jpg";
 import type { Route, SEOConfig, statsMapIntrface } from "@/types/commonTypes";
@@ -129,13 +124,7 @@ export const navLinks: navLinkProps[] = [
     isForDesk: true,
     isForMob: true,
   },
-  {
-    text: "Services",
-    href: siteUrlConfig.services,
-    content: "components",
-    isForDesk: true,
-  },
-  { text: "Services", href: siteUrlConfig.services, isForMob: true },
+
 
   {
     text: "About Us",
