@@ -43,6 +43,8 @@ export interface FetchFunctionParams<T = string> {
     searchQuery?: string;
     status?: string;
     scheduledDate?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
   };
 }
 

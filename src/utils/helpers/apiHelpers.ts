@@ -30,6 +30,12 @@ export const buildQueryParams = (
     if (params.pagination.scheduledDate) {
       query.append("scheduledDate", params.pagination.scheduledDate);
     }
+    if (params.pagination.sortBy) {
+      query.append("sortBy", params.pagination.sortBy);
+    }
+    if (params.pagination.sortOrder) {
+      query.append("sortOrder", params.pagination.sortOrder);
+    }
   }
 
   return query.toString();

@@ -63,7 +63,9 @@ const TelecallerLeads: React.FC = () => {
       ...params,
       pagination: {
         ...params?.pagination,
-        scheduledDate: 'any'
+        scheduledDate: 'any',
+        sortBy: 'scheduledDate',
+        sortOrder: 'desc'
       }
     });
   };
