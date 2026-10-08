@@ -26,6 +26,7 @@ const CommonTable = <T,>({
   showSearchInput,
   searchPlaceholder = "Search...",
   showStatusFilter,
+  statusOptions,
   headerAction,
   onDataFetched,
 }: CommonTableComponentProps<T>) => {
@@ -164,7 +165,10 @@ const CommonTable = <T,>({
                 className="pl-6 pr-2 py-2 h-10 w-44 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground text-sm appearance-none cursor-pointer"
               >
                 <option value="all">All Statuses</option>
-                {(Object.entries(ENQUIRY_STATUS_CONFIG) as [string, { label: string }][]).map(
+                {(statusOptions
+                  ? statusOptions.map((o) => [o.value, { label: o.label }] as [string, { label: string }])
+                  : (Object.entries(ENQUIRY_STATUS_CONFIG) as [string, { label: string }][])
+                ).map(
                   ([key, cfg]) => (
                     <option key={key} value={key}>{cfg.label}</option>
                   )

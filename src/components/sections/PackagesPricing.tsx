@@ -19,11 +19,12 @@ import {
   MapPin,
   CheckCircle2,
 } from "lucide-react";
+import { IconBrandWhatsapp } from "@tabler/icons-react";
 
 const requirements = [
   { icon: Camera, label: "Personal Photo" },
-  { icon: FileText, label: "Passport copy valid for at least 6 months" },
-  { icon: GraduationCap, label: "University degree attested" },
+  { icon: FileText, label: "Passport Copy" },
+  { icon: GraduationCap, label: "Attested Certificates" },
   { icon: Briefcase, label: "Experience certificate" },
   { icon: User, label: "CV" },
 ];
@@ -310,7 +311,7 @@ const PackagesPricing: React.FC = () => {
                 color: "white",
               }}
             >
-              <Phone className="w-4 h-4" />
+              <IconBrandWhatsapp className="w-4 h-4" color="#25D366" />
               +971 542 326 584
             </a>
             <Link
@@ -328,12 +329,17 @@ const PackagesPricing: React.FC = () => {
         </div>
 
         {/* ── Contact details ── */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
               icon: Phone,
-              label: "+971 542326584  •  +971 542326583",
+              label: "+971 542326584",
               href: "tel:+971542326584",
+            },
+            {
+              icon: Phone,
+              label: "+971 542326583",
+              href: "tel:+971542326583",
             },
             {
               icon: Mail,

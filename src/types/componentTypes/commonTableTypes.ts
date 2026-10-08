@@ -20,6 +20,7 @@ export interface CommonTableComponentProps<T> {
   showSearchInput?: boolean;
   searchPlaceholder?: string;
   showStatusFilter?: boolean;
+  statusOptions?: { label: string; value: string }[];
   headerAction?: React.ReactNode;
   onDataFetched?: (data: ApiPaginatedResponse<T>) => void;
 }

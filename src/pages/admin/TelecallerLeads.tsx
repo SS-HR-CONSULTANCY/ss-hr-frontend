@@ -8,10 +8,21 @@ import { toast } from "react-toastify";
 
 import { Users, Clock, CheckCircle, PhoneCall } from "lucide-react";
 
+const CONTACT_STATUS_OPTIONS = [
+  "Pending",
+  "Contacted",
+  "Need Follow Up",
+  "Not Interested",
+  "Processing Application",
+  "Completed",
+  "Rejected Application",
+];
+
 const TelecallerLeads: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0 });
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   
   // State for telecalling updates
   const [status, setStatus] = useState<string>("Pending");
@@ -64,6 +75,7 @@ const TelecallerLeads: React.FC = () => {
       pagination: {
         ...params?.pagination,
         scheduledDate: 'any',
+        status: statusFilter === "all" ? undefined : statusFilter,
         sortBy: 'scheduledDate',
         sortOrder: 'desc'
       }
@@ -72,46 +84,67 @@ const TelecallerLeads: React.FC = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-1">
+        <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900 flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-medium mb-1">Total Contacts</p>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</h3>
           </div>
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600 dark:text-blue-400">
+          <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-600 dark:text-blue-400">
             <Users className="w-5 h-5" />
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+        <div className="bg-yellow-50 dark:bg-yellow-950/20 p-4 rounded-xl shadow-sm border border-yellow-100 dark:border-yellow-900 flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-medium mb-1">Pending to contact</p>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending}</h3>
           </div>
-          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-full text-yellow-600 dark:text-yellow-400">
+          <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-full text-yellow-600 dark:text-yellow-400">
             <Clock className="w-5 h-5" />
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+        <div className="bg-green-50 dark:bg-green-950/20 p-4 rounded-xl shadow-sm border border-green-100 dark:border-green-900 flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-medium mb-1">Contacted</p>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.contacted}</h3>
           </div>
-          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-full text-green-600 dark:text-green-400">
+          <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full text-green-600 dark:text-green-400">
             <CheckCircle className="w-5 h-5" />
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+        <div className="bg-orange-50 dark:bg-orange-950/20 p-4 rounded-xl shadow-sm border border-orange-100 dark:border-orange-900 flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-medium mb-1">Need Follow Up</p>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.needFollowUp}</h3>
           </div>
-          <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-full text-orange-600 dark:text-orange-400">
+          <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-full text-orange-600 dark:text-orange-400">
             <PhoneCall className="w-5 h-5" />
           </div>
         </div>
       </div>
 
+        <div className="bg-purple-50 dark:bg-purple-950/20 p-4 rounded-xl shadow-sm border border-purple-100 dark:border-purple-900 flex flex-col justify-center lg:w-64 shrink-0">
+          <label htmlFor="contact-status-filter" className="text-sm text-gray-500 font-medium mb-1">
+            Filter by Status
+          </label>
+          <select
+            id="contact-status-filter"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="w-full px-2 py-2 text-sm rounded-md border border-purple-200 dark:border-purple-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-400 cursor-pointer"
+          >
+            <option value="all">All Statuses</option>
+            {CONTACT_STATUS_OPTIONS.map((o) => (
+              <option key={o} value={o}>{o}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <CommonTable<ImportedCustomer>
+        key={statusFilter}
+        id={statusFilter}
         fetchApiFunction={fetchAllScheduledLeads}
         queryKey="admin-telecaller-leads"
         heading="All Scheduled Leads"

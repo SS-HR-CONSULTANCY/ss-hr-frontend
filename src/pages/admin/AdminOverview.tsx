@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Users, Briefcase, Activity, Clock, CheckCircle } from "lucide-react";
+import { Users, Briefcase, Activity, Clock, CheckCircle, Contact } from "lucide-react";
 
 import DataFetchingError from "@/components/common/DataFetchingError";
 import GraphShimmer from "@/components/shimmer/GraphShimmer";
 import { adminFetchEnquiryAnalyticsData, adminFetchEnquiryStatusDistribution, adminFetchEnquirySummaryStats } from "@/utils/apis/adminApi";
 import { adminFetchAllCategories } from "@/utils/apis/adminCategoryApi";
+import { adminFetchAllPlatformLeads } from "@/utils/apis/adminPlatformLeadsApi";
 import { ENQUIRY_STATUS_CONFIG } from "@/utils/enquiryStatusConfig";
 import {
   ChartContainer,
@@ -64,6 +65,17 @@ const AdminOverview: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
+  // Total contacts from Contact List (same filter as TelecallerLeads page)
+  const { data: contactListData } = useQuery({
+    queryKey: ["overviewContactListTotal"],
+    queryFn: () =>
+      adminFetchAllPlatformLeads({
+        pagination: { page: 1, limit: 1, scheduledDate: "any" },
+      }),
+    refetchOnWindowFocus: false,
+  });
+  const totalContacts = contactListData?.stats?.total ?? contactListData?.totalCount ?? 0;
+
   const pieData = React.useMemo(() => {
     if (!statusDistributionData) return [];
     
@@ -104,7 +116,7 @@ const AdminOverview: React.FC = () => {
           <GraphShimmer count={1} />
         </div>
       ) : summaryStatsData ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4 w-full">
           <Card className="bg-blue-50/50 dark:bg-blue-950/20 border-blue-100 dark:border-blue-900 shadow-sm transition-all hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Enquiries</CardTitle>
@@ -152,6 +164,16 @@ const AdminOverview: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600 dark:text-green-400">{summaryStatsData.completed}</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-cyan-50/50 dark:bg-cyan-950/20 border-cyan-100 dark:border-cyan-900 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Contacts</CardTitle>
+              <Contact className="h-4 w-4 text-cyan-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-cyan-700 dark:text-cyan-400">{totalContacts}</div>
             </CardContent>
           </Card>
         </div>
