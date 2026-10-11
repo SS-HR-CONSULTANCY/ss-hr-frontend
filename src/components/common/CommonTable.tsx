@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, X } from "lucide-react";
 import { ENQUIRY_STATUS_CONFIG } from "@/utils/enquiryStatusConfig";
 import { DataTable } from "../table/data-table";
 import { useQuery } from "@tanstack/react-query";
@@ -148,8 +148,18 @@ const CommonTable = <T,>({
                 placeholder={searchPlaceholder}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="pl-8 pr-2 py-2 h-10 w-64 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground placeholder-gray-400"
+                className="pl-8 pr-7 py-2 h-10 w-64 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground placeholder-gray-400"
               />
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={() => setSearchInput("")}
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+                  aria-label="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
           )}
 

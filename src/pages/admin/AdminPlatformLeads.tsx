@@ -60,10 +60,12 @@ const AdminPlatformLeads: React.FC = () => {
       <CommonTable<ImportedCustomer>
         fetchApiFunction={adminFetchAllPlatformLeads}
         queryKey="admin-platform-leads"
-        heading="Leads"
+        heading="Platform Leads"
         description=""
         column={columns}
         columnsCount={9}
+        showSearchInput={true}
+        searchPlaceholder="Search name, email, phone, state..."
       />
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
