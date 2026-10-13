@@ -2,6 +2,13 @@ import { axiosInstance } from "@/lib/axios";
 import { buildQueryParams } from "../helpers/apiHelpers";
 import type { FetchFunctionParams, ApiPaginatedResponse } from "@/types/commonTypes";
 
+export interface ImportedCustomerActivity {
+  type: "status" | "comment" | "schedule" | "state";
+  from?: string;
+  to?: string;
+  at: string;
+}
+
 export interface ImportedCustomer {
   _id: string;
   name: string;
@@ -15,6 +22,7 @@ export interface ImportedCustomer {
   status: string;
   comment: string;
   scheduledDate?: string;
+  activityLog?: ImportedCustomerActivity[];
   createdAt: string;
 }
 
@@ -33,6 +41,7 @@ export const adminFetchAllPlatformLeads = async (
     currentPage: resData.page,
     totalPages: resData.totalPages,
     stats: resData.stats,
+    states: resData.states,
   };
 };
 

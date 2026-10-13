@@ -30,6 +30,9 @@ export const buildQueryParams = (
     if (params.pagination.scheduledDate) {
       query.append("scheduledDate", params.pagination.scheduledDate);
     }
+    if (params.pagination.state && params.pagination.state !== "all") {
+      query.append("state", params.pagination.state);
+    }
     if (params.pagination.sortBy) {
       query.append("sortBy", params.pagination.sortBy);
     }

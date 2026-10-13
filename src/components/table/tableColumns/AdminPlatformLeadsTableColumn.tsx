@@ -6,8 +6,10 @@ import type { ImportedCustomer } from "@/utils/apis/adminPlatformLeadsApi";
 
 export const AdminPlatformLeadsTableColumns = (
   onView: (customer: ImportedCustomer) => void,
-  onUpdateStatus: (id: string, newStatus: string, comment: string, scheduledDate?: string, state?: string) => void
-): ColumnDef<ImportedCustomer>[] => [
+  onUpdateStatus: (id: string, newStatus: string, comment: string, scheduledDate?: string, state?: string) => void,
+  options?: { hideEmail?: boolean }
+): ColumnDef<ImportedCustomer>[] => {
+  const columns: ColumnDef<ImportedCustomer>[] = [
   {
     id: "serialNumber",
     header: ({ column }) => (
@@ -28,7 +30,7 @@ export const AdminPlatformLeadsTableColumns = (
       const linkedinUrl = row.original.linkedinUrl;
 
       return (
-        <div className="font-medium flex items-center justify-start gap-2 text-left w-full">
+        <div className="font-medium flex items-center justify-center gap-2 text-center w-full">
           {name}
           {linkedinUrl && (
             <a
@@ -52,7 +54,7 @@ export const AdminPlatformLeadsTableColumns = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
-    cell: ({ row }) => <div className="text-left w-full flex justify-start">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="text-center w-full flex justify-center">{row.getValue("email")}</div>,
   },
   {
     accessorKey: "phone",
@@ -111,7 +113,7 @@ export const AdminPlatformLeadsTableColumns = (
               }
             }
           }}
-          className="w-full min-w-[100px] px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all placeholder:text-gray-400"
+          className="w-full min-w-[100px] text-center px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all placeholder:text-gray-400"
           placeholder="N/A"
         />
       );
@@ -166,30 +168,49 @@ export const AdminPlatformLeadsTableColumns = (
       const initialDate = row.original.scheduledDate;
       const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : "";
       const [localComment, setLocalComment] = React.useState(initialComment);
+      const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 
       React.useEffect(() => {
         setLocalComment(initialComment);
       }, [initialComment]);
 
+      const autoResize = () => {
+        if (textareaRef.current) {
+          textareaRef.current.style.height = "auto";
+          textareaRef.current.style.height = `${Math.max(36, textareaRef.current.scrollHeight)}px`;
+        }
+      };
+
+      React.useEffect(() => {
+        autoResize();
+      }, [localComment]);
+
       return (
-        <input 
+        <textarea 
+          ref={textareaRef}
           value={localComment}
-          onChange={(e) => setLocalComment(e.target.value)}
+          rows={1}
+          onChange={(e) => {
+            setLocalComment(e.target.value);
+            autoResize();
+          }}
           onBlur={() => {
             if (localComment !== initialComment) {
               onUpdateStatus(customerId, status, localComment, formattedInitialDate);
             }
           }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               if (localComment !== initialComment) {
                 onUpdateStatus(customerId, status, localComment, formattedInitialDate);
               }
+              (e.target as HTMLTextAreaElement).blur();
             }
           }}
-          className="w-full min-w-[150px] px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all"
+          className="w-full min-w-[220px] text-center px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all resize-none whitespace-normal break-words leading-relaxed overflow-hidden placeholder:text-gray-400"
           placeholder="Add comment..."
+          title={localComment || "Add comment..."}
         />
       );
     },
@@ -225,7 +246,7 @@ export const AdminPlatformLeadsTableColumns = (
             setLocalDate(e.target.value);
             onUpdateStatus(customerId, status, comment, e.target.value);
           }}
-          className={`w-full min-w-[130px] px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all ${isToday ? 'text-red-600 font-semibold' : 'text-gray-700'}`}
+          className={`w-full min-w-[130px] text-center px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all ${isToday ? 'text-red-600 font-semibold' : 'text-gray-700'}`}
         />
       );
     }
@@ -245,3 +266,10 @@ export const AdminPlatformLeadsTableColumns = (
     },
   },
 ];
+
+  if (options?.hideEmail) {
+    return columns.filter((col) => ("accessorKey" in col ? col.accessorKey !== "email" : true));
+  }
+
+  return columns;
+};

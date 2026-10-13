@@ -24,6 +24,7 @@ export interface ApiPaginatedResponse<T> extends ApiBaseResponse {
   totalCount?: number;
   currentPage?: number;
   totalPages?: number;
+  states?: string[];
   stats?: {
     total: number;
     pending: number;
@@ -43,6 +44,7 @@ export interface FetchFunctionParams<T = string> {
     searchQuery?: string;
     status?: string;
     scheduledDate?: string;
+    state?: string;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
   };

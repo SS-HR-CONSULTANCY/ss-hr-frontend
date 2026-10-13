@@ -1,12 +1,13 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import CommonTable from "@/components/common/CommonTable";
 import { adminFetchAllPlatformLeads, adminUpdatePlatformLead, type ImportedCustomer } from "@/utils/apis/adminPlatformLeadsApi";
 import { AdminPlatformLeadsTableColumns } from "@/components/table/tableColumns/AdminPlatformLeadsTableColumn";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import LeadTimeline from "@/components/admin/LeadTimeline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-import { Users, Clock, CheckCircle, PhoneCall } from "lucide-react";
+import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -18,11 +19,41 @@ const CONTACT_STATUS_OPTIONS = [
   "Rejected Application",
 ];
 
+const sortStatesWithPriority = (states: string[]): string[] => {
+  const getPriorityIndex = (name: string): number => {
+    const clean = name.trim().toLowerCase().replace(/\s+/g, "");
+    if (clean === "kerala") return 0;
+    if (clean === "tamilnadu") return 1;
+    if (clean === "karnataka") return 2;
+    return 999;
+  };
+  return [...states].sort((a, b) => {
+    const pA = getPriorityIndex(a);
+    const pB = getPriorityIndex(b);
+    if (pA !== pB) return pA - pB;
+    return a.localeCompare(b);
+  });
+};
+
+const DEFAULT_INDIAN_STATES = sortStatesWithPriority([
+  "Kerala", "Tamil Nadu", "Karnataka",
+  "Andhra Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Delhi",
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir",
+  "Jharkhand", "Madhya Pradesh", "Maharashtra",
+  "Odisha", "Puducherry", "Punjab", "Rajasthan", "Telangana",
+  "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Dubai", "Sharjah"
+]);
+
 const TelecallerLeads: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0 });
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [stateFilter, setStateFilter] = useState<string>("all");
+  const [availableStates, setAvailableStates] = useState<string[]>(DEFAULT_INDIAN_STATES);
+  const [dateFilter, setDateFilter] = useState<string>("any");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   
   // State for telecalling updates
   const [status, setStatus] = useState<string>("Pending");
@@ -30,6 +61,13 @@ const TelecallerLeads: React.FC = () => {
   const [scheduledDate, setScheduledDate] = useState<string>("");
 
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm.trim());
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const updateMutation = useMutation({
     mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string, state?: string } }) => 
@@ -67,15 +105,24 @@ const TelecallerLeads: React.FC = () => {
     });
   };
 
-  const columns = AdminPlatformLeadsTableColumns(handleView, handleInlineStatusUpdate);
+  const columns = AdminPlatformLeadsTableColumns(handleView, handleInlineStatusUpdate, { hideEmail: true });
 
   const fetchAllScheduledLeads = (params?: any) => {
+    let scheduledDateParam = 'any';
+    if (dateFilter === 'today') {
+      scheduledDateParam = new Date().toISOString().split('T')[0];
+    } else if (dateFilter !== 'any') {
+      scheduledDateParam = dateFilter;
+    }
+
     return adminFetchAllPlatformLeads({
       ...params,
       pagination: {
         ...params?.pagination,
-        scheduledDate: 'any',
+        searchQuery: debouncedSearch || undefined,
+        scheduledDate: scheduledDateParam,
         status: statusFilter === "all" ? undefined : statusFilter,
+        state: stateFilter === "all" ? undefined : stateFilter,
         sortBy: 'scheduledDate',
         sortOrder: 'desc'
       }
@@ -84,8 +131,8 @@ const TelecallerLeads: React.FC = () => {
 
   return (
     <div>
-      <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 mb-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-1">
+      {/* Top Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
         <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900 flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-medium mb-1">Total Contacts</p>
@@ -124,35 +171,117 @@ const TelecallerLeads: React.FC = () => {
         </div>
       </div>
 
-        <div className="bg-purple-50 dark:bg-purple-950/20 p-4 rounded-xl shadow-sm border border-purple-100 dark:border-purple-900 flex flex-col justify-center lg:w-64 shrink-0">
-          <label htmlFor="contact-status-filter" className="text-sm text-gray-500 font-medium mb-1">
-            Filter by Status
-          </label>
-          <select
-            id="contact-status-filter"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full px-2 py-2 text-sm rounded-md border border-purple-200 dark:border-purple-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-purple-400 cursor-pointer"
-          >
-            <option value="all">All Statuses</option>
-            {CONTACT_STATUS_OPTIONS.map((o) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
+      {/* Filters and Search Bar just below stats */}
+      <div className="bg-white dark:bg-gray-950 p-3.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        {/* Search Bar */}
+        <div className="relative flex-1">
+          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search name, phone, state, designation..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+          />
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={() => setSearchTerm("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-0.5"
+              aria-label="Clear search"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Status Filter */}
+          <div className="relative flex items-center">
+            <Filter className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
+            <select
+              id="contact-status-filter"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300"
+            >
+              <option value="all">All Statuses</option>
+              {CONTACT_STATUS_OPTIONS.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* State Filter */}
+          <div className="relative flex items-center">
+            <MapPin className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
+            <select
+              id="contact-state-filter"
+              value={stateFilter}
+              onChange={(e) => setStateFilter(e.target.value)}
+              className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300 max-w-[170px]"
+            >
+              <option value="all">All States</option>
+              {availableStates.map((st) => (
+                <option key={st} value={st}>{st}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Date Filter */}
+          <div className="relative flex items-center">
+            <Calendar className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
+            <select
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300"
+            >
+              <option value="any">All Scheduled</option>
+              <option value="today">Scheduled Today</option>
+            </select>
+          </div>
+
+          {/* Reset Filters */}
+          {(statusFilter !== "all" || stateFilter !== "all" || dateFilter !== "any" || searchTerm.trim()) && (
+            <button
+              onClick={() => {
+                setStatusFilter("all");
+                setStateFilter("all");
+                setDateFilter("any");
+                setSearchTerm("");
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
+              title="Reset all filters"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Reset
+            </button>
+          )}
         </div>
       </div>
 
       <CommonTable<ImportedCustomer>
-        key={statusFilter}
-        id={statusFilter}
+        key={`${statusFilter}-${stateFilter}-${dateFilter}-${debouncedSearch}`}
+        id={`${statusFilter}-${stateFilter}-${dateFilter}-${debouncedSearch}`}
         fetchApiFunction={fetchAllScheduledLeads}
         queryKey="admin-telecaller-leads"
-        heading="All Scheduled Leads"
-        description="Clients that have been scheduled for contact"
         column={columns}
-        columnsCount={9}
+        columnsCount={columns.length}
         pageSize={8}
         onDataFetched={useCallback((data: any) => {
+          if (data.states && Array.isArray(data.states) && data.states.length > 0) {
+            setAvailableStates(prev => {
+              const merged = sortStatesWithPriority(Array.from(new Set([...prev, ...data.states])));
+              if (
+                merged.length === prev.length &&
+                merged.every((val, idx) => val === prev[idx])
+              ) {
+                return prev;
+              }
+              return merged;
+            });
+          }
           if (data.stats) {
             setStats(prev => {
               const newTotal = data.stats.total || 0;
@@ -196,7 +325,16 @@ const TelecallerLeads: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Email</h4>
-                  <p className="text-gray-900 dark:text-gray-100">{selectedCustomer.email}</p>
+                  {selectedCustomer.email ? (
+                    <a
+                      href={`mailto:${selectedCustomer.email}`}
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline break-all font-medium text-sm inline-flex items-center gap-1"
+                    >
+                      {selectedCustomer.email}
+                    </a>
+                  ) : (
+                    <p className="text-gray-400 text-sm">N/A</p>
+                  )}
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Phone</h4>
@@ -272,6 +410,8 @@ const TelecallerLeads: React.FC = () => {
                   </button>
                 </div>
               </div>
+
+              <LeadTimeline customer={selectedCustomer} />
               
               <div>
                 <h4 className="text-[15px] font-semibold text-gray-900 dark:text-gray-100 mb-3">Designations</h4>
