@@ -6,8 +6,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import LeadTimeline from "@/components/admin/LeadTimeline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE } from "@/utils/helpers/followUp";
 
-import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw } from "lucide-react";
+import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -91,6 +92,9 @@ const TelecallerLeads: React.FC = () => {
   };
 
   const handleInlineStatusUpdate = (id: string, newStatus: string, existingComment: string, scheduledDate?: string, state?: string) => {
+    if (isMissedFollowUp(newStatus, scheduledDate)) {
+      toast.warn(FOLLOW_UP_WARNING_MESSAGE);
+    }
     updateMutation.mutate({
       id,
       payload: { status: newStatus, comment: existingComment, scheduledDate, state }
@@ -99,6 +103,9 @@ const TelecallerLeads: React.FC = () => {
 
   const handleUpdateLead = () => {
     if (!selectedCustomer) return;
+    if (isMissedFollowUp(status, scheduledDate)) {
+      toast.warn(FOLLOW_UP_WARNING_MESSAGE);
+    }
     updateMutation.mutate({
       id: selectedCustomer._id,
       payload: { status, comment, scheduledDate }
@@ -123,7 +130,7 @@ const TelecallerLeads: React.FC = () => {
         scheduledDate: scheduledDateParam,
         status: statusFilter === "all" ? undefined : statusFilter,
         state: stateFilter === "all" ? undefined : stateFilter,
-        sortBy: 'scheduledDate',
+        sortBy: 'scheduledAt',
         sortOrder: 'desc'
       }
     });
@@ -397,8 +404,14 @@ const TelecallerLeads: React.FC = () => {
                       type="date"
                       value={scheduledDate}
                       onChange={(e) => setScheduledDate(e.target.value)}
-                      className="w-full rounded-lg border-gray-300 border p-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700"
+                      className={`w-full rounded-lg border p-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 ${isMissedFollowUp(status, scheduledDate) ? 'border-red-400 bg-red-50/60' : 'border-gray-300 dark:border-gray-700'}`}
                     />
+                    {isMissedFollowUp(status, scheduledDate) && (
+                      <div className="mt-2 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/30 dark:border-red-900 px-3 py-2 text-xs font-medium text-red-700 dark:text-red-400">
+                        <AlertTriangle className="w-4 h-4 shrink-0 mt-px" />
+                        <span>{FOLLOW_UP_WARNING_MESSAGE}</span>
+                      </div>
+                    )}
                   </div>
 
                   <button 

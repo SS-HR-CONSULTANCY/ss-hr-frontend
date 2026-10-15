@@ -20,6 +20,8 @@ export const adminUpdateBill = async (props: {
   serviceStatus?: string;
   comment?: string;
   dueDate?: string;
+  googleReviewStatus?: string;
+  googleReviewLink?: string;
 }): Promise<ApiBaseResponse> => {
   const response = await axiosInstance.patch(`/admin/bills/${props.enquiryId}`, {
     enquiryType: props.enquiryType,
@@ -29,6 +31,8 @@ export const adminUpdateBill = async (props: {
     serviceStatus: props.serviceStatus,
     comment: props.comment,
     dueDate: props.dueDate,
+    googleReviewStatus: props.googleReviewStatus,
+    googleReviewLink: props.googleReviewLink,
   });
   return response.data;
 };

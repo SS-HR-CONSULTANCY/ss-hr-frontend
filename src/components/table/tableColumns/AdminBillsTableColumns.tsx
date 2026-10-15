@@ -16,14 +16,18 @@ import {
 } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, PlusCircle, Pencil, Trash2 } from "lucide-react";
+import { CalendarIcon, PlusCircle, Pencil, Trash2, Star, ExternalLink, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const toTitleCase = (str: string) => {
+const toTitleCase = (str: string, maxWords?: number) => {
   if (!str) return "";
-  return str.split(" ").map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  ).join(" ");
+  let words = str.trim().split(/\s+/).filter(Boolean);
+  if (maxWords && maxWords > 0) {
+    words = words.slice(0, maxWords);
+  }
+  return words
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 };
 
 const InlineAmountCell = ({ value, currency, onSave }: { value: number, currency: string, onSave: (val: number, cur: string) => void }) => {
@@ -94,18 +98,18 @@ const InlineDueDateCell = ({ value, isFullyPaid, onSave }: { value: string | nul
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          disabled={isDisabled}
-          className={cn(
-            "w-[85px] justify-start text-left font-normal h-7 text-[10px] px-1 whitespace-nowrap text-slate-700",
-            !date && "text-slate-500 border-dashed",
-            isDisabled && "opacity-40"
-          )}
-        >
-          <CalendarIcon className="mr-1 h-3 w-3 opacity-70 shrink-0 text-slate-500" />
-          {date ? format(date, "dd-MM-yy") : <span>Set due</span>}
-        </Button>
+          <Button
+            variant="outline"
+            disabled={isDisabled}
+            className={cn(
+              "w-[74px] justify-center text-center font-normal h-7 text-[10px] px-1 whitespace-nowrap text-slate-700",
+              !date && "text-slate-500 border-dashed",
+              isDisabled && "opacity-40"
+            )}
+          >
+            <CalendarIcon className="mr-1 h-3 w-3 opacity-70 shrink-0 text-slate-500" />
+            {date ? format(date, "dd MMM") : <span>Set due</span>}
+          </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
@@ -343,6 +347,171 @@ const PaymentHistoryPopover = ({
   );
 };
 
+const GoogleReviewCell = ({
+  status,
+  link,
+  clientName,
+  onSave,
+}: {
+  status?: string;
+  link?: string;
+  clientName?: string;
+  onSave: (data: { googleReviewStatus: string; googleReviewLink: string }) => void;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [reviewStatus, setReviewStatus] = useState<string>(status || "pending");
+  const [reviewLink, setReviewLink] = useState<string>(link || "");
+
+  useEffect(() => {
+    setReviewStatus(status || "pending");
+    setReviewLink(link || "");
+  }, [status, link]);
+
+  const isReviewed = reviewStatus === "reviewed";
+  const hasLink = Boolean(reviewLink && reviewLink.trim().length > 0);
+  const formattedLink = reviewLink ? (reviewLink.startsWith("http://") || reviewLink.startsWith("https://") ? reviewLink : `https://${reviewLink}`) : "";
+
+  const handleSave = () => {
+    onSave({
+      googleReviewStatus: reviewStatus,
+      googleReviewLink: reviewLink.trim(),
+    });
+    setIsOpen(false);
+  };
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <div className="flex items-center gap-1 justify-center">
+        <PopoverTrigger asChild>
+          {isReviewed ? (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 text-[10px] font-semibold px-1.5 whitespace-nowrap bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 flex items-center gap-1 shadow-xs cursor-pointer"
+              title="Click to view/edit Google Review"
+            >
+              <Star className="w-2.5 h-2.5 text-amber-500 fill-amber-500 shrink-0" />
+              <span>Reviewed</span>
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 text-[10px] font-semibold px-1.5 whitespace-nowrap bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-100 hover:text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800 flex items-center gap-1 shadow-xs cursor-pointer"
+              title="Google Review is pending - click to update"
+            >
+              <AlertTriangle className="w-2.5 h-2.5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span>Pending</span>
+            </Button>
+          )}
+        </PopoverTrigger>
+
+        {hasLink && (
+          <a
+            href={formattedLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open Google Review Link"
+            className="h-7 w-6 inline-flex items-center justify-center rounded border border-slate-200 bg-white text-slate-500 hover:text-blue-600 hover:border-blue-300 transition-colors dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 shrink-0 shadow-xs"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ExternalLink className="w-2.5 h-2.5" />
+          </a>
+        )}
+      </div>
+
+      <PopoverContent className="w-72 p-3" align="end">
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <label className="text-[11px] font-medium text-slate-600 dark:text-slate-300">
+              Review Status
+            </label>
+            <Select
+              value={reviewStatus}
+              onValueChange={(val: string) => setReviewStatus(val)}
+            >
+              <SelectTrigger className="h-8 text-xs font-medium">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pending">
+                  <div className="flex items-center gap-1.5 text-amber-600 font-medium">
+                    <AlertTriangle className="w-3 h-3 text-amber-500 shrink-0" />
+                    <span>Pending / Not Given</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="reviewed">
+                  <div className="flex items-center gap-1.5 text-emerald-600">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span>Reviewed / Given</span>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-medium text-slate-600 dark:text-slate-300">
+                Google Review Link
+              </label>
+              {reviewLink && (
+                <a
+                  href={reviewLink.startsWith("http") ? reviewLink : `https://${reviewLink}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] text-blue-600 hover:underline inline-flex items-center gap-0.5"
+                >
+                  <span>Test Link</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              )}
+            </div>
+            <Input
+              type="text"
+              placeholder="Paste Google Review URL..."
+              value={reviewLink}
+              onChange={(e) => {
+                const val = e.target.value;
+                setReviewLink(val);
+                // When a review link is pasted, auto-select Reviewed if currently pending
+                if (val.trim() && reviewStatus === "pending") {
+                  setReviewStatus("reviewed");
+                }
+              }}
+              className="h-8 text-xs"
+            />
+          </div>
+
+          <div className="flex items-center justify-end gap-2 pt-2 border-t">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-7 text-xs px-2.5"
+              onClick={() => {
+                setReviewStatus(status || "pending");
+                setReviewLink(link || "");
+                setIsOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              className="h-7 text-xs px-3 bg-[#00838f] hover:bg-[#006978] text-white"
+              onClick={handleSave}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 export const AdminBillsTableColumns = (
   handleUpdateInvoiceAmount: (enquiry: AdminFetchAllBillsResponse, amount: number, currency: string) => void,
   handleUpdateStatus: (enquiry: AdminFetchAllBillsResponse, status: string) => void,
@@ -350,20 +519,26 @@ export const AdminBillsTableColumns = (
   handleUpdateDueDate: (enquiry: AdminFetchAllBillsResponse, dueDate: string) => void,
   handleUpdateServiceStatus?: (enquiry: AdminFetchAllBillsResponse, serviceStatus: string) => void,
   handleUpdatePayment?: (enquiry: AdminFetchAllBillsResponse, paymentId: string, payment: { date: string, amount: number }) => void,
-  handleDeletePayment?: (enquiry: AdminFetchAllBillsResponse, paymentId: string) => void
+  handleDeletePayment?: (enquiry: AdminFetchAllBillsResponse, paymentId: string) => void,
+  handleUpdateGoogleReview?: (enquiry: AdminFetchAllBillsResponse, data: { googleReviewStatus: string; googleReviewLink: string }) => void
 ): ColumnDef<AdminFetchAllBillsResponse>[] => {
   return [
     {
       accessorKey: "date",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
-      cell: ({ row }) => <span className="text-[11px] whitespace-nowrap text-slate-700 font-medium">{format(new Date(row.original.date), "dd MMM yyyy")}</span>,
+      cell: ({ row }) => <span className="text-[11px] whitespace-nowrap text-slate-700 font-medium">{row.original.date ? format(new Date(row.original.date), "dd MMM") : "-"}</span>,
     },
     {
       accessorKey: "name",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Name" className="justify-start pl-1" />,
       cell: ({ row }) => (
         <div className="flex items-center justify-start w-full pl-1">
-          <span className="font-semibold text-[11px] whitespace-nowrap text-left text-slate-800">{toTitleCase(row.original.name)}</span>
+          <span 
+            className="font-semibold text-[11px] whitespace-nowrap text-left text-slate-800"
+            title={row.original.name}
+          >
+            {toTitleCase(row.original.name, 2)}
+          </span>
         </div>
       ),
     },
@@ -445,7 +620,7 @@ export const AdminBillsTableColumns = (
           value={row.original.status || "pending"}
           onValueChange={(value) => handleUpdateStatus(row.original, value)}
         >
-          <SelectTrigger className="w-[85px] h-7 text-[10px] font-semibold px-1 whitespace-nowrap">
+          <SelectTrigger className="w-[76px] h-7 text-[10px] font-semibold px-1 whitespace-nowrap">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -464,18 +639,30 @@ export const AdminBillsTableColumns = (
           value={row.original.serviceStatus || "processing_application"}
           onValueChange={(value) => handleUpdateServiceStatus && handleUpdateServiceStatus(row.original, value)}
         >
-          <SelectTrigger className="w-[125px] h-7 text-[10px] font-semibold px-1 whitespace-nowrap">
+          <SelectTrigger className="w-[82px] h-7 text-[10px] font-semibold px-1 whitespace-nowrap">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="processing_application">
-              <span className="text-blue-600 dark:text-blue-400">Processing Application</span>
+              <span className="text-blue-600 dark:text-blue-400">Processing</span>
             </SelectItem>
             <SelectItem value="completed">
               <span className="text-green-600 dark:text-green-400">Completed</span>
             </SelectItem>
           </SelectContent>
         </Select>
+      ),
+    },
+    {
+      accessorKey: "googleReview",
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Google Review" />,
+      cell: ({ row }) => (
+        <GoogleReviewCell
+          status={row.original.googleReviewStatus}
+          link={row.original.googleReviewLink}
+          clientName={toTitleCase(row.original.name)}
+          onSave={(data) => handleUpdateGoogleReview && handleUpdateGoogleReview(row.original, data)}
+        />
       ),
     },
   ];

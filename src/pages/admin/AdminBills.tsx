@@ -14,7 +14,7 @@ const AdminBills: React.FC = () => {
   ];
 
   return (
-    <div className="px-2 sm:px-6 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">
+    <div className="px-2 sm:px-3 pb-2 sm:pb-6 pt-0 sm:pt-2 w-full max-w-[100vw] overflow-hidden">
       {/* Tab bar */}
       <div className="flex items-center gap-1 border-b border-border mb-5">
         {tabs.map((tab) => (

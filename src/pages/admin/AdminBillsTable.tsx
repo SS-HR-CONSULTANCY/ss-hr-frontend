@@ -16,7 +16,18 @@ const AdminBillsTable: React.FC = () => {
   const queryClient = useQueryClient();
 
   const updateBillMutation = useMutation({
-    mutationFn: (data: { enquiryId: string; enquiryType: string; invoiceAmount?: number; currency?: string; status?: string; comment?: string; serviceStatus?: string; dueDate?: string }) => 
+    mutationFn: (data: { 
+      enquiryId: string; 
+      enquiryType: string; 
+      invoiceAmount?: number; 
+      currency?: string; 
+      status?: string; 
+      comment?: string; 
+      serviceStatus?: string; 
+      dueDate?: string;
+      googleReviewStatus?: string;
+      googleReviewLink?: string;
+    }) => 
       adminUpdateBill(data),
     onSuccess: (data) => {
       if (data.success) {
@@ -107,6 +118,18 @@ const AdminBillsTable: React.FC = () => {
     deletePaymentMutateRef.current({ enquiryId: enquiry._id, enquiryType: enquiry.enquiryType, paymentId });
   }, []);
 
+  const handleUpdateGoogleReview = React.useCallback((
+    enquiry: AdminFetchAllBillsResponse, 
+    reviewData: { googleReviewStatus: string; googleReviewLink: string }
+  ) => {
+    updateBillMutateRef.current({
+      enquiryId: enquiry._id,
+      enquiryType: enquiry.enquiryType,
+      googleReviewStatus: reviewData.googleReviewStatus,
+      googleReviewLink: reviewData.googleReviewLink,
+    });
+  }, []);
+
   const columns = useMemo(() => AdminBillsTableColumns(
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
@@ -114,7 +137,8 @@ const AdminBillsTable: React.FC = () => {
     handleUpdateDueDate,
     handleUpdateServiceStatus,
     handleUpdatePayment,
-    handleDeletePayment
+    handleDeletePayment,
+    handleUpdateGoogleReview
   ), [
     handleUpdateInvoiceAmount,
     handleUpdateStatus,
@@ -122,7 +146,8 @@ const AdminBillsTable: React.FC = () => {
     handleUpdateDueDate,
     handleUpdateServiceStatus,
     handleUpdatePayment,
-    handleDeletePayment
+    handleDeletePayment,
+    handleUpdateGoogleReview
   ]);
 
   return (

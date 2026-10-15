@@ -100,9 +100,11 @@ const buildJsx = (log: AdminLog): React.ReactNode => {
     case "Bill": {
       const parts: string[] = [];
       if (c.invoiceAmount !== undefined) parts.push(`invoice amount to ${fmtAmount(c.invoiceAmount, c.currency)}`);
-      if (c.status)        parts.push(`status to "${c.status}"`);
-      if (c.serviceStatus) parts.push(`service status to "${c.serviceStatus}"`);
-      if (c.dueDate)       parts.push(`due date to ${fmtDateOnly(c.dueDate)}`);
+      if (c.status)             parts.push(`status to "${c.status}"`);
+      if (c.serviceStatus)      parts.push(`service status to "${c.serviceStatus}"`);
+      if (c.dueDate)            parts.push(`due date to ${fmtDateOnly(c.dueDate)}`);
+      if (c.googleReviewStatus) parts.push(`Google review status to "${c.googleReviewStatus}"`);
+      if (c.googleReviewLink)   parts.push(`Google review link`);
       return (
         <><Who v={who} /> <Verb v="updated billing details" action="UPDATE" /> <Muted v="for " />
         <InvoiceRef entityName={log.entityName} /><Updated parts={parts} /> <Muted v="on " /><Date_ v={on} />.</>

@@ -38,6 +38,7 @@ import { useQuery } from "@tanstack/react-query";
 import { adminFetchAllEnquiries } from "@/utils/apis/adminEnquiryApi";
 import { adminFetchAllWhatsappEnquiries } from "@/utils/apis/adminWhatsappEnquiryApi";
 import { adminFetchAllPlatformLeads } from "@/utils/apis/adminPlatformLeadsApi";
+import { adminFetchAllBills } from "@/utils/apis/adminBillApi";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
@@ -92,6 +93,22 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     refetchInterval: 60000,
   });
 
+  const { data: pendingReviewsCount = 0 } = useQuery({
+    queryKey: ["adminBills", "pendingReviewsCount"],
+    queryFn: async () => {
+      try {
+        const res = await adminFetchAllBills({
+          pagination: { page: 1, limit: 1000 },
+        });
+        const bills = res?.data || [];
+        return bills.filter((b: any) => b.googleReviewStatus !== "reviewed").length;
+      } catch (e) {
+        return 0;
+      }
+    },
+    refetchInterval: 60000,
+  });
+
   const iconMap: Record<string, React.ReactNode> = {
     overview: <LayoutDashboard />,
     users: <Users />,
@@ -114,16 +131,26 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "tour-package-status": <Plane />,
     "job-hunting-package-status": <BriefcaseBusiness />,
     "follow-ups": <PhoneCall />,
+    bills: <Receipt />,
     "bills-&-payments": <Receipt />,
+    "payments-&-review": <Receipt />,
+    "payments-&-google-review": <Receipt />,
+    "payments-google-review": <Receipt />,
+    "payment-google-review": <Receipt />,
     "expenses-and-costs": <CreditCard />,
     logs: <ClipboardList />,
     "platform-leads": <Users />,
     "contact-list": <PhoneCall />,
   };
 
-  const getIcon = (name: string): React.ReactNode => {
+  const getIcon = (name: string, path?: string): React.ReactNode => {
+    if (path && iconMap[path]) return iconMap[path];
     const normalizedName = normalizeRouteName(name);
-    return iconMap[normalizedName];
+    if (iconMap[normalizedName]) return iconMap[normalizedName];
+    if (path === "bills" || normalizedName.includes("payment") || normalizedName.includes("bill") || normalizedName.includes("google")) {
+      return <Receipt />;
+    }
+    return undefined;
   };
 
   const normalizeRouteName = (name: string): string => {
@@ -132,7 +159,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
 
   return (
     <div
-      className="w-64 bg-white text-slate-700 border-r border-[#b2ebf2] shadow-sm overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col"
+      className="w-72 bg-white text-slate-700 border-r border-[#b2ebf2] shadow-sm overflow-y-scroll no-scrollbar transition-all duration-300 hidden md:flex flex-col"
     >
       <div className="p-4 flex-1">
         <ul className="space-y-3">
@@ -151,14 +178,25 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
             return false;
           }).map((route) => {
             const normalizedName = normalizeRouteName(route.name);
+            const isBills =
+              normalizedName === "payments-&-review" ||
+              normalizedName === "payments-&-google-review" ||
+              normalizedName === "bills-&-payments" ||
+              route.path === "bills";
             const badge =
               normalizedName === "follow-ups"
                 ? todayFollowUpsCount
                 : normalizedName === "contact-list"
                 ? pendingContactsCount
+                : isBills
+                ? pendingReviewsCount
                 : undefined;
             const badgeColor =
-              normalizedName === "contact-list" ? "bg-orange-500" : "bg-red-500";
+              isBills
+                ? "bg-amber-500"
+                : normalizedName === "contact-list"
+                ? "bg-orange-500"
+                : "bg-red-500";
 
             return (
               <NavLink
@@ -173,7 +211,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                 }
               >
                 <SingleTab
-                  icon={getIcon(route.name)}
+                  icon={getIcon(route.name, route.path)}
                   text={route.name}
                   sidebarOpen={true}
                   badge={badge}

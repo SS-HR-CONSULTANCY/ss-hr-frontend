@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
                 >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id} className="text-center py-3 font-semibold text-gray-700 dark:text-gray-300">
+                      <TableHead key={header.id} className="text-center py-2 px-1 font-semibold text-gray-700 dark:text-gray-300 text-[11px]">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -127,7 +127,7 @@ export function DataTable<TData, TValue>({
                     className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="text-center py-3 text-gray-700 dark:text-gray-300">
+                      <TableCell key={cell.id} className="text-center py-2 px-1 text-gray-700 dark:text-gray-300">
                         <div className="flex justify-center items-center w-full">
                           {flexRender(
                             cell.column.columnDef.cell,

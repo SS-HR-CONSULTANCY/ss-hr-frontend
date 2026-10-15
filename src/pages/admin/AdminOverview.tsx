@@ -51,8 +51,8 @@ const AdminOverview: React.FC = () => {
     data: statusDistributionData,
     isLoading: isStatusLoading,
   } = useQuery({
-    queryKey: ["enquiryStatusDistribution", period],
-    queryFn: () => adminFetchEnquiryStatusDistribution(period),
+    queryKey: ["enquiryStatusDistribution"],
+    queryFn: () => adminFetchEnquiryStatusDistribution("all"),
     refetchOnWindowFocus: false,
   });
 
@@ -188,12 +188,12 @@ const AdminOverview: React.FC = () => {
             
             <div className="flex flex-wrap items-center gap-4">
               <Select value={period} onValueChange={setPeriod}>
-                <SelectTrigger className="w-[140px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+                <SelectTrigger className="w-[170px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                   <SelectValue placeholder="Select Period" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="monthly">Monthly (Yearly)</SelectItem>
                 </SelectContent>
               </Select>
               
@@ -234,7 +234,7 @@ const AdminOverview: React.FC = () => {
                 message={"Failed to fetch analytics data: " + (error as Error).message}
                 className="bg-gray-200 dark:bg-gray-600 rounded-md text-red-500 mt-4"
               />
-            ) : analyticsData && analyticsData.length > 0 ? (
+            ) : analyticsData ? (
               (() => {
                 let displayData = [];
                 const now = new Date();
@@ -256,15 +256,15 @@ const AdminOverview: React.FC = () => {
                     });
                   }
                 } else if (period === 'monthly') {
-                  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-                  for (let i = 1; i <= daysInMonth; i++) {
-                    const d = new Date(now.getFullYear(), now.getMonth(), i);
-                    const dateStr = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
-                    const found = analyticsData?.find(item => item.date === dateStr);
+                  // Month-wise (Yearly): all 12 months of the year (Jan - Dec)
+                  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                  for (let i = 0; i < 12; i++) {
+                    const monthStr = `${now.getFullYear()}-${(i + 1).toString().padStart(2, '0')}`;
+                    const found = analyticsData?.find(item => item.date === monthStr);
                     
                     displayData.push({
-                      date: dateStr,
-                      dayName: i.toString(),
+                      date: monthStr,
+                      dayName: months[i],
                       count: found ? found.count : 0
                     });
                   }

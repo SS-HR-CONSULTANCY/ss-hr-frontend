@@ -447,4 +447,6 @@ export interface AdminFetchAllBillsResponse {
   status: "pending" | "partially_paid" | "paid";
   comment?: string;
   dueDate: string | null;
+  googleReviewStatus?: "pending" | "reviewed";
+  googleReviewLink?: string;
 }

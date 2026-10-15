@@ -22,25 +22,25 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn("text-center font-semibold text-[13px] text-gray-700 dark:text-gray-300", className)}>{title}</div>;
+    return <div className={cn("text-center font-semibold text-[11px] text-gray-700 dark:text-gray-300", className)}>{title}</div>;
   }
 
   return (
-    <div className={cn("flex items-center justify-center space-x-2", className)}>
+    <div className={cn("flex items-center justify-center space-x-1", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 px-2 text-[13px] data-[state=open]:bg-accent font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 whitespace-nowrap"
+            className="h-7 px-1 text-[11px] data-[state=open]:bg-accent font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 whitespace-nowrap"
           >
             <span className="whitespace-nowrap">{title}</span>
             {column.getIsSorted() === "desc" ? (
-              <ArrowDown className="ml-1.5 h-4 w-4" />
+              <ArrowDown className="ml-1 h-3 w-3" />
             ) : column.getIsSorted() === "asc" ? (
-              <ArrowUp className="ml-1.5 h-4 w-4" />
+              <ArrowUp className="ml-1 h-3 w-3" />
             ) : (
-              <ChevronsUpDown className="ml-1.5 h-4 w-4 text-gray-400 dark:text-gray-500 opacity-70" />
+              <ChevronsUpDown className="ml-1 h-3 w-3 text-gray-400 dark:text-gray-500 opacity-70" />
             )}
           </Button>
         </DropdownMenuTrigger>

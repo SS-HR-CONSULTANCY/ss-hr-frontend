@@ -1,8 +1,9 @@
 import React from "react";
-import { Eye } from "lucide-react";
+import { Eye, AlertTriangle } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { ImportedCustomer } from "@/utils/apis/adminPlatformLeadsApi";
+import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE } from "@/utils/helpers/followUp";
 
 export const AdminPlatformLeadsTableColumns = (
   onView: (customer: ImportedCustomer) => void,
@@ -238,16 +239,29 @@ export const AdminPlatformLeadsTableColumns = (
       const today = new Date().toISOString().split('T')[0];
       const isToday = localDate === today;
 
+      const missedFollowUp = isMissedFollowUp(status, localDate);
+
       return (
-        <input 
-          type="date"
-          value={localDate}
-          onChange={(e) => {
-            setLocalDate(e.target.value);
-            onUpdateStatus(customerId, status, comment, e.target.value);
-          }}
-          className={`w-full min-w-[130px] text-center px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all ${isToday ? 'text-red-600 font-semibold' : 'text-gray-700'}`}
-        />
+        <div className="flex flex-col items-center gap-0.5 w-full">
+          <input 
+            type="date"
+            value={localDate}
+            onChange={(e) => {
+              setLocalDate(e.target.value);
+              onUpdateStatus(customerId, status, comment, e.target.value);
+            }}
+            className={`w-full min-w-[130px] text-center px-2 py-1.5 text-sm border hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all ${missedFollowUp ? 'border-red-300 bg-red-50/60' : 'border-transparent'} ${isToday ? 'text-red-600 font-semibold' : 'text-gray-700'}`}
+          />
+          {missedFollowUp && (
+            <span
+              className="flex items-center gap-1 text-[11px] font-medium text-red-600 leading-tight"
+              title={FOLLOW_UP_WARNING_MESSAGE}
+            >
+              <AlertTriangle className="w-3 h-3 shrink-0" />
+              Add a future date
+            </span>
+          )}
+        </div>
       );
     }
   },

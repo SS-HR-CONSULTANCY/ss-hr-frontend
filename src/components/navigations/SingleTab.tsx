@@ -17,9 +17,9 @@ export const SingleTab: React.FC<SingleTabProps> = ({
     >
       {sidebarOpen ? (
         <div className="flex items-center justify-between w-full">
-          <div className="flex cursor-pointer items-center">
-            <span className="text-2xl font-bold">{icon}</span>
-            <span className="ml-2">{text}</span>
+          <div className="flex cursor-pointer items-center min-w-0">
+            <span className="text-2xl font-bold shrink-0">{icon}</span>
+            <span className="ml-2 whitespace-nowrap text-sm">{text}</span>
           </div>
           {!!badge && Number(badge) > 0 && (
             <span className={`${badgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-full mr-2`}>
