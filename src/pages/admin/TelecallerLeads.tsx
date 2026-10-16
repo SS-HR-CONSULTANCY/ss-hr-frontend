@@ -156,8 +156,7 @@ const TelecallerLeads: React.FC = () => {
     handleInlineStatusUpdate, 
     { 
       hideEmail: true,
-      staffList,
-      onAssignStaff: isAdmin ? handleAssignStaff : undefined,
+      hideAssignStaff: true,
       isAdmin,
     }
   );

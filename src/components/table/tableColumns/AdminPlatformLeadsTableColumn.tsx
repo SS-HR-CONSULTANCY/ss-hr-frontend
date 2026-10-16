@@ -7,6 +7,7 @@ import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE } from "@/utils/helpers/fol
 
 export interface AdminPlatformLeadsColumnsOptions {
   hideEmail?: boolean;
+  hideAssignStaff?: boolean;
   staffList?: AssignedStaff[];
   onAssignStaff?: (id: string, staffId: string | null) => void;
   isAdmin?: boolean;
@@ -359,9 +360,15 @@ export const AdminPlatformLeadsTableColumns = (
   },
 ];
 
+  let result = columns;
+
   if (options?.hideEmail !== false) {
-    return columns.filter((col) => ("accessorKey" in col ? col.accessorKey !== "email" : true));
+    result = result.filter((col) => ("accessorKey" in col ? col.accessorKey !== "email" : true));
   }
 
-  return columns;
+  if (options?.hideAssignStaff) {
+    result = result.filter((col) => ("accessorKey" in col ? col.accessorKey !== "assignedTo" : true));
+  }
+
+  return result;
 };
