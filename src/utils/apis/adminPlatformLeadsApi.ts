@@ -80,3 +80,46 @@ export const adminFetchSystemStaff = async (): Promise<AssignedStaff[]> => {
   const users: any[] = response.data.data || [];
   return users.filter((u) => u.role === "staff" && u.isActive !== false);
 };
+
+export interface StaffStatItem {
+  staffId: string;
+  fullName: string;
+  username: string;
+  isActive: boolean;
+  totalAssigned: number;
+  pending: number;
+  contacted: number;
+  needFollowUp: number;
+  processingApplication: number;
+  completed: number;
+  rejectedApplication: number;
+  notInterested: number;
+  scheduledToday: number;
+  missedFollowUp: number;
+  contactRate: number;
+  conversionRate: number;
+}
+
+export interface SuperAdminStaffStatsResponse {
+  overall: {
+    totalLeads: number;
+    totalAssigned: number;
+    totalUnassigned: number;
+    activeStaffCount: number;
+  };
+  staffStats: StaffStatItem[];
+  unassignedStats: {
+    total: number;
+    pending: number;
+    contacted: number;
+    needFollowUp: number;
+    completed: number;
+    scheduledToday: number;
+    missedFollowUp: number;
+  };
+}
+
+export const adminFetchSuperAdminStaffStats = async (): Promise<SuperAdminStaffStatsResponse> => {
+  const response = await axiosInstance.get("/imported-customers/staff-stats");
+  return response.data.data;
+};

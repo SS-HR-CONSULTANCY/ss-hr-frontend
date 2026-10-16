@@ -23,6 +23,7 @@ import {
   PhoneCall,
   Receipt,
   ClipboardList,
+  Crown,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -141,7 +142,14 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     logs: <ClipboardList />,
     "platform-leads": <Users />,
     "contact-list": <PhoneCall />,
+    "super-overview": <Crown className="text-amber-500" />,
   };
+
+  const isTony =
+    user?.role === "admin" &&
+    (user?.email === "tony" ||
+      user?.fullName === "Super Admin" ||
+      (user as any)?.username === "tony");
 
   const getIcon = (name: string, path?: string): React.ReactNode => {
     if (path && iconMap[path]) return iconMap[path];
@@ -170,7 +178,15 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
           </li>
           
           {routes.filter((r) => {
-            if (user?.role === "admin" && user?.email === "tony") return true;
+            // Super overview is strictly exclusive to Tony (Super Admin)
+            if (r.path === "super-overview") {
+              return isTony;
+            }
+            // Hide standard overview from Super Admin since he has Super Overview
+            if (r.path === "overview" && isTony) {
+              return false;
+            }
+            if (isTony) return true;
             if (user?.permissions?.includes("all")) return true;
             if (user?.permissions && user.permissions.length > 0) {
               return user.permissions.includes(r.path);

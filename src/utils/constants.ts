@@ -650,6 +650,11 @@ export const userApplicationRoutes: Route[] = [
 
 export const adminApplicationRoutes: Route[] = [
   {
+    path: "super-overview",
+    name: "Super Overview",
+    roles: ["admin"],
+  },
+  {
     path: "overview",
     name: "Overview",
     roles: ["admin"],

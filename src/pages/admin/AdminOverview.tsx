@@ -22,10 +22,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { Navigate } from "react-router-dom";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#F4A460', '#DDA0DD'];
 
 const AdminOverview: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isTony =
+    user?.role === "admin" &&
+    (user?.email === "tony" ||
+      user?.fullName === "Super Admin" ||
+      (user as any)?.username === "tony");
+
+  // Super Admin has dedicated Super Overview page
+  if (isTony) {
+    return <Navigate to="/ss-hr-admin/super-overview" replace />;
+  }
+
   const [period, setPeriod] = useState<string>("weekly");
   const [status, setStatus] = useState<string>("all");
   const [category, setCategory] = useState<string>("all");

@@ -23,6 +23,7 @@ const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const AboutUsPage = lazy(() => import("@/pages/common/AboutUsPage"));
 const ContactPage = lazy(() => import("@/pages/common/ContactPage"));
 const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
+const SuperAdminOverview = lazy(() => import("@/pages/admin/SuperAdminOverview"));
 const AdminJobsPage = lazy(() => import("@/pages/admin/AdminJobsPage"));
 const AdminFollowUps = lazy(() => import("@/pages/admin/AdminFollowUps"));
 const AdminBills = lazy(() => import("@/pages/admin/AdminBills"));
@@ -66,6 +67,14 @@ const AdminIndexRedirect = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   if (user?.role === "staff") {
     return <Navigate to="telecaller-leads" replace />;
+  }
+  const isTony =
+    user?.role === "admin" &&
+    (user?.email === "tony" ||
+      user?.fullName === "Super Admin" ||
+      (user as any)?.username === "tony");
+  if (isTony) {
+    return <Navigate to="super-overview" replace />;
   }
   return <Navigate to="overview" replace />;
 };
@@ -222,6 +231,14 @@ const appRouter = createBrowserRouter([
       {
         index: true,
         element: <AdminIndexRedirect />,
+      },
+      {
+        path: "super-overview",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <SuperAdminOverview />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "overview",
