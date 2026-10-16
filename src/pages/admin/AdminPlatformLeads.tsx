@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import CommonTable from "@/components/common/CommonTable";
-import { adminFetchAllPlatformLeads, adminUpdatePlatformLead, type ImportedCustomer } from "@/utils/apis/adminPlatformLeadsApi";
+import { 
+  adminFetchAllPlatformLeads, 
+  adminUpdatePlatformLead, 
+  adminAssignPlatformLead,
+  adminFetchSystemStaff,
+  type ImportedCustomer,
+  type AssignedStaff
+} from "@/utils/apis/adminPlatformLeadsApi";
 import { AdminPlatformLeadsTableColumns } from "@/components/table/tableColumns/AdminPlatformLeadsTableColumn";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { Copy } from "lucide-react";
 
 const AdminPlatformLeads: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
@@ -17,8 +25,33 @@ const AdminPlatformLeads: React.FC = () => {
 
   const queryClient = useQueryClient();
 
+  const { data: staffList = [] } = useQuery<AssignedStaff[]>({
+    queryKey: ["adminStaffList"],
+    queryFn: adminFetchSystemStaff,
+  });
+
+  const assignMutation = useMutation({
+    mutationFn: (data: { id: string; staffId: string | null }) =>
+      adminAssignPlatformLead(data.id, data.staffId),
+    onSuccess: (updatedCustomer) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-platform-leads"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-telecaller-leads"] });
+      const staffName = typeof updatedCustomer.assignedTo === "object" && updatedCustomer.assignedTo
+        ? updatedCustomer.assignedTo.fullName || updatedCustomer.assignedTo.username
+        : "staff";
+      toast.success(updatedCustomer.assignedTo ? `Contact assigned to ${staffName}` : "Contact unassigned");
+    },
+    onError: () => {
+      toast.error("Failed to assign staff");
+    },
+  });
+
+  const handleAssignStaff = (id: string, staffId: string | null) => {
+    assignMutation.mutate({ id, staffId });
+  };
+
   const updateMutation = useMutation({
-    mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string, state?: string } }) => 
+    mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string, state?: string, assignedTo?: string | null } }) => 
       adminUpdatePlatformLead(data.id, data.payload),
     onSuccess: (updatedCustomer) => {
       queryClient.invalidateQueries({ queryKey: ["admin-platform-leads"] });
@@ -53,7 +86,16 @@ const AdminPlatformLeads: React.FC = () => {
     });
   };
 
-  const columns = AdminPlatformLeadsTableColumns(handleView, handleInlineStatusUpdate);
+  const columns = AdminPlatformLeadsTableColumns(
+    handleView,
+    handleInlineStatusUpdate,
+    {
+      hideEmail: true,
+      staffList,
+      onAssignStaff: handleAssignStaff,
+      isAdmin: true,
+    }
+  );
 
   return (
     <div>
@@ -86,7 +128,29 @@ const AdminPlatformLeads: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Email</h4>
-                  <p className="text-gray-900 dark:text-gray-100">{selectedCustomer.email}</p>
+                  {selectedCustomer.email ? (
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <a
+                        href={`mailto:${selectedCustomer.email}`}
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline break-all font-medium text-sm"
+                      >
+                        {selectedCustomer.email}
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(selectedCustomer.email);
+                          toast.success("Email copied to clipboard");
+                        }}
+                        className="p-1 hover:bg-gray-200 dark:hover:bg-gray-800 rounded text-gray-500 hover:text-gray-700 transition-colors"
+                        title="Copy email"
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-gray-400 text-sm">N/A</p>
+                  )}
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Phone</h4>
@@ -95,6 +159,32 @@ const AdminPlatformLeads: React.FC = () => {
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">State</h4>
                   <p className="text-gray-900 dark:text-gray-100">{selectedCustomer.state || "N/A"}</p>
+                </div>
+                <div className="col-span-2">
+                  <h4 className="text-sm font-medium text-gray-500 mb-1">Assign Staff</h4>
+                  <select
+                    value={
+                      selectedCustomer.assignedTo
+                        ? typeof selectedCustomer.assignedTo === "object"
+                          ? selectedCustomer.assignedTo._id
+                          : selectedCustomer.assignedTo
+                        : ""
+                    }
+                    onChange={(e) => {
+                      const val = e.target.value || null;
+                      handleAssignStaff(selectedCustomer._id, val);
+                      const matching = staffList.find(s => s._id === val) || null;
+                      setSelectedCustomer(prev => prev ? ({ ...prev, assignedTo: matching }) : null);
+                    }}
+                    className="w-full rounded-lg border-gray-300 border p-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 font-medium"
+                  >
+                    <option value="">Unassigned</option>
+                    {staffList.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.fullName || s.username}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 {selectedCustomer.linkedinUrl && (
                   <div className="col-span-2 mt-2">

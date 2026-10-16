@@ -1,5 +1,5 @@
 import React from "react";
-import { UserPlus, RefreshCw, MessageSquare, CalendarClock, MapPin } from "lucide-react";
+import { UserPlus, RefreshCw, MessageSquare, CalendarClock, MapPin, UserCheck } from "lucide-react";
 import type { ImportedCustomer, ImportedCustomerActivity } from "@/utils/apis/adminPlatformLeadsApi";
 
 const STATUS_DOT: Record<string, string> = {
@@ -123,6 +123,21 @@ const buildItems = (customer: ImportedCustomer): TimelineItem[] => {
           title: (
             <span className="font-medium">
               State {a.from ? `changed from ${a.from} to ${a.to || "N/A"}` : `set to ${a.to || "N/A"}`}
+            </span>
+          ),
+        });
+        break;
+      case "assignment":
+        items.push({
+          key,
+          at: a.at,
+          icon: <UserCheck className="w-3.5 h-3.5" />,
+          iconClass: "bg-purple-100 text-purple-700 border-purple-300",
+          title: (
+            <span className="font-medium">
+              {a.to === "Unassigned"
+                ? "Contact unassigned"
+                : `Contact assigned to ${a.to}`}
             </span>
           ),
         });

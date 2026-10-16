@@ -2,13 +2,20 @@ import React from "react";
 import { Eye, AlertTriangle } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import type { ImportedCustomer } from "@/utils/apis/adminPlatformLeadsApi";
+import type { ImportedCustomer, AssignedStaff } from "@/utils/apis/adminPlatformLeadsApi";
 import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE } from "@/utils/helpers/followUp";
+
+export interface AdminPlatformLeadsColumnsOptions {
+  hideEmail?: boolean;
+  staffList?: AssignedStaff[];
+  onAssignStaff?: (id: string, staffId: string | null) => void;
+  isAdmin?: boolean;
+}
 
 export const AdminPlatformLeadsTableColumns = (
   onView: (customer: ImportedCustomer) => void,
-  onUpdateStatus: (id: string, newStatus: string, comment: string, scheduledDate?: string, state?: string) => void,
-  options?: { hideEmail?: boolean }
+  onUpdateStatus: (id: string, newStatus: string, comment: string, scheduledDate?: string, state?: string, assignedTo?: string | null) => void,
+  options: AdminPlatformLeadsColumnsOptions = { hideEmail: true }
 ): ColumnDef<ImportedCustomer>[] => {
   const columns: ColumnDef<ImportedCustomer>[] = [
   {
@@ -117,6 +124,77 @@ export const AdminPlatformLeadsTableColumns = (
           className="w-full min-w-[100px] text-center px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all placeholder:text-gray-400"
           placeholder="N/A"
         />
+      );
+    },
+  },
+  {
+    accessorKey: "assignedTo",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Assign Staff" />
+    ),
+    cell: ({ row }) => {
+      const customerId = row.original._id;
+      const currentAssigned = row.original.assignedTo;
+      const currentStaffId = typeof currentAssigned === "object" && currentAssigned !== null
+        ? currentAssigned._id
+        : (typeof currentAssigned === "string" ? currentAssigned : "");
+
+      const [selectedStaff, setSelectedStaff] = React.useState(currentStaffId || "");
+
+      React.useEffect(() => {
+        setSelectedStaff(currentStaffId || "");
+      }, [currentStaffId]);
+
+      // If not admin and no assignment callback provided, display clean badge
+      if (!options.isAdmin && !options.onAssignStaff) {
+        const staffObj = typeof currentAssigned === "object" && currentAssigned !== null ? currentAssigned : null;
+        return (
+          <div className="flex items-center justify-center">
+            {staffObj ? (
+              <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                {staffObj.fullName || staffObj.username}
+              </span>
+            ) : (
+              <span className="text-xs text-gray-400">Unassigned</span>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <div className="flex items-center justify-center">
+          <select
+            value={selectedStaff}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSelectedStaff(val);
+              if (options.onAssignStaff) {
+                options.onAssignStaff(customerId, val || null);
+              } else {
+                onUpdateStatus(
+                  customerId,
+                  row.original.status || "Pending",
+                  row.original.comment || "",
+                  row.original.scheduledDate ? new Date(row.original.scheduledDate).toISOString().split('T')[0] : "",
+                  row.original.state || "",
+                  val || null
+                );
+              }
+            }}
+            className={`px-2.5 py-1 text-xs font-semibold rounded-full border transition-all cursor-pointer outline-none ${
+              selectedStaff
+                ? "bg-purple-100 text-purple-700 border-purple-200 hover:border-purple-300 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800"
+                : "bg-gray-100 text-gray-500 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
+            }`}
+          >
+            <option value="" className="bg-white text-gray-700">Unassigned</option>
+            {(options.staffList || []).map((s) => (
+              <option key={s._id} value={s._id} className="bg-white text-gray-900 font-medium">
+                {s.fullName || s.username}
+              </option>
+            ))}
+          </select>
+        </div>
       );
     },
   },
@@ -281,7 +359,7 @@ export const AdminPlatformLeadsTableColumns = (
   },
 ];
 
-  if (options?.hideEmail) {
+  if (options?.hideEmail !== false) {
     return columns.filter((col) => ("accessorKey" in col ? col.accessorKey !== "email" : true));
   }
 

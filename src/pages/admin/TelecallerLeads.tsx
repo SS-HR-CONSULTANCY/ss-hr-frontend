@@ -1,14 +1,23 @@
 import React, { useState, useCallback, useEffect } from "react";
 import CommonTable from "@/components/common/CommonTable";
-import { adminFetchAllPlatformLeads, adminUpdatePlatformLead, type ImportedCustomer } from "@/utils/apis/adminPlatformLeadsApi";
+import { 
+  adminFetchAllPlatformLeads, 
+  adminUpdatePlatformLead, 
+  adminAssignPlatformLead,
+  adminFetchSystemStaff,
+  type ImportedCustomer,
+  type AssignedStaff 
+} from "@/utils/apis/adminPlatformLeadsApi";
 import { AdminPlatformLeadsTableColumns } from "@/components/table/tableColumns/AdminPlatformLeadsTableColumn";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import LeadTimeline from "@/components/admin/LeadTimeline";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE } from "@/utils/helpers/followUp";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 
-import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle } from "lucide-react";
+import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle, UserCheck } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -46,6 +55,10 @@ const DEFAULT_INDIAN_STATES = sortStatesWithPriority([
 ]);
 
 const TelecallerLeads: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isAdmin = user?.role === "admin";
+  const [assignedStaffFilter, setAssignedStaffFilter] = useState<string>("all");
+
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0 });
@@ -70,8 +83,34 @@ const TelecallerLeads: React.FC = () => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
+  const { data: staffList = [] } = useQuery<AssignedStaff[]>({
+    queryKey: ["adminStaffList"],
+    queryFn: adminFetchSystemStaff,
+    enabled: isAdmin,
+  });
+
+  const assignMutation = useMutation({
+    mutationFn: (data: { id: string; staffId: string | null }) =>
+      adminAssignPlatformLead(data.id, data.staffId),
+    onSuccess: (updatedCustomer) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-telecaller-leads"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-platform-leads"] });
+      const staffName = typeof updatedCustomer.assignedTo === "object" && updatedCustomer.assignedTo
+        ? updatedCustomer.assignedTo.fullName || updatedCustomer.assignedTo.username
+        : "staff";
+      toast.success(updatedCustomer.assignedTo ? `Contact assigned to ${staffName}` : "Contact unassigned");
+    },
+    onError: () => {
+      toast.error("Failed to assign staff");
+    },
+  });
+
+  const handleAssignStaff = (id: string, staffId: string | null) => {
+    assignMutation.mutate({ id, staffId });
+  };
+
   const updateMutation = useMutation({
-    mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string, state?: string } }) => 
+    mutationFn: (data: { id: string, payload: { status: string, comment: string, scheduledDate?: string, state?: string, assignedTo?: string | null } }) => 
       adminUpdatePlatformLead(data.id, data.payload),
     onSuccess: (updatedCustomer) => {
       queryClient.invalidateQueries({ queryKey: ["admin-telecaller-leads"] });
@@ -112,7 +151,16 @@ const TelecallerLeads: React.FC = () => {
     });
   };
 
-  const columns = AdminPlatformLeadsTableColumns(handleView, handleInlineStatusUpdate, { hideEmail: true });
+  const columns = AdminPlatformLeadsTableColumns(
+    handleView, 
+    handleInlineStatusUpdate, 
+    { 
+      hideEmail: true,
+      staffList,
+      onAssignStaff: isAdmin ? handleAssignStaff : undefined,
+      isAdmin,
+    }
+  );
 
   const fetchAllScheduledLeads = (params?: any) => {
     let scheduledDateParam = 'any';
@@ -130,6 +178,7 @@ const TelecallerLeads: React.FC = () => {
         scheduledDate: scheduledDateParam,
         status: statusFilter === "all" ? undefined : statusFilter,
         state: stateFilter === "all" ? undefined : stateFilter,
+        assignedTo: isAdmin && assignedStaffFilter !== "all" ? assignedStaffFilter : undefined,
         sortBy: 'scheduledAt',
         sortOrder: 'desc'
       }
@@ -249,13 +298,32 @@ const TelecallerLeads: React.FC = () => {
             </select>
           </div>
 
+          {/* Assigned Staff Filter (Admin only) */}
+          {isAdmin && (
+            <div className="relative flex items-center">
+              <UserCheck className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
+              <select
+                value={assignedStaffFilter}
+                onChange={(e) => setAssignedStaffFilter(e.target.value)}
+                className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300"
+              >
+                <option value="all">All Staff Contacts</option>
+                <option value="unassigned">Unassigned Only</option>
+                {staffList.map((s) => (
+                  <option key={s._id} value={s._id}>{s.fullName || s.username}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {/* Reset Filters */}
-          {(statusFilter !== "all" || stateFilter !== "all" || dateFilter !== "any" || searchTerm.trim()) && (
+          {(statusFilter !== "all" || stateFilter !== "all" || dateFilter !== "any" || assignedStaffFilter !== "all" || searchTerm.trim()) && (
             <button
               onClick={() => {
                 setStatusFilter("all");
                 setStateFilter("all");
                 setDateFilter("any");
+                setAssignedStaffFilter("all");
                 setSearchTerm("");
               }}
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer"
@@ -269,8 +337,8 @@ const TelecallerLeads: React.FC = () => {
       </div>
 
       <CommonTable<ImportedCustomer>
-        key={`${statusFilter}-${stateFilter}-${dateFilter}-${debouncedSearch}`}
-        id={`${statusFilter}-${stateFilter}-${dateFilter}-${debouncedSearch}`}
+        key={`${statusFilter}-${stateFilter}-${dateFilter}-${assignedStaffFilter}-${debouncedSearch}`}
+        id={`${statusFilter}-${stateFilter}-${dateFilter}-${assignedStaffFilter}-${debouncedSearch}`}
         fetchApiFunction={fetchAllScheduledLeads}
         queryKey="admin-telecaller-leads"
         column={columns}
@@ -350,6 +418,40 @@ const TelecallerLeads: React.FC = () => {
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">State</h4>
                   <p className="text-gray-900 dark:text-gray-100">{selectedCustomer.state || "N/A"}</p>
+                </div>
+                <div className="col-span-2">
+                  <h4 className="text-sm font-medium text-gray-500 mb-1">Assigned Staff</h4>
+                  {isAdmin ? (
+                    <select
+                      value={
+                        selectedCustomer.assignedTo
+                          ? typeof selectedCustomer.assignedTo === "object"
+                            ? selectedCustomer.assignedTo._id
+                            : selectedCustomer.assignedTo
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const val = e.target.value || null;
+                        handleAssignStaff(selectedCustomer._id, val);
+                        const matching = staffList.find(s => s._id === val) || null;
+                        setSelectedCustomer(prev => prev ? ({ ...prev, assignedTo: matching }) : null);
+                      }}
+                      className="w-full rounded-lg border-gray-300 border p-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 font-medium"
+                    >
+                      <option value="">Unassigned</option>
+                      {staffList.map((s) => (
+                        <option key={s._id} value={s._id}>
+                          {s.fullName || s.username}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <p className="text-gray-900 dark:text-gray-100 font-medium text-sm">
+                      {typeof selectedCustomer.assignedTo === "object" && selectedCustomer.assignedTo
+                        ? selectedCustomer.assignedTo.fullName || selectedCustomer.assignedTo.username
+                        : "Assigned to You"}
+                    </p>
+                  )}
                 </div>
                 {selectedCustomer.linkedinUrl && (
                   <div className="col-span-2 mt-2">
