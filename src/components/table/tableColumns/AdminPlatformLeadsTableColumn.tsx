@@ -44,7 +44,7 @@ export const AdminPlatformLeadsTableColumns = (
           <span className="truncate">{name}</span>
           {isNew && (
             <span
-              className="inline-flex items-center px-1 py-[0.5px] rounded text-[8.5px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tracking-wider uppercase shrink-0 leading-none"
+              className="inline-flex items-center px-1 py-0 rounded text-[7px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80 tracking-tight uppercase shrink-0 leading-tight"
               title="New lead"
             >
               New
