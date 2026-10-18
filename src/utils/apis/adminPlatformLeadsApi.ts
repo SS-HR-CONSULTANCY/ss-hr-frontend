@@ -27,6 +27,7 @@ export interface ImportedCustomer {
   linkedinUrl?: string;
   source: string;
   status: string;
+  isNewLead?: boolean;
   comment: string;
   scheduledDate?: string;
   assignedTo?: AssignedStaff | string | null;

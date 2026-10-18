@@ -3,7 +3,7 @@ import { Eye, AlertTriangle } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { ImportedCustomer, AssignedStaff } from "@/utils/apis/adminPlatformLeadsApi";
-import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE } from "@/utils/helpers/followUp";
+import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
 
 export interface AdminPlatformLeadsColumnsOptions {
   hideEmail?: boolean;
@@ -37,10 +37,19 @@ export const AdminPlatformLeadsTableColumns = (
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
       const linkedinUrl = row.original.linkedinUrl;
+      const isNew = isNewPlatformLead(row.original);
 
       return (
         <div className="font-medium flex items-center justify-start gap-2 text-left w-full pl-1">
-          {name}
+          <span className="truncate">{name}</span>
+          {isNew && (
+            <span
+              className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 tracking-wide uppercase shrink-0 shadow-xs"
+              title="New lead"
+            >
+              New
+            </span>
+          )}
           {linkedinUrl && (
             <a
               href={linkedinUrl}

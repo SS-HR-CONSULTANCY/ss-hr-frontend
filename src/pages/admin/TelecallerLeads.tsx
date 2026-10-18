@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import LeadTimeline from "@/components/admin/LeadTimeline";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE } from "@/utils/helpers/followUp";
+import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 
@@ -178,8 +178,8 @@ const TelecallerLeads: React.FC = () => {
         status: statusFilter === "all" ? undefined : statusFilter,
         state: stateFilter === "all" ? undefined : stateFilter,
         assignedTo: isAdmin && assignedStaffFilter !== "all" ? assignedStaffFilter : undefined,
-        sortBy: 'scheduledAt',
-        sortOrder: 'desc'
+        sortBy: params?.pagination?.sortBy || 'scheduledDate',
+        sortOrder: params?.pagination?.sortOrder || 'asc'
       }
     });
   };
@@ -395,7 +395,14 @@ const TelecallerLeads: React.FC = () => {
               <div className="grid grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Name</h4>
-                  <p className="text-gray-900 dark:text-gray-100 font-medium">{selectedCustomer.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-gray-900 dark:text-gray-100 font-medium">{selectedCustomer.name}</p>
+                    {isNewPlatformLead(selectedCustomer) && (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 tracking-wide uppercase shrink-0">
+                        New
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Email</h4>
