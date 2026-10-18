@@ -104,8 +104,14 @@ export function DataTable<TData, TValue>({
                   className="border-b border-gray-200 dark:border-gray-800 hover:bg-transparent"
                 >
                   {headerGroup.headers.map((header) => {
+                    const isNameColumn = header.column.id === "name" || header.column.id === "fullName";
                     return (
-                      <TableHead key={header.id} className="text-center py-2 px-1 font-semibold text-gray-700 dark:text-gray-300 text-[11px]">
+                      <TableHead
+                        key={header.id}
+                        className={`py-2 px-1 font-semibold text-gray-700 dark:text-gray-300 text-[11px] ${
+                          isNameColumn ? "text-left pl-2" : "text-center"
+                        }`}
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -126,16 +132,28 @@ export function DataTable<TData, TValue>({
                     data-state={row.getIsSelected() && "selected"}
                     className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="text-center py-2 px-1 text-gray-700 dark:text-gray-300">
-                        <div className="flex justify-center items-center w-full">
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </div>
-                      </TableCell>
-                    ))}
+                    {row.getVisibleCells().map((cell) => {
+                      const isNameColumn = cell.column.id === "name" || cell.column.id === "fullName";
+                      return (
+                        <TableCell
+                          key={cell.id}
+                          className={`py-2 px-1 text-gray-700 dark:text-gray-300 ${
+                            isNameColumn ? "text-left pl-2" : "text-center"
+                          }`}
+                        >
+                          <div
+                            className={`flex items-center w-full ${
+                              isNameColumn ? "justify-start text-left" : "justify-center"
+                            }`}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </div>
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
                 ))
               ) : (

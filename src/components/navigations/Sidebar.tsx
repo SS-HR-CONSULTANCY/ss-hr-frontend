@@ -24,6 +24,9 @@ import {
   Receipt,
   ClipboardList,
   Crown,
+  Layers,
+  Smartphone,
+  ListTodo,
 } from "lucide-react";
 import React from "react";
 import { SingleTab } from "./SingleTab";
@@ -40,6 +43,7 @@ import { adminFetchAllEnquiries } from "@/utils/apis/adminEnquiryApi";
 import { adminFetchAllWhatsappEnquiries } from "@/utils/apis/adminWhatsappEnquiryApi";
 import { adminFetchAllPlatformLeads } from "@/utils/apis/adminPlatformLeadsApi";
 import { adminFetchAllBills } from "@/utils/apis/adminBillApi";
+import { adminFetchDailyDuties } from "@/utils/apis/adminDailyDutyApi";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
@@ -110,6 +114,19 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     refetchInterval: 60000,
   });
 
+  const { data: stuckDutiesCount = 0 } = useQuery({
+    queryKey: ["adminStuckDutiesCount"],
+    queryFn: async () => {
+      try {
+        const res = await adminFetchDailyDuties({ status: "stuck" });
+        return res?.stats?.stuck || 0;
+      } catch (e) {
+        return 0;
+      }
+    },
+    refetchInterval: 30000,
+  });
+
   const iconMap: Record<string, React.ReactNode> = {
     overview: <LayoutDashboard />,
     users: <Users />,
@@ -143,6 +160,9 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     "platform-leads": <Users />,
     "contact-list": <PhoneCall />,
     "super-overview": <Crown className="text-amber-500" />,
+    "daily-duties": <ListTodo className="text-teal-600" />,
+    "full-stack-solutions": <Layers className="text-indigo-500" />,
+    "share-my-apps": <Smartphone className="text-emerald-500" />,
   };
 
   const isTony =
@@ -187,10 +207,13 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
               return false;
             }
             if (isTony) return true;
+            if (r.path === "daily-duties") return true;
+            if (user?.role === "staff" && r.path === "telecaller-leads") return true;
             if (user?.permissions?.includes("all")) return true;
             if (user?.permissions && user.permissions.length > 0) {
               return user.permissions.includes(r.path);
             }
+            if (user?.role === "admin") return true;
             return false;
           }).map((route) => {
             const normalizedName = normalizeRouteName(route.name);
@@ -199,6 +222,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
               normalizedName === "payments-&-google-review" ||
               normalizedName === "bills-&-payments" ||
               route.path === "bills";
+            const isDailyDuties = route.path === "daily-duties" || normalizedName === "daily-duties";
             const badge =
               normalizedName === "follow-ups"
                 ? todayFollowUpsCount
@@ -206,12 +230,16 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                 ? pendingContactsCount
                 : isBills
                 ? pendingReviewsCount
+                : isDailyDuties && stuckDutiesCount > 0
+                ? stuckDutiesCount
                 : undefined;
             const badgeColor =
               isBills
                 ? "bg-amber-500"
                 : normalizedName === "contact-list"
                 ? "bg-orange-500"
+                : isDailyDuties
+                ? "bg-rose-500 animate-pulse"
                 : "bg-red-500";
 
             return (

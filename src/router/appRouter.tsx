@@ -43,6 +43,9 @@ const AdminTestimonials = lazy(() => import("@/pages/admin/AdminTestimonials"));
 const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"));
 const AdminPlatformLeads = lazy(() => import("@/pages/admin/AdminPlatformLeads"));
 const TelecallerLeads = lazy(() => import("@/pages/admin/TelecallerLeads"));
+const DailyDutiesPage = lazy(() => import("@/pages/admin/DailyDutiesPage"));
+const FullStackSolutionsPage = lazy(() => import("@/pages/admin/FullStackSolutionsPage"));
+const ShareMyAppsPage = lazy(() => import("@/pages/admin/ShareMyAppsPage"));
 const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
 const UpdatePasswordPage = lazy(
   () => import("@/pages/auth/UpdatePasswordPage"),
@@ -374,6 +377,30 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin", "staff"]}>
             <TelecallerLeads />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "daily-duties",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "staff"]}>
+            <DailyDutiesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "full-stack-solutions",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <FullStackSolutionsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "share-my-apps",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <ShareMyAppsPage />
           </ProtectedRoute>
         ),
       },

@@ -32,14 +32,14 @@ export const AdminPlatformLeadsTableColumns = (
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Name" className="justify-start text-left pl-1" />
     ),
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
       const linkedinUrl = row.original.linkedinUrl;
 
       return (
-        <div className="font-medium flex items-center justify-center gap-2 text-center w-full">
+        <div className="font-medium flex items-center justify-start gap-2 text-left w-full pl-1">
           {name}
           {linkedinUrl && (
             <a

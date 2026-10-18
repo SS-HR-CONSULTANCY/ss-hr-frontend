@@ -189,205 +189,219 @@ const SuperAdminOverview: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 text-black dark:text-white mt-4 w-full pb-14">
+    <div className="space-y-8 text-black dark:text-white mt-0 w-full pb-14">
       {/* ======================================================== */}
       {/* 1. STAFF SEPARATE STATS SECTION (EXCLUSIVE TO SUPER ADMIN) */}
       {/* ======================================================== */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-900">
-              <UserCheck className="w-5 h-5" />
+        {/* Staff Performance & Workload Section */}
+        {isStaffStatsLoading ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <GraphShimmer count={1} />
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                Staff Telecalling Performance & Lead Distribution
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
-                  Super Admin Only
-                </span>
-              </h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Breakdown of leads assigned to each staff member, contact rates, and conversion metrics.
-              </p>
+            <div className="lg:col-span-1">
+              <GraphShimmer count={1} />
             </div>
           </div>
-        </div>
-
-        {/* Staff Quick KPI Summary Cards */}
-        {isStaffStatsLoading ? (
-          <GraphShimmer count={1} />
         ) : staffStatsData ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-gradient-to-br from-indigo-50/60 to-white dark:from-indigo-950/20 dark:to-gray-900 border-indigo-100 dark:border-indigo-900/50 shadow-sm">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Assigned Leads</CardTitle>
-                <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600">
-                  <UserCheck className="w-4 h-4" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+            {/* Left Side: Header + 4 KPI Cards + Workload Comparison Chart */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex items-center gap-2 h-10">
+                <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-900">
+                  <UserCheck className="w-5 h-5" />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
-                  {staffStatsData.overall.totalAssigned}
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                    Staff Telecalling Performance & Lead Distribution
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
+                      Super Admin Only
+                    </span>
+                  </h2>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  Distributed across {staffStatsData.overall.activeStaffCount} active staff members
-                </p>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card className="bg-gradient-to-br from-blue-50/60 to-white dark:from-blue-950/20 dark:to-gray-900 border-blue-100 dark:border-blue-900/50 shadow-sm">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Contacted</CardTitle>
-                <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600">
-                  <PhoneCall className="w-4 h-4" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                  {staffStatsData.staffStats.reduce((acc, s) => acc + s.contacted, 0)}
-                </div>
-                <p className="text-xs text-gray-500 mt-1">Calls initiated by telecallers</p>
-              </CardContent>
-            </Card>
+              {/* 4 Stats Cards in Single Row */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <Card className="bg-gradient-to-br from-indigo-50/60 to-white dark:from-indigo-950/20 dark:to-gray-900 border-indigo-100 dark:border-indigo-900/50 shadow-sm">
+                  <CardHeader className="flex flex-row items-center justify-between p-3 pb-1 space-y-0">
+                    <CardTitle className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate pr-1">Total Assigned</CardTitle>
+                    <div className="p-1.5 rounded-md bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 shrink-0">
+                      <UserCheck className="w-3.5 h-3.5" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-3 pt-0">
+                    <div className="text-xl font-bold text-indigo-700 dark:text-indigo-300">
+                      {staffStatsData.overall.totalAssigned}
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-0.5 truncate">
+                      {staffStatsData.overall.activeStaffCount} active staff
+                    </p>
+                  </CardContent>
+                </Card>
 
-            <Card className="bg-gradient-to-br from-emerald-50/60 to-white dark:from-emerald-950/20 dark:to-gray-900 border-emerald-100 dark:border-emerald-900/50 shadow-sm">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Converted / Completed</CardTitle>
-                <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600">
-                  <Award className="w-4 h-4" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">
-                  {staffStatsData.staffStats.reduce((acc, s) => acc + s.completed, 0)}
-                </div>
-                <p className="text-xs text-gray-500 mt-1">Successfully closed leads</p>
-              </CardContent>
-            </Card>
+                <Card className="bg-gradient-to-br from-blue-50/60 to-white dark:from-blue-950/20 dark:to-gray-900 border-blue-100 dark:border-blue-900/50 shadow-sm">
+                  <CardHeader className="flex flex-row items-center justify-between p-3 pb-1 space-y-0">
+                    <CardTitle className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate pr-1">Contacted</CardTitle>
+                    <div className="p-1.5 rounded-md bg-blue-100 dark:bg-blue-900/40 text-blue-600 shrink-0">
+                      <PhoneCall className="w-3.5 h-3.5" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-3 pt-0">
+                    <div className="text-xl font-bold text-blue-700 dark:text-blue-300">
+                      {staffStatsData.staffStats.reduce((acc, s) => acc + s.contacted, 0)}
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-0.5 truncate">Calls initiated</p>
+                  </CardContent>
+                </Card>
 
-            <Card className="bg-gradient-to-br from-amber-50/60 to-white dark:from-amber-950/20 dark:to-gray-900 border-amber-100 dark:border-amber-900/50 shadow-sm">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Unassigned Contacts</CardTitle>
-                <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-600">
-                  <AlertTriangle className="w-4 h-4" />
+                <Card className="bg-gradient-to-br from-emerald-50/60 to-white dark:from-emerald-950/20 dark:to-gray-900 border-emerald-100 dark:border-emerald-900/50 shadow-sm">
+                  <CardHeader className="flex flex-row items-center justify-between p-3 pb-1 space-y-0">
+                    <CardTitle className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate pr-1">Converted</CardTitle>
+                    <div className="p-1.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 shrink-0">
+                      <Award className="w-3.5 h-3.5" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-3 pt-0">
+                    <div className="text-xl font-bold text-emerald-700 dark:text-emerald-300">
+                      {staffStatsData.staffStats.reduce((acc, s) => acc + s.completed, 0)}
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-0.5 truncate">Closed leads</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-amber-50/60 to-white dark:from-amber-950/20 dark:to-gray-900 border-amber-100 dark:border-amber-900/50 shadow-sm">
+                  <CardHeader className="flex flex-row items-center justify-between p-3 pb-1 space-y-0">
+                    <CardTitle className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate pr-1">Unassigned</CardTitle>
+                    <div className="p-1.5 rounded-md bg-amber-100 dark:bg-amber-900/40 text-amber-600 shrink-0">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-3 pt-0">
+                    <div className="text-xl font-bold text-amber-700 dark:text-amber-400">
+                      {staffStatsData.overall.totalUnassigned}
+                    </div>
+                    <Link
+                      to="/ss-hr-admin/platform-leads"
+                      className="text-[10px] font-medium text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-0.5 mt-0.5 truncate"
+                    >
+                      Assign now <ArrowRight className="w-2.5 h-2.5" />
+                    </Link>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Visual Staff Workload Comparison Chart */}
+              {staffStatsData.staffStats.length > 0 && (
+                <Card className="shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-base font-semibold">Staff Workload & Conversion Comparison</CardTitle>
+                        <CardDescription className="text-xs">
+                          Compare total assigned leads against contacted and converted counts per staff member
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-[280px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={staffChartData} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
+                          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                          <XAxis dataKey="name" tickLine={false} axisLine={false} />
+                          <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
+                          <RechartsTooltip />
+                          <Legend />
+                          <Bar dataKey="assigned" name="Assigned" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="contacted" name="Contacted" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="completed" name="Completed" fill="#10b981" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            {/* Right Side: Staff Performance Breakdown starting from top right at SAME LEVEL */}
+            {staffStatsData.staffStats.length > 0 && (
+              <div className="lg:col-span-1 space-y-4">
+                <div className="flex items-center justify-between h-10">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
+                    Staff Performance Breakdown
+                  </h3>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200">
+                    {staffStatsData.staffStats.length} Staff
+                  </span>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-amber-700 dark:text-amber-400">
-                  {staffStatsData.overall.totalUnassigned}
+                <div className="space-y-3">
+                  {staffStatsData.staffStats.map((staff, idx) => (
+                    <Card key={staff.staffId} className="border-l-4 shadow-sm hover:shadow-md transition-all" style={{ borderLeftColor: STAFF_COLORS[idx % STAFF_COLORS.length] }}>
+                      <CardContent className="p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2.5">
+                            <div
+                              className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs"
+                              style={{ backgroundColor: STAFF_COLORS[idx % STAFF_COLORS.length] }}
+                            >
+                              {staff.fullName.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100">{staff.fullName}</h4>
+                              <p className="text-xs text-gray-400 font-mono">@{staff.username}</p>
+                            </div>
+                          </div>
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200">
+                            {staff.totalAssigned} Leads
+                          </span>
+                        </div>
+
+                        {/* Progress Metrics */}
+                        <div className="space-y-1.5 pt-1">
+                          <div className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400">
+                            <span>Contact Rate:</span>
+                            <span className="font-semibold text-gray-900 dark:text-gray-100">{staff.contactRate}%</span>
+                          </div>
+                          <div className="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                              style={{ width: `${Math.min(staff.contactRate, 100)}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Status Badges Grid */}
+                        <div className="grid grid-cols-3 gap-1.5 pt-1 text-center">
+                          <div className="p-1.5 rounded-lg bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-900/50">
+                            <span className="block text-[10px] text-yellow-700 dark:text-yellow-400 font-medium">Pending</span>
+                            <span className="font-bold text-xs text-yellow-800 dark:text-yellow-300">{staff.pending}</span>
+                          </div>
+                          <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50">
+                            <span className="block text-[10px] text-blue-700 dark:text-blue-400 font-medium">Contacted</span>
+                            <span className="font-bold text-xs text-blue-800 dark:text-blue-300">{staff.contacted}</span>
+                          </div>
+                          <div className="p-1.5 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50">
+                            <span className="block text-[10px] text-green-700 dark:text-green-400 font-medium">Completed</span>
+                            <span className="font-bold text-xs text-green-800 dark:text-green-300">{staff.completed}</span>
+                          </div>
+                        </div>
+
+                        {staff.missedFollowUp > 0 && (
+                          <div className="flex items-center gap-1.5 text-xs text-red-600 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 px-2.5 py-1 rounded-md">
+                            <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{staff.missedFollowUp} missed follow-up(s)</span>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-                <Link
-                  to="/ss-hr-admin/platform-leads"
-                  className="text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 mt-1"
-                >
-                  Assign now <ArrowRight className="w-3 h-3" />
-                </Link>
-              </CardContent>
-            </Card>
+              </div>
+            )}
           </div>
         ) : null}
-
-        {/* Staff Comparison Chart & Cards */}
-        {staffStatsData && staffStatsData.staffStats.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Visual Staff Workload Comparison Chart */}
-            <Card className="lg:col-span-2 shadow-sm">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-base font-semibold">Staff Workload & Conversion Comparison</CardTitle>
-                    <CardDescription className="text-xs">
-                      Compare total assigned leads against contacted and converted counts per staff member
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[280px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={staffChartData} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
-                      <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                      <XAxis dataKey="name" tickLine={false} axisLine={false} />
-                      <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
-                      <RechartsTooltip />
-                      <Legend />
-                      <Bar dataKey="assigned" name="Assigned" fill="#6366f1" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="contacted" name="Contacted" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="completed" name="Completed" fill="#10b981" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Individual Staff Cards */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Staff Performance Breakdown</h3>
-              <div className="space-y-3">
-                {staffStatsData.staffStats.map((staff, idx) => (
-                  <Card key={staff.staffId} className="border-l-4 shadow-sm hover:shadow-md transition-all" style={{ borderLeftColor: STAFF_COLORS[idx % STAFF_COLORS.length] }}>
-                    <CardContent className="p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs"
-                            style={{ backgroundColor: STAFF_COLORS[idx % STAFF_COLORS.length] }}
-                          >
-                            {staff.fullName.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100">{staff.fullName}</h4>
-                            <p className="text-xs text-gray-400 font-mono">@{staff.username}</p>
-                          </div>
-                        </div>
-                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200">
-                          {staff.totalAssigned} Leads
-                        </span>
-                      </div>
-
-                      {/* Progress Metrics */}
-                      <div className="space-y-1.5 pt-1">
-                        <div className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400">
-                          <span>Contact Rate:</span>
-                          <span className="font-semibold text-gray-900 dark:text-gray-100">{staff.contactRate}%</span>
-                        </div>
-                        <div className="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-blue-500 rounded-full transition-all duration-500"
-                            style={{ width: `${Math.min(staff.contactRate, 100)}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Status Badges Grid */}
-                      <div className="grid grid-cols-3 gap-1.5 pt-1 text-center">
-                        <div className="p-1.5 rounded-lg bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-900/50">
-                          <span className="block text-[10px] text-yellow-700 dark:text-yellow-400 font-medium">Pending</span>
-                          <span className="font-bold text-xs text-yellow-800 dark:text-yellow-300">{staff.pending}</span>
-                        </div>
-                        <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50">
-                          <span className="block text-[10px] text-blue-700 dark:text-blue-400 font-medium">Contacted</span>
-                          <span className="font-bold text-xs text-blue-800 dark:text-blue-300">{staff.contacted}</span>
-                        </div>
-                        <div className="p-1.5 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50">
-                          <span className="block text-[10px] text-green-700 dark:text-green-400 font-medium">Completed</span>
-                          <span className="font-bold text-xs text-green-800 dark:text-green-300">{staff.completed}</span>
-                        </div>
-                      </div>
-
-                      {staff.missedFollowUp > 0 && (
-                        <div className="flex items-center gap-1.5 text-xs text-red-600 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 px-2.5 py-1 rounded-md">
-                          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                          <span>{staff.missedFollowUp} missed follow-up(s)</span>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="border-t border-gray-200 dark:border-gray-800 my-6" />

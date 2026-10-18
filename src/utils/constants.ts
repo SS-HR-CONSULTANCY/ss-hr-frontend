@@ -710,6 +710,21 @@ export const adminApplicationRoutes: Route[] = [
     roles: ["admin", "staff"],
   },
   {
+    path: "daily-duties",
+    name: "Daily Duties",
+    roles: ["admin", "staff"],
+  },
+  {
+    path: "full-stack-solutions",
+    name: "Full Stack Solutions",
+    roles: ["admin"],
+  },
+  {
+    path: "share-my-apps",
+    name: "ShareMyApps",
+    roles: ["admin"],
+  },
+  {
     path: "settings",
     name: "Settings",
     roles: ["admin"],
