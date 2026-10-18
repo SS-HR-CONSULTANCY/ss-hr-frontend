@@ -398,7 +398,7 @@ const TelecallerLeads: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <p className="text-gray-900 dark:text-gray-100 font-medium">{selectedCustomer.name}</p>
                     {isNewPlatformLead(selectedCustomer) && (
-                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 tracking-wide uppercase shrink-0">
+                      <span className="inline-flex items-center px-1 py-[0.5px] rounded text-[8.5px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tracking-wider uppercase shrink-0 leading-none">
                         New
                       </span>
                     )}
