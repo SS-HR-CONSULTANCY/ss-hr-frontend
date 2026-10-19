@@ -8,7 +8,7 @@ import {
   type ImportedCustomer,
   type AssignedStaff 
 } from "@/utils/apis/adminPlatformLeadsApi";
-import { AdminPlatformLeadsTableColumns } from "@/components/table/tableColumns/AdminPlatformLeadsTableColumn";
+import { AdminPlatformLeadsTableColumns, buildWhatsAppUrl, formatPhoneWithCountryCode } from "@/components/table/tableColumns/AdminPlatformLeadsTableColumn";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import LeadTimeline from "@/components/admin/LeadTimeline";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
+import { IconBrandWhatsapp } from "@tabler/icons-react";
 
 import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle, UserCheck } from "lucide-react";
 
@@ -158,6 +159,7 @@ const TelecallerLeads: React.FC = () => {
       hideEmail: true,
       hideAssignStaff: true,
       isAdmin,
+      staffName: user?.fullName || user?.username || "",
     }
   );
 
@@ -419,7 +421,26 @@ const TelecallerLeads: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">Phone</h4>
-                  <p className="text-gray-900 dark:text-gray-100">{selectedCustomer.phone}</p>
+                  {selectedCustomer.phone ? (
+                    <a
+                      href={buildWhatsAppUrl(
+                        selectedCustomer.phone,
+                        selectedCustomer.name,
+                        user?.fullName || user?.username || ""
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2 py-1 -ml-2 rounded-md text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/30 transition-colors font-medium text-sm group"
+                      title={`Send WhatsApp message to ${selectedCustomer.name || selectedCustomer.phone}`}
+                    >
+                      <IconBrandWhatsapp size={16} className="text-[#25D366] shrink-0 group-hover:scale-110 transition-transform" />
+                      <span className="underline-offset-2 hover:underline">
+                        {formatPhoneWithCountryCode(selectedCustomer.phone)}
+                      </span>
+                    </a>
+                  ) : (
+                    <p className="text-gray-400 text-sm">N/A</p>
+                  )}
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 mb-1">State</h4>

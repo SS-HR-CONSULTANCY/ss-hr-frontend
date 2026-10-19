@@ -1,5 +1,6 @@
 import React from "react";
 import { Eye, AlertTriangle } from "lucide-react";
+import { IconBrandWhatsapp } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import type { ImportedCustomer, AssignedStaff } from "@/utils/apis/adminPlatformLeadsApi";
@@ -11,7 +12,51 @@ export interface AdminPlatformLeadsColumnsOptions {
   staffList?: AssignedStaff[];
   onAssignStaff?: (id: string, staffId: string | null) => void;
   isAdmin?: boolean;
+  staffName?: string;
 }
+
+export const formatPhoneWithCountryCode = (phone: string): string => {
+  if (!phone) return "";
+  const trimmed = phone.trim();
+  if (trimmed.startsWith("+")) return trimmed;
+  if (trimmed.startsWith("-")) {
+    const withoutDash = trimmed.replace(/^-+/, "");
+    return withoutDash.startsWith("+") ? withoutDash : `+${withoutDash}`;
+  }
+
+  const digits = trimmed.replace(/\D/g, "");
+  if (!digits) return trimmed;
+
+  if (digits.length === 10) {
+    return `+91${digits}`;
+  }
+  if (digits.length === 11 && digits.startsWith("0")) {
+    return `+91${digits.slice(1)}`;
+  }
+  if (digits.length === 12 && digits.startsWith("91")) {
+    return `+${digits}`;
+  }
+  if (digits.length > 10) {
+    return `+${digits}`;
+  }
+
+  return `+91${digits}`;
+};
+
+export const buildWhatsAppUrl = (phone: string, customerName?: string, staffName?: string): string => {
+  if (!phone) return "";
+  const formatted = formatPhoneWithCountryCode(phone);
+  const cleanDigits = formatted.replace(/\D/g, "");
+  if (!cleanDigits) return "";
+  
+  const greeting = customerName?.trim() ? `Hello ${customerName.trim()},` : "Hello,";
+  const staffIntro = staffName?.trim() 
+    ? `I am ${staffName.trim()} from SS HR Consultancy`
+    : "I am from SS HR Consultancy";
+  const message = `${greeting} ${staffIntro}`;
+  
+  return `https://wa.me/${cleanDigits}?text=${encodeURIComponent(message)}`;
+};
 
 export const AdminPlatformLeadsTableColumns = (
   onView: (customer: ImportedCustomer) => void,
@@ -80,19 +125,30 @@ export const AdminPlatformLeadsTableColumns = (
       <DataTableColumnHeader column={column} title="Phone" />
     ),
     cell: ({ row }) => {
-      const phone = row.getValue("phone") as string;
-      if (!phone) return <div>N/A</div>;
+      const phone = (row.getValue("phone") as string) || "";
+      if (!phone) return <div className="text-gray-400 text-center w-full">N/A</div>;
       
-      const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, "")}`;
+      const customerName = row.original.name || "";
+      const assignedStaff = typeof row.original.assignedTo === "object" && row.original.assignedTo
+        ? (row.original.assignedTo.fullName || row.original.assignedTo.username)
+        : "";
+      const effectiveStaffName = options.staffName || assignedStaff || "";
+      const whatsappUrl = buildWhatsAppUrl(phone, customerName, effectiveStaffName);
+      const displayPhone = formatPhoneWithCountryCode(phone);
+
       return (
-        <a 
-          href={whatsappUrl} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="text-green-600 hover:text-green-700 hover:underline flex items-center justify-center gap-1"
-        >
-          {phone}
-        </a>
+        <div className="flex items-center justify-center w-full">
+          <a 
+            href={whatsappUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/30 transition-colors font-medium text-xs whitespace-nowrap group"
+            title={`Send WhatsApp message to ${customerName || displayPhone}`}
+          >
+            <IconBrandWhatsapp size={16} className="text-[#25D366] shrink-0 group-hover:scale-110 transition-transform" />
+            <span className="underline-offset-2 hover:underline">{displayPhone}</span>
+          </a>
+        </div>
       );
     },
   },
