@@ -124,3 +124,62 @@ export const adminFetchSuperAdminStaffStats = async (): Promise<SuperAdminStaffS
   const response = await axiosInstance.get("/imported-customers/staff-stats");
   return response.data.data;
 };
+
+export const adminSummarizeLeadComment = async (content: string): Promise<string> => {
+  if (!content || !content.trim()) {
+    throw new Error("No conversation content provided to summarize.");
+  }
+
+  // 1. Try backend endpoint first
+  try {
+    const response = await axiosInstance.post("/imported-customers/summarize-comment", { content });
+    if (response?.data?.data?.summary) {
+      return response.data.data.summary;
+    }
+  } catch (backendError) {
+    console.warn("Backend summarization failed, falling back to direct OpenAI API...", backendError);
+  }
+
+  // 2. Direct OpenAI fallback
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("AI summarization failed and VITE_OPENAI_API_KEY is not configured.");
+  }
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert AI assistant for telecallers at SS HR Consultancy. The telecaller will paste an entire raw conversation, call transcript, or WhatsApp chat with a candidate/lead. Your job is to summarize this conversation into a concise, professional telecaller note (maximum 2-3 sentences or clean bullet points). Highlight: candidate's interest level, qualification/experience, preferred role/location/salary if mentioned, and agreed next steps. Output ONLY the summary without any prefix, quotes, or conversational fluff.",
+        },
+        {
+          role: "user",
+          content: content.trim(),
+        },
+      ],
+      temperature: 0.3,
+      max_tokens: 250,
+    }),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`OpenAI summarization failed: ${errorText}`);
+  }
+
+  const result = await res.json();
+  const summary = result?.choices?.[0]?.message?.content?.trim();
+  if (!summary) {
+    throw new Error("Empty summary received from AI");
+  }
+  return summary;
+};
+

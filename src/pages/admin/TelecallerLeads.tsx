@@ -5,6 +5,7 @@ import {
   adminUpdatePlatformLead, 
   adminAssignPlatformLead,
   adminFetchSystemStaff,
+  adminSummarizeLeadComment,
   type ImportedCustomer,
   type AssignedStaff 
 } from "@/utils/apis/adminPlatformLeadsApi";
@@ -18,7 +19,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 
-import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle, UserCheck } from "lucide-react";
+import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle, UserCheck, Sparkles, Loader2, Undo2 } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -73,6 +74,8 @@ const TelecallerLeads: React.FC = () => {
   // State for telecalling updates
   const [status, setStatus] = useState<string>("Pending");
   const [comment, setComment] = useState<string>("");
+  const [previousComment, setPreviousComment] = useState<string>("");
+  const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
   const [scheduledDate, setScheduledDate] = useState<string>("");
 
   const queryClient = useQueryClient();
@@ -123,10 +126,31 @@ const TelecallerLeads: React.FC = () => {
     }
   });
 
+  const handleSummarizeComment = async () => {
+    if (!comment || !comment.trim()) {
+      toast.info("Please paste or type the conversation text in the comment box first.");
+      return;
+    }
+    try {
+      setIsSummarizing(true);
+      const originalText = comment;
+      const summary = await adminSummarizeLeadComment(originalText);
+      setPreviousComment(originalText);
+      setComment(summary);
+      toast.success("Conversation summarized with AI!");
+    } catch (err: any) {
+      console.error("AI summarize error:", err);
+      toast.error(err.message || "Failed to summarize conversation with AI.");
+    } finally {
+      setIsSummarizing(false);
+    }
+  };
+
   const handleView = (customer: ImportedCustomer) => {
     setSelectedCustomer(customer);
     setStatus(customer.status || "Pending");
     setComment(customer.comment || "");
+    setPreviousComment("");
     setScheduledDate(customer.scheduledDate ? new Date(customer.scheduledDate).toISOString().split('T')[0] : "");
     setIsSheetOpen(true);
   };
@@ -199,12 +223,12 @@ const TelecallerLeads: React.FC = () => {
             <Users className="w-5 h-5" />
           </div>
         </div>
-        <div className="bg-yellow-50 dark:bg-yellow-950/20 p-4 rounded-xl shadow-sm border border-yellow-100 dark:border-yellow-900 flex items-center justify-between">
+        <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-xl shadow-sm border border-red-100 dark:border-red-900 flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500 font-medium mb-1">Pending to contact</p>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending}</h3>
           </div>
-          <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-full text-yellow-600 dark:text-yellow-400">
+          <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 dark:text-red-400">
             <Clock className="w-5 h-5" />
           </div>
         </div>
@@ -518,13 +542,54 @@ const TelecallerLeads: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Agent Comments</label>
-                    <textarea 
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      placeholder="Enter follow up notes..."
-                      className="w-full rounded-lg border-gray-300 border p-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 min-h-[80px]"
-                    />
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Agent Comments
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleSummarizeComment}
+                        disabled={isSummarizing || !comment?.trim()}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white shadow-xs hover:from-violet-700 hover:to-purple-700 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 transition-all cursor-pointer"
+                        title="Paste full conversation in the comment box, then click to summarize with AI"
+                      >
+                        {isSummarizing ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Summarizing...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                            <span>AI Summarize</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <textarea 
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        placeholder="Enter follow up notes, or paste full WhatsApp / call conversation to summarize..."
+                        className="w-full rounded-lg border-gray-300 border p-2.5 text-sm focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500 dark:bg-gray-800 dark:border-gray-700 min-h-[90px] transition-all"
+                      />
+                    </div>
+                    {previousComment && previousComment !== comment && (
+                      <div className="flex items-center justify-between mt-1 text-xs">
+                        <span className="text-gray-400 dark:text-gray-500 text-[11px]">Summarized with AI</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setComment(previousComment);
+                            setPreviousComment("");
+                          }}
+                          className="inline-flex items-center gap-1 text-[11px] text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 font-medium hover:underline cursor-pointer"
+                        >
+                          <Undo2 className="w-3 h-3" />
+                          Undo AI summary
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div>

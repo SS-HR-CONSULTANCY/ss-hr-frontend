@@ -5,6 +5,7 @@ import {
   adminUpdatePlatformLead, 
   adminAssignPlatformLead,
   adminFetchSystemStaff,
+  adminSummarizeLeadComment,
   type ImportedCustomer,
   type AssignedStaff
 } from "@/utils/apis/adminPlatformLeadsApi";
@@ -12,7 +13,7 @@ import { AdminPlatformLeadsTableColumns, buildWhatsAppUrl, formatPhoneWithCountr
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Copy } from "lucide-react";
+import { Copy, Sparkles, Loader2, Undo2 } from "lucide-react";
 import { isNewPlatformLead } from "@/utils/helpers/followUp";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
@@ -26,6 +27,8 @@ const AdminPlatformLeads: React.FC = () => {
   // State for telecalling updates
   const [status, setStatus] = useState<string>("Pending");
   const [comment, setComment] = useState<string>("");
+  const [previousComment, setPreviousComment] = useState<string>("");
+  const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
   const [scheduledDate, setScheduledDate] = useState<string>("");
 
   const queryClient = useQueryClient();
@@ -68,10 +71,31 @@ const AdminPlatformLeads: React.FC = () => {
     }
   });
 
+  const handleSummarizeComment = async () => {
+    if (!comment || !comment.trim()) {
+      toast.info("Please paste or type the conversation text in the comment box first.");
+      return;
+    }
+    try {
+      setIsSummarizing(true);
+      const originalText = comment;
+      const summary = await adminSummarizeLeadComment(originalText);
+      setPreviousComment(originalText);
+      setComment(summary);
+      toast.success("Conversation summarized with AI!");
+    } catch (err: any) {
+      console.error("AI summarize error:", err);
+      toast.error(err.message || "Failed to summarize conversation with AI.");
+    } finally {
+      setIsSummarizing(false);
+    }
+  };
+
   const handleView = (customer: ImportedCustomer) => {
     setSelectedCustomer(customer);
     setStatus(customer.status || "Pending");
     setComment(customer.comment || "");
+    setPreviousComment("");
     setScheduledDate(customer.scheduledDate ? new Date(customer.scheduledDate).toISOString().split('T')[0] : "");
     setIsSheetOpen(true);
   };
@@ -254,13 +278,54 @@ const AdminPlatformLeads: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Agent Comments</label>
-                    <textarea 
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      placeholder="Enter follow up notes..."
-                      className="w-full rounded-lg border-gray-300 border p-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 min-h-[80px]"
-                    />
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Agent Comments
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleSummarizeComment}
+                        disabled={isSummarizing || !comment?.trim()}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white shadow-xs hover:from-violet-700 hover:to-purple-700 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 transition-all cursor-pointer"
+                        title="Paste full conversation in the comment box, then click to summarize with AI"
+                      >
+                        {isSummarizing ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Summarizing...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                            <span>AI Summarize</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <div className="relative">
+                      <textarea 
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        placeholder="Enter follow up notes, or paste full WhatsApp / call conversation to summarize..."
+                        className="w-full rounded-lg border-gray-300 border p-2.5 text-sm focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500 dark:bg-gray-800 dark:border-gray-700 min-h-[90px] transition-all"
+                      />
+                    </div>
+                    {previousComment && previousComment !== comment && (
+                      <div className="flex items-center justify-between mt-1 text-xs">
+                        <span className="text-gray-400 dark:text-gray-500 text-[11px]">Summarized with AI</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setComment(previousComment);
+                            setPreviousComment("");
+                          }}
+                          className="inline-flex items-center gap-1 text-[11px] text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 font-medium hover:underline cursor-pointer"
+                        >
+                          <Undo2 className="w-3 h-3" />
+                          Undo AI summary
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div>

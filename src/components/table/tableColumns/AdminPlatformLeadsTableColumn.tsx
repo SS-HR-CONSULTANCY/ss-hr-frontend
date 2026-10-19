@@ -1,10 +1,15 @@
 import React from "react";
-import { Eye, AlertTriangle } from "lucide-react";
+import { Eye, AlertTriangle, Sparkles, Loader2 } from "lucide-react";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
-import type { ImportedCustomer, AssignedStaff } from "@/utils/apis/adminPlatformLeadsApi";
+import { 
+  type ImportedCustomer, 
+  type AssignedStaff,
+  adminSummarizeLeadComment 
+} from "@/utils/apis/adminPlatformLeadsApi";
 import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
+import { toast } from "react-toastify";
 
 export interface AdminPlatformLeadsColumnsOptions {
   hideEmail?: boolean;
@@ -313,6 +318,7 @@ export const AdminPlatformLeadsTableColumns = (
       const initialDate = row.original.scheduledDate;
       const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : "";
       const [localComment, setLocalComment] = React.useState(initialComment);
+      const [isSummarizing, setIsSummarizing] = React.useState(false);
       const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 
       React.useEffect(() => {
@@ -330,33 +336,69 @@ export const AdminPlatformLeadsTableColumns = (
         autoResize();
       }, [localComment]);
 
+      const handleAiSummarize = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!localComment || !localComment.trim()) {
+          toast.info("Please paste or type the conversation text in the comment box first.");
+          return;
+        }
+        try {
+          setIsSummarizing(true);
+          const summary = await adminSummarizeLeadComment(localComment);
+          setLocalComment(summary);
+          onUpdateStatus(customerId, status, summary, formattedInitialDate);
+          toast.success("Conversation summarized with AI!");
+        } catch (err: any) {
+          console.error("AI summarize error:", err);
+          toast.error(err.message || "Failed to summarize with AI");
+        } finally {
+          setIsSummarizing(false);
+        }
+      };
+
       return (
-        <textarea 
-          ref={textareaRef}
-          value={localComment}
-          rows={1}
-          onChange={(e) => {
-            setLocalComment(e.target.value);
-            autoResize();
-          }}
-          onBlur={() => {
-            if (localComment !== initialComment) {
-              onUpdateStatus(customerId, status, localComment, formattedInitialDate);
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
+        <div className="relative group/ai-comment w-full min-w-[220px]">
+          <textarea 
+            ref={textareaRef}
+            value={localComment}
+            rows={1}
+            onChange={(e) => {
+              setLocalComment(e.target.value);
+              autoResize();
+            }}
+            onBlur={() => {
               if (localComment !== initialComment) {
                 onUpdateStatus(customerId, status, localComment, formattedInitialDate);
               }
-              (e.target as HTMLTextAreaElement).blur();
-            }
-          }}
-          className="w-full min-w-[220px] text-center px-2 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all resize-none whitespace-normal break-words leading-relaxed overflow-hidden placeholder:text-gray-400"
-          placeholder="Add comment..."
-          title={localComment || "Add comment..."}
-        />
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (localComment !== initialComment) {
+                  onUpdateStatus(customerId, status, localComment, formattedInitialDate);
+                }
+                (e.target as HTMLTextAreaElement).blur();
+              }
+            }}
+            className="w-full text-center px-2 pr-7 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all resize-none whitespace-normal break-words leading-relaxed overflow-hidden placeholder:text-gray-400"
+            placeholder="Add comment..."
+            title={localComment || "Add comment..."}
+          />
+          <button
+            type="button"
+            onClick={handleAiSummarize}
+            disabled={isSummarizing || !localComment?.trim()}
+            className="absolute right-1 top-2 p-1 rounded-md text-violet-500 hover:text-violet-700 hover:bg-violet-50 dark:hover:bg-violet-900/40 dark:text-violet-400 disabled:opacity-0 opacity-40 group-hover/ai-comment:opacity-100 transition-all cursor-pointer"
+            title="Summarize conversation with AI"
+          >
+            {isSummarizing ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-600 dark:text-violet-400" />
+            ) : (
+              <Sparkles className="w-3.5 h-3.5" />
+            )}
+          </button>
+        </div>
       );
     },
   },
