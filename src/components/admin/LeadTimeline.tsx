@@ -1,5 +1,10 @@
 import React from "react";
-import { UserPlus, RefreshCw, MessageSquare, CalendarClock, MapPin, UserCheck } from "lucide-react";
+import { UserPlus, RefreshCw, MessageSquare, CalendarClock, MapPin, UserCheck, Eye } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import type { ImportedCustomer, ImportedCustomerActivity } from "@/utils/apis/adminPlatformLeadsApi";
 
 const STATUS_DOT: Record<string, string> = {
@@ -41,6 +46,46 @@ const StatusPill: React.FC<{ status?: string }> = ({ status }) => (
     {status || "—"}
   </span>
 );
+
+const CommentPopover: React.FC<{ text: string; date?: string }> = ({
+  text,
+  date,
+}) => {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium text-violet-700 dark:text-violet-300 bg-violet-100/80 dark:bg-violet-950/60 hover:bg-violet-200/80 dark:hover:bg-violet-900/60 border border-violet-200 dark:border-violet-800 transition-colors cursor-pointer select-none"
+          title="View full comment"
+        >
+          <Eye className="w-3 h-3" />
+          <span>View</span>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="z-[70] w-80 sm:w-96 max-w-[90vw] p-3.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xl rounded-xl"
+        align="start"
+        side="bottom"
+        sideOffset={6}
+      >
+        <div className="flex items-center justify-between pb-2 mb-2 border-b border-gray-100 dark:border-gray-800">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400">
+            <MessageSquare className="w-3.5 h-3.5" /> Full Comment
+          </span>
+          {date && (
+            <span className="text-[10px] text-gray-400">
+              {formatDateTime(date)}
+            </span>
+          )}
+        </div>
+        <div className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words max-h-60 overflow-y-auto leading-relaxed bg-gray-50/70 dark:bg-gray-950/50 p-2.5 rounded-lg border border-gray-100 dark:border-gray-800">
+          {text}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 interface TimelineItem {
   key: string;
@@ -90,13 +135,11 @@ const buildItems = (customer: ImportedCustomer): TimelineItem[] => {
           icon: <MessageSquare className="w-3.5 h-3.5" />,
           iconClass: "bg-violet-100 text-violet-700 border-violet-300",
           title: (
-            <span className="font-medium">{a.to ? "Comment updated" : "Comment removed"}</span>
+            <div className="flex items-center flex-wrap gap-2 font-medium">
+              <span>{a.to ? "Comment updated" : "Comment removed"}</span>
+              {a.to && <CommentPopover text={a.to} date={a.at} />}
+            </div>
           ),
-          body: a.to ? (
-            <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-md px-2.5 py-1.5">
-              {a.to}
-            </p>
-          ) : undefined,
         });
         break;
       case "schedule":
@@ -156,20 +199,27 @@ const LeadTimeline: React.FC<{ customer: ImportedCustomer }> = ({ customer }) =>
   return (
     <div>
       <h4 className="text-[15px] font-semibold text-gray-900 dark:text-gray-100 mb-3">Timeline</h4>
-      <ol className="relative ml-3.5 border-l-2 border-gray-200 dark:border-gray-800 space-y-5">
-        {items.map((item) => (
-          <li key={item.key} className="ml-6 relative">
-            <span
-              className={`absolute -left-[39px] top-0 flex items-center justify-center w-7 h-7 rounded-full border ring-4 ring-white dark:ring-gray-950 ${item.iconClass}`}
+      {items.length === 0 ? (
+        <div className="text-center py-8 text-gray-400 text-sm">No activity history yet.</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {items.map((item) => (
+            <div
+              key={item.key}
+              className="flex items-start gap-3 p-3 rounded-xl bg-gray-50/70 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 hover:bg-gray-50/90 dark:hover:bg-gray-900/80 transition-all shadow-2xs"
             >
-              {item.icon}
-            </span>
-            <div className="text-sm text-gray-900 dark:text-gray-100">{item.title}</div>
-            {item.body}
-            <time className="block mt-0.5 text-xs text-gray-400">{formatDateTime(item.at)}</time>
-          </li>
-        ))}
-      </ol>
+              <span className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-lg border shadow-xs ${item.iconClass}`}>
+                {item.icon}
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-medium text-gray-900 dark:text-gray-100 leading-snug">{item.title}</div>
+                {item.body}
+                <time className="block mt-1 text-[11px] text-gray-400">{formatDateTime(item.at)}</time>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

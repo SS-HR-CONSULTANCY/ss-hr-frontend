@@ -104,6 +104,18 @@ export const STATUS_STYLES: Record<string, { pill: string; dot: string }> = {
   },
 };
 
+export const STATUS_TEXT_COLORS: Record<string, string> = {
+  Pending: "text-amber-700 dark:text-amber-400",
+  Contacted: "text-blue-700 dark:text-blue-400",
+  "Re-contacted": "text-cyan-700 dark:text-cyan-400",
+  Recontacted: "text-cyan-700 dark:text-cyan-400",
+  "Need Follow Up": "text-orange-700 dark:text-orange-400",
+  "Not Interested": "text-gray-600 dark:text-gray-400",
+  "Processing Application": "text-purple-700 dark:text-purple-400",
+  "Rejected Application": "text-red-700 dark:text-red-400",
+  Completed: "text-emerald-700 dark:text-emerald-400",
+};
+
 export const AdminPlatformLeadsTableColumns = (
   onView: (customer: ImportedCustomer) => void,
   onUpdateStatus: (id: string, newStatus: string, comment: string, scheduledDate?: string, state?: string, assignedTo?: string | null) => void,
@@ -317,19 +329,11 @@ export const AdminPlatformLeadsTableColumns = (
     ),
     cell: ({ row }) => {
       const status = (row.getValue("status") as string) || "Pending";
-      const style = STATUS_STYLES[status] || {
-        pill: "bg-gray-100 text-gray-700 border-gray-300",
-        dot: "bg-gray-400",
-      };
+      const textCls = STATUS_TEXT_COLORS[status] || "text-gray-700 dark:text-gray-300";
 
       return (
-        <div className="flex justify-center">
-          <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full border shadow-xs select-none ${style.pill}`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
-            {status}
-          </span>
+        <div className="flex items-center justify-center text-xs font-semibold select-none">
+          <span className={textCls}>{status}</span>
         </div>
       );
     },
@@ -487,7 +491,7 @@ export const AdminPlatformLeadsTableColumns = (
           onClick={() => onView(row.original)}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:hover:bg-blue-900/60 border border-blue-200 dark:border-blue-800 transition-colors mx-auto cursor-pointer"
         >
-          <Eye className="h-3.5 w-3.5" /> Activity
+          <Eye className="h-3.5 w-3.5" /> Update Lead
         </button>
       );
     },
