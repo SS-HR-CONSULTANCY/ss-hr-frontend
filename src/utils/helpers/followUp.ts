@@ -1,19 +1,29 @@
 export const NEED_FOLLOW_UP_STATUS = "Need Follow Up";
+export const RE_CONTACTED_STATUS = "Re-contacted";
 
 /** Today's date as YYYY-MM-DD (UTC, consistent with how scheduled dates are stored/compared). */
 export const getTodayString = (): string => new Date().toISOString().split("T")[0];
 
+/** Checks if a status requires scheduling a next follow up or re-contact date */
+export const isSchedulableStatus = (status?: string): boolean => {
+  return (
+    status === NEED_FOLLOW_UP_STATUS ||
+    status === RE_CONTACTED_STATUS ||
+    status === "Recontacted"
+  );
+};
+
 /**
- * A lead is a "missed follow up" when it needs a follow up but its scheduled
+ * A lead is a "missed follow up" when it needs a follow up or re-contact but its scheduled
  * date is in the past (strictly before today). Dates are YYYY-MM-DD strings.
  */
 export const isMissedFollowUp = (status?: string, scheduledDate?: string): boolean => {
-  if (status !== NEED_FOLLOW_UP_STATUS || !scheduledDate) return false;
+  if (!isSchedulableStatus(status) || !scheduledDate) return false;
   return scheduledDate.slice(0, 10) < getTodayString();
 };
 
 export const FOLLOW_UP_WARNING_MESSAGE =
-  "Follow up date is in the past. Please add a future date, otherwise this follow up will be missed.";
+  "Scheduled date is in the past. Please select a future date to avoid missing this lead.";
 
 export interface LeadWithStatusInfo {
   status?: string;

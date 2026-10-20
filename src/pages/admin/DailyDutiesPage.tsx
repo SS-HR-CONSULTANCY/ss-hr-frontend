@@ -160,6 +160,7 @@ const DailyDutiesPage: React.FC = () => {
     mutationFn: adminCreateDailyDuty,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["daily-duties"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyDutyPendingCount"] });
       queryClient.invalidateQueries({ queryKey: ["adminStuckDutiesCount"] });
       toast.success("Daily duty assigned successfully");
       setIsAssignModalOpen(false);
@@ -174,6 +175,7 @@ const DailyDutiesPage: React.FC = () => {
     mutationFn: ({ id, payload }: { id: string; payload: any }) => adminUpdateDailyDuty(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["daily-duties"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyDutyPendingCount"] });
       toast.success("Duty details updated");
       setIsEditModalOpen(false);
     },
@@ -186,6 +188,7 @@ const DailyDutiesPage: React.FC = () => {
     mutationFn: ({ id, payload }: { id: string; payload: any }) => adminUpdateDutyProgress(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["daily-duties"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyDutyPendingCount"] });
       toast.success("Duty progress updated");
       setIsProgressModalOpen(false);
     },
@@ -198,6 +201,7 @@ const DailyDutiesPage: React.FC = () => {
     mutationFn: ({ id, payload }: { id: string; payload: any }) => adminReportDutyStuck(id, payload),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["daily-duties"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyDutyPendingCount"] });
       queryClient.invalidateQueries({ queryKey: ["adminStuckDutiesCount"] });
       toast.success(variables.payload.isStuck ? "Blocker reported to Admin" : "Blocker resolved!");
       setIsStuckModalOpen(false);
@@ -212,6 +216,7 @@ const DailyDutiesPage: React.FC = () => {
     mutationFn: ({ id, payload }: { id: string; payload: any }) => adminValidateDuty(id, payload),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["daily-duties"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyDutyPendingCount"] });
       toast.success(variables.payload.isValidated ? "Duty verified & approved!" : "Revision requested");
       setIsValidateModalOpen(false);
     },
@@ -224,6 +229,7 @@ const DailyDutiesPage: React.FC = () => {
     mutationFn: ({ id, text }: { id: string; text: string }) => adminAddDutyComment(id, text),
     onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ["daily-duties"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyDutyPendingCount"] });
       setActiveDuty(updated);
       setNewCommentText("");
       toast.success("Comment posted");
@@ -237,6 +243,7 @@ const DailyDutiesPage: React.FC = () => {
     mutationFn: adminDeleteDailyDuty,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["daily-duties"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyDutyPendingCount"] });
       queryClient.invalidateQueries({ queryKey: ["adminStuckDutiesCount"] });
       toast.success("Duty deleted");
     },
@@ -675,6 +682,28 @@ const DailyDutiesPage: React.FC = () => {
                         <Clock className="w-3 h-3" />
                         {deadlineInfo.text}
                       </span>
+
+                      {/* Carry Forward Tag */}
+                      {duty.isCarriedForward && (
+                        <span
+                          className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full border flex items-center gap-1 bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
+                          title={`Carried forward from ${duty.carriedForwardFrom || duty.originalDutyDate || "previous day"}`}
+                        >
+                          <RotateCcw className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                          Carried forward {duty.carriedForwardFrom ? `from ${duty.carriedForwardFrom}` : ""}
+                        </span>
+                      )}
+
+                      {/* If viewing a past date and this duty was carried forward to a later date */}
+                      {duty.dutyDate > selectedDate && (
+                        <span
+                          className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full border flex items-center gap-1 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800"
+                          title={`Carried forward to ${duty.dutyDate}`}
+                        >
+                          <RotateCcw className="w-3 h-3 text-blue-600 dark:text-blue-400 -scale-x-100" />
+                          Carried forward to {duty.dutyDate}
+                        </span>
+                      )}
                     </div>
 
                     {/* Duty Title */}
@@ -748,6 +777,11 @@ const DailyDutiesPage: React.FC = () => {
                       )}
                       <div>
                         <span>Date: {duty.dutyDate}</span>
+                        {duty.originalDutyDate && duty.originalDutyDate !== duty.dutyDate && (
+                          <span className="text-gray-400 text-[11px] ml-1">
+                            (Original: {duty.originalDutyDate})
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>

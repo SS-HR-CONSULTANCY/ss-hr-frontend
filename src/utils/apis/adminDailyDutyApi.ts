@@ -43,6 +43,10 @@ export interface IDailyDuty {
   completedCount: number;
   status: DutyStatus;
   progress: number;
+  isCarriedForward?: boolean;
+  originalDutyDate?: string;
+  carriedForwardFrom?: string;
+  carriedForwardAt?: string;
   stuckInfo?: {
     isStuck: boolean;
     reason?: string;
@@ -137,8 +141,18 @@ export const adminFetchStaffMembers = async (): Promise<IDutyUser[]> => {
 
 // Fetch duties with filters & stats
 export const adminFetchDailyDuties = async (params: FetchDutiesParams = {}): Promise<DailyDutiesResponse> => {
-  const res = await axiosInstance.get("/admin/daily-duties", { params });
+  const today = new Date().toISOString().split("T")[0];
+  const res = await axiosInstance.get("/admin/daily-duties", { params: { today, ...params } });
   return res.data?.data || { duties: [], total: 0, stats: { total: 0, pending: 0, inProgress: 0, stuck: 0, completed: 0, validated: 0, overdue: 0 } };
+};
+
+// Fetch pending and stuck duties count for badges
+export const adminFetchDailyDutiesPendingCount = async (): Promise<{ pendingCount: number; stuckCount: number }> => {
+  const today = new Date().toISOString().split("T")[0];
+  const res = await axiosInstance.get("/admin/daily-duties/pending-count", {
+    params: { today }
+  });
+  return res.data?.data || { pendingCount: 0, stuckCount: 0 };
 };
 
 // Create a new duty (single or multi-staff assignment)

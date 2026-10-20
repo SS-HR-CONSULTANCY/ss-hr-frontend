@@ -4,6 +4,7 @@ export interface User {
   _id: string;
   serialNumber: string;
   fullName: string;
+  username?: string;
   email: string;
   role: RoleType;
   isVerified: boolean;

@@ -14,6 +14,8 @@ import { toast } from "react-toastify";
 export interface AdminPlatformLeadsColumnsOptions {
   hideEmail?: boolean;
   hideAssignStaff?: boolean;
+  hideComment?: boolean;
+  hideScheduledDate?: boolean;
   staffList?: AssignedStaff[];
   onAssignStaff?: (id: string, staffId: string | null) => void;
   isAdmin?: boolean;
@@ -61,6 +63,45 @@ export const buildWhatsAppUrl = (phone: string, customerName?: string, staffName
   const message = `${greeting} ${staffIntro}`;
   
   return `https://wa.me/${cleanDigits}?text=${encodeURIComponent(message)}`;
+};
+
+export const STATUS_STYLES: Record<string, { pill: string; dot: string }> = {
+  Pending: {
+    pill: "bg-yellow-100 text-yellow-800 border-yellow-300",
+    dot: "bg-yellow-400",
+  },
+  Contacted: {
+    pill: "bg-blue-100 text-blue-800 border-blue-300",
+    dot: "bg-blue-400",
+  },
+  "Re-contacted": {
+    pill: "bg-cyan-100 text-cyan-800 border-cyan-300",
+    dot: "bg-cyan-400",
+  },
+  Recontacted: {
+    pill: "bg-cyan-100 text-cyan-800 border-cyan-300",
+    dot: "bg-cyan-400",
+  },
+  "Need Follow Up": {
+    pill: "bg-orange-100 text-orange-800 border-orange-300",
+    dot: "bg-orange-400",
+  },
+  "Not Interested": {
+    pill: "bg-gray-100 text-gray-700 border-gray-300",
+    dot: "bg-gray-400",
+  },
+  "Processing Application": {
+    pill: "bg-purple-100 text-purple-800 border-purple-300",
+    dot: "bg-purple-400",
+  },
+  "Rejected Application": {
+    pill: "bg-red-100 text-red-800 border-red-300",
+    dot: "bg-red-400",
+  },
+  Completed: {
+    pill: "bg-green-100 text-green-800 border-green-300",
+    dot: "bg-green-400",
+  },
 };
 
 export const AdminPlatformLeadsTableColumns = (
@@ -275,34 +316,21 @@ export const AdminPlatformLeadsTableColumns = (
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string || "Pending";
-      const comment = row.getValue("comment") as string || "";
-      const customerId = row.original._id;
-      const initialDate = row.original.scheduledDate;
-      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : "";
+      const status = (row.getValue("status") as string) || "Pending";
+      const style = STATUS_STYLES[status] || {
+        pill: "bg-gray-100 text-gray-700 border-gray-300",
+        dot: "bg-gray-400",
+      };
 
       return (
-        <select
-          value={status}
-          onChange={(e) => onUpdateStatus(customerId, e.target.value, comment, formattedInitialDate)}
-          className={`px-2 py-1 text-xs font-semibold rounded-full border border-transparent hover:border-gray-300 focus:ring-0 focus:outline-none cursor-pointer outline-none appearance-none
-            ${status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 
-              status === 'Contacted' ? 'bg-blue-100 text-blue-700' : 
-              status === 'Need Follow Up' ? 'bg-orange-100 text-orange-700' :
-              status === 'Not Interested' ? 'bg-gray-100 text-gray-700' :
-              status === 'Processing Application' ? 'bg-purple-100 text-purple-700' :
-              status === 'Completed' ? 'bg-green-100 text-green-700' :
-              status === 'Rejected Application' ? 'bg-red-100 text-red-700' :
-              'bg-gray-100 text-gray-700'}`}
-        >
-          <option value="Pending" className="bg-yellow-50 text-yellow-700 font-semibold">Pending</option>
-          <option value="Contacted" className="bg-blue-50 text-blue-700 font-semibold">Contacted</option>
-          <option value="Need Follow Up" className="bg-orange-50 text-orange-700 font-semibold">Need Follow Up</option>
-          <option value="Not Interested" className="bg-gray-50 text-gray-700 font-semibold">Not Interested</option>
-          <option value="Processing Application" className="bg-purple-50 text-purple-700 font-semibold">Processing Application</option>
-          <option value="Completed" className="bg-green-50 text-green-700 font-semibold">Completed</option>
-          <option value="Rejected Application" className="bg-red-50 text-red-700 font-semibold">Rejected Application</option>
-        </select>
+        <div className="flex justify-center">
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full border shadow-xs select-none ${style.pill}`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
+            {status}
+          </span>
+        </div>
       );
     },
   },
@@ -457,9 +485,9 @@ export const AdminPlatformLeadsTableColumns = (
       return (
         <button
           onClick={() => onView(row.original)}
-          className="text-blue-600 hover:text-blue-800 flex items-center gap-1 mx-auto transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:hover:bg-blue-900/60 border border-blue-200 dark:border-blue-800 transition-colors mx-auto cursor-pointer"
         >
-          <Eye className="h-4 w-4" /> View
+          <Eye className="h-3.5 w-3.5" /> Activity
         </button>
       );
     },
@@ -474,6 +502,14 @@ export const AdminPlatformLeadsTableColumns = (
 
   if (options?.hideAssignStaff) {
     result = result.filter((col) => ("accessorKey" in col ? col.accessorKey !== "assignedTo" : true));
+  }
+
+  if (options?.hideComment) {
+    result = result.filter((col) => ("accessorKey" in col ? col.accessorKey !== "comment" : true));
+  }
+
+  if (options?.hideScheduledDate) {
+    result = result.filter((col) => ("accessorKey" in col ? col.accessorKey !== "scheduledDate" : true));
   }
 
   return result;

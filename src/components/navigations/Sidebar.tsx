@@ -43,7 +43,7 @@ import { adminFetchAllEnquiries } from "@/utils/apis/adminEnquiryApi";
 import { adminFetchAllWhatsappEnquiries } from "@/utils/apis/adminWhatsappEnquiryApi";
 import { adminFetchAllPlatformLeads } from "@/utils/apis/adminPlatformLeadsApi";
 import { adminFetchAllBills } from "@/utils/apis/adminBillApi";
-import { adminFetchDailyDuties } from "@/utils/apis/adminDailyDutyApi";
+import { adminFetchDailyDutiesPendingCount } from "@/utils/apis/adminDailyDutyApi";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
@@ -114,18 +114,14 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     refetchInterval: 60000,
   });
 
-  const { data: stuckDutiesCount = 0 } = useQuery({
-    queryKey: ["adminStuckDutiesCount"],
-    queryFn: async () => {
-      try {
-        const res = await adminFetchDailyDuties({ status: "stuck" });
-        return res?.stats?.stuck || 0;
-      } catch (e) {
-        return 0;
-      }
-    },
+  const { data: dailyDutyCounts = { pendingCount: 0, stuckCount: 0 } } = useQuery({
+    queryKey: ["dailyDutyPendingCount", user?._id],
+    queryFn: adminFetchDailyDutiesPendingCount,
     refetchInterval: 30000,
   });
+
+  const dailyDutiesPendingCount = dailyDutyCounts.pendingCount;
+  const stuckDutiesCount = dailyDutyCounts.stuckCount;
 
   const iconMap: Record<string, React.ReactNode> = {
     overview: <LayoutDashboard />,
@@ -230,8 +226,12 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                 ? pendingContactsCount
                 : isBills
                 ? pendingReviewsCount
-                : isDailyDuties && stuckDutiesCount > 0
-                ? stuckDutiesCount
+                : isDailyDuties
+                ? dailyDutiesPendingCount > 0
+                  ? dailyDutiesPendingCount
+                  : stuckDutiesCount > 0
+                  ? stuckDutiesCount
+                  : undefined
                 : undefined;
             const badgeColor =
               isBills
@@ -239,7 +239,9 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
                 : normalizedName === "contact-list"
                 ? "bg-orange-500"
                 : isDailyDuties
-                ? "bg-rose-500 animate-pulse"
+                ? stuckDutiesCount > 0
+                  ? "bg-rose-500 animate-pulse"
+                  : "bg-orange-500"
                 : "bg-red-500";
 
             return (
