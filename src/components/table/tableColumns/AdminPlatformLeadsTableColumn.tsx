@@ -348,7 +348,6 @@ export const AdminPlatformLeadsTableColumns = (
           const summary = await adminSummarizeLeadComment(localComment);
           setLocalComment(summary);
           onUpdateStatus(customerId, status, summary, formattedInitialDate);
-          toast.success("Conversation summarized with AI!");
         } catch (err: any) {
           console.error("AI summarize error:", err);
           toast.error(err.message || "Failed to summarize with AI");

@@ -184,7 +184,7 @@ const AdminOverview: React.FC = () => {
 
           <Card className="bg-cyan-50/50 dark:bg-cyan-950/20 border-cyan-100 dark:border-cyan-900 shadow-sm transition-all hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Contacts</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Leads</CardTitle>
               <Contact className="h-4 w-4 text-cyan-500" />
             </CardHeader>
             <CardContent>

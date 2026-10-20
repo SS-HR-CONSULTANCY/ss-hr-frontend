@@ -45,6 +45,8 @@ export interface FetchFunctionParams<T = string> {
     status?: string;
     scheduledDate?: string;
     state?: string;
+    assignedTo?: string;
+    today?: string;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
   };

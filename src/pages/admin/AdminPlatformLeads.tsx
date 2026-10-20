@@ -82,7 +82,6 @@ const AdminPlatformLeads: React.FC = () => {
       const summary = await adminSummarizeLeadComment(originalText);
       setPreviousComment(originalText);
       setComment(summary);
-      toast.success("Conversation summarized with AI!");
     } catch (err: any) {
       console.error("AI summarize error:", err);
       toast.error(err.message || "Failed to summarize conversation with AI.");

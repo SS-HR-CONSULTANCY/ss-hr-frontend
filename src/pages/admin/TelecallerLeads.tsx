@@ -14,12 +14,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import LeadTimeline from "@/components/admin/LeadTimeline";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
+import { isMissedFollowUp, isNewPlatformLead } from "@/utils/helpers/followUp";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 
-import { Users, Clock, CheckCircle, PhoneCall, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle, UserCheck, Sparkles, Loader2, Undo2 } from "lucide-react";
+import { Users, Clock, CheckCircle, PhoneCall, PhoneOutgoing, Search, Filter, Calendar, MapPin, X, RotateCcw, AlertTriangle, UserCheck, Sparkles, Loader2, Undo2 } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -63,7 +63,7 @@ const TelecallerLeads: React.FC = () => {
 
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0 });
+  const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0, myCallsToday: 0 });
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [stateFilter, setStateFilter] = useState<string>("all");
   const [availableStates, setAvailableStates] = useState<string[]>(DEFAULT_INDIAN_STATES);
@@ -137,7 +137,6 @@ const TelecallerLeads: React.FC = () => {
       const summary = await adminSummarizeLeadComment(originalText);
       setPreviousComment(originalText);
       setComment(summary);
-      toast.success("Conversation summarized with AI!");
     } catch (err: any) {
       console.error("AI summarize error:", err);
       toast.error(err.message || "Failed to summarize conversation with AI.");
@@ -156,9 +155,6 @@ const TelecallerLeads: React.FC = () => {
   };
 
   const handleInlineStatusUpdate = (id: string, newStatus: string, existingComment: string, scheduledDate?: string, state?: string) => {
-    if (isMissedFollowUp(newStatus, scheduledDate)) {
-      toast.warn(FOLLOW_UP_WARNING_MESSAGE);
-    }
     updateMutation.mutate({
       id,
       payload: { status: newStatus, comment: existingComment, scheduledDate, state }
@@ -167,9 +163,6 @@ const TelecallerLeads: React.FC = () => {
 
   const handleUpdateLead = () => {
     if (!selectedCustomer) return;
-    if (isMissedFollowUp(status, scheduledDate)) {
-      toast.warn(FOLLOW_UP_WARNING_MESSAGE);
-    }
     updateMutation.mutate({
       id: selectedCustomer._id,
       payload: { status, comment, scheduledDate }
@@ -204,6 +197,7 @@ const TelecallerLeads: React.FC = () => {
         status: statusFilter === "all" ? undefined : statusFilter,
         state: stateFilter === "all" ? undefined : stateFilter,
         assignedTo: isAdmin && assignedStaffFilter !== "all" ? assignedStaffFilter : undefined,
+        today: new Date().toISOString().split('T')[0],
         sortBy: params?.pagination?.sortBy || 'scheduledDate',
         sortOrder: params?.pagination?.sortOrder || 'asc'
       }
@@ -213,10 +207,10 @@ const TelecallerLeads: React.FC = () => {
   return (
     <div>
       {/* Top Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-5">
         <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900 flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-500 font-medium mb-1">Total Contacts</p>
+            <p className="text-sm text-gray-500 font-medium mb-1">Total Leads</p>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</h3>
           </div>
           <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-600 dark:text-blue-400">
@@ -248,6 +242,15 @@ const TelecallerLeads: React.FC = () => {
           </div>
           <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-full text-orange-600 dark:text-orange-400">
             <PhoneCall className="w-5 h-5" />
+          </div>
+        </div>
+        <div className="bg-purple-50 dark:bg-purple-950/20 p-4 rounded-xl shadow-sm border border-purple-100 dark:border-purple-900 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-500 font-medium mb-1">My Calls Today</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.myCallsToday}</h3>
+          </div>
+          <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-400">
+            <PhoneOutgoing className="w-5 h-5" />
           </div>
         </div>
       </div>
@@ -388,11 +391,13 @@ const TelecallerLeads: React.FC = () => {
               const newPending = data.stats.pending || 0;
               const newContacted = data.stats.contacted || 0;
               const newNeedFollowUp = data.stats.needFollowUp || 0;
+              const newMyCallsToday = data.stats.myCallsToday || 0;
               if (
                 prev.total === newTotal &&
                 prev.pending === newPending &&
                 prev.contacted === newContacted &&
-                prev.needFollowUp === newNeedFollowUp
+                prev.needFollowUp === newNeedFollowUp &&
+                prev.myCallsToday === newMyCallsToday
               ) {
                 return prev;
               }
@@ -401,6 +406,7 @@ const TelecallerLeads: React.FC = () => {
                 pending: newPending,
                 contacted: newContacted,
                 needFollowUp: newNeedFollowUp,
+                myCallsToday: newMyCallsToday,
               };
             });
           }
