@@ -21,12 +21,34 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
+  const isNameCol =
+    column.id === "name" ||
+    column.id === "fullName" ||
+    column.id === "clientName" ||
+    column.id === "customerName";
+
   if (!column.getCanSort()) {
-    return <div className={cn("text-center font-semibold text-[11px] text-gray-700 dark:text-gray-300", className)}>{title}</div>;
+    return (
+      <div
+        className={cn(
+          isNameCol ? "text-left" : "text-center",
+          "font-semibold text-[11px] text-gray-700 dark:text-gray-300",
+          className
+        )}
+      >
+        {title}
+      </div>
+    );
   }
 
   return (
-    <div className={cn("flex items-center justify-center space-x-1", className)}>
+    <div
+      className={cn(
+        "flex items-center space-x-1",
+        isNameCol ? "justify-start text-left" : "justify-center",
+        className
+      )}
+    >
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

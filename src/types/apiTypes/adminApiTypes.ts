@@ -317,6 +317,7 @@ export type DeleteAdminRequest = Pick<User, "_id">;
 export interface AdminfetchAllTestimonialsResponse {
   _id: string;
   clientName: string;
+  clientPhoto?: string;
   designation?: string;
   testimonial: string;
   rating?: number;

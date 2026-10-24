@@ -24,7 +24,7 @@ const AddTestimonialForm: React.FC = () => {
 
   const [formData, setFormData] = useState<CreateTestimonialFormData>({
     clientName: "",
-    designation: "Google Reviewer",
+    designation: "",
     testimonial: "",
     rating: 5,
     reviewDate: getNowLocalDateTime(),
@@ -37,7 +37,7 @@ const AddTestimonialForm: React.FC = () => {
   const resetForm = () => {
     setFormData({
       clientName: "",
-      designation: "Google Reviewer",
+      designation: "",
       testimonial: "",
       rating: 5,
       reviewDate: getNowLocalDateTime(),

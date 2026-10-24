@@ -85,16 +85,41 @@ const TestimonialDetails: React.FC = () => {
             Reviewer Profile
           </h3>
           <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white font-bold text-lg shrink-0 shadow-sm">
+            {testimonial.clientPhoto ? (
+              <img
+                src={testimonial.clientPhoto}
+                alt={testimonial.clientName}
+                referrerPolicy="no-referrer"
+                className="w-12 h-12 rounded-full object-cover shrink-0 shadow-sm border border-zinc-200 dark:border-zinc-700"
+                onError={(e) => {
+                  const target = e.currentTarget as HTMLElement;
+                  target.style.display = "none";
+                  const sibling = target.nextElementSibling as HTMLElement;
+                  if (sibling) {
+                    sibling.style.display = "flex";
+                    sibling.classList.remove("hidden");
+                  }
+                }}
+              />
+            ) : null}
+            <div
+              className={`items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white font-bold text-lg shrink-0 shadow-sm ${
+                testimonial.clientPhoto ? "hidden" : "flex"
+              }`}
+            >
               {testimonial.clientName?.charAt(0)?.toUpperCase() || "G"}
             </div>
             <div>
               <h4 className="text-lg font-semibold">
                 {testimonial.clientName}
               </h4>
-              <p className="text-sm text-muted-foreground">
-                {testimonial.designation || "Google Reviewer"}
-              </p>
+              {testimonial.designation &&
+                testimonial.designation.trim() !==
+                  "Client of SS HR Tours & Travels" && (
+                  <p className="text-sm text-muted-foreground">
+                    {testimonial.designation}
+                  </p>
+                )}
             </div>
           </div>
         </div>

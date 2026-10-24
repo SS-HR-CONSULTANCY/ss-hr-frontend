@@ -33,7 +33,8 @@ const EditTestimonialForm: React.FC = () => {
 
   const [formData, setFormData] = useState<UpdateTestimonialFormData>({
     clientName: "",
-    designation: "Google Reviewer",
+    clientPhoto: "",
+    designation: "Client of SS HR Tours & Travels",
     testimonial: "",
     rating: 5,
     reviewDate: "",
@@ -53,9 +54,15 @@ const EditTestimonialForm: React.FC = () => {
   useEffect(() => {
     if (testimonialData?.testimonial) {
       const t = testimonialData.testimonial;
+      const rawDesig = t.designation?.trim();
+      const designation =
+        rawDesig === "Client of SS HR Tours & Travels"
+          ? ""
+          : rawDesig || "";
       setFormData({
         clientName: t.clientName || "",
-        designation: t.designation || "Google Reviewer",
+        clientPhoto: t.clientPhoto || "",
+        designation,
         testimonial: t.testimonial || "",
         rating: t.rating ?? 5,
         reviewDate: formatToLocalDateTimeInput(t.reviewDate || t.createdAt),
@@ -146,6 +153,26 @@ const EditTestimonialForm: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {formData.clientPhoto && (
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40 border">
+            <img
+              src={formData.clientPhoto}
+              alt={formData.clientName}
+              referrerPolicy="no-referrer"
+              className="w-10 h-10 rounded-full object-cover border shadow-sm"
+              onError={(e) => {
+                (e.currentTarget as HTMLElement).style.display = "none";
+              }}
+            />
+            <div className="text-xs min-w-0">
+              <p className="font-medium text-foreground">Google Profile Photo Synced</p>
+              <p className="text-muted-foreground truncate max-w-sm">
+                {formData.clientPhoto}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Reviewer Name & Designation */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">

@@ -8,9 +8,17 @@ import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
 import { fetchTestimonials } from "@/utils/apis/userTestimonialApi";
 import { staticTestimonials } from "@/utils/constants";
 
+const sortNewestToOldest = (list: Testimonial[]): Testimonial[] => {
+  return [...list].sort((a, b) => {
+    const timeA = new Date(a.reviewDate || a.createdAt).getTime();
+    const timeB = new Date(b.reviewDate || b.createdAt).getTime();
+    return timeB - timeA; // Latest to oldest
+  });
+};
+
 const Reviews: React.FC = () => {
-  const [testmonials, setTestimonials] = useState<Testimonial[]>(
-    staticTestimonials as unknown as Testimonial[],
+  const [testmonials, setTestimonials] = useState<Testimonial[]>(() =>
+    sortNewestToOldest(staticTestimonials as unknown as Testimonial[]),
   );
 
   const { data, isError, error } = useQuery({
@@ -21,9 +29,11 @@ const Reviews: React.FC = () => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      setTestimonials(data);
+      setTestimonials(sortNewestToOldest(data));
     } else if (isError && error) {
-      setTestimonials(staticTestimonials as unknown as Testimonial[]);
+      setTestimonials(
+        sortNewestToOldest(staticTestimonials as unknown as Testimonial[]),
+      );
     }
   }, [data, error, isError]);
 
@@ -40,7 +50,7 @@ const Reviews: React.FC = () => {
             <InfiniteMovingCards
               key={testmonials.map((t) => t._id).join("-")}
               items={testmonials || []}
-              direction="right"
+              direction="left"
               speed="slow"
             />
           </div>

@@ -1,6 +1,7 @@
 export interface Testimonial {
   _id: string;
   clientName: string;
+  clientPhoto?: string;
   designation?: string;
   testimonial: string;
   rating?: number;
@@ -13,6 +14,7 @@ export interface Testimonial {
 
 export interface CreateTestimonialFormData {
   clientName: string;
+  clientPhoto?: string;
   designation?: string;
   testimonial: string;
   rating?: number;
@@ -21,6 +23,7 @@ export interface CreateTestimonialFormData {
 
 export interface UpdateTestimonialFormData {
   clientName?: string;
+  clientPhoto?: string;
   designation?: string;
   testimonial?: string;
   rating?: number;

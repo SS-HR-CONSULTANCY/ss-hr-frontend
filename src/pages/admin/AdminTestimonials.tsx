@@ -74,7 +74,7 @@ const AdminTestimonials: React.FC = () => {
         heading=""
         description=""
         column={column}
-        columnsCount={6}
+        columnsCount={7}
         pageSize={10}
       />
 

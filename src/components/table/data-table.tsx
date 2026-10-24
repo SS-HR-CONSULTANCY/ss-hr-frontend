@@ -105,7 +105,11 @@ export function DataTable<TData, TValue>({
                   className="border-b border-gray-200 dark:border-gray-800 hover:bg-transparent"
                 >
                   {headerGroup.headers.map((header) => {
-                    const isNameColumn = header.column.id === "name" || header.column.id === "fullName";
+                    const isNameColumn =
+                      header.column.id === "name" ||
+                      header.column.id === "fullName" ||
+                      header.column.id === "clientName" ||
+                      header.column.id === "customerName";
                     return (
                       <TableHead
                         key={header.id}
@@ -134,7 +138,11 @@ export function DataTable<TData, TValue>({
                     className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
                   >
                     {row.getVisibleCells().map((cell) => {
-                      const isNameColumn = cell.column.id === "name" || cell.column.id === "fullName";
+                      const isNameColumn =
+                        cell.column.id === "name" ||
+                        cell.column.id === "fullName" ||
+                        cell.column.id === "clientName" ||
+                        cell.column.id === "customerName";
                       return (
                         <TableCell
                           key={cell.id}
