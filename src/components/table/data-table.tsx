@@ -21,6 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
+import { ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "../ui/button";
 
@@ -170,24 +171,47 @@ export function DataTable<TData, TValue>({
           </Table>
         </div>
 
-        {/* Use built-in pagination controls */}
-        <div className="flex justify-center items-center py-3 px-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/30 relative">
-          <div className="flex items-center space-x-2">
+        {/* Centered Pagination Section */}
+        <div className="flex items-center justify-center py-3 px-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50/40 dark:bg-gray-900/40">
+          {/* Main Controls Row - Perfectly Centered */}
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+            {/* Jump Previous 10 Pages */}
             <Button
               variant="outline"
               size="sm"
-              className="hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-800 h-8"
-              onClick={() => table.previousPage()}
+              className="h-8 px-2.5 text-xs font-medium border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-40 transition-colors"
+              onClick={() => {
+                const newPage = Math.max(0, paginationState.pageIndex - 10);
+                table.setPageIndex(newPage);
+              }}
               disabled={!table.getCanPreviousPage()}
+              title="Previous 10 pages"
+              aria-label="Previous 10 pages"
             >
-              Previous
+              <ChevronsLeft className="h-3.5 w-3.5 mr-0.5" />
+              <span>-10</span>
             </Button>
 
-            <div className="flex items-center space-x-1 hidden sm:flex">
+            {/* Previous 1 Page */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 px-3 text-xs font-medium border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-40 transition-colors"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              title="Previous page"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="h-3.5 w-3.5 mr-1" />
+              <span>Previous</span>
+            </Button>
+
+            {/* Numbered Page Buttons */}
+            <div className="flex items-center gap-1 hidden sm:flex">
               {(() => {
-                const total = pageCount || table.getPageCount();
+                const total = pageCount && pageCount > 0 ? pageCount : Math.max(1, table.getPageCount());
                 const current = paginationState.pageIndex + 1;
-                const pages: (number | string)[] = [];
+                const pages: number[] = [];
 
                 let startPage = Math.max(1, current - 4);
                 let endPage = startPage + 9;
@@ -201,35 +225,58 @@ export function DataTable<TData, TValue>({
                   pages.push(i);
                 }
 
-                return pages.map((p, idx) => (
-                  <Button
-                    key={idx}
-                    variant={p === current ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => typeof p === "number" && table.setPageIndex(p - 1)}
-                    disabled={typeof p !== "number"}
-                    className={
-                      typeof p !== "number" 
-                        ? "border-transparent px-1 cursor-default hover:bg-transparent h-8 w-8" 
-                        : p === current
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90 h-8 w-8"
-                          : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 h-8 w-8"
-                    }
-                  >
-                    {p}
-                  </Button>
-                ));
+                return pages.map((p) => {
+                  const isActive = p === current;
+                  return (
+                    <Button
+                      key={p}
+                      variant={isActive ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => table.setPageIndex(p - 1)}
+                      className={
+                        isActive
+                          ? "bg-primary text-primary-foreground hover:bg-primary/90 h-8 w-8 p-0 text-xs font-semibold shadow-xs"
+                          : "border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 h-8 w-8 p-0 text-xs font-medium"
+                      }
+                    >
+                      {p}
+                    </Button>
+                  );
+                });
               })()}
             </div>
 
+            {/* Next 1 Page */}
             <Button
               variant="outline"
               size="sm"
-              className="hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-800 h-8"
+              className="h-8 px-3 text-xs font-medium border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-40 transition-colors"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              title="Next page"
+              aria-label="Next page"
             >
-              Next
+              <span>Next</span>
+              <ChevronRight className="h-3.5 w-3.5 ml-1" />
+            </Button>
+
+            {/* Jump Next 10 Pages */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 px-2.5 text-xs font-medium border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-40 transition-colors"
+              onClick={() => {
+                const total = pageCount && pageCount > 0 ? pageCount : Math.max(1, table.getPageCount());
+                const maxPageIndex = Math.max(0, total - 1);
+                const newPage = Math.min(maxPageIndex, paginationState.pageIndex + 10);
+                table.setPageIndex(newPage);
+              }}
+              disabled={!table.getCanNextPage()}
+              title="Next 10 pages"
+              aria-label="Next 10 pages"
+            >
+              <span>+10</span>
+              <ChevronsRight className="h-3.5 w-3.5 ml-0.5" />
             </Button>
           </div>
         </div>

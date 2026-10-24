@@ -7,7 +7,7 @@ import {
   type ImportedCustomer, 
   type AssignedStaff 
 } from "@/utils/apis/adminPlatformLeadsApi";
-import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
+import { isMissedFollowUp, getTodayString, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 export interface AdminPlatformLeadsColumnsOptions {
@@ -454,12 +454,46 @@ export const AdminPlatformLeadsTableColumns = (
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
+      const rawDate = row.original.scheduledDate;
+      let formattedDate = "";
+      if (rawDate) {
+        try {
+          formattedDate = new Date(rawDate).toISOString().split("T")[0];
+        } catch {
+          formattedDate = String(rawDate).slice(0, 10);
+        }
+      }
+      const status = row.original.status || "Pending";
+      const today = getTodayString();
+      const isDateInPast = Boolean(formattedDate) && formattedDate < today;
+      const isFollowUpPast = isMissedFollowUp(status, formattedDate) || (
+        isDateInPast &&
+        status !== "Completed" &&
+        status !== "Rejected Application" &&
+        status !== "Not Interested"
+      );
+
       return (
         <button
           onClick={() => onView(row.original)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:hover:bg-blue-900/60 border border-blue-200 dark:border-blue-800 transition-colors mx-auto cursor-pointer"
+          title={
+            isFollowUpPast
+              ? `Follow-up date is in the past (${formattedDate})`
+              : "Update Lead"
+          }
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:hover:bg-blue-900/60 border transition-colors mx-auto cursor-pointer ${
+            isFollowUpPast
+              ? "border-red-300 dark:border-red-800 ring-1 ring-red-400/30"
+              : "border-blue-200 dark:border-blue-800"
+          }`}
         >
-          <Eye className="h-3.5 w-3.5" /> Update Lead
+          <span>Update Lead</span>
+          {isFollowUpPast && (
+            <AlertTriangle
+              className="h-3.5 w-3.5 text-red-600 fill-red-100 dark:fill-red-950/50 dark:text-red-400 shrink-0"
+              aria-label="Follow-up date is in the past"
+            />
+          )}
         </button>
       );
     },

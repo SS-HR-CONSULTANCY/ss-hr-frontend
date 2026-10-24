@@ -18,8 +18,6 @@ import {
   RefreshCw,
   MessageSquare,
   CalendarClock,
-  ChevronDown,
-  ChevronUp,
   ExternalLink,
   User,
   Eye,
@@ -281,7 +279,6 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
   const [previousComment, setPreviousComment] = useState("");
   const [scheduledDate, setScheduledDate] = useState("");
   const [isSummarizing, setIsSummarizing] = useState(false);
-  const [showResume, setShowResume] = useState(false);
 
   useEffect(() => {
     if (customer) {
@@ -294,7 +291,6 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
           : ""
       );
       setActiveTab("update");
-      setShowResume(false);
     }
   }, [customer?._id]);
 
@@ -1025,57 +1021,24 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
                           <ExternalLink className="w-3 h-3" /> Open
                         </a>
                       )}
-                      {customer.cvUrl && (
-                        <button
-                          onClick={() => setShowResume(!showResume)}
-                          className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
-                        >
-                          {showResume ? (
-                            <>
-                              <ChevronUp className="w-3 h-3" /> Hide
-                            </>
-                          ) : (
-                            <>
-                              <ChevronDown className="w-3 h-3" /> Preview
-                            </>
-                          )}
-                        </button>
-                      )}
                     </div>
                   </div>
 
                   {customer.cvUrl ? (
-                    showResume ? (
-                      <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
-                        <iframe
-                          src={
-                            customer.cvUrl.includes("drive.google.com")
-                              ? customer.cvUrl.replace(
-                                  /\/view(\?.*)?$/,
-                                  "/preview$1"
-                                )
-                              : customer.cvUrl
-                          }
-                          className="w-full h-[520px] bg-gray-50 dark:bg-gray-900"
-                          title="Resume Preview"
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        className="flex items-center gap-3 px-4 py-3 border border-dashed border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50/60 dark:bg-gray-900/40 cursor-pointer hover:border-blue-300 transition-colors"
-                        onClick={() => setShowResume(true)}
-                      >
-                        <FileText className="w-8 h-8 text-gray-300 shrink-0" />
-                        <div>
-                          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                            Resume available
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            Click Preview or Open to view
-                          </p>
-                        </div>
-                      </div>
-                    )
+                    <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-xs">
+                      <iframe
+                        src={
+                          customer.cvUrl.includes("drive.google.com")
+                            ? customer.cvUrl.replace(
+                                /\/view(\?.*)?$/,
+                                "/preview$1"
+                              )
+                            : customer.cvUrl
+                        }
+                        className="w-full h-[520px] bg-gray-50 dark:bg-gray-900"
+                        title="Resume Preview"
+                      />
+                    </div>
                   ) : (
                     <div className="flex items-center gap-3 px-4 py-3 border border-dashed border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50/60 dark:bg-gray-900/40">
                       <FileText className="w-8 h-8 text-gray-200 shrink-0" />
