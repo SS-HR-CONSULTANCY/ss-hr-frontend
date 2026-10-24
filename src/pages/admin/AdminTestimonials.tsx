@@ -1,5 +1,5 @@
 import React from "react";
-import { Plus } from "lucide-react";
+import { Plus, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import CommonTable from "@/components/common/CommonTable";
@@ -21,7 +21,9 @@ const AdminTestimonials: React.FC = () => {
     handleDeleteTestimonial,
     handleEditTestimonial,
     handleViewTestimonial,
+    handleSyncGoogleReviews,
     isDeleting,
+    isSyncing,
   } = useAdminTestimonials();
 
   const column = AdminTestimonialTableColumns(
@@ -43,13 +45,26 @@ const AdminTestimonials: React.FC = () => {
         title="Google Reviews"
         subtitle="Manage customer Google reviews dynamically reflected on the user website"
         actionButton={
-          <Button
-            onClick={() => dispatch(toggleAddTestimonialForm())}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            <Plus className="h-5 w-5 mr-1" />
-            Add Google Review
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleSyncGoogleReviews}
+              disabled={isSyncing}
+              variant="outline"
+              className="border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40"
+            >
+              <RefreshCw
+                className={`h-4 w-4 mr-1.5 ${isSyncing ? "animate-spin" : ""}`}
+              />
+              {isSyncing ? "Syncing..." : "Sync from Google"}
+            </Button>
+            <Button
+              onClick={() => dispatch(toggleAddTestimonialForm())}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Plus className="h-5 w-5 mr-1" />
+              Add Google Review
+            </Button>
+          </div>
         }
       />
 

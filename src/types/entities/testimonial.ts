@@ -6,6 +6,7 @@ export interface Testimonial {
   rating?: number;
   reviewDate?: string;
   isVisible: boolean;
+  googleReviewId?: string;
   createdAt: string;
   updatedAt: string;
 }

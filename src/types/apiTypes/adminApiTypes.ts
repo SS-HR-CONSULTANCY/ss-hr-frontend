@@ -322,6 +322,7 @@ export interface AdminfetchAllTestimonialsResponse {
   rating?: number;
   reviewDate?: string;
   isVisible: boolean;
+  googleReviewId?: string;
   createdAt: string;
 }
 

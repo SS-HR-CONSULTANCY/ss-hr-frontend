@@ -96,3 +96,15 @@ export const getTestimonialStats = async (): Promise<
   const response = await axiosInstance.get("/admin/testimonials/stats");
   return response.data;
 };
+
+export interface SyncGoogleReviewsResponse extends ApiBaseResponse {
+  totalFetched?: number;
+  newAdded?: number;
+  updated?: number;
+}
+
+export const syncGoogleReviews = async (): Promise<SyncGoogleReviewsResponse> => {
+  const response = await axiosInstance.post("/admin/testimonials/sync");
+  return response.data;
+};
+
