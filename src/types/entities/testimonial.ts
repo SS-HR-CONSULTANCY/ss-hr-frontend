@@ -1,9 +1,10 @@
 export interface Testimonial {
   _id: string;
   clientName: string;
-  designation: string;
+  designation?: string;
   testimonial: string;
   rating?: number;
+  reviewDate?: string;
   isVisible: boolean;
   createdAt: string;
   updatedAt: string;
@@ -11,13 +12,17 @@ export interface Testimonial {
 
 export interface CreateTestimonialFormData {
   clientName: string;
-  designation: string;
+  designation?: string;
   testimonial: string;
+  rating?: number;
+  reviewDate?: string;
 }
 
 export interface UpdateTestimonialFormData {
   clientName?: string;
   designation?: string;
   testimonial?: string;
+  rating?: number;
+  reviewDate?: string;
   isVisible?: boolean;
 }

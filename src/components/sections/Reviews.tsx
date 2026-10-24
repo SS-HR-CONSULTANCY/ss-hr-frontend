@@ -16,7 +16,7 @@ const Reviews: React.FC = () => {
   const { data, isError, error } = useQuery({
     queryKey: ["testimonials"],
     queryFn: fetchTestimonials,
-    staleTime: 10 * 60 * 1000,
+    staleTime: 60 * 1000,
   });
 
   useEffect(() => {
@@ -30,22 +30,21 @@ const Reviews: React.FC = () => {
   return (
     <section id="reviews" className="pt-16">
       <Heading
-        heading="Reviews"
-        headingDescription="See what our customers are saying about us."
+        heading="Google Reviews"
+        headingDescription="See what our verified clients are saying about us on Google."
         mainDivClassName="text-center mx-auto max-w-2xl"
       />
       <AuroraBackground>
-
         <div className="relative flex flex-col gap-4 items-center justify-center px-4">
           <div className="relative w-full max-w-screen overflow-hidden">
             <InfiniteMovingCards
+              key={testmonials.map((t) => t._id).join("-")}
               items={testmonials || []}
               direction="right"
               speed="slow"
             />
           </div>
         </div>
-
       </AuroraBackground>
     </section>
   );

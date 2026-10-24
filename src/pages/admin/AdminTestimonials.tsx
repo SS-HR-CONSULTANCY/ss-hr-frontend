@@ -40,15 +40,15 @@ const AdminTestimonials: React.FC = () => {
   return (
     <>
       <TablePageHeader
-        title="Reviews"
-        subtitle="Client reviews about our HR consultancy services"
+        title="Google Reviews"
+        subtitle="Manage customer Google reviews dynamically reflected on the user website"
         actionButton={
           <Button
             onClick={() => dispatch(toggleAddTestimonialForm())}
-            variant="outline"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
-            <Plus className="h-5 w-5" />
-            Add New Review
+            <Plus className="h-5 w-5 mr-1" />
+            Add Google Review
           </Button>
         }
       />

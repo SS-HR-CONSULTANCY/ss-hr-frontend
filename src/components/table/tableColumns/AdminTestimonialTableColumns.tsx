@@ -1,10 +1,13 @@
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { Button } from "@/components/ui/button";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Eye, Edit, Trash2, Star } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 
 import type { AdminfetchAllTestimonialsResponse } from "@/types/apiTypes/adminApiTypes";
+
+dayjs.extend(relativeTime);
 
 export const AdminTestimonialTableColumns = (
   handleDeleteTestimonial: (testimonialId: string) => void,
@@ -12,18 +15,56 @@ export const AdminTestimonialTableColumns = (
   handleViewTestimonial: (testimonialId: string) => void,
   isDeleting: boolean,
 ): ColumnDef<AdminfetchAllTestimonialsResponse>[] => [
-
   {
     accessorKey: "clientName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Client Name" />
+      <DataTableColumnHeader column={column} title="Reviewer" />
     ),
+    cell: ({ row }) => {
+      const name = row.original.clientName;
+      const designation = row.original.designation || "Google Reviewer";
+      return (
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-semibold text-xs shrink-0 shadow-sm">
+            {name?.charAt(0)?.toUpperCase() || "G"}
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="font-medium text-sm truncate">{name}</span>
+            <span className="text-[11px] text-muted-foreground truncate">
+              {designation}
+            </span>
+          </div>
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "designation",
+    accessorKey: "rating",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Designation" />
+      <DataTableColumnHeader column={column} title="Rating" />
     ),
+    cell: ({ row }) => {
+      const rating = row.original.rating ?? 5;
+      return (
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-3.5 h-3.5 ${
+                  i < rating
+                    ? "fill-[#fbbc04] text-[#fbbc04]"
+                    : "fill-gray-200 text-gray-300 dark:fill-gray-700 dark:text-gray-600"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-xs font-semibold text-[#fbbc04]">
+            {rating}.0
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "testimonial",
@@ -33,14 +74,31 @@ export const AdminTestimonialTableColumns = (
     cell: ({ row }) => {
       const text = row.original.testimonial;
       const truncatedText =
-        text.length > 50 ? `${text.substring(0, 50)}...` : text;
+        text.length > 55 ? `${text.substring(0, 55)}...` : text;
       return (
         <span
-          className="max-w-xs cursor-pointer hover:text-blue-600"
+          className="max-w-xs block cursor-pointer hover:text-blue-600 text-xs leading-relaxed"
           title={text}
         >
           {truncatedText}
         </span>
+      );
+    },
+  },
+  {
+    accessorKey: "reviewDate",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Review Date & Time" />
+    ),
+    cell: ({ row }) => {
+      const rawDate = row.original.reviewDate || row.original.createdAt;
+      const formatted = dayjs(rawDate).format("DD MMM YYYY, hh:mm A");
+      const relative = dayjs(rawDate).fromNow();
+      return (
+        <div className="flex flex-col">
+          <span className="text-xs font-medium">{formatted}</span>
+          <span className="text-[10px] text-muted-foreground">{relative}</span>
+        </div>
       );
     },
   },
@@ -53,7 +111,7 @@ export const AdminTestimonialTableColumns = (
       const isVisible = row.original.isVisible;
       return (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
+          className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${
             isVisible
               ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
               : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
@@ -62,16 +120,6 @@ export const AdminTestimonialTableColumns = (
           {isVisible ? "Visible" : "Hidden"}
         </span>
       );
-    },
-  },
-  {
-    accessorKey: "createdAt",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Added On" />
-    ),
-    cell: ({ row }) => {
-      const date = dayjs(row.original.createdAt).format("DD MMM YYYY");
-      return <span>{date}</span>;
     },
   },
   {

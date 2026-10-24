@@ -300,6 +300,14 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
+        path: "reviews",
+        element: (
+          <ProtectedRoute requiredRole={["admin"]}>
+            <AdminTestimonials />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "applications",
         element: (
           <ProtectedRoute requiredRole={["admin"]}>

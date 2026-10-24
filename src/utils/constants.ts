@@ -679,6 +679,11 @@ export const adminApplicationRoutes: Route[] = [
     name: "Payments & Review",
     roles: ["admin"],
   },
+  {
+    path: "reviews",
+    name: "Google Reviews",
+    roles: ["admin"],
+  },
 
   {
     path: "jobs",

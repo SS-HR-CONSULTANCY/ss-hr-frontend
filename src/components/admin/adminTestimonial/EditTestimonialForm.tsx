@@ -15,6 +15,14 @@ import {
   updateTestimonial,
 } from "@/utils/apis/adminTestimonialApi";
 import FormLoading from "@/components/form/FormLoading";
+import { Star } from "lucide-react";
+
+const formatToLocalDateTimeInput = (dateInput?: string | Date) => {
+  const date = dateInput ? new Date(dateInput) : new Date();
+  if (isNaN(date.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
 
 const EditTestimonialForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,13 +33,16 @@ const EditTestimonialForm: React.FC = () => {
 
   const [formData, setFormData] = useState<UpdateTestimonialFormData>({
     clientName: "",
-    designation: "",
+    designation: "Google Reviewer",
     testimonial: "",
+    rating: 5,
+    reviewDate: "",
     isVisible: true,
   });
 
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [errors, setErrors] = useState<Partial<UpdateTestimonialFormData>>({});
-  // const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: testimonialData, isLoading } = useQuery({
     queryKey: ["testimonial", selectedTestimonialId],
@@ -39,21 +50,16 @@ const EditTestimonialForm: React.FC = () => {
     enabled: !!selectedTestimonialId,
   });
 
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (!file) return;
-
-  //   setFormData({ ...formData, clientPhoto: file });
-  //   setPreviewImage(URL.createObjectURL(file));
-  // };
-
   useEffect(() => {
     if (testimonialData?.testimonial) {
+      const t = testimonialData.testimonial;
       setFormData({
-        clientName: testimonialData.testimonial.clientName,
-        designation: testimonialData.testimonial.designation,
-        testimonial: testimonialData.testimonial.testimonial,
-        isVisible: testimonialData.testimonial.isVisible,
+        clientName: t.clientName || "",
+        designation: t.designation || "Google Reviewer",
+        testimonial: t.testimonial || "",
+        rating: t.rating ?? 5,
+        reviewDate: formatToLocalDateTimeInput(t.reviewDate || t.createdAt),
+        isVisible: t.isVisible ?? true,
       });
     }
   }, [testimonialData]);
@@ -61,12 +67,12 @@ const EditTestimonialForm: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: Partial<UpdateTestimonialFormData> = {};
 
-    if (formData.clientName && formData.clientName.length < 2) {
-      newErrors.clientName = "Client name must be at least 2 characters";
+    if (formData.clientName && formData.clientName.trim().length < 2) {
+      newErrors.clientName = "Reviewer name must be at least 2 characters";
     }
 
-    if (formData.testimonial && formData.testimonial.length < 20) {
-      newErrors.testimonial = "Review must be at least 20 characters";
+    if (formData.testimonial && !formData.testimonial.trim()) {
+      newErrors.testimonial = "Review text cannot be empty";
     }
 
     setErrors(newErrors);
@@ -78,19 +84,33 @@ const EditTestimonialForm: React.FC = () => {
 
     if (!validateForm()) return;
 
-    const res = await updateTestimonial({
-      testimonialId: selectedTestimonialId!,
-      testimonialData: formData,
-    });
+    try {
+      setIsSubmitting(true);
+      const payload: UpdateTestimonialFormData = {
+        ...formData,
+        rating: Number(formData.rating) || 5,
+        reviewDate: formData.reviewDate
+          ? new Date(formData.reviewDate).toISOString()
+          : undefined,
+      };
 
-    if (res) {
-      if (res.success) {
-        toast.success("Review updated successfully");
+      const res = await updateTestimonial({
+        testimonialId: selectedTestimonialId!,
+        testimonialData: payload,
+      });
+
+      if (res && res.success) {
+        toast.success(res.message || "Review updated successfully");
         queryClient.invalidateQueries({ queryKey: ["testimonials"] });
         dispatch(closeEditTestimonialForm());
+      } else {
+        toast.error(res?.message || "Failed to update review");
       }
-    } else {
-      toast.error("Failed to update review");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      toast.error(error?.response?.data?.message || "Failed to update review");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -102,92 +122,163 @@ const EditTestimonialForm: React.FC = () => {
     return <FormLoading />;
   }
 
+  const activeRating = hoverRating !== null ? hoverRating : formData.rating || 5;
+
   return (
-    <div className="p-6 rounded-lg shadow-sm border max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-6">Edit Review</h2>
+    <div className="p-6 rounded-lg shadow-sm border max-w-2xl mx-auto bg-card text-card-foreground">
+      <div className="flex items-center justify-between pb-4 mb-4 border-b">
+        <div className="flex items-center gap-3">
+          <span
+            className="w-7 h-7 shrink-0"
+            style={{
+              backgroundImage: `url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJubm96ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=")`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "contain",
+            }}
+          />
+          <div>
+            <h2 className="text-xl font-semibold">Edit Google Review</h2>
+            <p className="text-xs text-muted-foreground">
+              Modify reviewer details, rating, review timestamp, or visibility.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Reviewer Name & Designation */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="clientName" className="">
-              Client Name
-            </Label>
+            <Label htmlFor="clientName">Reviewer Name</Label>
             <Input
               id="clientName"
               value={formData.clientName}
               onChange={(e) =>
                 setFormData({ ...formData, clientName: e.target.value })
               }
-              className=""
-              placeholder="Enter client name"
+              placeholder="e.g. Anagha T. S"
             />
             {errors.clientName && (
-              <p className="text-red-500 text-sm mt-1">{errors.clientName}</p>
+              <p className="text-red-500 text-xs mt-1">{errors.clientName}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="designation" className="">
-              Designation
-            </Label>
+            <Label htmlFor="designation">Designation / Tag</Label>
             <Input
               id="designation"
               value={formData.designation}
               onChange={(e) =>
                 setFormData({ ...formData, designation: e.target.value })
               }
-              className=""
-              placeholder="Enter designation"
+              placeholder="e.g. Google Reviewer"
             />
           </div>
-
         </div>
 
+        {/* Rating & Review Date & Time */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          {/* Star Rating Picker */}
+          <div className="space-y-2">
+            <Label>Rating ({formData.rating || 5} / 5 Stars)</Label>
+            <div className="flex items-center gap-1.5 pt-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  type="button"
+                  key={star}
+                  onClick={() => setFormData({ ...formData, rating: star })}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(null)}
+                  className="p-1 rounded hover:scale-110 transition-transform focus:outline-none"
+                  title={`${star} Star${star > 1 ? "s" : ""}`}
+                >
+                  <Star
+                    className={`w-7 h-7 ${
+                      star <= activeRating
+                        ? "fill-[#fbbc04] text-[#fbbc04]"
+                        : "fill-gray-200 text-gray-300 dark:fill-gray-700 dark:text-gray-600"
+                    }`}
+                  />
+                </button>
+              ))}
+              <span className="text-sm font-semibold ml-2 text-[#fbbc04]">
+                {formData.rating || 5}.0
+              </span>
+            </div>
+          </div>
 
+          {/* Review Date and Time */}
+          <div className="space-y-2">
+            <Label htmlFor="reviewDate">Review Date & Time</Label>
+            <Input
+              id="reviewDate"
+              type="datetime-local"
+              value={formData.reviewDate || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, reviewDate: e.target.value })
+              }
+            />
+            <p className="text-[11px] text-muted-foreground">
+              Timestamp of when this review was posted on Google.
+            </p>
+          </div>
+        </div>
 
+        {/* Review Text */}
         <div className="space-y-2">
-          <Label htmlFor="testimonial" className="">
-            Review
-          </Label>
+          <Label htmlFor="testimonial">Review Content</Label>
           <Textarea
             id="testimonial"
+            rows={4}
             value={formData.testimonial}
             onChange={(e) =>
               setFormData({ ...formData, testimonial: e.target.value })
             }
-            className=""
-            placeholder="Enter client review..."
+            placeholder="Enter review content..."
           />
           {errors.testimonial && (
-            <p className="text-red-500 text-sm mt-1">{errors.testimonial}</p>
+            <p className="text-red-500 text-xs mt-1">{errors.testimonial}</p>
           )}
         </div>
 
-        <div className="flex items-center">
-          <label
-            className="pr-[15px] text-[15px] leading-none"
-            htmlFor="isVisible"
-          >
-            Make review visible to public
-          </label>
+        {/* Visibility Switch */}
+        <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/40">
+          <div>
+            <Label htmlFor="isVisible" className="font-medium cursor-pointer">
+              Visible to Public
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              When enabled, this review is displayed dynamically on the user website.
+            </p>
+          </div>
           <Switch.Root
-            className="relative h-[25px] w-[42px] cursor-default rounded-full bg-gray-300 shadow-[0_2px_10px] shadow-gray-400 outline-none focus:shadow-[0_0_0_2px] focus:shadow-blue-500 data-[state=checked]:bg-blue-600"
+            className="relative h-[25px] w-[42px] cursor-pointer rounded-full bg-gray-300 shadow-sm outline-none focus:ring-2 focus:ring-blue-500 data-[state=checked]:bg-blue-600 transition-colors"
             id="isVisible"
             checked={formData.isVisible}
             onCheckedChange={(checked) =>
               setFormData({ ...formData, isVisible: checked })
             }
           >
-            <Switch.Thumb className="block size-[21px] translate-x-0.5 rounded-full bg-white shadow-[0_2px_2px] shadow-gray-400 transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
+            <Switch.Thumb className="block size-[21px] translate-x-0.5 rounded-full bg-white shadow-sm transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
           </Switch.Root>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="outline" onClick={handleCancel}>
+        {/* Buttons */}
+        <div className="flex justify-end gap-3 pt-4 border-t">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCancel}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="outline">
-            {"Update Review"}
+          <Button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Updating..." : "Update Review"}
           </Button>
         </div>
       </form>
