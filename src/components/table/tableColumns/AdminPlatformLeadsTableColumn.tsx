@@ -1,15 +1,14 @@
 import React from "react";
-import { Eye, AlertTriangle, Sparkles, Loader2 } from "lucide-react";
+import { Eye, AlertTriangle, X } from "lucide-react";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../DataTableColumnHeader";
 import { 
   type ImportedCustomer, 
-  type AssignedStaff,
-  adminSummarizeLeadComment 
+  type AssignedStaff 
 } from "@/utils/apis/adminPlatformLeadsApi";
 import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, isNewPlatformLead } from "@/utils/helpers/followUp";
-import { toast } from "react-toastify";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 export interface AdminPlatformLeadsColumnsOptions {
   hideEmail?: boolean;
@@ -114,6 +113,60 @@ export const STATUS_TEXT_COLORS: Record<string, string> = {
   "Processing Application": "text-purple-700 dark:text-purple-400",
   "Rejected Application": "text-red-700 dark:text-red-400",
   Completed: "text-emerald-700 dark:text-emerald-400",
+};
+
+interface LeadCommentCellProps {
+  comment: string;
+}
+
+const LeadCommentCell: React.FC<LeadCommentCellProps> = ({ comment }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const trimmedComment = (comment || "").trim();
+
+  if (!trimmedComment) {
+    return (
+      <div className="text-gray-400 dark:text-gray-500 text-xs text-center w-full select-none">
+        —
+      </div>
+    );
+  }
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className="group flex items-center justify-between gap-1.5 max-w-[180px] sm:max-w-[220px] w-full text-left px-2 py-1 rounded-md bg-gray-50/70 dark:bg-gray-800/40 hover:bg-blue-50/90 dark:hover:bg-blue-950/40 border border-gray-200/80 hover:border-blue-300 dark:border-gray-800 dark:hover:border-blue-700 transition-all cursor-pointer focus:outline-none"
+          title="Click to view full comment"
+        >
+          <span className="truncate text-xs text-gray-700 dark:text-gray-300 font-normal group-hover:text-blue-700 dark:group-hover:text-blue-300 flex-1">
+            {trimmedComment}
+          </span>
+          <Eye className="w-3.5 h-3.5 text-blue-500 group-hover:text-blue-700 shrink-0 transition-colors" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        side="bottom"
+        sideOffset={6}
+        className="w-80 sm:w-96 p-3 shadow-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-xl z-50 animate-in fade-in-0 zoom-in-95"
+      >
+        <div className="relative pt-1 pr-6 pb-1">
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className="absolute -top-1 -right-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+            title="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+          <div className="text-xs text-gray-800 dark:text-gray-200 leading-relaxed max-h-[260px] overflow-y-auto whitespace-pre-wrap break-words select-text">
+            {trimmedComment}
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
 };
 
 export const AdminPlatformLeadsTableColumns = (
@@ -254,7 +307,7 @@ export const AdminPlatformLeadsTableColumns = (
   {
     accessorKey: "assignedTo",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Assign Staff" />
+      <DataTableColumnHeader column={column} title="Assigned Staff" />
     ),
     cell: ({ row }) => {
       const customerId = row.original._id;
@@ -344,93 +397,8 @@ export const AdminPlatformLeadsTableColumns = (
       <DataTableColumnHeader column={column} title="Comment" />
     ),
     cell: ({ row }) => {
-      const initialComment = row.getValue("comment") as string || "";
-      const status = row.getValue("status") as string || "Pending";
-      const customerId = row.original._id;
-      const initialDate = row.original.scheduledDate;
-      const formattedInitialDate = initialDate ? new Date(initialDate).toISOString().split('T')[0] : "";
-      const [localComment, setLocalComment] = React.useState(initialComment);
-      const [isSummarizing, setIsSummarizing] = React.useState(false);
-      const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
-
-      React.useEffect(() => {
-        setLocalComment(initialComment);
-      }, [initialComment]);
-
-      const autoResize = () => {
-        if (textareaRef.current) {
-          textareaRef.current.style.height = "auto";
-          textareaRef.current.style.height = `${Math.max(36, textareaRef.current.scrollHeight)}px`;
-        }
-      };
-
-      React.useEffect(() => {
-        autoResize();
-      }, [localComment]);
-
-      const handleAiSummarize = async (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (!localComment || !localComment.trim()) {
-          toast.info("Please paste or type the conversation text in the comment box first.");
-          return;
-        }
-        try {
-          setIsSummarizing(true);
-          const summary = await adminSummarizeLeadComment(localComment);
-          setLocalComment(summary);
-          onUpdateStatus(customerId, status, summary, formattedInitialDate);
-        } catch (err: any) {
-          console.error("AI summarize error:", err);
-          toast.error(err.message || "Failed to summarize with AI");
-        } finally {
-          setIsSummarizing(false);
-        }
-      };
-
-      return (
-        <div className="relative group/ai-comment w-full min-w-[220px]">
-          <textarea 
-            ref={textareaRef}
-            value={localComment}
-            rows={1}
-            onChange={(e) => {
-              setLocalComment(e.target.value);
-              autoResize();
-            }}
-            onBlur={() => {
-              if (localComment !== initialComment) {
-                onUpdateStatus(customerId, status, localComment, formattedInitialDate);
-              }
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                if (localComment !== initialComment) {
-                  onUpdateStatus(customerId, status, localComment, formattedInitialDate);
-                }
-                (e.target as HTMLTextAreaElement).blur();
-              }
-            }}
-            className="w-full text-center px-2 pr-7 py-1.5 text-sm border border-transparent hover:border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-transparent rounded-md transition-all resize-none whitespace-normal break-words leading-relaxed overflow-hidden placeholder:text-gray-400"
-            placeholder="Add comment..."
-            title={localComment || "Add comment..."}
-          />
-          <button
-            type="button"
-            onClick={handleAiSummarize}
-            disabled={isSummarizing || !localComment?.trim()}
-            className="absolute right-1 top-2 p-1 rounded-md text-violet-500 hover:text-violet-700 hover:bg-violet-50 dark:hover:bg-violet-900/40 dark:text-violet-400 disabled:opacity-0 opacity-40 group-hover/ai-comment:opacity-100 transition-all cursor-pointer"
-            title="Summarize conversation with AI"
-          >
-            {isSummarizing ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-600 dark:text-violet-400" />
-            ) : (
-              <Sparkles className="w-3.5 h-3.5" />
-            )}
-          </button>
-        </div>
-      );
+      const comment = (row.getValue("comment") as string) || "";
+      return <LeadCommentCell comment={comment} />;
     },
   },
   {

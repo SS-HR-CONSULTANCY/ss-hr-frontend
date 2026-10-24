@@ -56,6 +56,11 @@ const DEFAULT_INDIAN_STATES = sortStatesWithPriority([
 const TelecallerLeads: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.role === "admin";
+  const isTony =
+    user?.role === "admin" &&
+    (user?.email === "tony" ||
+      user?.fullName === "Super Admin" ||
+      (user as any)?.username === "tony");
   const [assignedStaffFilter, setAssignedStaffFilter] = useState<string>("all");
 
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
@@ -142,10 +147,12 @@ const TelecallerLeads: React.FC = () => {
     handleInlineStatusUpdate, 
     { 
       hideEmail: true,
-      hideAssignStaff: true,
-      hideComment: true,
+      hideAssignStaff: !isTony,
+      hideComment: false,
       hideScheduledDate: true,
-      isAdmin,
+      staffList,
+      onAssignStaff: handleAssignStaff,
+      isAdmin: isTony,
       staffName: user?.fullName || user?.username || "",
     }
   );
@@ -166,7 +173,7 @@ const TelecallerLeads: React.FC = () => {
         scheduledDate: scheduledDateParam,
         status: statusFilter === "all" ? undefined : statusFilter,
         state: stateFilter === "all" ? undefined : stateFilter,
-        assignedTo: isAdmin && assignedStaffFilter !== "all" ? assignedStaffFilter : undefined,
+        assignedTo: isTony && assignedStaffFilter !== "all" ? assignedStaffFilter : undefined,
         today: new Date().toISOString().split('T')[0],
         sortBy: params?.pagination?.sortBy || 'scheduledDate',
         sortOrder: params?.pagination?.sortOrder || 'asc'
@@ -296,8 +303,8 @@ const TelecallerLeads: React.FC = () => {
             </select>
           </div>
 
-          {/* Assigned Staff Filter (Admin only) */}
-          {isAdmin && (
+          {/* Assigned Staff Filter (Super Admin Tony only) */}
+          {isTony && (
             <div className="relative flex items-center">
               <UserCheck className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
               <select
