@@ -21,6 +21,7 @@ import {
   ExternalLink,
   User,
   Eye,
+  Globe,
 } from "lucide-react";
 import {
   Popover,
@@ -57,15 +58,28 @@ interface LeadActivityModalProps {
     status: string;
     comment: string;
     scheduledDate?: string;
+    website?: string;
   }) => void;
   onAssignStaff?: (id: string, staffId: string | null) => void;
   isSaving?: boolean;
   isAdmin?: boolean;
   staffList?: AssignedStaff[];
   currentUserName?: string;
+  /** Show an editable website field (saved together with the activity). */
+  showWebsite?: boolean;
+  /** Override the selectable statuses (defaults to the platform lead statuses). */
+  statusOptions?: string[];
+  /** Label of the third tab (defaults to "Candidate Info"). */
+  detailsLabel?: string;
+  /** Custom content for the third tab. When omitted the candidate info view is shown. */
+  renderDetails?: (customer: ImportedCustomer) => React.ReactNode;
+  /** Label for the website audit/report tab. */
+  reportLabel?: string;
+  /** Custom content for the website audit/report tab. */
+  renderReport?: (customer: ImportedCustomer) => React.ReactNode;
 }
 
-type Tab = "update" | "history" | "details";
+type Tab = "update" | "history" | "details" | "report";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -116,6 +130,22 @@ const STATUS_STYLES: Record<string, { pill: string; dot: string }> = {
   Completed: {
     pill: "bg-green-100 text-green-800 border-green-300",
     dot: "bg-green-400",
+  },
+  "In Discussion": {
+    pill: "bg-indigo-100 text-indigo-800 border-indigo-300",
+    dot: "bg-indigo-400",
+  },
+  "Quotation Sent": {
+    pill: "bg-purple-100 text-purple-800 border-purple-300",
+    dot: "bg-purple-400",
+  },
+  Converted: {
+    pill: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    dot: "bg-emerald-400",
+  },
+  Lost: {
+    pill: "bg-red-100 text-red-800 border-red-300",
+    dot: "bg-red-400",
   },
 };
 
@@ -272,6 +302,12 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
   isAdmin = false,
   staffList = [],
   currentUserName = "",
+  showWebsite = false,
+  statusOptions,
+  detailsLabel,
+  renderDetails,
+  reportLabel,
+  renderReport,
 }) => {
   const [activeTab, setActiveTab] = useState<Tab>("update");
   const [status, setStatus] = useState("Pending");
@@ -279,11 +315,13 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
   const [previousComment, setPreviousComment] = useState("");
   const [scheduledDate, setScheduledDate] = useState("");
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [website, setWebsite] = useState("");
 
   useEffect(() => {
     if (customer) {
       setStatus(customer.status || "Pending");
       setComment(customer.comment || "");
+      setWebsite(customer.website || "");
       setPreviousComment("");
       setScheduledDate(
         customer.scheduledDate
@@ -389,6 +427,15 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
       label: "Update Lead",
       icon: <MessageSquarePlus className="w-3.5 h-3.5" />,
     },
+    ...(renderReport
+      ? [
+          {
+            id: "report" as Tab,
+            label: reportLabel || "Website Audit",
+            icon: <Globe className="w-3.5 h-3.5" />,
+          },
+        ]
+      : []),
     {
       id: "history",
       label: "History",
@@ -396,7 +443,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
     },
     {
       id: "details",
-      label: "Candidate Info",
+      label: detailsLabel || "Candidate Info",
       icon: <User className="w-3.5 h-3.5" />,
     },
   ];
@@ -410,6 +457,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
       status,
       comment,
       scheduledDate: isScheduleStatus ? scheduledDate : scheduledDate || undefined,
+      website: showWebsite ? website.trim() : undefined,
     });
   };
 
@@ -535,7 +583,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
                       Contact Status
                     </label>
                     <div className="grid grid-cols-2 gap-2">
-                      {STATUS_OPTIONS.map((opt) => {
+                      {(statusOptions || STATUS_OPTIONS).map((opt) => {
                         const styles =
                           STATUS_STYLES[opt] || STATUS_STYLES["Not Interested"];
                         const isSelected = status === opt;
@@ -705,6 +753,25 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
 
                 {/* ── Right Column: Notes, Staff & Save ── */}
                 <div className="flex flex-col justify-between space-y-3.5 h-full">
+                  {/* Website (optional) */}
+                  {showWebsite && (
+                    <div className="shrink-0">
+                      <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                        Website Link
+                      </label>
+                      <div className="relative">
+                        <ExternalLink className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                        <input
+                          type="text"
+                          value={website}
+                          onChange={(e) => setWebsite(e.target.value)}
+                          placeholder="https://example.com"
+                          className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Comment / Notes */}
                   <div className="flex-1 flex flex-col min-h-0">
                     <div className="flex items-center justify-between mb-2 shrink-0">
@@ -909,8 +976,16 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
               </div>
             )}
 
+            {/* ─ Website Audit / Report Tab ─ */}
+            {activeTab === "report" && renderReport && (
+              <div className="p-6">{renderReport(customer)}</div>
+            )}
+
             {/* ─ Candidate Info Tab ─ */}
-            {activeTab === "details" && (
+            {activeTab === "details" && renderDetails && (
+              <div className="p-6">{renderDetails(customer)}</div>
+            )}
+            {activeTab === "details" && !renderDetails && (
               <div className="p-6 space-y-5">
                 {/* Info Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800">

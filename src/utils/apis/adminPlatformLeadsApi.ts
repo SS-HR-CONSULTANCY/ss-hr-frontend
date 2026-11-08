@@ -25,6 +25,7 @@ export interface ImportedCustomer {
   designations: string[];
   cvUrl: string;
   linkedinUrl?: string;
+  website?: string;
   source: string;
   status: string;
   isNewLead?: boolean;

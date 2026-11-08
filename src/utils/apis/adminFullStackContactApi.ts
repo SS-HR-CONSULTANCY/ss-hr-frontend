@@ -8,6 +8,15 @@ export interface IFSSActivity {
   by?: string;
 }
 
+export interface IWebsiteAudit {
+  overallHealth?: string;
+  issues?: string[];
+  report?: string;
+  actionItems?: string;
+  auditedBy?: string;
+  auditedAt?: string;
+}
+
 export interface IFullStackContact {
   _id: string;
   name: string;
@@ -19,6 +28,8 @@ export interface IFullStackContact {
   city?: string;
   budget?: string;
   projectDescription?: string;
+  website?: string;
+  websiteAudit?: IWebsiteAudit;
   status: 'Pending' | 'Contacted' | 'Need Follow Up' | 'In Discussion' | 'Quotation Sent' | 'Converted' | 'Completed' | 'Lost';
   comment?: string;
   scheduledDate?: string;
@@ -93,6 +104,8 @@ export const adminTelecallFSSContact = async (
     comment?: string;
     scheduledDate?: string;
     scheduledAt?: string;
+    website?: string;
+    websiteAudit?: IWebsiteAudit;
   }
 ): Promise<IFullStackContact> => {
   const res = await axiosInstance.patch(`/admin/full-stack-contacts/${id}/telecall`, data);
@@ -106,4 +119,35 @@ export const adminAssignFSSContact = async (id: string, staffId: string | null):
 
 export const adminDeleteFSSContact = async (id: string): Promise<void> => {
   await axiosInstance.delete(`/admin/full-stack-contacts/${id}`);
+};
+
+export interface ParsedLead {
+  name: string;
+  phone: string;
+  rating: string;
+  reviews: string;
+  category: string;
+  address: string;
+  website: string;
+}
+
+export const adminParseFSSLeads = async (text: string): Promise<ParsedLead[]> => {
+  const res = await axiosInstance.post("/admin/full-stack-contacts/parse-leads", { text });
+  return res.data.data;
+};
+
+export const adminBulkCreateFSSContacts = async (
+  contacts: Array<Partial<IFullStackContact>>
+): Promise<{ created: number; duplicates: number; skippedNoPhone: number }> => {
+  const res = await axiosInstance.post("/admin/full-stack-contacts/bulk", { contacts });
+  return res.data.data;
+};
+
+export const adminFormatAuditReport = async (data: {
+  content: string;
+  website?: string;
+  companyName?: string;
+}): Promise<{ formattedReport: string; suggestedPitch: string }> => {
+  const res = await axiosInstance.post("/admin/full-stack-contacts/format-audit-report", data);
+  return res.data.data;
 };

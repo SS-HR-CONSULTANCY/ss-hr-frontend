@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
@@ -7,48 +7,45 @@ import {
   Layers,
   Users,
   Clock,
-  CheckCircle,
   PhoneCall,
   Search,
-  Filter,
-  Calendar,
   X,
   RotateCcw,
   AlertTriangle,
   Plus,
-  Edit2,
   Trash2,
   MessageCircle,
   Building,
-  Mail,
-  UserCheck,
   ChevronLeft,
   ChevronRight,
-  Briefcase,
-  ExternalLink,
   Award,
+  MapPin,
+  Sparkles,
+  Globe,
 } from "lucide-react";
 
 import {
   adminFetchAllFSSContacts,
   adminCreateFSSContact,
-  adminUpdateFSSContact,
   adminTelecallFSSContact,
   adminAssignFSSContact,
   adminDeleteFSSContact,
   type IFullStackContact,
+  type IWebsiteAudit,
 } from "@/utils/apis/adminFullStackContactApi";
 import { adminFetchSystemStaff, type AssignedStaff } from "@/utils/apis/adminPlatformLeadsApi";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import LeadActivityModal from "@/components/admin/LeadActivityModal";
+import WebsiteAuditReportPanel from "@/components/admin/WebsiteAuditReportPanel";
+import type { ImportedCustomer, ImportedCustomerActivity } from "@/utils/apis/adminPlatformLeadsApi";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { isMissedFollowUp, FOLLOW_UP_WARNING_MESSAGE, getTodayString } from "@/utils/helpers/followUp";
+import ImportLeadsModal from "./ImportLeadsModal";
+import { isMissedFollowUp, getTodayString } from "@/utils/helpers/followUp";
 
 const FSS_STATUS_OPTIONS = [
   "Pending",
@@ -102,6 +99,32 @@ const getStatusBadgeClass = (status: string) => {
   }
 };
 
+// Imported leads store "Category | Address | Website | Rating" in projectDescription.
+const parseLeadDetails = (text?: string) => {
+  const result = { category: "", address: "", website: "", rating: "", notes: "" };
+  if (!text) return result;
+  const plain: string[] = [];
+  text.split("|").map((s) => s.trim()).filter(Boolean).forEach((part) => {
+    const m = part.match(/^(Category|Address|Website|Rating):\s*(.*)$/i);
+    if (m) {
+      result[m[1].toLowerCase() as "category" | "address" | "website" | "rating"] = m[2].trim();
+    } else {
+      plain.push(part);
+    }
+  });
+  if (!result.category && !result.address && plain.length >= 2) {
+    result.category = plain[0];
+    result.address = plain[1];
+    result.notes = plain.slice(2).join(" | ");
+  } else if (plain.length) {
+    result.notes = plain.join(" | ");
+  }
+  return result;
+};
+
+const truncateText = (text?: string, max = 30): string =>
+  text && text.length > max ? `...` : text || "";
+
 const FullStackSolutionsPage: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.role === "admin";
@@ -113,13 +136,12 @@ const FullStackSolutionsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [serviceFilter, setServiceFilter] = useState<string>("all");
   const [assignedStaffFilter, setAssignedStaffFilter] = useState<string>("all");
   const [scheduledDateFilter, setScheduledDateFilter] = useState<string>("any");
 
   // Modals & Drawers
+  const [isImportOpen, setIsImportOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedContact, setSelectedContact] = useState<IFullStackContact | null>(null);
 
@@ -129,6 +151,7 @@ const FullStackSolutionsPage: React.FC = () => {
     phone: "",
     email: "",
     companyName: "",
+    website: "",
     service: "Full Stack Web Development",
     state: "",
     city: "",
@@ -139,11 +162,6 @@ const FullStackSolutionsPage: React.FC = () => {
     scheduledDate: "",
     assignedTo: "",
   });
-
-  // Telecalling drawer state
-  const [telecallStatus, setTelecallStatus] = useState<string>("Pending");
-  const [telecallComment, setTelecallComment] = useState<string>("");
-  const [telecallDate, setTelecallDate] = useState<string>("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -164,7 +182,6 @@ const FullStackSolutionsPage: React.FC = () => {
   const {
     data: contactsResponse,
     isLoading,
-    isFetching,
   } = useQuery({
     queryKey: [
       "fss-contacts",
@@ -172,7 +189,6 @@ const FullStackSolutionsPage: React.FC = () => {
       limit,
       debouncedSearch,
       statusFilter,
-      serviceFilter,
       assignedStaffFilter,
       scheduledDateFilter,
     ],
@@ -182,7 +198,6 @@ const FullStackSolutionsPage: React.FC = () => {
         limit,
         search: debouncedSearch,
         status: statusFilter,
-        service: serviceFilter,
         assignedTo: assignedStaffFilter,
         scheduledDate: scheduledDateFilter,
       }),
@@ -207,44 +222,31 @@ const FullStackSolutionsPage: React.FC = () => {
     },
   });
 
-  const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<IFullStackContact> }) =>
-      adminUpdateFSSContact(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
-      toast.success("Contact updated successfully");
-      setIsEditModalOpen(false);
-      setSelectedContact(null);
-    },
-    onError: (err: any) => {
-      toast.error(err?.response?.data?.message || "Failed to update contact");
-    },
-  });
-
   const telecallMutation = useMutation({
     mutationFn: ({
       id,
       data,
     }: {
       id: string;
-      data: { status?: string; comment?: string; scheduledDate?: string };
+      data: { status?: string; comment?: string; scheduledDate?: string; website?: string };
     }) => adminTelecallFSSContact(id, data),
     onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
-      toast.success("Telecall record updated");
+      toast.success("Lead updated successfully");
       setSelectedContact(updated);
-      setTelecallComment("");
+      setIsDrawerOpen(false);
     },
     onError: (err: any) => {
-      toast.error(err?.response?.data?.message || "Failed to update telecall");
+      toast.error(err?.response?.data?.message || "Failed to update lead");
     },
   });
 
   const assignMutation = useMutation({
     mutationFn: ({ id, staffId }: { id: string; staffId: string | null }) =>
       adminAssignFSSContact(id, staffId),
-    onSuccess: () => {
+    onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
+      setSelectedContact((prev) => (prev && prev._id === updated._id ? updated : prev));
       toast.success("Staff assigned successfully");
     },
     onError: (err: any) => {
@@ -269,6 +271,7 @@ const FullStackSolutionsPage: React.FC = () => {
       phone: "",
       email: "",
       companyName: "",
+      website: "",
       service: "Full Stack Web Development",
       state: "",
       city: "",
@@ -286,31 +289,8 @@ const FullStackSolutionsPage: React.FC = () => {
     setIsAddModalOpen(true);
   };
 
-  const handleOpenEditModal = (contact: IFullStackContact) => {
-    setSelectedContact(contact);
-    setFormData({
-      name: contact.name || "",
-      phone: contact.phone || "",
-      email: contact.email || "",
-      companyName: contact.companyName || "",
-      service: contact.service || "Full Stack Web Development",
-      state: contact.state || "",
-      city: contact.city || "",
-      budget: contact.budget || "< ₹50,000",
-      projectDescription: contact.projectDescription || "",
-      status: contact.status || "Pending",
-      comment: "",
-      scheduledDate: contact.scheduledDate ? contact.scheduledDate.split("T")[0] : "",
-      assignedTo: contact.assignedTo ? (typeof contact.assignedTo === "object" ? contact.assignedTo._id : contact.assignedTo) : "",
-    });
-    setIsEditModalOpen(true);
-  };
-
   const handleOpenDrawer = (contact: IFullStackContact) => {
     setSelectedContact(contact);
-    setTelecallStatus(contact.status || "Pending");
-    setTelecallComment("");
-    setTelecallDate(contact.scheduledDate ? contact.scheduledDate.split("T")[0] : "");
     setIsDrawerOpen(true);
   };
 
@@ -323,30 +303,35 @@ const FullStackSolutionsPage: React.FC = () => {
     createMutation.mutate(formData as any);
   };
 
-  const handleEditSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleModalUpdate = (payload: { status: string; comment: string; scheduledDate?: string; website?: string }) => {
     if (!selectedContact) return;
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      toast.error("Name and Phone number are required");
-      return;
-    }
-    updateMutation.mutate({
-      id: selectedContact._id,
-      data: formData as any,
-    });
+    telecallMutation.mutate({ id: selectedContact._id, data: payload });
   };
 
-  const handleTelecallSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSaveAudit = async (audit: IWebsiteAudit, newWebsite?: string) => {
     if (!selectedContact) return;
-    telecallMutation.mutate({
-      id: selectedContact._id,
-      data: {
-        status: telecallStatus,
-        comment: telecallComment,
-        scheduledDate: telecallDate,
-      },
-    });
+    try {
+      const updated = await adminTelecallFSSContact(selectedContact._id, {
+        websiteAudit: audit,
+        ...(newWebsite ? { website: newWebsite } : {}),
+      });
+      queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
+      setSelectedContact(updated);
+      toast.success("Website audit report saved successfully");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to save website audit report");
+    }
+  };
+
+  const renderWebsiteAudit = () => {
+    if (!selectedContact) return null;
+    return (
+      <WebsiteAuditReportPanel
+        contact={selectedContact}
+        onSaveAudit={handleSaveAudit}
+        isSaving={telecallMutation.isPending}
+      />
+    );
   };
 
   const handleDelete = (id: string, name: string) => {
@@ -359,14 +344,144 @@ const FullStackSolutionsPage: React.FC = () => {
     setSearchTerm("");
     setDebouncedSearch("");
     setStatusFilter("all");
-    setServiceFilter("all");
     setAssignedStaffFilter("all");
     setScheduledDateFilter("any");
     setPage(1);
   };
 
-  return (
-    <div className="space-y-5 text-black dark:text-white mt-0 w-full pb-14">
+  // Map an FSS contact to the shape expected by the shared Update Lead popup
+  const staffNameById = (value?: string) => {
+    if (!value) return value;
+    const staff = staffList.find((s) => s._id === value);
+    return staff ? staff.fullName || staff.username : value;
+  };
+
+  const modalCustomer: ImportedCustomer | null = selectedContact
+    ? {
+        _id: selectedContact._id,
+        name: selectedContact.name,
+        email: selectedContact.email || "",
+        phone: selectedContact.phone,
+        state: selectedContact.state || "",
+        designations: [],
+        cvUrl: "",
+        website: selectedContact.website || parseLeadDetails(selectedContact.projectDescription).website,
+        source: "Full Stack Solutions",
+        status: selectedContact.status,
+        isNewLead: false,
+        comment: selectedContact.comment || "",
+        scheduledDate: selectedContact.scheduledDate,
+        assignedTo: selectedContact.assignedTo || null,
+        createdAt: selectedContact.createdAt,
+        activityLog: (selectedContact.activityLog || []).map(
+          (a): ImportedCustomerActivity => ({
+            type: a.type,
+            from: a.type === "assignment" ? staffNameById(a.from) : a.from,
+            to: a.type === "assignment" ? staffNameById(a.to) : a.to,
+            at: a.at,
+          })
+        ),
+      }
+    : null;
+
+  const renderContactDetails = () => {
+    const c = selectedContact;
+    if (!c) return null;
+    const lead = parseLeadDetails(c.projectDescription);
+    const location = [lead.address, c.city, c.state].filter(Boolean).join(", ");
+    const mapsUrl = location
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${c.name} ${location}`)}`
+      : "";
+    const field = (label: string, value?: React.ReactNode) => (
+      <div>
+        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5">{label}</p>
+        <p className="text-sm text-gray-900 dark:text-gray-100 font-medium break-words">
+          {value || <span className="text-gray-400 font-normal">N/A</span>}
+        </p>
+      </div>
+    );
+    return (
+      <div className="space-y-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800">
+          {field("Name", c.name)}
+          {field("Company", c.companyName)}
+          {field("Phone", c.phone)}
+          {field("Email", c.email)}
+          {field("Service", c.service)}
+          {field("Budget", c.budget)}
+          {field("Category", lead.category)}
+          {field("Rating", lead.rating)}
+          {field(
+            "Website",
+            (c.website || lead.website) ? (
+              <a
+                href={(c.website || lead.website).startsWith("http") ? (c.website || lead.website) : `https://${c.website || lead.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 dark:text-blue-400 hover:underline break-all"
+              >
+                {c.website || lead.website}
+              </a>
+            ) : undefined
+          )}
+        </div>
+        <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800">
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5" /> Company Location
+            </p>
+            {mapsUrl && (
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                View on Google Maps
+              </a>
+            )}
+          </div>
+          <p className="text-sm text-gray-900 dark:text-gray-100 font-medium break-words">
+            {location || <span className="text-gray-400 font-normal">N/A</span>}
+          </p>
+        </div>
+        {c.websiteAudit && (
+          <div className="p-4 bg-purple-50/60 dark:bg-purple-950/20 rounded-xl border border-purple-100 dark:border-purple-900/40 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wide flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5" /> Website Analysis Report
+              </span>
+              {c.websiteAudit.auditedAt && (
+                <span className="text-[10px] text-gray-400">
+                  {new Date(c.websiteAudit.auditedAt).toLocaleDateString()}
+                  {c.websiteAudit.auditedBy && ` • by ${c.websiteAudit.auditedBy}`}
+                </span>
+              )}
+            </div>
+            {c.websiteAudit.report && (
+              <p className="text-xs text-gray-700 dark:text-gray-300 font-mono whitespace-pre-wrap p-2.5 rounded-lg bg-white/70 dark:bg-gray-900 border border-purple-100 dark:border-purple-900/30">
+                {c.websiteAudit.report
+                  .replace(/^#*\s*Website Audit Report.*$/gim, "")
+                  .replace(/^#{1,6}\s*/gm, "")
+                  .trim()}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div>
+          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+            Description / Notes
+          </p>
+          <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words p-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-900/40">
+            {lead.notes || (!lead.category && !lead.address ? c.projectDescription : "") || "No description."}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  return (    <div className="space-y-5 text-black dark:text-white mt-0 w-full pb-14">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -378,6 +493,14 @@ const FullStackSolutionsPage: React.FC = () => {
           </h1>
         </div>
 
+        <div className="flex items-center gap-2 shrink-0">
+        <button
+          onClick={() => setIsImportOpen(true)}
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-indigo-200 dark:border-indigo-900 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-xs font-semibold transition-colors"
+        >
+          <Sparkles className="w-4 h-4" />
+          Import Leads
+        </button>
         <button
           onClick={handleOpenAddModal}
           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition-colors shrink-0"
@@ -385,19 +508,21 @@ const FullStackSolutionsPage: React.FC = () => {
           <Plus className="w-4 h-4" />
           Add New Contact
         </button>
+        </div>
       </div>
+      <ImportLeadsModal open={isImportOpen} onOpenChange={setIsImportOpen} />
 
+      <div className="flex flex-col xl:flex-row items-stretch gap-3">
       {/* KPI Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xl:flex-none xl:w-[460px]">
         <div className="bg-gradient-to-br from-indigo-50/60 to-white dark:from-indigo-950/20 dark:to-gray-900 border border-indigo-100 dark:border-indigo-900/50 p-3 rounded-xl shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Contacts</span>
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Contacts</span>
             <div className="p-1.5 rounded-md bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600">
               <Users className="w-3.5 h-3.5" />
             </div>
           </div>
           <div className="text-xl font-bold text-indigo-700 dark:text-indigo-300 mt-1">{stats.total}</div>
-          <p className="text-[10px] text-gray-500 mt-0.5">Manually added leads</p>
         </div>
 
         <div className="bg-gradient-to-br from-yellow-50/60 to-white dark:from-yellow-950/20 dark:to-gray-900 border border-yellow-100 dark:border-yellow-900/50 p-3 rounded-xl shadow-sm">
@@ -408,7 +533,6 @@ const FullStackSolutionsPage: React.FC = () => {
             </div>
           </div>
           <div className="text-xl font-bold text-yellow-700 dark:text-yellow-400 mt-1">{stats.pending}</div>
-          <p className="text-[10px] text-gray-500 mt-0.5">Awaiting initial call</p>
         </div>
 
         <div className="bg-gradient-to-br from-blue-50/60 to-white dark:from-blue-950/20 dark:to-gray-900 border border-blue-100 dark:border-blue-900/50 p-3 rounded-xl shadow-sm">
@@ -419,7 +543,6 @@ const FullStackSolutionsPage: React.FC = () => {
             </div>
           </div>
           <div className="text-xl font-bold text-blue-700 dark:text-blue-300 mt-1">{stats.contacted}</div>
-          <p className="text-[10px] text-gray-500 mt-0.5">Calls & chats completed</p>
         </div>
 
         <div className="bg-gradient-to-br from-emerald-50/60 to-white dark:from-emerald-950/20 dark:to-gray-900 border border-emerald-100 dark:border-emerald-900/50 p-3 rounded-xl shadow-sm">
@@ -430,18 +553,17 @@ const FullStackSolutionsPage: React.FC = () => {
             </div>
           </div>
           <div className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">{stats.converted}</div>
-          <p className="text-[10px] text-gray-500 mt-0.5">Successfully closed deals</p>
         </div>
       </div>
 
       {/* Search and Filters Bar */}
-      <div className="bg-white dark:bg-gray-950 p-3.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <div className="bg-white dark:bg-gray-950 p-2.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-stretch md:items-center gap-2 flex-1 min-w-0">
         {/* Search */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-[160px]">
           <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search name, phone, email, company, service..."
+            placeholder="Search name, phone, email, company, website, comments..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-8 py-2 text-xs rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-gray-400"
@@ -472,23 +594,6 @@ const FullStackSolutionsPage: React.FC = () => {
             {FSS_STATUS_OPTIONS.map((st) => (
               <option key={st} value={st}>
                 {st}
-              </option>
-            ))}
-          </select>
-
-          {/* Service Filter */}
-          <select
-            value={serviceFilter}
-            onChange={(e) => {
-              setServiceFilter(e.target.value);
-              setPage(1);
-            }}
-            className="py-1.5 px-2.5 text-xs rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          >
-            <option value="all">All Services</option>
-            {FSS_SERVICES.map((s) => (
-              <option key={s} value={s}>
-                {s}
               </option>
             ))}
           </select>
@@ -527,7 +632,7 @@ const FullStackSolutionsPage: React.FC = () => {
           )}
 
           {/* Reset Filters */}
-          {(searchTerm || statusFilter !== "all" || serviceFilter !== "all" || assignedStaffFilter !== "all" || scheduledDateFilter !== "any") && (
+          {(searchTerm || statusFilter !== "all" || assignedStaffFilter !== "all" || scheduledDateFilter !== "any") && (
             <button
               onClick={resetAllFilters}
               title="Reset all filters"
@@ -538,6 +643,7 @@ const FullStackSolutionsPage: React.FC = () => {
           )}
         </div>
       </div>
+      </div>
 
       {/* Contacts Table Card */}
       <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
@@ -547,10 +653,10 @@ const FullStackSolutionsPage: React.FC = () => {
               <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
                 <th className="px-4 py-3 text-left">Contact / Client</th>
                 <th className="px-4 py-3 text-left">Phone & Email</th>
-                <th className="px-4 py-3 text-left">Service & Budget</th>
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">Assigned Staff</th>
-                <th className="px-4 py-3 text-left">Follow-up</th>
+                <th className="px-4 py-3 text-left">Website</th>
+                <th className="px-4 py-3 text-left">Comments</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
@@ -569,7 +675,7 @@ const FullStackSolutionsPage: React.FC = () => {
                         <Users className="w-5 h-5" />
                       </div>
                       <p className="font-semibold text-gray-800 dark:text-gray-200">No contacts found</p>
-                      {(searchTerm || statusFilter !== "all" || serviceFilter !== "all") && (
+                      {(searchTerm || statusFilter !== "all") && (
                         <p className="text-gray-400 text-xs max-w-sm">
                           No contacts match your current filters. Try resetting them.
                         </p>
@@ -597,12 +703,12 @@ const FullStackSolutionsPage: React.FC = () => {
                       {/* Name & Company */}
                       <td className="px-4 py-3">
                         <div className="font-semibold text-gray-900 dark:text-gray-100">
-                          {contact.name}
+                          <span title={contact.name}>{truncateText(contact.name)}</span>
                         </div>
-                        {contact.companyName ? (
+                        {contact.companyName && contact.companyName.trim().toLowerCase() !== contact.name.trim().toLowerCase() ? (
                           <div className="text-[11px] text-gray-500 flex items-center gap-1 mt-0.5">
                             <Building className="w-3 h-3 text-gray-400" />
-                            <span>{contact.companyName}</span>
+                            <span title={contact.companyName}>{truncateText(contact.companyName)}</span>
                           </div>
                         ) : null}
                         {contact.state || contact.city ? (
@@ -615,7 +721,7 @@ const FullStackSolutionsPage: React.FC = () => {
                       {/* Phone & Email */}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1.5 font-mono text-gray-800 dark:text-gray-200">
-                          <span>{contact.phone}</span>
+                          <span className="whitespace-nowrap">{contact.phone}</span>
                           {cleanPhone && (
                             <a
                               href={`https://wa.me/${cleanPhone}`}
@@ -637,18 +743,6 @@ const FullStackSolutionsPage: React.FC = () => {
                           </a>
                         ) : (
                           <span className="text-[11px] text-gray-400">No email</span>
-                        )}
-                      </td>
-
-                      {/* Service & Budget */}
-                      <td className="px-4 py-3">
-                        <span className="inline-block px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/50 text-[11px] font-medium">
-                          {contact.service || "Web Development"}
-                        </span>
-                        {contact.budget && (
-                          <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-                            Budget: <span className="font-medium text-gray-700 dark:text-gray-300">{contact.budget}</span>
-                          </div>
                         )}
                       </td>
 
@@ -698,20 +792,42 @@ const FullStackSolutionsPage: React.FC = () => {
                         )}
                       </td>
 
-                      {/* Follow-up */}
-                      <td className="px-4 py-3">
-                        {contact.scheduledDate ? (
-                          <div className="space-y-0.5">
-                            <span className="text-gray-700 dark:text-gray-300 font-mono text-[11px]">
-                              {contact.scheduledDate.split("T")[0]}
-                            </span>
-                            {missed && (
-                              <div className="flex items-center gap-1 text-[10px] text-red-600 font-medium">
-                                <AlertTriangle className="w-3 h-3" />
-                                <span>Missed</span>
-                              </div>
-                            )}
-                          </div>
+                      {/* Website */}
+                      <td className="px-4 py-3 max-w-[170px]">
+                        {(() => {
+                          const site = contact.website || parseLeadDetails(contact.projectDescription).website;
+                          if (!site && !contact.websiteAudit) return <span className="text-gray-400 text-[11px]">—</span>;
+                          const href = site ? (site.startsWith("http") ? site : `https://${site}`) : "";
+                          const label = site ? site.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "") : "";
+                          return (
+                            <div className="space-y-0.5">
+                              {site && (
+                                <a
+                                  href={href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={site}
+                                  className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline break-all block"
+                                >
+                                  {truncateText(label, 24)}
+                                </a>
+                              )}
+                              {contact.websiteAudit?.report && (
+                                <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800 tracking-tight">
+                                  Report Added
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })()}
+                      </td>
+
+                      {/* Comments */}
+                      <td className="px-4 py-3 max-w-[200px]">
+                        {contact.comment ? (
+                          <span title={contact.comment} className="text-[11px] text-gray-700 dark:text-gray-300 break-words">
+                            {truncateText(contact.comment, 50)}
+                          </span>
                         ) : (
                           <span className="text-gray-400 text-[11px]">—</span>
                         )}
@@ -722,17 +838,15 @@ const FullStackSolutionsPage: React.FC = () => {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => handleOpenDrawer(contact)}
-                            title="Telecall / Activity"
-                            className="p-1.5 rounded-lg border border-indigo-200 dark:border-indigo-900 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 transition-colors"
+                            title={missed ? `Follow-up date is in the past (${contact.scheduledDate?.split("T")[0]})` : "Update Lead"}
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:hover:bg-blue-900/60 border transition-colors cursor-pointer ${
+                              missed
+                                ? "border-red-300 dark:border-red-800 ring-1 ring-red-400/30"
+                                : "border-blue-200 dark:border-blue-800"
+                            }`}
                           >
-                            <PhoneCall className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            onClick={() => handleOpenEditModal(contact)}
-                            title="Edit Contact"
-                            className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
+                            Update Lead
+                            {missed && <AlertTriangle className="h-3.5 w-3.5 text-red-600 dark:text-red-400 shrink-0" />}
                           </button>
                           {isAdmin && (
                             <button
@@ -839,6 +953,21 @@ const FullStackSolutionsPage: React.FC = () => {
 
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Website URL
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. https://example.com"
+                  value={formData.website}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Company / Organization
                 </label>
                 <input
@@ -846,6 +975,19 @@ const FullStackSolutionsPage: React.FC = () => {
                   placeholder="e.g. Acme Technologies"
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  State / Region
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Kerala, Tamil Nadu, Dubai"
+                  value={formData.state}
+                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                   className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
@@ -890,19 +1032,6 @@ const FullStackSolutionsPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  State / Region
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Kerala, Tamil Nadu, Dubai"
-                  value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Initial Status
                 </label>
                 <select
@@ -917,9 +1046,7 @@ const FullStackSolutionsPage: React.FC = () => {
                   ))}
                 </select>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Scheduled Follow-up Date
@@ -931,27 +1058,27 @@ const FullStackSolutionsPage: React.FC = () => {
                   className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
-
-              {isAdmin && (
-                <div>
-                  <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Assign Staff
-                  </label>
-                  <select
-                    value={formData.assignedTo}
-                    onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                  >
-                    <option value="">Unassigned</option>
-                    {staffList.map((s) => (
-                      <option key={s._id} value={s._id}>
-                        {s.fullName || s.username}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
             </div>
+
+            {isAdmin && (
+              <div>
+                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Assign Staff
+                </label>
+                <select
+                  value={formData.assignedTo}
+                  onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
+                >
+                  <option value="">Unassigned</option>
+                  {staffList.map((s) => (
+                    <option key={s._id} value={s._id}>
+                      {s.fullName || s.username}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div>
               <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -986,295 +1113,24 @@ const FullStackSolutionsPage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* ======================================================== */}
-      {/* EDIT CONTACT MODAL                                        */}
-      {/* ======================================================== */}
-      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-              <Edit2 className="w-4 h-4 text-indigo-600" />
-              Edit Contact Details
-            </DialogTitle>
-            <DialogDescription className="text-xs text-gray-500">
-              Update information for {selectedContact?.name}.
-            </DialogDescription>
-          </DialogHeader>
-
-          <form onSubmit={handleEditSubmit} className="space-y-3.5 pt-2 text-xs">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Contact Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Phone Number <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Company / Organization
-                </label>
-                <input
-                  type="text"
-                  value={formData.companyName}
-                  onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Service Requirement
-                </label>
-                <select
-                  value={formData.service}
-                  onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                >
-                  {FSS_SERVICES.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Budget Estimate
-                </label>
-                <select
-                  value={formData.budget}
-                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                >
-                  {BUDGET_RANGES.map((b) => (
-                    <option key={b} value={b}>
-                      {b}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  State / Region
-                </label>
-                <input
-                  type="text"
-                  value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Status
-                </label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                >
-                  {FSS_STATUS_OPTIONS.map((st) => (
-                    <option key={st} value={st}>
-                      {st}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Project Requirement / Notes
-              </label>
-              <textarea
-                rows={2}
-                value={formData.projectDescription}
-                onChange={(e) => setFormData({ ...formData, projectDescription: e.target.value })}
-                className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
-              <button
-                type="button"
-                onClick={() => setIsEditModalOpen(false)}
-                className="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 text-xs font-medium"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={updateMutation.isPending}
-                className="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold disabled:opacity-50"
-              >
-                {updateMutation.isPending ? "Saving..." : "Update Contact"}
-              </button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* ======================================================== */}
-      {/* TELECALLING & TIMELINE DRAWER (SHEET)                     */}
-      {/* ======================================================== */}
-      <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-          <SheetHeader className="pb-3 border-b border-gray-200 dark:border-gray-800">
-            <SheetTitle className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center justify-between">
-              <span>{selectedContact?.name}</span>
-              <span
-                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-                  selectedContact?.status ? getStatusBadgeClass(selectedContact.status) : ""
-                }`}
-              >
-                {selectedContact?.status}
-              </span>
-            </SheetTitle>
-            <SheetDescription className="text-xs text-gray-500 flex items-center gap-2">
-              <span>{selectedContact?.phone}</span>
-              {selectedContact?.companyName && <span>• {selectedContact.companyName}</span>}
-            </SheetDescription>
-          </SheetHeader>
-
-          {/* Telecall Update Form */}
-          <form onSubmit={handleTelecallSubmit} className="py-4 space-y-3.5 border-b border-gray-200 dark:border-gray-800 text-xs">
-            <h4 className="font-semibold text-gray-800 dark:text-gray-200">Update Telecalling Status</h4>
-
-            <div>
-              <label className="block text-gray-600 dark:text-gray-400 mb-1">Contact Status</label>
-              <select
-                value={telecallStatus}
-                onChange={(e) => setTelecallStatus(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-              >
-                {FSS_STATUS_OPTIONS.map((st) => (
-                  <option key={st} value={st}>
-                    {st}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-gray-600 dark:text-gray-400 mb-1">
-                Scheduled Next Follow-Up
-              </label>
-              <input
-                type="date"
-                value={telecallDate}
-                onChange={(e) => setTelecallDate(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-600 dark:text-gray-400 mb-1">Call Remarks / Remarks</label>
-              <textarea
-                rows={2}
-                placeholder="Spoke with client, discussed proposal, agreed on timeline..."
-                value={telecallComment}
-                onChange={(e) => setTelecallComment(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={telecallMutation.isPending}
-              className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold disabled:opacity-50 transition-colors"
-            >
-              {telecallMutation.isPending ? "Saving..." : "Record Call Update"}
-            </button>
-          </form>
-
-          {/* Activity Timeline */}
-          <div className="py-4 space-y-3">
-            <h4 className="font-semibold text-xs text-gray-800 dark:text-gray-200">Activity History</h4>
-            {selectedContact?.activityLog && selectedContact.activityLog.length > 0 ? (
-              <div className="space-y-2.5">
-                {[...selectedContact.activityLog].reverse().map((act, index) => (
-                  <div
-                    key={index}
-                    className="p-2.5 rounded-lg bg-gray-50 dark:bg-gray-900/60 border border-gray-100 dark:border-gray-800 text-xs space-y-1"
-                  >
-                    <div className="flex items-center justify-between text-[11px] text-gray-500">
-                      <span className="font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                        {act.type}
-                      </span>
-                      <span>{new Date(act.at).toLocaleString()}</span>
-                    </div>
-                    {act.type === "status" && (
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Status changed: <span className="font-medium text-gray-900 dark:text-gray-100">{act.from || "None"}</span> → <span className="font-semibold text-indigo-600">{act.to}</span>
-                      </p>
-                    )}
-                    {act.type === "comment" && (
-                      <p className="text-gray-700 dark:text-gray-300 italic">"{act.to}"</p>
-                    )}
-                    {act.type === "schedule" && (
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Follow-up scheduled for: <span className="font-semibold">{act.to}</span>
-                      </p>
-                    )}
-                    {act.type === "assignment" && (
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Staff assignment updated
-                      </p>
-                    )}
-                    {act.by && (
-                      <span className="text-[10px] text-gray-400 block">by {act.by}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-xs text-gray-400">No activity logged yet.</p>
-            )}
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
+      {/* Update Lead popup (shared with Contact List) */}
+      <LeadActivityModal
+        customer={modalCustomer}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onUpdate={handleModalUpdate}
+        onAssignStaff={isAdmin ? (id, staffId) => assignMutation.mutate({ id, staffId }) : undefined}
+        isSaving={telecallMutation.isPending}
+        isAdmin={isAdmin}
+        staffList={staffList}
+        currentUserName={user?.fullName || user?.username || ""}
+        showWebsite
+        statusOptions={FSS_STATUS_OPTIONS}
+        detailsLabel="Contact Info"
+        renderDetails={renderContactDetails}
+        reportLabel="Website Audit"
+        renderReport={renderWebsiteAudit}
+      />    </div>
   );
 };
 
