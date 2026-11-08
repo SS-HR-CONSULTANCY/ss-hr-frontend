@@ -128,6 +128,14 @@ const truncateText = (text?: string, max = 30): string =>
 const FullStackSolutionsPage: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.role === "admin";
+  const isTony =
+    user?.role === "admin" &&
+    (user?.email === "tony" ||
+      user?.fullName === "Super Admin" ||
+      (user as any)?.username === "tony" ||
+      user?.email?.toLowerCase().includes("tony") ||
+      (user as any)?.username?.toLowerCase().includes("tony") ||
+      user?.email === "admin@gmail.com");
   const queryClient = useQueryClient();
 
   // Filters & Search
@@ -171,11 +179,11 @@ const FullStackSolutionsPage: React.FC = () => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Fetch Staff List
+  // Fetch Staff List (Admin Tony only)
   const { data: staffList = [] } = useQuery<AssignedStaff[]>({
     queryKey: ["adminStaffList"],
     queryFn: adminFetchSystemStaff,
-    enabled: isAdmin,
+    enabled: isTony,
   });
 
   // Fetch Contacts
@@ -611,8 +619,8 @@ const FullStackSolutionsPage: React.FC = () => {
             <option value={getTodayString()}>Today's Follow-ups</option>
           </select>
 
-          {/* Staff Filter (Admin only) */}
-          {isAdmin && (
+          {/* Staff Filter (Tony only) */}
+          {isTony && (
             <select
               value={assignedStaffFilter}
               onChange={(e) => {
@@ -654,7 +662,7 @@ const FullStackSolutionsPage: React.FC = () => {
                 <th className="px-4 py-3 text-left">Contact / Client</th>
                 <th className="px-4 py-3 text-left">Phone & Email</th>
                 <th className="px-4 py-3 text-left">Status</th>
-                <th className="px-4 py-3 text-left">Assigned Staff</th>
+                {isTony && <th className="px-4 py-3 text-left">Assigned Staff</th>}
                 <th className="px-4 py-3 text-left">Website</th>
                 <th className="px-4 py-3 text-left">Comments</th>
                 <th className="px-4 py-3 text-right">Actions</th>
@@ -663,13 +671,13 @@ const FullStackSolutionsPage: React.FC = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
               {isLoading ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-gray-400">
+                  <td colSpan={isTony ? 7 : 6} className="px-4 py-12 text-center text-gray-400">
                     Loading Full Stack Solutions contacts...
                   </td>
                 </tr>
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center">
+                  <td colSpan={isTony ? 7 : 6} className="px-4 py-12 text-center">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center">
                         <Users className="w-5 h-5" />
@@ -757,9 +765,9 @@ const FullStackSolutionsPage: React.FC = () => {
                         </span>
                       </td>
 
-                      {/* Assigned Staff */}
-                      <td className="px-4 py-3">
-                        {isAdmin ? (
+                      {/* Assigned Staff (Tony only) */}
+                      {isTony && (
+                        <td className="px-4 py-3">
                           <select
                             value={
                               contact.assignedTo
@@ -783,14 +791,8 @@ const FullStackSolutionsPage: React.FC = () => {
                               </option>
                             ))}
                           </select>
-                        ) : (
-                          <span className="text-gray-600 dark:text-gray-400 text-xs font-medium">
-                            {contact.assignedTo && typeof contact.assignedTo === "object"
-                              ? contact.assignedTo.fullName || contact.assignedTo.username
-                              : "Unassigned"}
-                          </span>
-                        )}
-                      </td>
+                        </td>
+                      )}
 
                       {/* Website */}
                       <td className="px-4 py-3 max-w-[170px]">
@@ -1060,7 +1062,7 @@ const FullStackSolutionsPage: React.FC = () => {
               </div>
             </div>
 
-            {isAdmin && (
+            {isTony && (
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Assign Staff
@@ -1119,9 +1121,9 @@ const FullStackSolutionsPage: React.FC = () => {
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         onUpdate={handleModalUpdate}
-        onAssignStaff={isAdmin ? (id, staffId) => assignMutation.mutate({ id, staffId }) : undefined}
+        onAssignStaff={isTony ? (id, staffId) => assignMutation.mutate({ id, staffId }) : undefined}
         isSaving={telecallMutation.isPending}
-        isAdmin={isAdmin}
+        isAdmin={isTony}
         staffList={staffList}
         currentUserName={user?.fullName || user?.username || ""}
         showWebsite
