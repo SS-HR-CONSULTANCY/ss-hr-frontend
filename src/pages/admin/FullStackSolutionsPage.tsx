@@ -127,7 +127,6 @@ const truncateText = (text?: string, max = 30): string =>
 
 const FullStackSolutionsPage: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const isAdmin = user?.role === "admin";
   const isTony =
     user?.role === "admin" &&
     (user?.email === "tony" ||
@@ -850,15 +849,14 @@ const FullStackSolutionsPage: React.FC = () => {
                             Update Lead
                             {missed && <AlertTriangle className="h-3.5 w-3.5 text-red-600 dark:text-red-400 shrink-0" />}
                           </button>
-                          {isAdmin && (
-                            <button
-                              onClick={() => handleDelete(contact._id, contact.name)}
-                              title="Delete Contact"
-                              className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/50 text-rose-600 dark:text-rose-400 transition-colors"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          )}
+                          <button
+                            onClick={() => handleDelete(contact._id, contact.name)}
+                            title="Delete Contact"
+                            aria-label={`Delete ${contact.name}`}
+                            className="p-1.5 rounded-lg border border-rose-200 dark:border-rose-900/50 bg-rose-50/50 hover:bg-rose-100/70 dark:bg-rose-950/30 dark:hover:bg-rose-950/60 text-rose-600 dark:text-rose-400 transition-colors cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       </td>
                     </tr>
