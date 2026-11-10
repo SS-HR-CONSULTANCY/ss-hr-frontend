@@ -77,6 +77,8 @@ interface LeadActivityModalProps {
   reportLabel?: string;
   /** Custom content for the website audit/report tab. */
   renderReport?: (customer: ImportedCustomer) => React.ReactNode;
+  /** Custom summarizer function for comment/notes (e.g. for B2B company telesales). */
+  onSummarizeComment?: (content: string, customer: ImportedCustomer) => Promise<string>;
 }
 
 type Tab = "update" | "history" | "details" | "report";
@@ -308,6 +310,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
   renderDetails,
   reportLabel,
   renderReport,
+  onSummarizeComment,
 }) => {
   const [activeTab, setActiveTab] = useState<Tab>("update");
   const [status, setStatus] = useState("Pending");
@@ -411,7 +414,9 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
     try {
       setIsSummarizing(true);
       const original = comment;
-      const summary = await adminSummarizeLeadComment(original);
+      const summary = onSummarizeComment
+        ? await onSummarizeComment(original, customer)
+        : await adminSummarizeLeadComment(original);
       setPreviousComment(original);
       setComment(summary);
     } catch (err: any) {

@@ -30,6 +30,7 @@ import {
   adminTelecallFSSContact,
   adminAssignFSSContact,
   adminDeleteFSSContact,
+  adminSummarizeFSSLeadComment,
   type IFullStackContact,
   type IWebsiteAudit,
 } from "@/utils/apis/adminFullStackContactApi";
@@ -1130,6 +1131,13 @@ const FullStackSolutionsPage: React.FC = () => {
         renderDetails={renderContactDetails}
         reportLabel="Website Audit"
         renderReport={renderWebsiteAudit}
+        onSummarizeComment={(content) =>
+          adminSummarizeFSSLeadComment(
+            content,
+            selectedContact?.companyName || selectedContact?.name,
+            selectedContact?.website
+          )
+        }
       />    </div>
   );
 };

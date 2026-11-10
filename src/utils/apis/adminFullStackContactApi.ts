@@ -151,3 +151,62 @@ export const adminFormatAuditReport = async (data: {
   const res = await axiosInstance.post("/admin/full-stack-contacts/format-audit-report", data);
   return res.data.data;
 };
+
+export const adminSummarizeFSSLeadComment = async (
+  content: string,
+  companyName?: string,
+  website?: string
+): Promise<string> => {
+  if (!content || !content.trim()) {
+    throw new Error("No conversation content provided to summarize.");
+  }
+
+  // 1. Try backend endpoint first
+  try {
+    const res = await axiosInstance.post("/admin/full-stack-contacts/summarize-comment", {
+      content,
+      companyName,
+      website,
+    });
+    if (res?.data?.data?.summary) {
+      return res.data.data.summary;
+    }
+  } catch (err) {
+    console.warn("Backend FSS summarization failed, falling back to direct OpenAI...", err);
+  }
+
+  // 2. Direct OpenAI fallback
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  if (apiKey) {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0.3,
+        messages: [
+          {
+            role: "system",
+            content:
+              'You are an expert telesales AI assistant for "Full Stack Solutions" (a modern software development and web design agency). The executive contacts business clients (companies, NOT job candidates). Summarize the notes or chat into a professional, concise telesales note (1 to 3 short sentences or clean bullet points). Highlight: client company website/tech status, services discussed (web/app/SEO/CRM), client interest/objections, and agreed next steps. Output ONLY the summary without any prefix or quotes.',
+          },
+          {
+            role: "user",
+            content: `Company: ${companyName || "N/A"}\nWebsite: ${website || "N/A"}\nNotes: ${content.trim()}`,
+          },
+        ],
+        max_tokens: 300,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const s = data?.choices?.[0]?.message?.content?.trim();
+      if (s) return s.replace(/^#{1,6}\s*/gm, "").trim();
+    }
+  }
+
+  throw new Error("AI summarization failed. Please check your backend connection or OpenAI key.");
+};
