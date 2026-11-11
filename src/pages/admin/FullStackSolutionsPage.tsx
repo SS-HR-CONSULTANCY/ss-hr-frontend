@@ -22,6 +22,7 @@ import {
   MapPin,
   Sparkles,
   Globe,
+  Eye,
 } from "lucide-react";
 
 import {
@@ -46,6 +47,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import ImportLeadsModal from "./ImportLeadsModal";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { isMissedFollowUp, getTodayString } from "@/utils/helpers/followUp";
 
 const FSS_STATUS_OPTIONS = [
@@ -123,8 +125,79 @@ const parseLeadDetails = (text?: string) => {
   return result;
 };
 
-const truncateText = (text?: string, max = 30): string =>
-  text && text.length > max ? `...` : text || "";
+const truncateText = (text?: string, max = 30): string => {
+  if (!text) return "";
+  return text.length > max ? `${text.slice(0, max)}...` : text;
+};
+
+const getLatestComment = (contact?: IFullStackContact | null): string => {
+  if (!contact) return "";
+  if (contact.comment && contact.comment.trim()) {
+    return contact.comment.trim();
+  }
+  if (contact.activityLog && contact.activityLog.length > 0) {
+    const commentActivities = contact.activityLog
+      .filter((a) => a.type === "comment" && a.to && a.to.trim())
+      .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
+    if (commentActivities.length > 0 && commentActivities[0].to) {
+      return commentActivities[0].to.trim();
+    }
+  }
+  return "";
+};
+
+interface FSSCommentCellProps {
+  comment: string;
+}
+
+const FSSCommentCell: React.FC<FSSCommentCellProps> = ({ comment }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const trimmed = (comment || "").trim();
+
+  if (!trimmed) {
+    return <span className="text-gray-400 text-[11px]">—</span>;
+  }
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          title="Click to view full comment"
+          className="group flex items-center justify-between gap-1.5 max-w-[220px] w-full text-left px-2 py-1 rounded-md bg-gray-50/70 dark:bg-gray-800/40 hover:bg-blue-50/90 dark:hover:bg-blue-950/40 border border-gray-200/80 hover:border-blue-300 dark:border-gray-800 dark:hover:border-blue-700 transition-all cursor-pointer focus:outline-none"
+        >
+          <span className="text-[11px] text-gray-700 dark:text-gray-300 line-clamp-2 break-words leading-relaxed group-hover:text-blue-700 dark:group-hover:text-blue-300 flex-1">
+            {trimmed}
+          </span>
+          <Eye className="w-3.5 h-3.5 text-blue-500 group-hover:text-blue-700 shrink-0 transition-colors ml-1" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        side="bottom"
+        sideOffset={6}
+        className="w-80 sm:w-96 p-3 shadow-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-xl z-50 animate-in fade-in-0 zoom-in-95"
+      >
+        <div className="relative pt-1 pr-6 pb-1">
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className="absolute -top-1 -right-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+            title="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+          <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
+            Activity Notes / Comment
+          </div>
+          <div className="text-xs text-gray-800 dark:text-gray-200 leading-relaxed max-h-[260px] overflow-y-auto whitespace-pre-wrap break-words select-text">
+            {trimmed}
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 const FullStackSolutionsPage: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -377,7 +450,7 @@ const FullStackSolutionsPage: React.FC = () => {
         source: "Full Stack Solutions",
         status: selectedContact.status,
         isNewLead: false,
-        comment: selectedContact.comment || "",
+        comment: getLatestComment(selectedContact),
         scheduledDate: selectedContact.scheduledDate,
         assignedTo: selectedContact.assignedTo || null,
         createdAt: selectedContact.createdAt,
@@ -825,14 +898,8 @@ const FullStackSolutionsPage: React.FC = () => {
                       </td>
 
                       {/* Comments */}
-                      <td className="px-4 py-3 max-w-[200px]">
-                        {contact.comment ? (
-                          <span title={contact.comment} className="text-[11px] text-gray-700 dark:text-gray-300 break-words">
-                            {truncateText(contact.comment, 50)}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400 text-[11px]">—</span>
-                        )}
+                      <td className="px-4 py-3 max-w-[220px]">
+                        <FSSCommentCell comment={getLatestComment(contact)} />
                       </td>
 
                       {/* Actions */}
