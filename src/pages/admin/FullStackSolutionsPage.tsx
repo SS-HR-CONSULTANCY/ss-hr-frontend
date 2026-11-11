@@ -158,16 +158,18 @@ const FSSCommentCell: React.FC<FSSCommentCellProps> = ({ comment }) => {
     return <span className="text-gray-400 text-[11px]">—</span>;
   }
 
+  const shortText = truncateText(trimmed, 36);
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <button
           type="button"
-          title="Click to view full comment"
-          className="group flex items-center justify-between gap-1.5 max-w-[220px] w-full text-left px-2 py-1 rounded-md bg-gray-50/70 dark:bg-gray-800/40 hover:bg-blue-50/90 dark:hover:bg-blue-950/40 border border-gray-200/80 hover:border-blue-300 dark:border-gray-800 dark:hover:border-blue-700 transition-all cursor-pointer focus:outline-none"
+          title={trimmed}
+          className="group flex items-center justify-between gap-1.5 max-w-[210px] w-full text-left px-2 py-1 rounded-md bg-gray-50/70 dark:bg-gray-800/40 hover:bg-blue-50/90 dark:hover:bg-blue-950/40 border border-gray-200/80 hover:border-blue-300 dark:border-gray-800 dark:hover:border-blue-700 transition-all cursor-pointer focus:outline-none"
         >
-          <span className="text-[11px] text-gray-700 dark:text-gray-300 line-clamp-2 break-words leading-relaxed group-hover:text-blue-700 dark:group-hover:text-blue-300 flex-1">
-            {trimmed}
+          <span className="text-[11px] text-gray-700 dark:text-gray-300 truncate whitespace-nowrap group-hover:text-blue-700 dark:group-hover:text-blue-300 flex-1">
+            {shortText}
           </span>
           <Eye className="w-3.5 h-3.5 text-blue-500 group-hover:text-blue-700 shrink-0 transition-colors ml-1" />
         </button>
