@@ -44,6 +44,7 @@ import { adminFetchAllWhatsappEnquiries } from "@/utils/apis/adminWhatsappEnquir
 import { adminFetchAllPlatformLeads } from "@/utils/apis/adminPlatformLeadsApi";
 import { adminFetchAllBills } from "@/utils/apis/adminBillApi";
 import { adminFetchDailyDutiesPendingCount } from "@/utils/apis/adminDailyDutyApi";
+import { adminFetchAllFSSContacts } from "@/utils/apis/adminFullStackContactApi";
 
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
@@ -83,14 +84,33 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     refetchInterval: 60000, // Refresh every minute
   });
 
+  const todayDateString = new Date().toISOString().split("T")[0];
+
   const { data: pendingContactsCount = 0 } = useQuery({
-    queryKey: ["adminPendingContactsCount"],
+    queryKey: ["adminPendingContactsCount", todayDateString],
     queryFn: async () => {
       try {
         const res = await adminFetchAllPlatformLeads({
-          pagination: { page: 1, limit: 1, scheduledDate: "any" },
+          pagination: { page: 1, limit: 1, scheduledDate: todayDateString, today: todayDateString },
         });
         return res?.stats?.pending || 0;
+      } catch (e) {
+        return 0;
+      }
+    },
+    refetchInterval: 60000,
+  });
+
+  const { data: fssPendingTodayCount = 0 } = useQuery({
+    queryKey: ["adminFSSPendingTodayCount", todayDateString],
+    queryFn: async () => {
+      try {
+        const res = await adminFetchAllFSSContacts({
+          page: 1,
+          limit: 1,
+          scheduledDate: todayDateString,
+        });
+        return (res?.stats?.pending || 0) + (res?.stats?.needFollowUp || 0);
       } catch (e) {
         return 0;
       }
@@ -219,11 +239,16 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
               normalizedName === "bills-&-payments" ||
               route.path === "bills";
             const isDailyDuties = route.path === "daily-duties" || normalizedName === "daily-duties";
+            const isContactList = route.path === "telecaller-leads" || normalizedName === "contact-list";
+            const isFSS = route.path === "full-stack-solutions" || normalizedName === "full-stack-solutions";
+
             const badge =
               normalizedName === "follow-ups"
                 ? todayFollowUpsCount
-                : normalizedName === "contact-list"
+                : isContactList
                 ? pendingContactsCount
+                : isFSS
+                ? fssPendingTodayCount
                 : isBills
                 ? pendingReviewsCount
                 : isDailyDuties
@@ -236,8 +261,10 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
             const badgeColor =
               isBills
                 ? "bg-amber-500"
-                : normalizedName === "contact-list"
+                : isContactList
                 ? "bg-orange-500"
+                : isFSS
+                ? "bg-red-500"
                 : isDailyDuties
                 ? stuckDutiesCount > 0
                   ? "bg-rose-500 animate-pulse"

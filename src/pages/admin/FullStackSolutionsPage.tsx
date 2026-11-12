@@ -296,6 +296,7 @@ const FullStackSolutionsPage: React.FC = () => {
     mutationFn: adminCreateFSSContact,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
+      queryClient.invalidateQueries({ queryKey: ["adminFSSPendingTodayCount"] });
       toast.success("Contact added successfully");
       setIsAddModalOpen(false);
       resetForm();
@@ -315,6 +316,7 @@ const FullStackSolutionsPage: React.FC = () => {
     }) => adminTelecallFSSContact(id, data),
     onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
+      queryClient.invalidateQueries({ queryKey: ["adminFSSPendingTodayCount"] });
       toast.success("Lead updated successfully");
       setSelectedContact(updated);
       setIsDrawerOpen(false);
@@ -329,6 +331,7 @@ const FullStackSolutionsPage: React.FC = () => {
       adminAssignFSSContact(id, staffId),
     onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
+      queryClient.invalidateQueries({ queryKey: ["adminFSSPendingTodayCount"] });
       setSelectedContact((prev) => (prev && prev._id === updated._id ? updated : prev));
       toast.success("Staff assigned successfully");
     },
@@ -341,6 +344,7 @@ const FullStackSolutionsPage: React.FC = () => {
     mutationFn: adminDeleteFSSContact,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
+      queryClient.invalidateQueries({ queryKey: ["adminFSSPendingTodayCount"] });
       toast.success("Contact deleted");
     },
     onError: (err: any) => {
@@ -1247,11 +1251,13 @@ const FullStackSolutionsPage: React.FC = () => {
         renderDetails={renderContactDetails}
         reportLabel="Website Audit"
         renderReport={renderWebsiteAudit}
-        onSummarizeComment={(content) =>
+        onSummarizeComment={(content, cust, currentStatus, schedDate) =>
           adminSummarizeFSSLeadComment(
             content,
             selectedContact?.companyName || selectedContact?.name,
-            selectedContact?.website
+            selectedContact?.website,
+            currentStatus || cust?.status || selectedContact?.status,
+            schedDate || selectedContact?.scheduledDate
           )
         }
       />    </div>

@@ -21,6 +21,8 @@ export interface CommonTableComponentProps<T> {
   searchPlaceholder?: string;
   showStatusFilter?: boolean;
   statusOptions?: { label: string; value: string }[];
+  showAssignedStaffFilter?: boolean;
+  staffOptions?: Array<{ _id: string; fullName?: string; username?: string; name?: string }>;
   headerAction?: React.ReactNode;
   onDataFetched?: (data: ApiPaginatedResponse<T>) => void;
 }

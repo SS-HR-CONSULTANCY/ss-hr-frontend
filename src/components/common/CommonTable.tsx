@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Search, Filter, X } from "lucide-react";
+import { Search, Filter, X, UserCheck } from "lucide-react";
 import { ENQUIRY_STATUS_CONFIG } from "@/utils/enquiryStatusConfig";
 import { DataTable } from "../table/data-table";
 import { useQuery } from "@tanstack/react-query";
@@ -27,6 +27,8 @@ const CommonTable = <T,>({
   searchPlaceholder = "Search...",
   showStatusFilter,
   statusOptions,
+  showAssignedStaffFilter,
+  staffOptions = [],
   headerAction,
   onDataFetched,
 }: CommonTableComponentProps<T>) => {
@@ -37,6 +39,11 @@ const CommonTable = <T,>({
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [assignedStaffFilter, setAssignedStaffFilter] = useState("all");
+
+  const hasActiveFilter =
+    (showAssignedStaffFilter && assignedStaffFilter !== "all") ||
+    (showStatusFilter && statusFilter !== "all");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -69,6 +76,7 @@ const CommonTable = <T,>({
           category,
           searchQuery,
           status: statusFilter === "all" ? undefined : statusFilter,
+          assignedTo: assignedStaffFilter === "all" ? undefined : assignedStaffFilter,
         },
       }),
     queryKey: [
@@ -81,6 +89,7 @@ const CommonTable = <T,>({
       category,
       searchQuery,
       statusFilter,
+      assignedStaffFilter,
     ],
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -163,6 +172,50 @@ const CommonTable = <T,>({
             </div>
           )}
 
+          {showAssignedStaffFilter && (
+            <div className="mt-2 relative flex items-center border-b border-gray-300 dark:border-gray-600 focus-within:border-[#00838f] transition-colors">
+              <UserCheck className="w-4 h-4 text-gray-400 absolute left-0 pointer-events-none" />
+              <select
+                value={assignedStaffFilter}
+                onChange={(e) => {
+                  setAssignedStaffFilter(e.target.value);
+                  setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+                }}
+                className="pl-6 pr-6 py-2 h-10 w-48 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground text-sm cursor-pointer"
+              >
+                <option value="all" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                  All Assigned Staff
+                </option>
+                <option value="unassigned" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                  Unassigned
+                </option>
+                {staffOptions?.map((staff) => (
+                  <option
+                    key={staff._id}
+                    value={staff._id}
+                    className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                  >
+                    {staff.fullName || staff.username || staff.name || "Staff"}
+                  </option>
+                ))}
+              </select>
+              {assignedStaffFilter !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAssignedStaffFilter("all");
+                    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+                  }}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-1"
+                  aria-label="Clear staff filter"
+                  title="Clear staff filter"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
+
           {showStatusFilter && (
             <div className="mt-2 relative flex items-center border-b border-gray-300 dark:border-gray-600 focus-within:border-[#00838f] transition-colors">
               <Filter className="w-4 h-4 text-gray-400 absolute left-0 pointer-events-none" />
@@ -172,18 +225,53 @@ const CommonTable = <T,>({
                   setStatusFilter(e.target.value);
                   setPagination((prev) => ({ ...prev, pageIndex: 0 }));
                 }}
-                className="pl-6 pr-2 py-2 h-10 w-44 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground text-sm appearance-none cursor-pointer"
+                className="pl-6 pr-6 py-2 h-10 w-44 bg-transparent border-none focus:outline-none focus:ring-0 text-foreground text-sm cursor-pointer"
               >
-                <option value="all">All Statuses</option>
+                <option value="all" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                  All Statuses
+                </option>
                 {(statusOptions
                   ? statusOptions.map((o) => [o.value, { label: o.label }] as [string, { label: string }])
                   : (Object.entries(ENQUIRY_STATUS_CONFIG) as [string, { label: string }][])
                 ).map(
                   ([key, cfg]) => (
-                    <option key={key} value={key}>{cfg.label}</option>
+                    <option key={key} value={key} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                      {cfg.label}
+                    </option>
                   )
                 )}
               </select>
+              {statusFilter !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStatusFilter("all");
+                    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+                  }}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-1"
+                  aria-label="Clear status filter"
+                  title="Clear status filter"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {hasActiveFilter && (
+            <div className="mt-2 flex items-center">
+              {isLoading ? (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-400 animate-pulse border border-gray-200 dark:border-gray-700">
+                  Loading...
+                </span>
+              ) : typeof data?.totalCount === "number" ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-50 dark:bg-cyan-950/60 text-[#00838f] dark:text-cyan-300 border border-cyan-200/80 dark:border-cyan-800/80 shadow-sm animate-in fade-in duration-150">
+                  <span className="font-bold">{data.totalCount}</span>
+                  <span className="text-[11px] font-normal text-cyan-700/80 dark:text-cyan-400/80">
+                    {data.totalCount === 1 ? "contact" : "contacts"}
+                  </span>
+                </span>
+              ) : null}
             </div>
           )}
         </div>

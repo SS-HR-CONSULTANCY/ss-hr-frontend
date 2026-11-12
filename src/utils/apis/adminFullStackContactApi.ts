@@ -155,7 +155,9 @@ export const adminFormatAuditReport = async (data: {
 export const adminSummarizeFSSLeadComment = async (
   content: string,
   companyName?: string,
-  website?: string
+  website?: string,
+  status?: string,
+  scheduledDate?: string
 ): Promise<string> => {
   if (!content || !content.trim()) {
     throw new Error("No conversation content provided to summarize.");
@@ -167,6 +169,8 @@ export const adminSummarizeFSSLeadComment = async (
       content,
       companyName,
       website,
+      status,
+      scheduledDate,
     });
     if (res?.data?.data?.summary) {
       return res.data.data.summary;
@@ -191,11 +195,11 @@ export const adminSummarizeFSSLeadComment = async (
           {
             role: "system",
             content:
-              'You are an expert telesales AI assistant for "Full Stack Solutions" (a modern software development and web design agency). The executive contacts business clients (companies, NOT job candidates). Summarize the notes or chat into a professional, concise telesales note (1 to 3 short sentences or clean bullet points). Highlight: client company website/tech status, services discussed (web/app/SEO/CRM), client interest/objections, and agreed next steps. Output ONLY the summary without any prefix or quotes.',
+              'You are an expert telesales CRM assistant for "Full Stack Solutions" (a modern software development and web design agency). You summarize telesales call remarks or WhatsApp chats with business clients (companies, NOT job candidates).\n\nSummarize the conversation into a concise, professional CRM activity note (1 to 3 short sentences or clean lines).\nHighlight:\n1. Client website / digital status (e.g. has existing website, lacks website, needs modern redesign).\n2. Requirements discussed, if any.\n3. Client interest level or feedback (interested, already has internal team, unengaged, declined).\n4. Outcome & next step:\n   - CRITICAL: If the lead status is "Lost", "Not Interested", or if the client refused, showed no interest, or did not engage, DO NOT suggest or invent a follow-up action. Clearly state that the lead is closed/lost and no further follow-up is needed.\n   - Only mention a follow-up if the client explicitly requested one or asked for a proposal/call.\n\nStrict Rules:\n- This is a B2B business client, NEVER refer to them as an applicant, job seeker, or candidate.\n- Never use markdown heading hashes (\'#\', \'##\', \'###\').\n- Output ONLY the note text directly without quotes or preamble.',
           },
           {
             role: "user",
-            content: `Company: ${companyName || "N/A"}\nWebsite: ${website || "N/A"}\nNotes: ${content.trim()}`,
+            content: `Company: ${companyName || "N/A"}\nWebsite: ${website || "N/A"}\nLead Status: ${status || "N/A"}\nCall Remarks / Notes: ${content.trim()}`,
           },
         ],
         max_tokens: 300,

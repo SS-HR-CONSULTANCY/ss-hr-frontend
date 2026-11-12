@@ -78,7 +78,12 @@ interface LeadActivityModalProps {
   /** Custom content for the website audit/report tab. */
   renderReport?: (customer: ImportedCustomer) => React.ReactNode;
   /** Custom summarizer function for comment/notes (e.g. for B2B company telesales). */
-  onSummarizeComment?: (content: string, customer: ImportedCustomer) => Promise<string>;
+  onSummarizeComment?: (
+    content: string,
+    customer: ImportedCustomer,
+    currentStatus?: string,
+    scheduledDate?: string
+  ) => Promise<string>;
 }
 
 type Tab = "update" | "history" | "details" | "report";
@@ -415,7 +420,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
       setIsSummarizing(true);
       const original = comment;
       const summary = onSummarizeComment
-        ? await onSummarizeComment(original, customer)
+        ? await onSummarizeComment(original, customer, status, scheduledDate)
         : await adminSummarizeLeadComment(original);
       setPreviousComment(original);
       setComment(summary);
