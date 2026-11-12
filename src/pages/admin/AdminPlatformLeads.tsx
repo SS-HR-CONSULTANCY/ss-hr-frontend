@@ -19,6 +19,17 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 
+const PLATFORM_LEAD_STATUS_OPTIONS = [
+  { label: "Pending", value: "Pending" },
+  { label: "Need Follow Up", value: "Need Follow Up" },
+  { label: "Contacted", value: "Contacted" },
+  { label: "Re-contacted", value: "Re-contacted" },
+  { label: "Processing Application", value: "Processing Application" },
+  { label: "Completed", value: "Completed" },
+  { label: "Not Interested", value: "Not Interested" },
+  { label: "Rejected Application", value: "Rejected Application" },
+];
+
 const AdminPlatformLeads: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
@@ -137,6 +148,10 @@ const AdminPlatformLeads: React.FC = () => {
         columnsCount={9}
         showSearchInput={true}
         searchPlaceholder="Search name, email, phone, state..."
+        showAssignedStaffFilter={true}
+        staffOptions={staffList}
+        showStatusFilter={true}
+        statusOptions={PLATFORM_LEAD_STATUS_OPTIONS}
       />
 
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
