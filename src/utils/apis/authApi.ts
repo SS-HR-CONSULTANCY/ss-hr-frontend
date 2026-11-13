@@ -69,11 +69,14 @@ export const signin = createAsyncThunk<SigninResponse, SigninRequest>(
   },
 );
 
-export const signout = createAsyncThunk<ApiBaseResponse>(
+export const signout = createAsyncThunk<
+  ApiBaseResponse,
+  { userId?: string; username?: string; role?: string } | void
+>(
   "auth/signOut",
-  async (_, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
-      const response = await axiosInstance.post("/auth/logout");
+      const response = await axiosInstance.post("/auth/logout", payload || {});
       return response.data;
     } catch (err) {
       const error = err as AxiosError<ApiBaseResponse>;

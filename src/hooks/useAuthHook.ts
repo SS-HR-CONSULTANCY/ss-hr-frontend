@@ -24,9 +24,14 @@ const useAuthHook = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const handleLogout = async () => {
-    const role = user?.role as RoleType;
     try {
-      const res = await dispatch(signout()).unwrap();
+      const res = await dispatch(
+        signout({
+          userId: (user as any)?._id,
+          username: user?.email || (user as any)?.username,
+          role: user?.role,
+        })
+      ).unwrap();
       if (res.success) {
         toast.success(res.message || "Logout successfully");
         dispatch(resetChatSlice());
