@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "react-toastify";
 import { adminApplicationRoutes } from "@/utils/constants";
+import StaffSessionHistoryModal from "@/components/admin/StaffSessionHistoryModal";
 import {
   Trash2,
   Edit2,
@@ -21,6 +22,7 @@ import {
   RotateCcw,
   ChevronLeft,
   ChevronRight,
+  History,
 } from "lucide-react";
 
 interface SystemUser {
@@ -34,6 +36,7 @@ interface SystemUser {
   lastLogoutAt?: string | null;
   lastSeenAt?: string | null;
   isOnline?: boolean;
+  todayWorkMs?: number;
 }
 
 interface StaffSummaryItem {
@@ -125,6 +128,12 @@ const formatSessionDuration = (ms?: number | null): string => {
   return `${mins}m`;
 };
 
+const formatClockDuration = (ms: number): string => {
+  const totalSec = Math.floor(Math.max(0, ms) / 1000);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(Math.floor(totalSec / 3600))}:${pad(Math.floor((totalSec % 3600) / 60))}:${pad(totalSec % 60)}`;
+};
+
 const OnlineBadge: React.FC<{ isOnline: boolean }> = ({ isOnline }) => (
   <span
     className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold shrink-0 border ${
@@ -161,6 +170,7 @@ const parseUserAgent = (ua?: string): string => {
 const AdminSettings: React.FC = () => {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<"users" | "auth-logs">("users");
+  const [historyUser, setHistoryUser] = useState<SystemUser | null>(null);
 
   // Modal & User Form State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -180,7 +190,7 @@ const AdminSettings: React.FC = () => {
   const logLimit = 15;
 
   // Fetch Users
-  const { data: users = [], isLoading } = useQuery<SystemUser[]>({
+  const { data: users = [], isLoading, dataUpdatedAt: usersUpdatedAt } = useQuery<SystemUser[]>({
     queryKey: ["systemUsers"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/system-users");
@@ -217,6 +227,20 @@ const AdminSettings: React.FC = () => {
   const totalLogPages = authLogsData?.totalPages || 1;
   const onlineCount = staffSummary.filter((s) => s.isOnline).length;
   const usersOnlineCount = users.filter((u) => u.isOnline).length;
+
+  // Tick every second so online users' "Today" durations count up live.
+  const [nowTick, setNowTick] = useState(() => Date.now());
+  useEffect(() => {
+    if (activeTab !== "users" || usersOnlineCount === 0) return;
+    const id = window.setInterval(() => setNowTick(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [activeTab, usersOnlineCount]);
+
+  const getLiveTodayMs = (u: SystemUser): number => {
+    const base = u.todayWorkMs || 0;
+    if (!u.isOnline || !usersUpdatedAt) return base;
+    return base + Math.max(0, nowTick - usersUpdatedAt);
+  };
 
   // Create Mutation
   const createMutation = useMutation({
@@ -313,6 +337,7 @@ const AdminSettings: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
+      <StaffSessionHistoryModal user={historyUser} onClose={() => setHistoryUser(null)} />
       {/* Top Header & Tab Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -438,7 +463,18 @@ const AdminSettings: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <OnlineBadge isOnline={Boolean(u.isOnline)} />
+                      <div className="flex items-center gap-2">
+                        <OnlineBadge isOnline={Boolean(u.isOnline)} />
+                        {(u.isOnline || (u.todayWorkMs || 0) > 0) && (
+                          <span
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold tabular-nums text-gray-700 dark:text-gray-300"
+                            title="Total logged-in time today"
+                          >
+                            <Clock className="w-3 h-3" />
+                            {formatClockDuration(getLiveTodayMs(u))}
+                          </span>
+                        )}
+                      </div>
                       {!u.isOnline && (
                         <p
                           className="mt-1 text-[11px] text-gray-500 dark:text-gray-400"
@@ -453,7 +489,14 @@ const AdminSettings: React.FC = () => {
                     <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
                       {u.permissions.join(", ") || "None"}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right whitespace-nowrap">
+                      <button
+                        onClick={() => setHistoryUser(u)}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-4 cursor-pointer"
+                        title="Login & Logout History"
+                      >
+                        <History className="h-4 w-4" />
+                      </button>
                       <button
                         onClick={() => openEditModal(u)}
                         className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 mr-4 cursor-pointer"
