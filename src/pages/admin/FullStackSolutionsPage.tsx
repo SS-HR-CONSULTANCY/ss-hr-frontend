@@ -23,6 +23,7 @@ import {
   Sparkles,
   Globe,
   Eye,
+  CalendarDays,
 } from "lucide-react";
 
 import {
@@ -70,6 +71,45 @@ const FSS_SERVICES = [
   "Consultation",
   "Other",
 ];
+
+// Scheduled dates are stored as UTC calendar dates (YYYY-MM-DD).
+const ScheduledDateCell: React.FC<{ date?: string; missed: boolean }> = ({ date, missed }) => {
+  if (!date) return <span className="text-gray-400 text-[11px]">—</span>;
+  const key = date.slice(0, 10);
+  const today = getTodayString();
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+  const label = new Date(`${key}T12:00:00Z`).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+  const tag =
+    key === today
+      ? null
+      : key === tomorrow
+        ? { text: "Tomorrow", cls: "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/50 dark:text-indigo-300 dark:border-indigo-800" }
+        : missed
+          ? { text: "Overdue", cls: "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800" }
+          : null;
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span
+        className={`inline-flex items-center gap-1 text-[11px] font-medium ${
+          missed ? "text-red-600 dark:text-red-400" : "text-gray-700 dark:text-gray-300"
+        }`}
+      >
+        <CalendarDays className="w-3 h-3" />
+        {label}
+      </span>
+      {tag && (
+        <span className={`self-start px-1.5 py-px rounded border text-[10px] font-semibold ${tag.cls}`}>
+          {tag.text}
+        </span>
+      )}
+    </div>
+  );
+};
 
 const getStatusBadgeClass = (status: string) => {
   switch (status) {
@@ -732,6 +772,7 @@ const FullStackSolutionsPage: React.FC = () => {
                 <th className="px-4 py-3 text-left">Contact / Client</th>
                 <th className="px-4 py-3 text-left">Phone & Email</th>
                 <th className="px-4 py-3 text-left">Status</th>
+                <th className="px-4 py-3 text-left">Scheduled Date</th>
                 {isTony && <th className="px-4 py-3 text-left">Assigned Staff</th>}
                 <th className="px-4 py-3 text-left">Website</th>
                 <th className="px-4 py-3 text-left">Comments</th>
@@ -741,13 +782,13 @@ const FullStackSolutionsPage: React.FC = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
               {isLoading ? (
                 <tr>
-                  <td colSpan={isTony ? 7 : 6} className="px-4 py-12 text-center text-gray-400">
+                  <td colSpan={isTony ? 8 : 7} className="px-4 py-12 text-center text-gray-400">
                     Loading Full Stack Solutions contacts...
                   </td>
                 </tr>
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={isTony ? 7 : 6} className="px-4 py-12 text-center">
+                  <td colSpan={isTony ? 8 : 7} className="px-4 py-12 text-center">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center">
                         <Users className="w-5 h-5" />
@@ -833,6 +874,11 @@ const FullStackSolutionsPage: React.FC = () => {
                         >
                           {contact.status}
                         </span>
+                      </td>
+
+                      {/* Scheduled Date */}
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <ScheduledDateCell date={contact.scheduledDate} missed={missed} />
                       </td>
 
                       {/* Assigned Staff (Tony only) */}
