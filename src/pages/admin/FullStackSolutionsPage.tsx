@@ -71,15 +71,6 @@ const FSS_SERVICES = [
   "Other",
 ];
 
-const BUDGET_RANGES = [
-  "< ₹50,000",
-  "₹50,000 - ₹1,00,000",
-  "₹1,00,000 - ₹3,00,000",
-  "₹3,00,000 - ₹5,00,000",
-  "₹5,00,000+",
-  "To be discussed",
-];
-
 const getStatusBadgeClass = (status: string) => {
   switch (status) {
     case "Pending":
@@ -238,7 +229,7 @@ const FullStackSolutionsPage: React.FC = () => {
     service: "Full Stack Web Development",
     state: "",
     city: "",
-    budget: "< ₹50,000",
+    budget: "",
     projectDescription: "",
     status: "Pending",
     comment: "",
@@ -362,7 +353,7 @@ const FullStackSolutionsPage: React.FC = () => {
       service: "Full Stack Web Development",
       state: "",
       city: "",
-      budget: "< ₹50,000",
+      budget: "",
       projectDescription: "",
       status: "Pending",
       comment: "",
@@ -383,11 +374,11 @@ const FullStackSolutionsPage: React.FC = () => {
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      toast.error("Name and Phone number are required");
+    if (!formData.companyName.trim() || !formData.phone.trim()) {
+      toast.error("Company name and contact number are required");
       return;
     }
-    createMutation.mutate(formData as any);
+    createMutation.mutate({ ...formData, name: formData.companyName.trim() } as any);
   };
 
   const handleModalUpdate = (payload: { status: string; comment: string; scheduledDate?: string; website?: string }) => {
@@ -1031,21 +1022,22 @@ const FullStackSolutionsPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Contact Name <span className="text-red-500">*</span>
+                  Company Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Rahul Sharma"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  autoFocus
+                  placeholder="e.g. Acme Technologies"
+                  value={formData.companyName}
+                  onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                   className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Phone Number <span className="text-red-500">*</span>
+                  Contact Number <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -1061,13 +1053,13 @@ const FullStackSolutionsPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Email Address
+                  Location
                 </label>
                 <input
-                  type="email"
-                  placeholder="e.g. client@example.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  type="text"
+                  placeholder="e.g. Kochi, Kerala"
+                  value={formData.city}
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                   className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
@@ -1089,32 +1081,17 @@ const FullStackSolutionsPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Company / Organization
+                  Email Address
                 </label>
                 <input
-                  type="text"
-                  placeholder="e.g. Acme Technologies"
-                  value={formData.companyName}
-                  onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                  type="email"
+                  placeholder="e.g. client@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
 
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  State / Region
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Kerala, Tamil Nadu, Dubai"
-                  value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Service Requirement
@@ -1127,23 +1104,6 @@ const FullStackSolutionsPage: React.FC = () => {
                   {FSS_SERVICES.map((s) => (
                     <option key={s} value={s}>
                       {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Budget Estimate
-                </label>
-                <select
-                  value={formData.budget}
-                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                >
-                  {BUDGET_RANGES.map((b) => (
-                    <option key={b} value={b}>
-                      {b}
                     </option>
                   ))}
                 </select>
@@ -1200,19 +1160,6 @@ const FullStackSolutionsPage: React.FC = () => {
                 </select>
               </div>
             )}
-
-            <div>
-              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Project Requirement / Notes
-              </label>
-              <textarea
-                rows={2}
-                placeholder="Details of client request, project scope, tech stack, or remarks..."
-                value={formData.projectDescription}
-                onChange={(e) => setFormData({ ...formData, projectDescription: e.target.value })}
-                className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-              />
-            </div>
 
             <DialogFooter className="pt-2">
               <button
