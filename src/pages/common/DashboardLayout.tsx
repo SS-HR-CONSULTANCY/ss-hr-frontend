@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import MobileWarning from "../admin/MobileWarning";
 import { checkUserStatus } from "@/utils/apis/authApi";
+import { usePresenceHeartbeat } from "@/hooks/usePresenceHeartbeat";
 import Sidebar from "@/components/navigations/Sidebar";
 import { type AppDispatch, type RootState } from "@/store/store";
 import DashboardHeader from "@/components/navigations/DashboardHeader";
@@ -17,6 +18,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const dispatch = useDispatch<AppDispatch>();
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
+  );
+
+  usePresenceHeartbeat(
+    isAuthenticated && (user?.role === "admin" || user?.role === "staff"),
   );
 
   useEffect(() => {

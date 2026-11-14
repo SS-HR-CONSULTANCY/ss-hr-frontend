@@ -32,6 +32,7 @@ interface SystemUser {
   isActive: boolean;
   lastLoginAt?: string | null;
   lastLogoutAt?: string | null;
+  lastSeenAt?: string | null;
   isOnline?: boolean;
 }
 
@@ -43,6 +44,7 @@ interface StaffSummaryItem {
   isActive: boolean;
   lastLoginAt: string | null;
   lastLogoutAt: string | null;
+  lastSeenAt: string | null;
   isOnline: boolean;
   todayLoginCount: number;
   totalLoginCount: number;
@@ -123,6 +125,21 @@ const formatSessionDuration = (ms?: number | null): string => {
   return `${mins}m`;
 };
 
+const OnlineBadge: React.FC<{ isOnline: boolean }> = ({ isOnline }) => (
+  <span
+    className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold shrink-0 border ${
+      isOnline
+        ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800"
+        : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
+    }`}
+  >
+    <span
+      className={`w-1.5 h-1.5 rounded-full ${isOnline ? "bg-emerald-500 animate-pulse" : "bg-gray-400"}`}
+    />
+    {isOnline ? "Online" : "Offline"}
+  </span>
+);
+
 const parseUserAgent = (ua?: string): string => {
   if (!ua) return "Web Browser";
   let browser = "Browser";
@@ -169,6 +186,7 @@ const AdminSettings: React.FC = () => {
       const response = await axiosInstance.get("/admin/system-users");
       return response.data.data;
     },
+    refetchInterval: activeTab === "users" ? 30000 : false,
   });
 
   // Fetch Staff Login & Logout Logs
@@ -198,6 +216,7 @@ const AdminSettings: React.FC = () => {
   const totalLogsCount = authLogsData?.total || 0;
   const totalLogPages = authLogsData?.totalPages || 1;
   const onlineCount = staffSummary.filter((s) => s.isOnline).length;
+  const usersOnlineCount = users.filter((u) => u.isOnline).length;
 
   // Create Mutation
   const createMutation = useMutation({
@@ -333,6 +352,12 @@ const AdminSettings: React.FC = () => {
           <span className="ml-1 px-2 py-0.5 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
             {users.length}
           </span>
+          {usersOnlineCount > 0 && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {usersOnlineCount} Online
+            </span>
+          )}
         </button>
 
         <button
@@ -371,6 +396,9 @@ const AdminSettings: React.FC = () => {
                   Role
                 </th>
                 <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Status
+                </th>
+                <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Permissions
                 </th>
                 <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500 text-right">
@@ -381,13 +409,13 @@ const AdminSettings: React.FC = () => {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                     Loading...
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                     No custom users found.
                   </td>
                 </tr>
@@ -408,6 +436,19 @@ const AdminSettings: React.FC = () => {
                       >
                         {u.role.toUpperCase()}
                       </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <OnlineBadge isOnline={Boolean(u.isOnline)} />
+                      {!u.isOnline && (
+                        <p
+                          className="mt-1 text-[11px] text-gray-500 dark:text-gray-400"
+                          title={formatDateTime(u.lastSeenAt || u.lastLoginAt)}
+                        >
+                          {u.lastSeenAt || u.lastLoginAt
+                            ? `Last seen ${formatRelativeTime(u.lastSeenAt || u.lastLoginAt)}`
+                            : "Never logged in"}
+                        </p>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
                       {u.permissions.join(", ") || "None"}
@@ -496,20 +537,7 @@ const AdminSettings: React.FC = () => {
                         </p>
                       </div>
 
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold shrink-0 border ${
-                          staff.isOnline
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800"
-                            : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
-                        }`}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            staff.isOnline ? "bg-emerald-500 animate-pulse" : "bg-gray-400"
-                          }`}
-                        />
-                        {staff.isOnline ? "Online" : "Offline"}
-                      </span>
+                      <OnlineBadge isOnline={staff.isOnline} />
                     </div>
 
                     <div className="space-y-1.5 text-xs border-t border-gray-100 dark:border-gray-800 pt-2.5">
@@ -528,6 +556,22 @@ const AdminSettings: React.FC = () => {
                         </span>
                         <span className="font-medium text-gray-800 dark:text-gray-200">
                           {formatShortDateTime(staff.lastLogoutAt)}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-gray-600 dark:text-gray-400">
+                        <span className="flex items-center gap-1 font-medium">
+                          <Clock className="w-3 h-3" /> Last Seen:
+                        </span>
+                        <span
+                          className="font-medium text-gray-800 dark:text-gray-200"
+                          title={formatDateTime(staff.lastSeenAt)}
+                        >
+                          {staff.isOnline
+                            ? "Active now"
+                            : staff.lastSeenAt
+                              ? formatRelativeTime(staff.lastSeenAt)
+                              : "—"}
                         </span>
                       </div>
 
@@ -665,13 +709,13 @@ const AdminSettings: React.FC = () => {
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                   {isLogsLoading ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
+                      <td colSpan={6} className="px-6 py-10 text-center text-gray-500">
                         Loading login & logout logs...
                       </td>
                     </tr>
                   ) : authLogs.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
+                      <td colSpan={6} className="px-6 py-10 text-center text-gray-500">
                         No login or logout events recorded yet for the selected filters.
                       </td>
                     </tr>
