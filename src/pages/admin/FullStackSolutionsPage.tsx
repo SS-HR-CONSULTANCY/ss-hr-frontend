@@ -1229,6 +1229,7 @@ const FullStackSolutionsPage: React.FC = () => {
 
       {/* Update Lead popup (shared with Contact List) */}
       <LeadActivityModal
+        optionalScheduleStatuses={["Pending"]}
         customer={modalCustomer}
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
