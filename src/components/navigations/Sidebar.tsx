@@ -2,6 +2,7 @@ import {
   Users,
   Briefcase,
   LogOut,
+  Clock,
   PanelLeft,
   HandCoins,
   Star,
@@ -33,6 +34,7 @@ import { SingleTab } from "./SingleTab";
 import { NavLink } from "react-router-dom";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 import useAuthHook from "@/hooks/useAuthHook";
+import { usePresenceStatus, useTodaySessionTime } from "@/hooks/usePresenceHeartbeat";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store/store";
 import type { SidebarProps } from "@/types/componentTypes/sidebarTypes";
@@ -46,11 +48,23 @@ import { adminFetchAllBills } from "@/utils/apis/adminBillApi";
 import { adminFetchDailyDutiesPendingCount } from "@/utils/apis/adminDailyDutyApi";
 import { adminFetchAllFSSContacts } from "@/utils/apis/adminFullStackContactApi";
 
+const formatDuration = (ms: number): string => {
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const sec = totalSec % 60;
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(h)}:${pad(m)}:${pad(sec)}`;
+};
+
 const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
   const { handleLogout } = useAuthHook();
   const dispatch = useDispatch<AppDispatch>();
   const { sidebarOpen } = useSelector((state: RootState) => state.app);
   const { user } = useSelector((state: RootState) => state.auth);
+  const isPresenceOnline = usePresenceStatus();
+  const todaySessionMs = useTodaySessionTime();
+  const showPresence = user?.role === "admin" || user?.role === "staff";
 
   const { data: todayFollowUpsCount = 0 } = useQuery({
     queryKey: ["adminMixedFollowUpsTodayCount"],
@@ -207,10 +221,19 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     >
       <div className="p-4 flex-1">
         <ul className="space-y-3">
-          <li className="px-3 pb-3 pt-2">
-            <span className="text-2xl font-bold tracking-tight block truncate capitalize" style={{ color: "#00b5cc" }} title={user?.fullName || user?.email || "Dashboard"}>
+          <li className="px-3 pb-3 pt-2 flex items-center justify-between gap-2">
+            <span className="text-2xl font-bold tracking-tight block truncate capitalize min-w-0" style={{ color: "#00b5cc" }} title={user?.fullName || user?.email || "Dashboard"}>
               {user?.fullName || user?.email || "Dashboard"}
             </span>
+            {showPresence && todaySessionMs !== null && (
+              <span
+                className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold tabular-nums bg-[#e0f7fa] text-[#00838f] border border-[#b2ebf2] dark:bg-cyan-950/50 dark:text-cyan-300 dark:border-cyan-800"
+                title="Total logged-in time today"
+              >
+                <Clock className="w-3.5 h-3.5" />
+                {formatDuration(todaySessionMs)}
+              </span>
+            )}
           </li>
           
           {routes.filter((r) => {
@@ -296,14 +319,34 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
         </ul>
       </div>
 
-      <ul className="p-4 border-t border-[#b2ebf2]">
-
+      <ul className="p-4 border-t border-[#b2ebf2] flex items-center gap-2">
         <SingleTab
           icon={<LogOut />}
           text="Logout"
           onClick={handleLogout}
           sidebarOpen={true}
+          className="flex-1 min-w-0"
         />
+
+        {showPresence && (
+          <li className="list-none shrink-0">
+            <span
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                isPresenceOnline
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800"
+                  : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
+              }`}
+              title={isPresenceOnline ? "You are online" : "Connecting... / offline"}
+            >
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isPresenceOnline ? "bg-emerald-500 animate-pulse" : "bg-gray-400"
+                }`}
+              />
+              {isPresenceOnline ? "Online" : "Offline"}
+            </span>
+          </li>
+        )}
       </ul>
     </div>
   );
