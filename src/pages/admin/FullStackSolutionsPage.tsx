@@ -4,10 +4,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { toast } from "react-toastify";
 import {
-  Layers,
   Users,
-  Clock,
-  PhoneCall,
   Search,
   X,
   RotateCcw,
@@ -18,12 +15,14 @@ import {
   Building,
   ChevronLeft,
   ChevronRight,
-  Award,
   MapPin,
   Sparkles,
   Globe,
   Eye,
   CalendarDays,
+  ChevronsLeft,
+  ChevronsRight,
+  CalendarCheck,
 } from "lucide-react";
 
 import {
@@ -50,6 +49,8 @@ import {
 import ImportLeadsModal from "./ImportLeadsModal";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { isMissedFollowUp, getTodayString } from "@/utils/helpers/followUp";
+
+const FSS_TODAY_FILTER_KEY = "fss.todayFilter";
 
 const FSS_STATUS_OPTIONS = [
   "Pending",
@@ -251,7 +252,23 @@ const FullStackSolutionsPage: React.FC = () => {
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [assignedStaffFilter, setAssignedStaffFilter] = useState<string>("all");
-  const [scheduledDateFilter, setScheduledDateFilter] = useState<string>("any");
+  // "Today" filter is persisted so it survives a refresh until cleared.
+  const [scheduledDateFilter, setScheduledDateFilter] = useState<string>(() => {
+    try {
+      return localStorage.getItem(FSS_TODAY_FILTER_KEY) === "1" ? getTodayString() : "any";
+    } catch {
+      return "any";
+    }
+  });
+  const isTodayFilter = scheduledDateFilter === getTodayString();
+  useEffect(() => {
+    try {
+      if (isTodayFilter) localStorage.setItem(FSS_TODAY_FILTER_KEY, "1");
+      else localStorage.removeItem(FSS_TODAY_FILTER_KEY);
+    } catch {
+      // Storage unavailable; the filter just won't persist.
+    }
+  }, [isTodayFilter]);
 
   // Modals & Drawers
   const [isImportOpen, setIsImportOpen] = useState<boolean>(false);
@@ -318,7 +335,6 @@ const FullStackSolutionsPage: React.FC = () => {
   });
 
   const contacts = contactsResponse?.contacts || [];
-  const stats = contactsResponse?.stats || { total: 0, pending: 0, contacted: 0, needFollowUp: 0, converted: 0 };
   const totalPages = contactsResponse?.totalPages || 1;
   const totalCount = contactsResponse?.total || 0;
 
@@ -599,81 +615,10 @@ const FullStackSolutionsPage: React.FC = () => {
     );
   };
 
-  return (    <div className="space-y-5 text-black dark:text-white mt-0 w-full pb-14">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-900 shadow-sm">
-            <Layers className="w-5 h-5" />
-          </div>
-          <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-            Full Stack Solutions
-          </h1>
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-        <button
-          onClick={() => setIsImportOpen(true)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-indigo-200 dark:border-indigo-900 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-xs font-semibold transition-colors"
-        >
-          <Sparkles className="w-4 h-4" />
-          Import Leads
-        </button>
-        <button
-          onClick={handleOpenAddModal}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition-colors shrink-0"
-        >
-          <Plus className="w-4 h-4" />
-          Add New Contact
-        </button>
-        </div>
-      </div>
+  return (    <div className="space-y-5 text-black dark:text-white pt-4 w-full pb-24">
       <ImportLeadsModal open={isImportOpen} onOpenChange={setIsImportOpen} />
 
       <div className="flex flex-col xl:flex-row items-stretch gap-3">
-      {/* KPI Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xl:flex-none xl:w-[460px]">
-        <div className="bg-gradient-to-br from-indigo-50/60 to-white dark:from-indigo-950/20 dark:to-gray-900 border border-indigo-100 dark:border-indigo-900/50 p-3 rounded-xl shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Contacts</span>
-            <div className="p-1.5 rounded-md bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600">
-              <Users className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div className="text-xl font-bold text-indigo-700 dark:text-indigo-300 mt-1">{stats.total}</div>
-        </div>
-
-        <div className="bg-gradient-to-br from-yellow-50/60 to-white dark:from-yellow-950/20 dark:to-gray-900 border border-yellow-100 dark:border-yellow-900/50 p-3 rounded-xl shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Pending</span>
-            <div className="p-1.5 rounded-md bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600">
-              <Clock className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div className="text-xl font-bold text-yellow-700 dark:text-yellow-400 mt-1">{stats.pending}</div>
-        </div>
-
-        <div className="bg-gradient-to-br from-blue-50/60 to-white dark:from-blue-950/20 dark:to-gray-900 border border-blue-100 dark:border-blue-900/50 p-3 rounded-xl shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Contacted</span>
-            <div className="p-1.5 rounded-md bg-blue-100 dark:bg-blue-900/40 text-blue-600">
-              <PhoneCall className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div className="text-xl font-bold text-blue-700 dark:text-blue-300 mt-1">{stats.contacted}</div>
-        </div>
-
-        <div className="bg-gradient-to-br from-emerald-50/60 to-white dark:from-emerald-950/20 dark:to-gray-900 border border-emerald-100 dark:border-emerald-900/50 p-3 rounded-xl shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Converted</span>
-            <div className="p-1.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600">
-              <Award className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">{stats.converted}</div>
-        </div>
-      </div>
-
       {/* Search and Filters Bar */}
       <div className="bg-white dark:bg-gray-950 p-2.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-stretch md:items-center gap-2 flex-1 min-w-0">
         {/* Search */}
@@ -696,6 +641,25 @@ const FullStackSolutionsPage: React.FC = () => {
             </button>
           )}
         </div>
+
+        {/* Today quick filter */}
+        <button
+          type="button"
+          onClick={() => {
+            setScheduledDateFilter(isTodayFilter ? "any" : getTodayString());
+            setPage(1);
+          }}
+          className={`shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors cursor-pointer ${
+            isTodayFilter
+              ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700"
+              : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+          title={isTodayFilter ? "Showing today's follow-ups — click to clear" : "Show today's follow-ups"}
+        >
+          <CalendarCheck className="w-3.5 h-3.5" />
+          Today
+          {isTodayFilter && <X className="w-3 h-3" />}
+        </button>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
@@ -761,12 +725,42 @@ const FullStackSolutionsPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Actions */}
+        <div className="flex items-center gap-2 shrink-0 self-center">
+        <button
+          onClick={() => setIsImportOpen(true)}
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-indigo-200 dark:border-indigo-900 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-xs font-semibold transition-colors"
+        >
+          <Sparkles className="w-4 h-4" />
+          Import Leads
+        </button>
+        <button
+          onClick={handleOpenAddModal}
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition-colors shrink-0"
+        >
+          <Plus className="w-4 h-4" />
+          Add New Contact
+        </button>
+        </div>
       </div>
 
       {/* Contacts Table Card */}
-      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden w-full">
+        {/* Short pages are padded with blank rows (below) so the card never shrinks */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[1100px] table-fixed text-left border-collapse">
+            {/* Fixed column widths so columns don't resize with their content */}
+            <colgroup>
+              <col className="w-[17%]" />
+              <col className="w-[13%]" />
+              <col className="w-[9%]" />
+              <col className="w-[11%]" />
+              {isTony && <col className="w-[11%]" />}
+              <col className="w-[9%]" />
+              <col className={isTony ? "w-[16%]" : "w-[27%]"} />
+              <col className="w-[14%]" />
+            </colgroup>
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
                 <th className="px-4 py-3 text-left">Contact / Client</th>
@@ -782,13 +776,13 @@ const FullStackSolutionsPage: React.FC = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
               {isLoading ? (
                 <tr>
-                  <td colSpan={isTony ? 8 : 7} className="px-4 py-12 text-center text-gray-400">
+                  <td colSpan={isTony ? 8 : 7} className="px-4 h-[384px] text-center text-gray-400">
                     Loading Full Stack Solutions contacts...
                   </td>
                 </tr>
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={isTony ? 8 : 7} className="px-4 py-12 text-center">
+                  <td colSpan={isTony ? 8 : 7} className="px-4 h-[384px] text-center">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center">
                         <Users className="w-5 h-5" />
@@ -817,10 +811,10 @@ const FullStackSolutionsPage: React.FC = () => {
                   return (
                     <tr
                       key={contact._id}
-                      className="hover:bg-gray-50/60 dark:hover:bg-gray-900/40 transition-colors"
+                      className="h-[48px] hover:bg-gray-50/60 dark:hover:bg-gray-900/40 transition-colors"
                     >
                       {/* Name & Company */}
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-1.5">
                         <div className="font-semibold text-gray-900 dark:text-gray-100">
                           <span title={contact.name}>{truncateText(contact.name)}</span>
                         </div>
@@ -838,7 +832,7 @@ const FullStackSolutionsPage: React.FC = () => {
                       </td>
 
                       {/* Phone & Email */}
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-1.5">
                         <div className="flex items-center gap-1.5 font-mono text-gray-800 dark:text-gray-200">
                           <span className="whitespace-nowrap">{contact.phone}</span>
                           {cleanPhone && (
@@ -866,7 +860,7 @@ const FullStackSolutionsPage: React.FC = () => {
                       </td>
 
                       {/* Status */}
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-1.5">
                         <span
                           className={`inline-block px-2 py-0.5 rounded-full border text-[11px] font-medium ${getStatusBadgeClass(
                             contact.status
@@ -877,13 +871,13 @@ const FullStackSolutionsPage: React.FC = () => {
                       </td>
 
                       {/* Scheduled Date */}
-                      <td className="px-4 py-3 whitespace-nowrap">
+                      <td className="px-4 py-1.5 whitespace-nowrap">
                         <ScheduledDateCell date={contact.scheduledDate} missed={missed} />
                       </td>
 
                       {/* Assigned Staff (Tony only) */}
                       {isTony && (
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-1.5">
                           <select
                             value={
                               contact.assignedTo
@@ -911,7 +905,7 @@ const FullStackSolutionsPage: React.FC = () => {
                       )}
 
                       {/* Website */}
-                      <td className="px-4 py-3 max-w-[170px]">
+                      <td className="px-4 py-1.5 max-w-[170px]">
                         {(() => {
                           const site = contact.website || parseLeadDetails(contact.projectDescription).website;
                           if (!site && !contact.websiteAudit) return <span className="text-gray-400 text-[11px]">—</span>;
@@ -941,12 +935,12 @@ const FullStackSolutionsPage: React.FC = () => {
                       </td>
 
                       {/* Comments */}
-                      <td className="px-4 py-3 max-w-[220px]">
+                      <td className="px-4 py-1.5 max-w-[220px]">
                         <FSSCommentCell comment={getLatestComment(contact)} />
                       </td>
 
                       {/* Actions */}
-                      <td className="px-4 py-3 text-right">
+                      <td className="px-4 py-1.5 text-right">
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => handleOpenDrawer(contact)}
@@ -974,17 +968,25 @@ const FullStackSolutionsPage: React.FC = () => {
                   );
                 })
               )}
+              {/* Blank rows keep the table a constant height (one full page = `limit` rows) */}
+              {!isLoading &&
+                contacts.length > 0 &&
+                Array.from({ length: Math.max(0, limit - contacts.length) }, (_, i) => (
+                  <tr key={`filler-${i}`} aria-hidden="true" className="h-[48px]">
+                    <td colSpan={isTony ? 8 : 7} />
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
 
-        {/* Pagination Footer */}
-        {totalPages > 1 && (
-          <div className="p-3 border-t border-gray-200 dark:border-gray-800 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500">
-            <div>
+        {/* Pagination Footer (always shown so the card keeps a constant layout) */}
+        {(
+          <div className="px-3 pt-2 pb-3 border-t border-gray-200 dark:border-gray-800 flex flex-col items-center gap-1.5 text-xs text-gray-500">
+            <div className="text-center">
               Showing{" "}
               <span className="font-semibold text-gray-700 dark:text-gray-300">
-                {(page - 1) * limit + 1}
+                {totalCount === 0 ? 0 : (page - 1) * limit + 1}
               </span>{" "}
               to{" "}
               <span className="font-semibold text-gray-700 dark:text-gray-300">
@@ -996,56 +998,64 @@ const FullStackSolutionsPage: React.FC = () => {
               </span>{" "}
               contacts
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
+              <button
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 10))}
+                className="inline-flex items-center gap-1 h-8 px-2.5 rounded-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
+                title="Previous 10 pages"
+              >
+                <ChevronsLeft className="w-3.5 h-3.5" />
+                <span>-10</span>
+              </button>
               <button
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-200 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 h-8 px-2.5 rounded-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
                 title="Previous page"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
-                <span>Prev</span>
+                <span>Previous</span>
               </button>
 
               <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
-                  .reduce<(number | string)[]>((acc, p, idx, arr) => {
-                    if (idx > 0 && (p as number) - (arr[idx - 1] as number) > 1) {
-                      acc.push("...");
-                    }
-                    acc.push(p);
-                    return acc;
-                  }, [])
-                  .map((item, idx) =>
-                    item === "..." ? (
-                      <span key={`ellipsis-${idx}`} className="px-1 text-gray-400">
-                        ...
-                      </span>
-                    ) : (
-                      <button
-                        key={item}
-                        onClick={() => setPage(item as number)}
-                        className={`h-7 min-w-[28px] px-2 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
-                          page === item
-                            ? "bg-indigo-600 text-white shadow-xs"
-                            : "border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                        }`}
-                      >
-                        {item}
-                      </button>
-                    )
-                  )}
+                {(() => {
+                  // Fixed blocks of 10 page numbers: 1–10, 11–20, 21–30...
+                  const start = Math.floor((page - 1) / 10) * 10 + 1;
+                  const end = Math.min(start + 9, totalPages);
+                  return Array.from({ length: end - start + 1 }, (_, i) => start + i).map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => setPage(p)}
+                      className={`h-8 min-w-8 px-1.5 inline-flex items-center justify-center rounded-md border text-xs font-semibold tabular-nums transition-colors cursor-pointer ${
+                        page === p
+                          ? "bg-indigo-600 border-indigo-600 text-white shadow-xs"
+                          : "bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ));
+                })()}
               </div>
 
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-200 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 h-8 px-2.5 rounded-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
                 title="Next page"
               >
                 <span>Next</span>
                 <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 10))}
+                className="inline-flex items-center gap-1 h-8 px-2.5 rounded-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
+                title="Next 10 pages"
+              >
+                <span>+10</span>
+                <ChevronsRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>

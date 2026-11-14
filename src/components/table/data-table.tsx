@@ -215,19 +215,15 @@ export function DataTable<TData, TValue>({
             </Button>
 
             {/* Numbered Page Buttons */}
-            <div className="flex items-center gap-1 hidden sm:flex">
+            <div className="flex flex-wrap items-center justify-center gap-1">
               {(() => {
                 const total = pageCount && pageCount > 0 ? pageCount : Math.max(1, table.getPageCount());
                 const current = paginationState.pageIndex + 1;
                 const pages: number[] = [];
 
-                let startPage = Math.max(1, current - 4);
-                let endPage = startPage + 9;
-
-                if (endPage > total) {
-                  endPage = total;
-                  startPage = Math.max(1, endPage - 9);
-                }
+                // Fixed blocks of 10 page numbers: 1–10, 11–20, 21–30...
+                const startPage = Math.floor((current - 1) / 10) * 10 + 1;
+                const endPage = Math.min(startPage + 9, total);
 
                 for (let i = startPage; i <= endPage; i++) {
                   pages.push(i);

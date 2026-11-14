@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 
-import { Users, Clock, CheckCircle, PhoneCall, PhoneOutgoing, Search, Filter, Calendar, MapPin, X, RotateCcw, UserCheck } from "lucide-react";
+import { Users, Clock, CheckCircle, PhoneCall, PhoneOutgoing, Search, Filter, Calendar, MapPin, X, RotateCcw, UserCheck, CalendarCheck } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -53,6 +53,8 @@ const DEFAULT_INDIAN_STATES = sortStatesWithPriority([
   "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Dubai", "Sharjah"
 ]);
 
+const DATE_FILTER_STORAGE_KEY = "telecallerLeads.dateFilter";
+
 const TelecallerLeads: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.role === "admin";
@@ -69,7 +71,22 @@ const TelecallerLeads: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [stateFilter, setStateFilter] = useState<string>("all");
   const [availableStates, setAvailableStates] = useState<string[]>(DEFAULT_INDIAN_STATES);
-  const [dateFilter, setDateFilter] = useState<string>("any");
+  // Persisted so the "Today" filter survives a page refresh until it is cleared.
+  const [dateFilter, setDateFilter] = useState<string>(() => {
+    try {
+      return localStorage.getItem(DATE_FILTER_STORAGE_KEY) === "today" ? "today" : "any";
+    } catch {
+      return "any";
+    }
+  });
+  useEffect(() => {
+    try {
+      if (dateFilter === "today") localStorage.setItem(DATE_FILTER_STORAGE_KEY, "today");
+      else localStorage.removeItem(DATE_FILTER_STORAGE_KEY);
+    } catch {
+      // Storage unavailable (private mode); the filter just won't persist.
+    }
+  }, [dateFilter]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
@@ -234,26 +251,45 @@ const TelecallerLeads: React.FC = () => {
 
       {/* Filters and Search Bar just below stats */}
       <div className="bg-white dark:bg-gray-950 p-3.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-        {/* Search Bar */}
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search name, phone, state, designation..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
-          />
-          {searchTerm && (
+        {/* Search + Today */}
+        <div className="flex items-center gap-2.5 flex-1">
+          {/* Search Bar */}
+          <div className="relative w-full md:w-80">
+            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search name, phone, state, designation..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-0.5"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+            {/* Today quick filter (next to search) */}
             <button
               type="button"
-              onClick={() => setSearchTerm("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-0.5"
-              aria-label="Clear search"
+              onClick={() => setDateFilter((prev) => (prev === "today" ? "any" : "today"))}
+              className={`shrink-0 flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg border transition-colors cursor-pointer ${
+                dateFilter === "today"
+                  ? "bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-50/50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              }`}
+              title={dateFilter === "today" ? "Showing contacts scheduled for today — click to clear" : "Show contacts scheduled for today"}
             >
-              <X className="w-4 h-4" />
+              <CalendarCheck className="w-4 h-4" />
+              Today
+              {dateFilter === "today" && <X className="w-3.5 h-3.5" />}
             </button>
-          )}
         </div>
 
         {/* Filters */}

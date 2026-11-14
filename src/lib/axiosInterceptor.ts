@@ -13,10 +13,8 @@ export const setupAxiosInterceptors = () => {
         return error.response;
       }
       if (error.response?.status === 401) {
+        // Silently sign out; the protected routes redirect to the login page.
         store.dispatch(setAuthUser(null));
-        if (error.config?.url && !error.config.url.includes("/auth/checkUserStatus")) {
-          toast.error("Session expired. Please log in again.");
-        }
         return Promise.reject(error);
       }
       if (error.response?.status === 403) {
