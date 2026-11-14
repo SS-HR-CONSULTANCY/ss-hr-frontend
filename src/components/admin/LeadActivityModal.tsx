@@ -69,6 +69,8 @@ interface LeadActivityModalProps {
   showWebsite?: boolean;
   /** Override the selectable statuses (defaults to the platform lead statuses). */
   statusOptions?: string[];
+  /** Statuses that show the date picker with the date being optional (e.g. "Pending"). */
+  optionalScheduleStatuses?: string[];
   /** Label of the third tab (defaults to "Candidate Info"). */
   detailsLabel?: string;
   /** Custom content for the third tab. When omitted the candidate info view is shown. */
@@ -311,6 +313,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
   currentUserName = "",
   showWebsite = false,
   statusOptions,
+  optionalScheduleStatuses = [],
   detailsLabel,
   renderDetails,
   reportLabel,
@@ -352,6 +355,9 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
 
   const isRecontact = status === "Re-contacted" || status === "Recontacted";
   const isScheduleStatus = isSchedulableStatus(status);
+  // Date picker is shown (but not required) for these statuses.
+  const isOptionalSchedule = !isScheduleStatus && optionalScheduleStatuses.includes(status);
+  const showSchedulePicker = isScheduleStatus || isOptionalSchedule;
   const missedFollowUp = isMissedFollowUp(status, scheduledDate);
 
   const scheduleTheme = isRecontact
@@ -371,8 +377,8 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
           "bg-cyan-100/80 text-cyan-900 dark:bg-cyan-900/50 dark:text-cyan-200 border-cyan-200 dark:border-cyan-800",
       }
     : {
-        title: "Schedule Next Follow-up Date",
-        badge: "Follow-up Schedule",
+        title: isOptionalSchedule ? "Scheduled Date (Optional)" : "Schedule Next Follow-up Date",
+        badge: isOptionalSchedule ? "Optional" : "Follow-up Schedule",
         containerCls:
           "border-2 border-amber-400 dark:border-amber-600 bg-gradient-to-br from-amber-50/90 via-orange-50/50 to-yellow-50/30 dark:from-amber-950/40 dark:via-orange-950/20 dark:to-yellow-950/20 ring-2 ring-amber-400/20 shadow-xs",
         badgeCls:
@@ -633,7 +639,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
                   </div>
 
                   {/* Highlighted Schedule Section (for Re-contacted and Need Follow Up) */}
-                  {isScheduleStatus && (
+                  {showSchedulePicker && (
                     <div className={`p-4 rounded-2xl transition-all ${scheduleTheme.containerCls}`}>
                       {/* Header */}
                       <div className="flex items-center justify-between gap-2 mb-2">
@@ -698,7 +704,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
                           className={`w-full pl-9 pr-3 py-2 text-sm font-medium rounded-xl border bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 transition-all cursor-pointer ${
                             missedFollowUp
                               ? "border-red-400 bg-red-50/60 dark:border-red-800 dark:bg-red-950/20"
-                              : !scheduledDate
+                              : !scheduledDate && isScheduleStatus
                               ? "border-amber-400/80 dark:border-amber-600/80 animate-pulse"
                               : `border-gray-200 dark:border-gray-700 ${scheduleTheme.inputFocusCls}`
                           }`}
@@ -719,7 +725,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
                       )}
 
                       {/* Missing Date Notice */}
-                      {!scheduledDate && (
+                      {!scheduledDate && isScheduleStatus && (
                         <div className="mt-2.5 flex items-center gap-1.5 px-3 py-2 rounded-lg border border-amber-300 dark:border-amber-800 bg-amber-100/70 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 text-xs font-medium">
                           <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
                           <span>
@@ -739,7 +745,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
                   )}
 
                   {/* Optional note when date exists on non-schedule status */}
-                  {!isScheduleStatus && scheduledDate && (
+                  {!showSchedulePicker && scheduledDate && (
                     <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs text-gray-500">
                       <div className="flex items-center gap-1.5">
                         <CalendarCheck className="w-3.5 h-3.5 text-gray-400" />
