@@ -519,7 +519,7 @@ export const navServices = services.filter((s) => !hiddenFromNav.includes(s.id))
 
 // About component constants
 export const words: string =
-  "Established in 2021, SS Human Resource Consultancy & Tours & Travels has quickly become a leader in providing comprehensive HR and travel solutions. Our experienced team boasts extensive knowledge of the Dubai job market and travel industry. We pride ourselves on delivering personalized service and exceeding client expectations, making us your trusted partner for both career advancement and memorable travel experiences.";
+  "Established in 2021, SS Human Resource Consultancy & Tours & Travels has quickly become a leader in providing comprehensive HR and travel solutions. Our experienced team boasts extensive knowledge of the Dubai job market and travel industry. We pride ourselves on delivering personalized service and exceeding client expectations, making us your trusted partner for both career advancement and memorable travel experiences. Today, we also help businesses grow online through web development, mobile app development and digital marketing services.";
 
 // Package compoenent constants
 export const packages: PackageProps[] = [
