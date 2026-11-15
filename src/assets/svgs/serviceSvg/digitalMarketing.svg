@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Digital marketing">
+  <path d="M352 96v320c0 9-10 14-17 9l-111-79H136c-31 0-56-25-56-56v-68c0-31 25-56 56-56h88l111-79c7-5 17 0 17 9z" fill="#2f2e41"/>
+  <path d="M144 346h56l26 92c3 11-5 22-17 22h-27c-8 0-15-5-17-13l-21-101z" fill="#2f2e41"/>
+  <path d="M400 200c18 14 28 34 28 56s-10 42-28 56" fill="none" stroke="#2f2e41" stroke-width="28" stroke-linecap="round"/>
+  <path d="M440 140c34 28 54 70 54 116s-20 88-54 116" fill="none" stroke="#2f2e41" stroke-width="28" stroke-linecap="round"/>
+</svg>
