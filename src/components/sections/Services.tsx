@@ -31,8 +31,9 @@ const Services: React.FC = () => {
         {/* Services grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <div
+            <Link
               key={service.title}
+              to={service.buttonUrl || "/contact"}
               className="group relative flex flex-col p-6 rounded-2xl transition-all duration-300 cursor-pointer"
               style={{
                 background: "white",
@@ -82,24 +83,13 @@ const Services: React.FC = () => {
               </p>
 
               {/* CTA */}
-              {service.showButton && (
-                <a
-                  href="https://wa.me/971542326584?text=Hello,%20I%20would%20like%20to%20learn%20more%20about%20the%20services%20you%20offer.%20Could%20you%20please%20provide%20me%20with%20more%20information?"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 mt-5 text-sm font-bold transition-all"
-                  style={{ color: "#D4820A" }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.gap = "10px";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.gap = "6px";
-                  }}
-                >
-                  {service.buttonText || "Learn More"}
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </a>
-              )}
+              <span
+                className="inline-flex items-center gap-1.5 mt-5 text-sm font-bold"
+                style={{ color: "#D4820A" }}
+              >
+                {service.buttonText || "Learn More"}
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </span>
 
               {/* Bottom accent bar on hover */}
               <div
@@ -109,7 +99,7 @@ const Services: React.FC = () => {
                   background: "#febc04",
                 }}
               />
-            </div>
+            </Link>
           ))}
         </div>
 

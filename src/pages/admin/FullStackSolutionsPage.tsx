@@ -29,6 +29,7 @@ import {
   adminFetchAllFSSContacts,
   adminCreateFSSContact,
   adminTelecallFSSContact,
+  adminUpdateFSSContact,
   adminAssignFSSContact,
   adminDeleteFSSContact,
   adminSummarizeFSSLeadComment,
@@ -352,6 +353,25 @@ const FullStackSolutionsPage: React.FC = () => {
       toast.error(err?.response?.data?.message || "Failed to add contact");
     },
   });
+
+  // Rename the client from the Update Lead popup. The company name doubles as the display
+  // name for contacts created from the add form, so keep them in sync in that case.
+  const handleRenameContact = async (newName: string) => {
+    const contact = selectedContact;
+    if (!contact) return;
+    const data: Partial<IFullStackContact> = { name: newName };
+    const company = (contact.companyName || "").trim();
+    if (!company || company === contact.name.trim()) data.companyName = newName;
+    try {
+      const updated = await adminUpdateFSSContact(contact._id, data);
+      setSelectedContact(updated);
+      queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
+      toast.success("Client name updated");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to update client name");
+      throw err;
+    }
+  };
 
   const telecallMutation = useMutation({
     mutationFn: ({
@@ -1240,6 +1260,7 @@ const FullStackSolutionsPage: React.FC = () => {
       {/* Update Lead popup (shared with Contact List) */}
       <LeadActivityModal
         optionalScheduleStatuses={["Pending"]}
+        onRenameCustomer={handleRenameContact}
         customer={modalCustomer}
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}

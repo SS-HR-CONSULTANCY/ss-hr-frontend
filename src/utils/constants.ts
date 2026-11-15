@@ -19,6 +19,9 @@ import ticketServiceBanner from "../assets/serviceBanners/ticketServiceBanner.jp
 import type { ImageGridDataProps } from "@/types/componentTypes/imageGridDataTypes";
 import type { dataSelectListItemInterface } from "@/types/componentTypes/chartTypes";
 import certificateAttestationService from "../assets/svgs/serviceSvg/certificate.svg";
+import webDevelopmentService from "../assets/svgs/serviceSvg/webDev.svg";
+import digitalMarketingService from "../assets/svgs/serviceSvg/digitalMarketing.svg";
+import webDevBanner from "../assets/serviceBanners/webDevBanner.jpg";
 import type {
   navLinkProps,
   SiteUrlConfigProps,
@@ -124,8 +127,20 @@ export const navLinks: navLinkProps[] = [
     isForDesk: true,
     isForMob: true,
   },
-
-
+  {
+    text: "Web Development",
+    href: "/webdevelopment",
+    isLink: true,
+    isForDesk: true,
+    isForMob: true,
+  },
+  {
+    text: "Digital Marketing",
+    href: "/digitalmarketing",
+    isLink: true,
+    isForDesk: true,
+    isForMob: true,
+  },
   {
     text: "About Us",
     href: siteUrlConfig.aboutus,
@@ -441,9 +456,65 @@ export const services: ServiceProps[] = [
     contactButtonText: "Enquiry",
     heroTitle: "Start Your Job Hunt in Dubai With Confidence",
   },
+  {
+    id: "webdevelopment",
+    title: "Web Development",
+    description:
+      "Modern, responsive websites and web applications built to grow your business.",
+    hoverDescription:
+      "From business websites to custom web applications and e-commerce stores, our development team builds fast, secure and mobile-friendly solutions tailored to your goals. Benefit: A professional online presence that turns visitors into customers.",
+    imageUrl: webDevelopmentService,
+    href: "#services",
+
+    banner: webDevBanner,
+    bannerTitle: "Build A Powerful Online Presence",
+    showButton: false,
+    buttonText: "Know More",
+    buttonUrl: "/webdevelopment",
+    points: [
+      "We design and develop responsive websites that look great on every device and screen size.",
+      "Custom web applications, portals and e-commerce stores built around your business processes.",
+      "Fast, secure and SEO-friendly builds using modern technologies and best practices.",
+      "Domain, hosting, deployment and ongoing maintenance handled end to end.",
+      "Dedicated support to update, improve and scale your website as your business grows.",
+    ],
+    contactText:
+      "If you would like to enquire about web development, please contact us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
+    heroTitle: "Websites And Web Apps Built For Growth",
+  },
+  {
+    id: "digitalmarketing",
+    title: "Digital Marketing",
+    description:
+      "Result-driven online marketing to reach more customers and grow your brand.",
+    hoverDescription:
+      "Our digital marketing team helps you attract, engage and convert customers through SEO, social media marketing, paid advertising and content strategy. Benefit: More visibility, quality leads and measurable growth.",
+    imageUrl: digitalMarketingService,
+    href: "#services",
+
+    banner: webDevBanner,
+    bannerTitle: "Grow Your Brand Online",
+    showButton: false,
+    buttonText: "Know More",
+    buttonUrl: "/digitalmarketing",
+    points: [
+      "Search engine optimization (SEO) to rank your business higher on Google and drive organic traffic.",
+      "Social media marketing and management across Instagram, Facebook, LinkedIn and more.",
+      "Targeted paid advertising campaigns on Google and Meta platforms to generate quality leads.",
+      "Engaging content creation, branding and creatives that connect with your audience.",
+      "Transparent performance tracking and reports so you can see the results of every campaign.",
+    ],
+    contactText:
+      "If you would like to enquire about digital marketing, please contact us.",
+    contactUrl: "/contact",
+    contactButtonText: "Enquiry",
+    heroTitle: "Digital Marketing That Delivers Real Results",
+  },
 ];
 
-const hiddenFromNav = ["webdevelopment", "toursandtravels", "ticketservice", "cvwritingservice"];
+const hiddenFromNav = ["toursandtravels", "ticketservice", "cvwritingservice"];
 export const navServices = services.filter((s) => !hiddenFromNav.includes(s.id));
 
 // About component constants
@@ -1042,6 +1113,12 @@ export const SEO_DATA: Record<string, SEOConfig> = {
     title: "Web Development – SS HR Consultancy",
     description: "Build high-quality websites and apps with our IT team.",
     canonical: "https://sshrconsultancy.com/webdevelopment",
+  },
+
+  DIGITAL_MARKETING: {
+    title: "Digital Marketing – SS HR Consultancy",
+    description: "SEO, social media and paid ads to grow your business online.",
+    canonical: "https://sshrconsultancy.com/digitalmarketing",
   },
 
   JOB_HUNTING: {

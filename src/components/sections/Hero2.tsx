@@ -7,14 +7,19 @@ import {
   Globe,
   ArrowRight,
   Users,
-  TrendingUp,
-  MapPin,
-  GraduationCap,
   Star,
   Compass,
   Hotel,
   Calendar,
   Handshake,
+  Code,
+  Monitor,
+  ShoppingCart,
+  Megaphone,
+  Search,
+  Share2,
+  Target,
+  Rocket,
 } from "lucide-react";
 
 // ─── Tab content config ───────────────────────────────────────────────────────
@@ -67,9 +72,63 @@ const tabContent = {
     centerLabel: "Tours",
     centerSub: "Travel Packages",
   },
+  digital: {
+    badge: "Web Development & Digital Marketing",
+    headline: ["Build Your Website.", "Grow Your Brand.", "Get Real Results."],
+    highlightLine: "Get Real Results.",
+    description:
+      "From modern websites, web applications and e-commerce stores to SEO, social media and paid advertising, we build your online presence and market it to bring you more customers.",
+    features: [
+      { icon: Monitor, text: "Websites & Web Applications" },
+      { icon: ShoppingCart, text: "E-commerce Stores" },
+      { icon: Search, text: "SEO & Social Media Marketing" },
+      { icon: Target, text: "Google & Meta Ads" },
+    ],
+    cta: { label: "Start Your Project", url: "/webdevelopment" },
+    ctaSecondary: { label: "Learn More", url: "/digitalmarketing" },
+    cards: {
+      topLeft: { icon: Code, title: "Websites", sub: "Web & E-commerce", tag: "", tagColor: "", tagBg: "" },
+      topRight: { icon: Search, title: "SEO Ready", sub: "Rank Higher", tag: "", tagColor: "", tagBg: "" },
+      bottomLeft: { icon: Share2, title: "Social Media", sub: "Content & Creatives", tag: "", tagColor: "", tagBg: "" },
+      bottomRight: { icon: Megaphone, title: "Digital Marketing", sub: "Ads & Campaigns", link: "/digitalmarketing" },
+    },
+    centerIcon: Rocket,
+    centerLabel: "Your Digital",
+    centerSub: "Growth partner",
+  },
 };
 
-type Tab = "jobs" | "tours";
+type Tab = keyof typeof tabContent;
+
+const tabs: { id: Tab; label: string; icon: typeof Briefcase }[] = [
+  { id: "jobs", label: "Job Hunting Packages", icon: Briefcase },
+  { id: "tours", label: "Visa & Travel Services", icon: Plane },
+  { id: "digital", label: "Web Development & Digital Marketing", icon: Code },
+];
+
+const tabStats: Record<Tab, { value: string; label: string }[]> = {
+  jobs: [
+    { value: "500+", label: "Candidates Placed" },
+    { value: "2000+", label: "Visas Issued" },
+    { value: "50+", label: "Partner Companies" },
+    { value: "5+", label: "Years of Trust" },
+    { value: "24/7", label: "Customer Support" },
+  ],
+  tours: [
+    { value: "50+", label: "Tour Packages" },
+    { value: "4.9★", label: "Client Rating" },
+    { value: "100+", label: "Partner Hotels" },
+    { value: "5+", label: "Destinations" },
+    { value: "24/7", label: "Travel Support" },
+  ],
+  digital: [
+    { value: "100%", label: "Mobile Responsive" },
+    { value: "SEO", label: "Friendly Builds" },
+    { value: "Ads", label: "Google & Meta" },
+    { value: "Free", label: "Consultation" },
+    { value: "24/7", label: "Support" },
+  ],
+};
 
 const Hero2 = () => {
   const [activeTab, setActiveTab] = useState<Tab>("jobs");
@@ -182,62 +241,44 @@ const Hero2 = () => {
 
       {/* Main content */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-20 pt-8 lg:pt-12 pb-20">
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-10 lg:gap-14">
-        {/* ─── LEFT COLUMN ─── */}
-        <div className="lg:w-[52%] flex flex-col gap-6">
-
-          {/* ── TAB SWITCHER PILL ── */}
+        {/* ── TAB SWITCHER PILL (top, centered) ── */}
+        <div className="flex justify-center mb-10 lg:mb-14">
           <div
-            className="inline-flex items-center gap-1.5 p-1.5 rounded-full w-fit"
+            className="inline-flex flex-wrap justify-center items-center gap-1.5 p-1.5 rounded-3xl lg:rounded-full w-fit"
             style={{
               background: "rgba(212,160,23,0.10)",
               border: "1px solid rgba(254,188,4,0.25)",
               backdropFilter: "blur(8px)",
             }}
           >
-            {/* Job Hunting tab */}
-            <button
-              onClick={() => switchTab("jobs")}
-              className="px-4 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300"
-              style={
-                activeTab === "jobs"
-                  ? {
-                      background: "#febc04",
-                      color: "#261900",
-                      boxShadow: "0 2px 10px rgba(254,188,4,0.4)",
-                      transform: "scale(1.0)",
-                    }
-                  : {
-                      background: "transparent",
-                      color: "#6B7280",
-                    }
-              }
-            >
-              <Briefcase className="w-3.5 h-3.5" />
-              Job Hunting Packages
-            </button>
-
-            {/* Tours & Travels tab */}
-            <button
-              onClick={() => switchTab("tours")}
-              className="px-4 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300"
-              style={
-                activeTab === "tours"
-                  ? {
-                      background: "#febc04",
-                      color: "#261900",
-                      boxShadow: "0 2px 10px rgba(254,188,4,0.4)",
-                    }
-                  : {
-                      background: "transparent",
-                      color: "#6B7280",
-                    }
-              }
-            >
-              <Plane className="w-3.5 h-3.5" />
-              Visa &amp; Travel Services
-            </button>
+            {tabs.map(({ id, label, icon: TabIcon }) => (
+              <button
+                key={id}
+                onClick={() => switchTab(id)}
+                className="px-4 py-1.5 rounded-full font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap transition-all duration-300"
+                style={
+                  activeTab === id
+                    ? {
+                        background: "#febc04",
+                        color: "#261900",
+                        boxShadow: "0 2px 10px rgba(254,188,4,0.4)",
+                      }
+                    : {
+                        background: "transparent",
+                        color: "#6B7280",
+                      }
+                }
+              >
+                <TabIcon className="w-3.5 h-3.5" />
+                {label}
+              </button>
+            ))}
           </div>
+        </div>
+
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-10 lg:gap-14">
+        {/* ─── LEFT COLUMN ─── */}
+        <div className="lg:w-[52%] flex flex-col gap-6">
 
           {/* ── ANIMATED CONTENT ── */}
           <div
@@ -497,22 +538,7 @@ const Hero2 = () => {
       >
         <div className="max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-20 py-5">
           <div className="flex flex-wrap items-center justify-between gap-6">
-            {(activeTab === "jobs"
-              ? [
-                  { value: "500+", label: "Candidates Placed" },
-                  { value: "2000+", label: "Visas Issued" },
-                  { value: "50+", label: "Partner Companies" },
-                  { value: "5+", label: "Years of Trust" },
-                  { value: "24/7", label: "Customer Support" },
-                ]
-              : [
-                  { value: "50+", label: "Tour Packages" },
-                  { value: "4.9★", label: "Client Rating" },
-                  { value: "100+", label: "Partner Hotels" },
-                  { value: "5+", label: "Destinations" },
-                  { value: "24/7", label: "Travel Support" },
-                ]
-            ).map(({ value, label }) => (
+            {tabStats[activeTab].map(({ value, label }) => (
               <div key={label} className="flex items-center gap-2">
                 <span className="text-2xl font-black" style={{ color: "#D4820A" }}>
                   {value}

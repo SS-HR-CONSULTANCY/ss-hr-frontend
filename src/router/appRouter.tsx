@@ -148,6 +148,15 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
+        path: "/digitalmarketing",
+        element: (
+          <ServiceDetailedContent
+            {...services.find((s) => s.id === "digitalmarketing")!}
+            seoData={SEO_DATA.DIGITAL_MARKETING}
+          />
+        ),
+      },
+      {
         path: "/jobhunting",
         element: (
           <ServiceDetailedContent
