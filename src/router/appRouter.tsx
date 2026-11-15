@@ -21,6 +21,8 @@ const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
 
 const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const AboutUsPage = lazy(() => import("@/pages/common/AboutUsPage"));
+const WebDevelopmentPage = lazy(() => import("@/pages/common/WebDevelopmentPage"));
+const DigitalMarketingPage = lazy(() => import("@/pages/common/DigitalMarketingPage"));
 const ContactPage = lazy(() => import("@/pages/common/ContactPage"));
 const AdminOverview = lazy(() => import("@/pages/admin/AdminOverview"));
 const SuperAdminOverview = lazy(() => import("@/pages/admin/SuperAdminOverview"));
@@ -138,24 +140,8 @@ const appRouter = createBrowserRouter([
           />
         ),
       },
-      {
-        path: "/webdevelopment",
-        element: (
-          <ServiceDetailedContent
-            {...services.find((s) => s.id === "webdevelopment")!}
-            seoData={SEO_DATA.WEB_DEVELOPMENT}
-          />
-        ),
-      },
-      {
-        path: "/digitalmarketing",
-        element: (
-          <ServiceDetailedContent
-            {...services.find((s) => s.id === "digitalmarketing")!}
-            seoData={SEO_DATA.DIGITAL_MARKETING}
-          />
-        ),
-      },
+      { path: "/webdevelopment", element: <WebDevelopmentPage /> },
+      { path: "/digitalmarketing", element: <DigitalMarketingPage /> },
       {
         path: "/jobhunting",
         element: (
