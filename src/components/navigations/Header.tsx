@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, UserCircle, ChevronDown } from "lucide-react";
 import useAuthHook from "@/hooks/useAuthHook";
 import { useAppSelector } from "@/hooks/redux";
-import { navLinks, companyName, siteUrlConfig } from "@/utils/constants";
+import { navLinks, siteUrlConfig } from "@/utils/constants";
 import logoImage from "../../assets/logos/brand-icon.png";
 import noprofileImage from "../../assets/defaultImgaes/noProfile.png";
 import {
@@ -56,7 +56,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* ─── DESKTOP NAV ─── */}
-          <nav className="hidden md:flex items-center gap-16 lg:gap-28">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-12">
             {desktopLinks
               .filter((l) => l.text !== "Services" || l.isForDesk)
               .filter((l, i, arr) => arr.findIndex((x) => x.text === l.text) === i)
@@ -64,7 +64,7 @@ const Header: React.FC = () => {
                 <Link
                   key={link.text}
                   to={link.href}
-                  className="text-[14px] font-semibold transition-colors duration-200 py-1 relative"
+                  className="text-[14px] font-semibold transition-colors duration-200 py-1 relative whitespace-nowrap"
                   style={{
                     color: isActive(link.href) ? "#D4820A" : "#4682B4",
                   }}

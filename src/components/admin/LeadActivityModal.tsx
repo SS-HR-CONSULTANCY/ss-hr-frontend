@@ -22,6 +22,8 @@ import {
   User,
   Eye,
   Globe,
+  Pencil,
+  Check,
 } from "lucide-react";
 import {
   Popover,
@@ -71,6 +73,8 @@ interface LeadActivityModalProps {
   statusOptions?: string[];
   /** Statuses that show the date picker with the date being optional (e.g. "Pending"). */
   optionalScheduleStatuses?: string[];
+  /** When provided, the name in the header can be edited. Should reject on failure. */
+  onRenameCustomer?: (newName: string) => Promise<void>;
   /** Label of the third tab (defaults to "Candidate Info"). */
   detailsLabel?: string;
   /** Custom content for the third tab. When omitted the candidate info view is shown. */
@@ -314,6 +318,7 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
   showWebsite = false,
   statusOptions,
   optionalScheduleStatuses = [],
+  onRenameCustomer,
   detailsLabel,
   renderDetails,
   reportLabel,
@@ -325,6 +330,37 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
   const [comment, setComment] = useState("");
   const [previousComment, setPreviousComment] = useState("");
   const [scheduledDate, setScheduledDate] = useState("");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState("");
+  const [isSavingName, setIsSavingName] = useState(false);
+
+  // Leave edit mode when a different lead is opened.
+  useEffect(() => {
+    setIsEditingName(false);
+  }, [customer?._id]);
+
+  const startEditingName = () => {
+    setNameDraft(customer?.name || "");
+    setIsEditingName(true);
+  };
+
+  const saveName = async () => {
+    const next = nameDraft.trim();
+    if (!onRenameCustomer || !next) return;
+    if (next === (customer?.name || "").trim()) {
+      setIsEditingName(false);
+      return;
+    }
+    setIsSavingName(true);
+    try {
+      await onRenameCustomer(next);
+      setIsEditingName(false);
+    } catch {
+      // The caller shows the error; stay in edit mode so the user can retry.
+    } finally {
+      setIsSavingName(false);
+    }
+  };
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [website, setWebsite] = useState("");
 
@@ -503,9 +539,63 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-base font-bold text-gray-900 dark:text-white truncate">
-                  {customer.name}
-                </h2>
+                {isEditingName ? (
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <input
+                      autoFocus
+                      value={nameDraft}
+                      onChange={(e) => setNameDraft(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          saveName();
+                        } else if (e.key === "Escape") {
+                          e.stopPropagation();
+                          setIsEditingName(false);
+                        }
+                      }}
+                      disabled={isSavingName}
+                      maxLength={120}
+                      className="w-56 max-w-full px-2 py-1 text-sm font-semibold rounded-lg border border-blue-300 dark:border-blue-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                      aria-label="Client name"
+                    />
+                    <button
+                      type="button"
+                      onClick={saveName}
+                      disabled={isSavingName || !nameDraft.trim()}
+                      className="p-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 cursor-pointer"
+                      title="Save name"
+                    >
+                      {isSavingName ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingName(false)}
+                      disabled={isSavingName}
+                      className="p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+                      title="Cancel"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <h2 className="text-base font-bold text-gray-900 dark:text-white truncate">
+                      {customer.name}
+                    </h2>
+                    {onRenameCustomer && (
+                      <button
+                        type="button"
+                        onClick={startEditingName}
+                        className="p-1 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors cursor-pointer"
+                        title="Edit client name"
+                        aria-label="Edit client name"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </>
+                )}
                 {isNew && (
                   <span className="px-1.5 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded tracking-wide uppercase">
                     New
