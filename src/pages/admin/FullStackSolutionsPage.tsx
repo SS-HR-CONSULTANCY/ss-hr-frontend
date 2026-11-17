@@ -16,7 +16,6 @@ import {
   ChevronLeft,
   ChevronRight,
   MapPin,
-  Sparkles,
   Globe,
   Eye,
   CalendarDays,
@@ -47,7 +46,6 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import ImportLeadsModal from "./ImportLeadsModal";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { isMissedFollowUp, getTodayString } from "@/utils/helpers/followUp";
 
@@ -248,7 +246,7 @@ const FullStackSolutionsPage: React.FC = () => {
 
   // Filters & Search
   const [page, setPage] = useState<number>(1);
-  const limit = 8;
+  const limit = 10;
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -272,7 +270,6 @@ const FullStackSolutionsPage: React.FC = () => {
   }, [isTodayFilter]);
 
   // Modals & Drawers
-  const [isImportOpen, setIsImportOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [selectedContact, setSelectedContact] = useState<IFullStackContact | null>(null);
@@ -291,7 +288,7 @@ const FullStackSolutionsPage: React.FC = () => {
     projectDescription: "",
     status: "Pending",
     comment: "",
-    scheduledDate: "",
+    scheduledDate: getTodayString(),
     assignedTo: "",
   });
 
@@ -346,6 +343,8 @@ const FullStackSolutionsPage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
       queryClient.invalidateQueries({ queryKey: ["adminFSSPendingTodayCount"] });
       toast.success("Contact added successfully");
+      // Show the newest contact at the top: clear filters and jump to page 1
+      resetAllFilters();
       setIsAddModalOpen(false);
       resetForm();
     },
@@ -433,7 +432,7 @@ const FullStackSolutionsPage: React.FC = () => {
       projectDescription: "",
       status: "Pending",
       comment: "",
-      scheduledDate: "",
+      scheduledDate: getTodayString(),
       assignedTo: "",
     });
   };
@@ -636,13 +635,12 @@ const FullStackSolutionsPage: React.FC = () => {
   };
 
   return (    <div className="space-y-5 text-black dark:text-white pt-4 w-full pb-24">
-      <ImportLeadsModal open={isImportOpen} onOpenChange={setIsImportOpen} />
 
       <div className="flex flex-col xl:flex-row items-stretch gap-3">
       {/* Search and Filters Bar */}
       <div className="bg-white dark:bg-gray-950 p-2.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-stretch md:items-center gap-2 flex-1 min-w-0">
         {/* Search */}
-        <div className="relative flex-1 min-w-[160px]">
+        <div className="relative min-w-[160px] md:flex-none md:w-64">
           <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
@@ -671,8 +669,8 @@ const FullStackSolutionsPage: React.FC = () => {
           }}
           className={`shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors cursor-pointer ${
             isTodayFilter
-              ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700"
-              : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              ? "bg-indigo-600 border-green-500 text-white hover:bg-indigo-700"
+              : "bg-white dark:bg-gray-900 border-green-500 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
           }`}
           title={isTodayFilter ? "Showing today's follow-ups — click to clear" : "Show today's follow-ups"}
         >
@@ -744,25 +742,16 @@ const FullStackSolutionsPage: React.FC = () => {
             </button>
           )}
         </div>
-      </div>
 
-      {/* Actions */}
-        <div className="flex items-center gap-2 shrink-0 self-center">
-        <button
-          onClick={() => setIsImportOpen(true)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-indigo-200 dark:border-indigo-900 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-xs font-semibold transition-colors"
-        >
-          <Sparkles className="w-4 h-4" />
-          Import Leads
-        </button>
+        {/* Add New Contact (pinned to the right of the header bar) */}
         <button
           onClick={handleOpenAddModal}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition-colors shrink-0"
+          className="md:ml-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition-colors shrink-0"
         >
           <Plus className="w-4 h-4" />
           Add New Contact
         </button>
-        </div>
+      </div>
       </div>
 
       {/* Contacts Table Card */}
