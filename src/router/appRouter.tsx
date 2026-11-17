@@ -46,6 +46,7 @@ const AdminLogsPage = lazy(() => import("@/pages/admin/AdminLogsPage"));
 const AdminPlatformLeads = lazy(() => import("@/pages/admin/AdminPlatformLeads"));
 const TelecallerLeads = lazy(() => import("@/pages/admin/TelecallerLeads"));
 const DailyDutiesPage = lazy(() => import("@/pages/admin/DailyDutiesPage"));
+const StaffDashboardPage = lazy(() => import("@/pages/admin/StaffDashboardPage"));
 const FullStackSolutionsPage = lazy(() => import("@/pages/admin/FullStackSolutionsPage"));
 const ShareMyAppsPage = lazy(() => import("@/pages/admin/ShareMyAppsPage"));
 const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
@@ -71,7 +72,7 @@ import type { RootState } from "@/store/store";
 const AdminIndexRedirect = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   if (user?.role === "staff") {
-    return <Navigate to="telecaller-leads" replace />;
+    return <Navigate to="staff-dashboard" replace />;
   }
   const isTony =
     user?.role === "admin" &&
@@ -372,6 +373,14 @@ const appRouter = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole={["admin"]}>
             <AdminPlatformLeads />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "staff-dashboard",
+        element: (
+          <ProtectedRoute requiredRole={["admin", "staff"]}>
+            <StaffDashboardPage />
           </ProtectedRoute>
         ),
       },

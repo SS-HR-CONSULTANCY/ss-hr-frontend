@@ -34,12 +34,13 @@ export interface IFullStackContact {
   comment?: string;
   scheduledDate?: string;
   scheduledAt?: string;
+  /** A contact can be assigned to several staff members */
   assignedTo?: {
     _id: string;
     fullName: string;
     username: string;
     role: string;
-  } | null;
+  }[];
   activityLog: IFSSActivity[];
   createdAt: string;
   updatedAt: string;
@@ -112,8 +113,8 @@ export const adminTelecallFSSContact = async (
   return res.data.data;
 };
 
-export const adminAssignFSSContact = async (id: string, staffId: string | null): Promise<IFullStackContact> => {
-  const res = await axiosInstance.patch(`/admin/full-stack-contacts/${id}/assign`, { staffId });
+export const adminAssignFSSContact = async (id: string, staffIds: string[]): Promise<IFullStackContact> => {
+  const res = await axiosInstance.patch(`/admin/full-stack-contacts/${id}/assign`, { staffIds });
   return res.data.data;
 };
 

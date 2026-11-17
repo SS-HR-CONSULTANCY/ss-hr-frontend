@@ -42,7 +42,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       const isSuperAdmin = user.role === "admin" && user.email === "tony";
       const hasPermission = user.permissions?.includes("all") || (user.permissions && user.permissions.includes(routePath));
       
-      isAllowed = isSuperAdmin || !!hasPermission;
+      // Every staff account always gets its own dashboard (no per-route permission needed)
+      const isOwnStaffDashboard = user.role === "staff" && routePath === "staff-dashboard";
+
+      isAllowed = isSuperAdmin || isOwnStaffDashboard || !!hasPermission;
     }
   }
 
