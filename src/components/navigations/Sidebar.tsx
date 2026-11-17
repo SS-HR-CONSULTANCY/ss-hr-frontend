@@ -189,6 +189,7 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
     logs: <ClipboardList />,
     "platform-leads": <Users />,
     "contact-list": <PhoneCall />,
+    "staff-dashboard": <LayoutDashboard className="text-cyan-600" />,
     "super-overview": <Crown className="text-amber-500" />,
     "daily-duties": <ListTodo className="text-teal-600" />,
     "full-stack-solutions": <Layers className="text-indigo-500" />,
@@ -244,6 +245,10 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
             // Hide standard overview from Super Admin since he has Super Overview
             if (r.path === "overview" && isTony) {
               return false;
+            }
+            // Personal dashboard is only for staff accounts
+            if (r.path === "staff-dashboard") {
+              return user?.role === "staff";
             }
             if (isTony) return true;
             if (r.path === "daily-duties") return true;

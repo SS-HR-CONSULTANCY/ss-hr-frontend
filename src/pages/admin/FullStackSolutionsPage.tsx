@@ -35,6 +35,7 @@ import {
   type IFullStackContact,
   type IWebsiteAudit,
 } from "@/utils/apis/adminFullStackContactApi";
+import StaffMultiSelect from "@/components/admin/StaffMultiSelect";
 import { adminFetchSystemStaff, type AssignedStaff } from "@/utils/apis/adminPlatformLeadsApi";
 import LeadActivityModal from "@/components/admin/LeadActivityModal";
 import WebsiteAuditReportPanel from "@/components/admin/WebsiteAuditReportPanel";
@@ -289,7 +290,7 @@ const FullStackSolutionsPage: React.FC = () => {
     status: "Pending",
     comment: "",
     scheduledDate: getTodayString(),
-    assignedTo: "",
+    assignedTo: [] as string[],
   });
 
   useEffect(() => {
@@ -300,11 +301,10 @@ const FullStackSolutionsPage: React.FC = () => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Fetch Staff List (Admin Tony only)
+  // Fetch Staff List (used to assign contacts; available to admins and staff)
   const { data: staffList = [] } = useQuery<AssignedStaff[]>({
     queryKey: ["adminStaffList"],
     queryFn: adminFetchSystemStaff,
-    enabled: isTony,
   });
 
   // Fetch Contacts
@@ -393,8 +393,8 @@ const FullStackSolutionsPage: React.FC = () => {
   });
 
   const assignMutation = useMutation({
-    mutationFn: ({ id, staffId }: { id: string; staffId: string | null }) =>
-      adminAssignFSSContact(id, staffId),
+    mutationFn: ({ id, staffIds }: { id: string; staffIds: string[] }) =>
+      adminAssignFSSContact(id, staffIds),
     onSuccess: (updated) => {
       queryClient.invalidateQueries({ queryKey: ["fss-contacts"] });
       queryClient.invalidateQueries({ queryKey: ["adminFSSPendingTodayCount"] });
@@ -433,7 +433,7 @@ const FullStackSolutionsPage: React.FC = () => {
       status: "Pending",
       comment: "",
       scheduledDate: getTodayString(),
-      assignedTo: "",
+      assignedTo: [],
     });
   };
 
@@ -503,10 +503,17 @@ const FullStackSolutionsPage: React.FC = () => {
   };
 
   // Map an FSS contact to the shape expected by the shared Update Lead popup
+  // Assignment log entries store one id or a comma-separated list of ids
   const staffNameById = (value?: string) => {
     if (!value) return value;
-    const staff = staffList.find((s) => s._id === value);
-    return staff ? staff.fullName || staff.username : value;
+    return value
+      .split(",")
+      .map((part) => {
+        const id = part.trim();
+        const staff = staffList.find((s) => s._id === id);
+        return staff ? staff.fullName || staff.username : id;
+      })
+      .join(", ");
   };
 
   const modalCustomer: ImportedCustomer | null = selectedContact
@@ -524,7 +531,15 @@ const FullStackSolutionsPage: React.FC = () => {
         isNewLead: false,
         comment: getLatestComment(selectedContact),
         scheduledDate: selectedContact.scheduledDate,
-        assignedTo: selectedContact.assignedTo || null,
+        // The shared modal expects a single assignee, so show all assignees as one combined label
+        assignedTo: selectedContact.assignedTo?.length
+          ? {
+              _id: selectedContact.assignedTo.map((s) => s._id).join(","),
+              fullName: selectedContact.assignedTo.map((s) => s.fullName || s.username).join(", "),
+              username: "",
+              role: "",
+            }
+          : null,
         createdAt: selectedContact.createdAt,
         activityLog: (selectedContact.activityLog || []).map(
           (a): ImportedCustomerActivity => ({
@@ -765,9 +780,9 @@ const FullStackSolutionsPage: React.FC = () => {
               <col className="w-[13%]" />
               <col className="w-[9%]" />
               <col className="w-[11%]" />
-              {isTony && <col className="w-[11%]" />}
+              <col className="w-[11%]" />
               <col className="w-[9%]" />
-              <col className={isTony ? "w-[16%]" : "w-[27%]"} />
+              <col className="w-[16%]" />
               <col className="w-[14%]" />
             </colgroup>
             <thead>
@@ -776,7 +791,7 @@ const FullStackSolutionsPage: React.FC = () => {
                 <th className="px-4 py-3 text-left">Phone & Email</th>
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">Scheduled Date</th>
-                {isTony && <th className="px-4 py-3 text-left">Assigned Staff</th>}
+                <th className="px-4 py-3 text-left">Assigned Staff</th>
                 <th className="px-4 py-3 text-left">Website</th>
                 <th className="px-4 py-3 text-left">Comments</th>
                 <th className="px-4 py-3 text-right">Actions</th>
@@ -785,13 +800,13 @@ const FullStackSolutionsPage: React.FC = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
               {isLoading ? (
                 <tr>
-                  <td colSpan={isTony ? 8 : 7} className="px-4 h-[384px] text-center text-gray-400">
+                  <td colSpan={8} className="px-4 h-[384px] text-center text-gray-400">
                     Loading Full Stack Solutions contacts...
                   </td>
                 </tr>
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={isTony ? 8 : 7} className="px-4 h-[384px] text-center">
+                  <td colSpan={8} className="px-4 h-[384px] text-center">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center">
                         <Users className="w-5 h-5" />
@@ -884,34 +899,14 @@ const FullStackSolutionsPage: React.FC = () => {
                         <ScheduledDateCell date={contact.scheduledDate} missed={missed} />
                       </td>
 
-                      {/* Assigned Staff (Tony only) */}
-                      {isTony && (
-                        <td className="px-4 py-1.5">
-                          <select
-                            value={
-                              contact.assignedTo
-                                ? typeof contact.assignedTo === "object"
-                                  ? contact.assignedTo._id
-                                  : contact.assignedTo
-                                : ""
-                            }
-                            onChange={(e) =>
-                              assignMutation.mutate({
-                                id: contact._id,
-                                staffId: e.target.value || null,
-                              })
-                            }
-                            className="text-[11px] py-1 px-2 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                          >
-                            <option value="">Unassigned</option>
-                            {staffList.map((s) => (
-                              <option key={s._id} value={s._id}>
-                                {s.fullName || s.username}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                      )}
+                      {/* Assigned Staff (admins and staff can both edit) */}
+                      <td className="px-4 py-1.5">
+                        <StaffMultiSelect
+                          staff={staffList}
+                          value={(contact.assignedTo || []).map((s) => s._id)}
+                          onChange={(staffIds) => assignMutation.mutate({ id: contact._id, staffIds })}
+                        />
+                      </td>
 
                       {/* Website */}
                       <td className="px-4 py-1.5 max-w-[170px]">
@@ -982,7 +977,7 @@ const FullStackSolutionsPage: React.FC = () => {
                 contacts.length > 0 &&
                 Array.from({ length: Math.max(0, limit - contacts.length) }, (_, i) => (
                   <tr key={`filler-${i}`} aria-hidden="true" className="h-[48px]">
-                    <td colSpan={isTony ? 8 : 7} />
+                    <td colSpan={8} />
                   </tr>
                 ))}
             </tbody>
@@ -1206,25 +1201,17 @@ const FullStackSolutionsPage: React.FC = () => {
               </div>
             </div>
 
-            {isTony && (
-              <div>
-                <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Assign Staff
-                </label>
-                <select
-                  value={formData.assignedTo}
-                  onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
-                >
-                  <option value="">Unassigned</option>
-                  {staffList.map((s) => (
-                    <option key={s._id} value={s._id}>
-                      {s.fullName || s.username}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
+            <div>
+              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Assign Staff
+              </label>
+              <StaffMultiSelect
+                inline
+                staff={staffList}
+                value={formData.assignedTo}
+                onChange={(ids) => setFormData({ ...formData, assignedTo: ids })}
+              />
+            </div>
 
             <DialogFooter className="pt-2">
               <button
@@ -1254,7 +1241,6 @@ const FullStackSolutionsPage: React.FC = () => {
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         onUpdate={handleModalUpdate}
-        onAssignStaff={isTony ? (id, staffId) => assignMutation.mutate({ id, staffId }) : undefined}
         isSaving={telecallMutation.isPending}
         isAdmin={isTony}
         staffList={staffList}

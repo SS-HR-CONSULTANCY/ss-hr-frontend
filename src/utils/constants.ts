@@ -777,6 +777,11 @@ export const adminApplicationRoutes: Route[] = [
     roles: ["admin"],
   },
   {
+    path: "staff-dashboard",
+    name: "My Dashboard",
+    roles: ["staff"],
+  },
+  {
     path: "telecaller-leads",
     name: "Contact List",
     roles: ["admin", "staff"],
