@@ -57,8 +57,6 @@ const FSS_STATUS_OPTIONS = [
   "Contacted",
   "Need Follow Up",
   "In Discussion",
-  "Quotation Sent",
-  "Converted",
   "Completed",
   "Lost",
 ];
@@ -110,6 +108,15 @@ const ScheduledDateCell: React.FC<{ date?: string; missed: boolean }> = ({ date,
       )}
     </div>
   );
+};
+
+const STATUS_ACTIVE_CLASS: Record<string, string> = {
+  Pending: "bg-yellow-500 border-yellow-500 text-white",
+  Contacted: "bg-blue-600 border-blue-600 text-white",
+  "Need Follow Up": "bg-orange-500 border-orange-500 text-white",
+  "In Discussion": "bg-purple-600 border-purple-600 text-white",
+  Completed: "bg-emerald-600 border-emerald-600 text-white",
+  Lost: "bg-rose-600 border-rose-600 text-white",
 };
 
 const getStatusBadgeClass = (status: string) => {
@@ -697,54 +704,30 @@ const FullStackSolutionsPage: React.FC = () => {
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => {
-              setStatusFilter(e.target.value);
-              setPage(1);
-            }}
-            className="py-1.5 px-2.5 text-xs rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          >
-            <option value="all">All Statuses</option>
-            {FSS_STATUS_OPTIONS.map((st) => (
-              <option key={st} value={st}>
-                {st}
-              </option>
-            ))}
-          </select>
-
-          {/* Follow-up Date Filter */}
-          <select
-            value={scheduledDateFilter}
-            onChange={(e) => {
-              setScheduledDateFilter(e.target.value);
-              setPage(1);
-            }}
-            className="py-1.5 px-2.5 text-xs rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          >
-            <option value="any">All Dates</option>
-            <option value={getTodayString()}>Today's Follow-ups</option>
-          </select>
-
-          {/* Staff Filter (Tony only) */}
-          {isTony && (
-            <select
-              value={assignedStaffFilter}
-              onChange={(e) => {
-                setAssignedStaffFilter(e.target.value);
-                setPage(1);
-              }}
-              className="py-1.5 px-2.5 text-xs rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            >
-              <option value="all">All Assigned Staff</option>
-              <option value="unassigned">Unassigned</option>
-              {staffList.map((s) => (
-                <option key={s._id} value={s._id}>
-                  {s.fullName || s.username}
-                </option>
-              ))}
-            </select>
-          )}
+          {["all", ...FSS_STATUS_OPTIONS].map((st) => {
+            const active = statusFilter === st;
+            return (
+              <button
+                key={st}
+                type="button"
+                onClick={() => {
+                  setStatusFilter(st);
+                  setPage(1);
+                }}
+                className={`shrink-0 w-28 inline-flex items-center justify-center py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
+                  st === "all"
+                    ? active
+                      ? "bg-indigo-600 border-indigo-600 text-white"
+                      : "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-900/50 hover:bg-indigo-100"
+                    : active
+                      ? `${STATUS_ACTIVE_CLASS[st] || "bg-gray-600 border-gray-600 text-white"} shadow-sm`
+                      : `${getStatusBadgeClass(st)} hover:brightness-95`
+                }`}
+              >
+                {st === "all" ? "All" : st}
+              </button>
+            );
+          })}
 
           {/* Reset Filters */}
           {(searchTerm || statusFilter !== "all" || assignedStaffFilter !== "all" || scheduledDateFilter !== "any") && (

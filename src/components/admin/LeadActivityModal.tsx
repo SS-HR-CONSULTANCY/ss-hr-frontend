@@ -711,15 +711,11 @@ const LeadActivityModal: React.FC<LeadActivityModalProps> = ({
                             className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer text-left ${
                               isSelected
                                 ? `${styles.pill} border-current ring-2 ring-offset-1 ring-current/20 shadow-sm`
-                                : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-900"
+                                : `${styles.pill} opacity-60 hover:opacity-100`
                             }`}
                           >
                             <span
-                              className={`w-2 h-2 rounded-full shrink-0 ${
-                                isSelected
-                                  ? styles.dot
-                                  : "bg-gray-300 dark:bg-gray-600"
-                              }`}
+                              className={`w-2 h-2 rounded-full shrink-0 ${styles.dot}`}
                             />
                             <span className="truncate">{opt}</span>
                           </button>
