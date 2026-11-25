@@ -250,8 +250,9 @@ const Sidebar: React.FC<SidebarProps> = ({ routes }) => {
             if (r.path === "staff-dashboard") {
               return user?.role === "staff";
             }
+            // Daily Duties link is hidden from the sidebar
+            if (r.path === "daily-duties") return false;
             if (isTony) return true;
-            if (r.path === "daily-duties") return true;
             if (user?.role === "staff" && r.path === "telecaller-leads") return true;
             if (user?.permissions?.includes("all")) return true;
             if (user?.permissions && user.permissions.length > 0) {

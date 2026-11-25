@@ -10,7 +10,7 @@ import type {
   VerifyOtpRequest,
 } from "@/types/apiTypes/authApiTypes";
 import type { AxiosError } from "axios";
-import { axiosInstance } from "@/lib/axios";
+import { axiosInstance, setAuthToken } from "@/lib/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ApiBaseResponse } from "@/types/commonTypes";
 import type { RegisterRequest } from "@/types/slice/authSliceTypes";
@@ -56,7 +56,9 @@ export const signin = createAsyncThunk<SigninResponse, SigninRequest>(
   async (userData: SigninRequest, thunkAPI) => {
     try {
       const response = await axiosInstance.post("/auth/login", userData);
-      return response.data;
+      const { token, ...data } = response.data || {};
+      setAuthToken(token);
+      return data as SigninResponse;
     } catch (err) {
       const error = err as AxiosError<ApiBaseResponse>;
       return thunkAPI.rejectWithValue(
@@ -77,6 +79,7 @@ export const signout = createAsyncThunk<
   async (payload, thunkAPI) => {
     try {
       const response = await axiosInstance.post("/auth/logout", payload || {});
+      setAuthToken(null);
       return response.data;
     } catch (err) {
       const error = err as AxiosError<ApiBaseResponse>;

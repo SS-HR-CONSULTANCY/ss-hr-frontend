@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 
-import { Users, Clock, CheckCircle, PhoneCall, PhoneOutgoing, Search, Filter, Calendar, MapPin, X, RotateCcw, UserCheck, CalendarCheck } from "lucide-react";
+import { Users, Clock, CheckCircle, PhoneCall, PhoneOutgoing, Search, X, RotateCcw, UserCheck, CalendarCheck } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -28,30 +28,45 @@ const CONTACT_STATUS_OPTIONS = [
   "Completed",
 ];
 
-const sortStatesWithPriority = (states: string[]): string[] => {
-  const getPriorityIndex = (name: string): number => {
-    const clean = name.trim().toLowerCase().replace(/\s+/g, "");
-    if (clean === "kerala") return 0;
-    if (clean === "tamilnadu") return 1;
-    if (clean === "karnataka") return 2;
-    return 999;
-  };
-  return [...states].sort((a, b) => {
-    const pA = getPriorityIndex(a);
-    const pB = getPriorityIndex(b);
-    if (pA !== pB) return pA - pB;
-    return a.localeCompare(b);
-  });
+// Written out in full so Tailwind can detect every class.
+const STATUS_BUTTON_STYLES: Record<string, { idle: string; active: string }> = {
+  all: {
+    idle: "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-900/50",
+    active: "bg-indigo-600 border-indigo-600 text-white",
+  },
+  Pending: {
+    idle: "bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950/40 dark:text-yellow-300 dark:border-yellow-900/50",
+    active: "bg-yellow-500 border-yellow-500 text-white",
+  },
+  Contacted: {
+    idle: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900/50",
+    active: "bg-blue-600 border-blue-600 text-white",
+  },
+  "Re-contacted": {
+    idle: "bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-300 dark:border-cyan-900/50",
+    active: "bg-cyan-600 border-cyan-600 text-white",
+  },
+  "Need Follow Up": {
+    idle: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-900/50",
+    active: "bg-orange-500 border-orange-500 text-white",
+  },
+  "Not Interested": {
+    idle: "bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700",
+    active: "bg-gray-600 border-gray-600 text-white",
+  },
+  "Processing Application": {
+    idle: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-900/50",
+    active: "bg-purple-600 border-purple-600 text-white",
+  },
+  "Rejected Application": {
+    idle: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-900/50",
+    active: "bg-rose-600 border-rose-600 text-white",
+  },
+  Completed: {
+    idle: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/50",
+    active: "bg-emerald-600 border-emerald-600 text-white",
+  },
 };
-
-const DEFAULT_INDIAN_STATES = sortStatesWithPriority([
-  "Kerala", "Tamil Nadu", "Karnataka",
-  "Andhra Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Delhi",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir",
-  "Jharkhand", "Madhya Pradesh", "Maharashtra",
-  "Odisha", "Puducherry", "Punjab", "Rajasthan", "Telangana",
-  "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Dubai", "Sharjah"
-]);
 
 const DATE_FILTER_STORAGE_KEY = "telecallerLeads.dateFilter";
 
@@ -70,7 +85,6 @@ const TelecallerLeads: React.FC = () => {
   const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0, myCallsToday: 0 });
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [stateFilter, setStateFilter] = useState<string>("all");
-  const [availableStates, setAvailableStates] = useState<string[]>(DEFAULT_INDIAN_STATES);
   // Persisted so the "Today" filter survives a page refresh until it is cleared.
   const [dateFilter, setDateFilter] = useState<string>(() => {
     try {
@@ -252,9 +266,9 @@ const TelecallerLeads: React.FC = () => {
       {/* Filters and Search Bar just below stats */}
       <div className="bg-white dark:bg-gray-950 p-3.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search + Today */}
-        <div className="flex items-center gap-2.5 flex-1">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
           {/* Search Bar */}
-          <div className="relative w-full md:w-80">
+          <div className="relative shrink-0 w-full md:w-52">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
@@ -290,55 +304,31 @@ const TelecallerLeads: React.FC = () => {
               Today
               {dateFilter === "today" && <X className="w-3.5 h-3.5" />}
             </button>
+
+            {/* Status filter buttons */}
+            <div className="flex flex-nowrap items-center gap-1.5 flex-1 min-w-0">
+              {["all", ...CONTACT_STATUS_OPTIONS].map((st) => {
+                const active = statusFilter === st;
+                const c = STATUS_BUTTON_STYLES[st];
+                return (
+                  <button
+                    key={st}
+                    type="button"
+                    onClick={() => setStatusFilter(st)}
+                    title={st === "all" ? "All" : st}
+                    className={`flex-1 basis-0 min-w-0 px-1.5 inline-flex items-center justify-center py-2 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap overflow-hidden ${
+                      active ? `${c.active} shadow-sm` : `${c.idle} hover:brightness-95`
+                    }`}
+                  >
+                    <span className="truncate">{st === "all" ? "All" : st}</span>
+                  </button>
+                );
+              })}
+            </div>
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* Status Filter */}
-          <div className="relative flex items-center">
-            <Filter className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
-            <select
-              id="contact-status-filter"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300"
-            >
-              <option value="all">All Statuses</option>
-              {CONTACT_STATUS_OPTIONS.map((o) => (
-                <option key={o} value={o}>{o}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* State Filter */}
-          <div className="relative flex items-center">
-            <MapPin className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
-            <select
-              id="contact-state-filter"
-              value={stateFilter}
-              onChange={(e) => setStateFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300 max-w-[170px]"
-            >
-              <option value="all">All States</option>
-              {availableStates.map((st) => (
-                <option key={st} value={st}>{st}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Date Filter */}
-          <div className="relative flex items-center">
-            <Calendar className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
-            <select
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300"
-            >
-              <option value="any">All Scheduled</option>
-              <option value="today">Scheduled Today</option>
-            </select>
-          </div>
-
           {/* Assigned Staff Filter (Super Admin Tony only) */}
           {isTony && (
             <div className="relative flex items-center">
@@ -386,18 +376,6 @@ const TelecallerLeads: React.FC = () => {
         columnsCount={columns.length}
         pageSize={8}
         onDataFetched={useCallback((data: any) => {
-          if (data.states && Array.isArray(data.states) && data.states.length > 0) {
-            setAvailableStates(prev => {
-              const merged = sortStatesWithPriority(Array.from(new Set([...prev, ...data.states])));
-              if (
-                merged.length === prev.length &&
-                merged.every((val, idx) => val === prev[idx])
-              ) {
-                return prev;
-              }
-              return merged;
-            });
-          }
           if (data.stats) {
             setStats(prev => {
               const newTotal = data.stats.total || 0;
