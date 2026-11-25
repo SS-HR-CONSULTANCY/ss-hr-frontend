@@ -197,7 +197,7 @@ const FSSCommentCell: React.FC<FSSCommentCellProps> = ({ comment }) => {
     return <span className="text-gray-400 text-[11px]">—</span>;
   }
 
-  const shortText = truncateText(trimmed, 36);
+  const shortText = truncateText(trimmed, 60);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -205,7 +205,7 @@ const FSSCommentCell: React.FC<FSSCommentCellProps> = ({ comment }) => {
         <button
           type="button"
           title={trimmed}
-          className="group flex items-center justify-between gap-1.5 max-w-[210px] w-full text-left px-2 py-1 rounded-md bg-gray-50/70 dark:bg-gray-800/40 hover:bg-blue-50/90 dark:hover:bg-blue-950/40 border border-gray-200/80 hover:border-blue-300 dark:border-gray-800 dark:hover:border-blue-700 transition-all cursor-pointer focus:outline-none"
+          className="group flex items-center justify-between gap-1.5 max-w-[380px] w-full text-left px-2 py-1 rounded-md bg-gray-50/70 dark:bg-gray-800/40 hover:bg-blue-50/90 dark:hover:bg-blue-950/40 border border-gray-200/80 hover:border-blue-300 dark:border-gray-800 dark:hover:border-blue-700 transition-all cursor-pointer focus:outline-none"
         >
           <span className="text-[11px] text-gray-700 dark:text-gray-300 truncate whitespace-nowrap group-hover:text-blue-700 dark:group-hover:text-blue-300 flex-1">
             {shortText}
@@ -255,6 +255,8 @@ const FullStackSolutionsPage: React.FC = () => {
   // Filters & Search
   const [page, setPage] = useState<number>(1);
   const limit = 10;
+  // How many page-number buttons are shown at once
+  const PAGE_WINDOW = 20;
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -764,8 +766,7 @@ const FullStackSolutionsPage: React.FC = () => {
               <col className="w-[9%]" />
               <col className="w-[11%]" />
               <col className="w-[11%]" />
-              <col className="w-[9%]" />
-              <col className="w-[16%]" />
+              <col className="w-[25%]" />
               <col className="w-[14%]" />
             </colgroup>
             <thead>
@@ -775,7 +776,6 @@ const FullStackSolutionsPage: React.FC = () => {
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">Scheduled Date</th>
                 <th className="px-4 py-3 text-left">Assigned Staff</th>
-                <th className="px-4 py-3 text-left">Website</th>
                 <th className="px-4 py-3 text-left">Comments</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
@@ -783,13 +783,13 @@ const FullStackSolutionsPage: React.FC = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="px-4 h-[384px] text-center text-gray-400">
+                  <td colSpan={7} className="px-4 h-[384px] text-center text-gray-400">
                     Loading Full Stack Solutions contacts...
                   </td>
                 </tr>
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 h-[384px] text-center">
+                  <td colSpan={7} className="px-4 h-[384px] text-center">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center">
                         <Users className="w-5 h-5" />
@@ -891,38 +891,8 @@ const FullStackSolutionsPage: React.FC = () => {
                         />
                       </td>
 
-                      {/* Website */}
-                      <td className="px-4 py-1.5 max-w-[170px]">
-                        {(() => {
-                          const site = contact.website || parseLeadDetails(contact.projectDescription).website;
-                          if (!site && !contact.websiteAudit) return <span className="text-gray-400 text-[11px]">—</span>;
-                          const href = site ? (site.startsWith("http") ? site : `https://${site}`) : "";
-                          const label = site ? site.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "") : "";
-                          return (
-                            <div className="space-y-0.5">
-                              {site && (
-                                <a
-                                  href={href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  title={site}
-                                  className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline break-all block"
-                                >
-                                  {truncateText(label, 24)}
-                                </a>
-                              )}
-                              {contact.websiteAudit?.report && (
-                                <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800 tracking-tight">
-                                  Report Added
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })()}
-                      </td>
-
                       {/* Comments */}
-                      <td className="px-4 py-1.5 max-w-[220px]">
+                      <td className="px-4 py-1.5">
                         <FSSCommentCell comment={getLatestComment(contact)} />
                       </td>
 
@@ -960,7 +930,7 @@ const FullStackSolutionsPage: React.FC = () => {
                 contacts.length > 0 &&
                 Array.from({ length: Math.max(0, limit - contacts.length) }, (_, i) => (
                   <tr key={`filler-${i}`} aria-hidden="true" className="h-[48px]">
-                    <td colSpan={8} />
+                    <td colSpan={7} />
                   </tr>
                 ))}
             </tbody>
@@ -988,12 +958,12 @@ const FullStackSolutionsPage: React.FC = () => {
             <div className="flex flex-wrap items-center justify-center gap-1.5">
               <button
                 disabled={page <= 1}
-                onClick={() => setPage((p) => Math.max(1, p - 10))}
+                onClick={() => setPage((p) => Math.max(1, p - PAGE_WINDOW))}
                 className="inline-flex items-center gap-1 h-8 px-2.5 rounded-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
-                title="Previous 10 pages"
+                title={`Previous ${PAGE_WINDOW} pages`}
               >
                 <ChevronsLeft className="w-3.5 h-3.5" />
-                <span>-10</span>
+                <span>-{PAGE_WINDOW}</span>
               </button>
               <button
                 disabled={page <= 1}
@@ -1005,11 +975,11 @@ const FullStackSolutionsPage: React.FC = () => {
                 <span>Previous</span>
               </button>
 
-              <div className="flex items-center gap-1">
+              <div className="flex flex-wrap items-center justify-center gap-3">
                 {(() => {
-                  // Fixed blocks of 10 page numbers: 1–10, 11–20, 21–30...
-                  const start = Math.floor((page - 1) / 10) * 10 + 1;
-                  const end = Math.min(start + 9, totalPages);
+                  // Fixed blocks of page numbers: 1–20, 21–40, 41–60...
+                  const start = Math.floor((page - 1) / PAGE_WINDOW) * PAGE_WINDOW + 1;
+                  const end = Math.min(start + PAGE_WINDOW - 1, totalPages);
                   return Array.from({ length: end - start + 1 }, (_, i) => start + i).map((p) => (
                     <button
                       key={p}
@@ -1037,11 +1007,11 @@ const FullStackSolutionsPage: React.FC = () => {
               </button>
               <button
                 disabled={page >= totalPages}
-                onClick={() => setPage((p) => Math.min(totalPages, p + 10))}
+                onClick={() => setPage((p) => Math.min(totalPages, p + PAGE_WINDOW))}
                 className="inline-flex items-center gap-1 h-8 px-2.5 rounded-md border border-gray-300 bg-white dark:bg-gray-900 dark:border-gray-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors cursor-pointer"
-                title="Next 10 pages"
+                title={`Next ${PAGE_WINDOW} pages`}
               >
-                <span>+10</span>
+                <span>+{PAGE_WINDOW}</span>
                 <ChevronsRight className="w-3.5 h-3.5" />
               </button>
             </div>
