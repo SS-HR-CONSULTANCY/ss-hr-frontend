@@ -27,6 +27,7 @@ import {
 import {
   adminFetchAllFSSContacts,
   adminCreateFSSContact,
+  adminCheckFSSDuplicateName,
   adminTelecallFSSContact,
   adminUpdateFSSContact,
   adminAssignFSSContact,
@@ -345,6 +346,29 @@ const FullStackSolutionsPage: React.FC = () => {
   const totalPages = contactsResponse?.totalPages || 1;
   const totalCount = contactsResponse?.total || 0;
 
+  // Live duplicate check for the client name typed in the Add form (debounced)
+  const [duplicateName, setDuplicateName] = useState<string | null>(null);
+  useEffect(() => {
+    const name = formData.companyName.trim();
+    if (!isAddModalOpen || !name) {
+      setDuplicateName(null);
+      return;
+    }
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        const res = await adminCheckFSSDuplicateName(name);
+        if (!cancelled) setDuplicateName(res.exists ? res.name || name : null);
+      } catch {
+        if (!cancelled) setDuplicateName(null);
+      }
+    }, 400);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [formData.companyName, isAddModalOpen]);
+
   // Mutations
   const createMutation = useMutation({
     mutationFn: adminCreateFSSContact,
@@ -460,6 +484,10 @@ const FullStackSolutionsPage: React.FC = () => {
     e.preventDefault();
     if (!formData.companyName.trim() || !formData.phone.trim()) {
       toast.error("Company name and contact number are required");
+      return;
+    }
+    if (duplicateName) {
+      toast.error(`"${duplicateName}" already exists. Duplicate client names are not allowed.`);
       return;
     }
     createMutation.mutate({ ...formData, name: formData.companyName.trim() } as any);
@@ -1044,8 +1072,20 @@ const FullStackSolutionsPage: React.FC = () => {
                   placeholder="e.g. Acme Technologies"
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs focus:ring-1 focus:ring-indigo-500"
+                  className={`w-full px-3 py-1.5 rounded-lg border bg-white dark:bg-gray-900 text-xs focus:ring-1 ${
+                    duplicateName
+                      ? "border-red-400 focus:ring-red-500 dark:border-red-700"
+                      : "border-gray-200 dark:border-gray-700 focus:ring-indigo-500"
+                  }`}
                 />
+                {duplicateName && (
+                  <p className="mt-1 flex items-start gap-1 text-[11px] font-medium text-red-600 dark:text-red-400">
+                    <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-px" />
+                    <span>
+                      A client named &quot;{duplicateName}&quot; already exists. Duplicate names are not allowed.
+                    </span>
+                  </p>
+                )}
               </div>
 
               <div>
@@ -1176,7 +1216,7 @@ const FullStackSolutionsPage: React.FC = () => {
               </button>
               <button
                 type="submit"
-                disabled={createMutation.isPending}
+                disabled={createMutation.isPending || !!duplicateName}
                 className="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold disabled:opacity-50"
               >
                 {createMutation.isPending ? "Adding..." : "Save Contact"}

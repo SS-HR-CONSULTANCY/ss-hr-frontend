@@ -93,6 +93,16 @@ export const adminCreateFSSContact = async (data: Partial<IFullStackContact>): P
   return res.data.data;
 };
 
+export const adminCheckFSSDuplicateName = async (
+  name: string,
+  excludeId?: string
+): Promise<{ exists: boolean; name: string }> => {
+  const res = await axiosInstance.get("/admin/full-stack-contacts/check-duplicate", {
+    params: { name, ...(excludeId ? { excludeId } : {}) },
+  });
+  return res.data.data;
+};
+
 export const adminUpdateFSSContact = async (id: string, data: Partial<IFullStackContact>): Promise<IFullStackContact> => {
   const res = await axiosInstance.put(`/admin/full-stack-contacts/${id}`, data);
   return res.data.data;
