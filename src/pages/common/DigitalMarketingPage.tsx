@@ -39,9 +39,9 @@ import SEO from "@/components/common/SEOProps";
 import { SEO_DATA } from "@/utils/constants";
 
 const WHATSAPP_URL =
-  "https://wa.me/971542326584?text=Hello,%20I%20would%20like%20to%20discuss%20digital%20marketing%20for%20my%20business.";
-const PHONE = "+971 54 232 6584";
-const PHONE_URL = "tel:+971542326584";
+  "https://wa.me/971542326585?text=Hello,%20I%20would%20like%20to%20discuss%20digital%20marketing%20for%20my%20business.";
+const PHONE = "+971 54 232 6585";
+const PHONE_URL = "tel:+971542326585";
 
 const heroBenefits = [
   "Rank higher on Google with proven SEO",
