@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 
-import { Users, Clock, CheckCircle, PhoneCall, PhoneOutgoing, Search, X, RotateCcw, UserCheck, CalendarCheck } from "lucide-react";
+import { Search, X, RotateCcw, UserCheck, CalendarCheck } from "lucide-react";
 
 const CONTACT_STATUS_OPTIONS = [
   "Pending",
@@ -221,57 +221,8 @@ const TelecallerLeads: React.FC = () => {
 
   return (
     <div>
-      {/* Top Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-5">
-        <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900 flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 font-medium mb-1">Total Leads</p>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</h3>
-          </div>
-          <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-600 dark:text-blue-400">
-            <Users className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-xl shadow-sm border border-red-100 dark:border-red-900 flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 font-medium mb-1">Pending to contact</p>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending}</h3>
-          </div>
-          <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 dark:text-red-400">
-            <Clock className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="bg-green-50 dark:bg-green-950/20 p-4 rounded-xl shadow-sm border border-green-100 dark:border-green-900 flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 font-medium mb-1">Contacted</p>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.contacted}</h3>
-          </div>
-          <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full text-green-600 dark:text-green-400">
-            <CheckCircle className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="bg-orange-50 dark:bg-orange-950/20 p-4 rounded-xl shadow-sm border border-orange-100 dark:border-orange-900 flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 font-medium mb-1">Need Follow Up</p>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.needFollowUp}</h3>
-          </div>
-          <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-full text-orange-600 dark:text-orange-400">
-            <PhoneCall className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="bg-purple-50 dark:bg-purple-950/20 p-4 rounded-xl shadow-sm border border-purple-100 dark:border-purple-900 flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 font-medium mb-1">My Calls Today</p>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{stats.myCallsToday}</h3>
-          </div>
-          <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full text-purple-600 dark:text-purple-400">
-            <PhoneOutgoing className="w-5 h-5" />
-          </div>
-        </div>
-      </div>
-
-      {/* Filters and Search Bar just below stats */}
-      <div className="bg-white dark:bg-gray-950 p-3.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      {/* Filters and Search Bar */}
+      <div className="bg-white dark:bg-gray-950 p-3.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mt-12 mb-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search + Today */}
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {/* Search Bar */}
@@ -390,7 +341,7 @@ const TelecallerLeads: React.FC = () => {
         queryKey="admin-telecaller-leads"
         column={columns}
         columnsCount={columns.length}
-        pageSize={8}
+        pageSize={10}
         onDataFetched={useCallback((data: any) => {
           if (data.stats) {
             const nextCounts: Record<string, number> = data.stats.statusCounts || {};

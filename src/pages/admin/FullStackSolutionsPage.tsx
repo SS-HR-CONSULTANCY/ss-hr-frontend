@@ -21,7 +21,6 @@ import {
   CalendarDays,
   ChevronsLeft,
   ChevronsRight,
-  CalendarCheck,
 } from "lucide-react";
 
 import {
@@ -737,13 +736,12 @@ const FullStackSolutionsPage: React.FC = () => {
           }`}
           title={isTodayFilter ? "Showing today's follow-ups — click to clear" : "Show today's follow-ups"}
         >
-          <CalendarCheck className="w-3.5 h-3.5" />
           Today
           {isTodayFilter && <X className="w-3 h-3" />}
         </button>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0">
           {/* Status Filter */}
           {["all", ...FSS_STATUS_OPTIONS].map((st) => {
             const active = statusFilter === st;
@@ -758,7 +756,7 @@ const FullStackSolutionsPage: React.FC = () => {
                   setPage(1);
                 }}
                 title={`${label} (${count})`}
-                className={`shrink-0 w-32 px-1.5 inline-flex items-center justify-center gap-1 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
+                className={`grow basis-28 max-w-36 px-1.5 inline-flex items-center justify-center gap-1 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
                   st === "all"
                     ? active
                       ? "bg-indigo-600 border-indigo-600 text-white"
