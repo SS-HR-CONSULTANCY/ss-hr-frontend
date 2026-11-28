@@ -346,6 +346,17 @@ const FullStackSolutionsPage: React.FC = () => {
   const totalPages = contactsResponse?.totalPages || 1;
   const totalCount = contactsResponse?.total || 0;
 
+  // Keep the last known status counts so the filter-button badges don't flash to 0 while refetching
+  const [statusCounts, setStatusCounts] = useState<{ all: number; byStatus: Record<string, number> }>({
+    all: 0,
+    byStatus: {},
+  });
+  useEffect(() => {
+    const stats = contactsResponse?.stats;
+    if (!stats) return;
+    setStatusCounts({ all: stats.total || 0, byStatus: stats.statusCounts || {} });
+  }, [contactsResponse]);
+
   // Live duplicate check for the client name typed in the Add form (debounced)
   const [duplicateName, setDuplicateName] = useState<string | null>(null);
   useEffect(() => {
@@ -692,7 +703,7 @@ const FullStackSolutionsPage: React.FC = () => {
       {/* Search and Filters Bar */}
       <div className="bg-white dark:bg-gray-950 p-2.5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-stretch md:items-center gap-2 flex-1 min-w-0">
         {/* Search */}
-        <div className="relative min-w-[160px] md:flex-none md:w-64">
+        <div className="relative min-w-[160px] md:flex-none md:w-48">
           <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
@@ -736,6 +747,8 @@ const FullStackSolutionsPage: React.FC = () => {
           {/* Status Filter */}
           {["all", ...FSS_STATUS_OPTIONS].map((st) => {
             const active = statusFilter === st;
+            const label = st === "all" ? "All" : st;
+            const count = st === "all" ? statusCounts.all : statusCounts.byStatus[st] || 0;
             return (
               <button
                 key={st}
@@ -744,7 +757,8 @@ const FullStackSolutionsPage: React.FC = () => {
                   setStatusFilter(st);
                   setPage(1);
                 }}
-                className={`shrink-0 w-28 inline-flex items-center justify-center py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
+                title={`${label} (${count})`}
+                className={`shrink-0 w-32 px-1.5 inline-flex items-center justify-center gap-1 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
                   st === "all"
                     ? active
                       ? "bg-indigo-600 border-indigo-600 text-white"
@@ -754,7 +768,14 @@ const FullStackSolutionsPage: React.FC = () => {
                       : `${getStatusBadgeClass(st)} hover:brightness-95`
                 }`}
               >
-                {st === "all" ? "All" : st}
+                <span className="truncate">{label}</span>
+                <span
+                  className={`shrink-0 rounded-full px-1.5 text-[10px] leading-4 font-bold ${
+                    active ? "bg-white/25" : "bg-black/5 dark:bg-white/10"
+                  }`}
+                >
+                  {count}
+                </span>
               </button>
             );
           })}
@@ -777,7 +798,7 @@ const FullStackSolutionsPage: React.FC = () => {
           className="md:ml-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition-colors shrink-0"
         >
           <Plus className="w-4 h-4" />
-          Add New Contact
+          Add Contact
         </button>
       </div>
       </div>
@@ -833,7 +854,7 @@ const FullStackSolutionsPage: React.FC = () => {
                         className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium transition-colors"
                       >
                         <Plus className="w-3.5 h-3.5" />
-                        Add New Contact
+                        Add Contact
                       </button>
                     </div>
                   </td>
