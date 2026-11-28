@@ -626,7 +626,7 @@ export const footerData = [
     title: "Contacts",
     links: [
       { text: "+971 542326583", href: "tel:+971542326583", icon: Phone },
-      { text: "+971 542326584", href: "tel:+971542326584", icon: Phone },
+      { text: "+971 542326585", href: "tel:+971542326585", icon: Phone },
       { text: "+971 542326585", href: "tel:+971542326585", icon: Phone },
       { text: "+91 9349714742", href: "tel:+919349714742", icon: Phone },
     ],
@@ -648,7 +648,7 @@ export const contactData: ContactItem[] = [
     {
     icon: Phone,
     label: "Phone (UAE)",
-    value: "+971 542326584",
+    value: "+971 542326585",
     href: "#",
   },
   {

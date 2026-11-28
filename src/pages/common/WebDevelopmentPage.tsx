@@ -29,9 +29,9 @@ import { SEO_DATA } from "@/utils/constants";
 import webDevBanner from "@/assets/serviceBanners/webDevBanner.jpg";
 
 const WHATSAPP_URL =
-  "https://wa.me/971542326584?text=Hello,%20I%20would%20like%20to%20discuss%20a%20website%20project.";
-const PHONE = "+971 54 232 6584";
-const PHONE_URL = "tel:+971542326584";
+  "https://wa.me/971542326585?text=Hello,%20I%20would%20like%20to%20discuss%20a%20website%20project.";
+const PHONE = "+971 54 232 6585";
+const PHONE_URL = "tel:+971542326585";
 
 const tags = [
   "#WebDevelopment",

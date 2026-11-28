@@ -69,7 +69,7 @@ export default function Navigation({
                                 if (component.buttonAction === "share_interest") {
                                   e.preventDefault();
                                   window.open(
-                                    "https://wa.me/971542326584?text=Hello%2C%20I%20am%20interested%20in%20career%20opportunities%20with%20SS%20HR%20Consultancy.",
+                                    "https://wa.me/971542326585?text=Hello%2C%20I%20am%20interested%20in%20career%20opportunities%20with%20SS%20HR%20Consultancy.",
                                     "_blank"
                                   );
                                 }
