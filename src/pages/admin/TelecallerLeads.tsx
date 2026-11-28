@@ -28,6 +28,12 @@ const CONTACT_STATUS_OPTIONS = [
   "Completed",
 ];
 
+// Shorter display labels for the status filter buttons (filter values stay unchanged).
+const STATUS_BUTTON_LABELS: Record<string, string> = {
+  "Processing Application": "Processing",
+  "Rejected Application": "Rejected",
+};
+
 // Written out in full so Tailwind can detect every class.
 const STATUS_BUTTON_STYLES: Record<string, { idle: string; active: string }> = {
   all: {
@@ -83,6 +89,7 @@ const TelecallerLeads: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<ImportedCustomer | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stats, setStats] = useState({ total: 0, pending: 0, contacted: 0, needFollowUp: 0, myCallsToday: 0 });
+  const [statusCounts, setStatusCounts] = useState<Record<string, number>>({});
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [stateFilter, setStateFilter] = useState<string>("all");
   // Persisted so the "Today" filter survives a page refresh until it is cleared.
@@ -268,7 +275,7 @@ const TelecallerLeads: React.FC = () => {
         {/* Search + Today */}
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {/* Search Bar */}
-          <div className="relative shrink-0 w-full md:w-52">
+          <div className="relative shrink-0 w-full md:w-40">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
@@ -310,17 +317,26 @@ const TelecallerLeads: React.FC = () => {
               {["all", ...CONTACT_STATUS_OPTIONS].map((st) => {
                 const active = statusFilter === st;
                 const c = STATUS_BUTTON_STYLES[st];
+                const count = st === "all" ? stats.total : statusCounts[st] || 0;
+                const label = st === "all" ? "All" : STATUS_BUTTON_LABELS[st] || st;
                 return (
                   <button
                     key={st}
                     type="button"
                     onClick={() => setStatusFilter(st)}
-                    title={st === "all" ? "All" : st}
-                    className={`flex-1 basis-0 min-w-0 px-1.5 inline-flex items-center justify-center py-2 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap overflow-hidden ${
+                    title={`${label} (${count})`}
+                    className={`flex-1 basis-0 min-w-0 px-1.5 inline-flex items-center justify-center gap-1 py-2 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap overflow-hidden ${
                       active ? `${c.active} shadow-sm` : `${c.idle} hover:brightness-95`
                     }`}
                   >
-                    <span className="truncate">{st === "all" ? "All" : st}</span>
+                    <span className="truncate">{label}</span>
+                    <span
+                      className={`shrink-0 rounded-full px-1.5 text-[10px] leading-4 font-bold ${
+                        active ? "bg-white/25" : "bg-black/5 dark:bg-white/10"
+                      }`}
+                    >
+                      {count}
+                    </span>
                   </button>
                 );
               })}
@@ -332,14 +348,14 @@ const TelecallerLeads: React.FC = () => {
           {/* Assigned Staff Filter (Super Admin Tony only) */}
           {isTony && (
             <div className="relative flex items-center">
-              <UserCheck className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
+              <UserCheck className="w-4 h-4 text-gray-400 absolute left-2.5 pointer-events-none" />
               <select
                 value={assignedStaffFilter}
                 onChange={(e) => setAssignedStaffFilter(e.target.value)}
-                className="pl-9 pr-8 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300"
+                className="w-[130px] pl-8 pr-6 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-gray-300"
               >
-                <option value="all">All Staff Contacts</option>
-                <option value="unassigned">Unassigned Only</option>
+                <option value="all">All Staff</option>
+                <option value="unassigned">Unassigned</option>
                 {staffList.map((s) => (
                   <option key={s._id} value={s._id}>{s.fullName || s.username}</option>
                 ))}
@@ -377,6 +393,10 @@ const TelecallerLeads: React.FC = () => {
         pageSize={8}
         onDataFetched={useCallback((data: any) => {
           if (data.stats) {
+            const nextCounts: Record<string, number> = data.stats.statusCounts || {};
+            setStatusCounts(prev =>
+              JSON.stringify(prev) === JSON.stringify(nextCounts) ? prev : nextCounts
+            );
             setStats(prev => {
               const newTotal = data.stats.total || 0;
               const newPending = data.stats.pending || 0;

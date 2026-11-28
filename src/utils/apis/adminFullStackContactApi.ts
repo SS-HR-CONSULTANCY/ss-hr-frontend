@@ -59,6 +59,7 @@ export interface FSSContactsResponse {
     contacted: number;
     needFollowUp: number;
     converted: number;
+    statusCounts?: Record<string, number>;
   };
 }
 
